@@ -1,11 +1,11 @@
 package com.github.creme332;
 
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.github.creme332.controller.Controller;
 
 public class App {
     public static void main(String[] args) {
-        FlatLightLaf.setup();
+        FlatMacLightLaf.setup();
         new Controller();
     }
 }
