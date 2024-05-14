@@ -16,7 +16,7 @@ public class Frame extends JFrame {
     private CardLayout cl = new CardLayout(); // used to swap between screens
 
     private SplashScreen splashScreen = new SplashScreen();
-    private JPanel mainScreen = new JPanel();
+    private JPanel mainScreen = new JPanel(new BorderLayout());
 
     public Frame(MenuBar menubar, Canvas canvas) {
         // set frame title
@@ -36,10 +36,14 @@ public class Frame extends JFrame {
             this.setLocationRelativeTo(null);
         }
 
+        // setup screen container
         screenContainer.setLayout(cl);
         screenContainer.add(splashScreen, "splashScreen");
         screenContainer.add(mainScreen, "mainScreen");
         this.add(screenContainer);
+
+        // add canvas to mainScreen
+        mainScreen.add(canvas);
 
         // add menubar to frame
         setJMenuBar(menubar);
