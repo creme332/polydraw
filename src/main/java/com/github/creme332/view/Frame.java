@@ -12,12 +12,13 @@ public class Frame extends JFrame {
     private int frameHeight = 1000;
 
     // screens
-    JPanel screenContainer = new JPanel(); // a container for all screens
+    private JPanel screenContainer = new JPanel(); // a container for all screens
     private CardLayout cl = new CardLayout(); // used to swap between screens
 
-    SplashScreen splashScreen = new SplashScreen();
+    private SplashScreen splashScreen = new SplashScreen();
+    private JPanel mainScreen = new JPanel();
 
-    public Frame(MenuBar menubar, Canvas grid) {
+    public Frame(MenuBar menubar, Canvas canvas) {
         // set frame title
         this.setTitle("polydraw");
 
@@ -37,10 +38,13 @@ public class Frame extends JFrame {
 
         screenContainer.setLayout(cl);
         screenContainer.add(splashScreen, "splashScreen");
-        screenContainer.add(grid, "canvas");
+        screenContainer.add(mainScreen, "mainScreen");
         this.add(screenContainer);
 
+        // add menubar to frame
         setJMenuBar(menubar);
+
+        // display frame
         this.setVisible(true);
     }
 
@@ -51,7 +55,7 @@ public class Frame extends JFrame {
      * to ensure proper rendering.
      */
     public void showMainScreen() {
-        cl.show(screenContainer, "canvas");
+        cl.show(screenContainer, "mainScreen");
     }
 
     public void showSplashScreen() {
