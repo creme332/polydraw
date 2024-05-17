@@ -129,15 +129,18 @@ public class MenuBar extends JMenuBar {
         // undo button
         JButton btn = new JButton();
         btn.setIcon(loader.loadIcon("/icons/undo.png", 50));
+        btn.setBorderPainted(false);
         leftPanel.add(btn);
 
         // redo button
         btn = new JButton();
         btn.setIcon(loader.loadIcon("/icons/redo.png", 50));
+        btn.setBorderPainted(false);
         leftPanel.add(btn);
 
         btn = new JButton();
         btn.setIcon(loader.loadIcon("/icons/gear.png", 50));
+        btn.setBorderPainted(false);
         leftPanel.add(btn);
 
         this.add(leftPanel);
