@@ -11,6 +11,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 
+import org.kordamp.ikonli.swing.FontIcon;
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
+
 import com.github.creme332.utils.IconLoader;
 
 public class MenuBar extends JMenuBar {
@@ -22,6 +25,7 @@ public class MenuBar extends JMenuBar {
 
     public MenuBar() throws Exception {
         IconLoader loader = new IconLoader();
+        FontIcon icon;
 
         // Build the menu for cursor
         menu = new JMenu();
@@ -82,10 +86,10 @@ public class MenuBar extends JMenuBar {
         menu = new JMenu();
         menu.setIcon(loader.loadIcon("/icons/triangle.png", 50));
 
-        menuItem = new JMenuItem("Polygon", loader.loadIcon("/icons/ellipse.png", 50));
+        menuItem = new JMenuItem("Polygon", loader.loadIcon("/icons/triangle.png", 50));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Regular Polygon", loader.loadIcon("/icons/ellipse.png", 50));
+        menuItem = new JMenuItem("Regular Polygon", loader.loadIcon("/icons/regular-polygon.png", 50));
         menu.add(menuItem);
 
         this.add(menu);
@@ -118,7 +122,8 @@ public class MenuBar extends JMenuBar {
         menuItem = new JMenuItem("Zoom Out", loader.loadIcon("/icons/zoom-out.png", 50));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Delete", loader.loadIcon("/icons/eraser.png", 30));
+        icon = FontIcon.of(BootstrapIcons.ERASER, 0);
+        menuItem = new JMenuItem("Delete", icon);
         menu.add(menuItem);
 
         this.add(menu);
