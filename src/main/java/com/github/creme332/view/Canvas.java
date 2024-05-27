@@ -24,8 +24,8 @@ public class Canvas extends JPanel {
 
     private Point initialClick;
     final int cellSize = 100;
-    private int xCenter = 0; // x-translation of canvas center
-    private int yCenter = 0; // y-translation of canvas center
+    private int xCenter = 0; // displayed x-coordinate of canvas center
+    private int yCenter = 0; // displayed y-coordinate of canvas center
     private double scaleFactor = 1;
 
     private int xAxisPos; // y-coordinate of x-axis relative to canvas top left
@@ -209,20 +209,28 @@ public class Canvas extends JPanel {
         g2.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(2)); // Set line thickness
 
-        g2.drawLine(yAxisPos, 0, yAxisPos, height); // vertical axis
+        int labelYPos = Math.min(width - 30, Math.max(12, yAxisPos));
+
+        if (yAxisPos >= 0 || yAxisPos <= width)
+            g2.drawLine(yAxisPos, 0, yAxisPos, height); // vertical axis
+
+        // label center of vertical axis
+        g2.drawString(Integer.valueOf(yCenter).toString(), labelYPos, height/2);
 
         // label ticks on positive vertical axis
         for (int i = 1; i <= width / (2 * cellSize); i++) {
-            g2.drawString(Integer.valueOf(xCenter + i).toString(), yAxisPos,
-                    yCenter + height / 2 - i * cellSize);
+            int labelY = height / 2 - i * cellSize;
+            g2.drawString(Integer.valueOf(yCenter + i).toString(), labelYPos,
+                    labelY);
         }
 
         // label ticks on negative vertical axis
         for (int i = 1; i <= width / (2 * cellSize); i++) {
-            String label = Integer.valueOf(xCenter - i).toString();
+            int labelY = height / 2 + i * cellSize;
 
-            g2.drawString(label, yAxisPos,
-                    yCenter + height / 2 + i * cellSize);
+            String label = Integer.valueOf(yCenter - i).toString();
+
+            g2.drawString(label, labelYPos, labelY);
         }
     }
 
