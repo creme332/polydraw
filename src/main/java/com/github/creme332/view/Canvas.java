@@ -28,7 +28,8 @@ public class Canvas extends JPanel {
     private int yCenter = 0; // y-translation of canvas center
     private double scaleFactor = 1;
 
-    private int xAxisPos; // y-coordinate of x-axis
+    private int xAxisPos; // y-coordinate of x-axis relative to canvas top left
+    private int yAxisPos; // x-coordinate of y-axis relative to canvas top left
 
     public Canvas() {
         // add border
@@ -42,6 +43,8 @@ public class Canvas extends JPanel {
                 height = getHeight();
 
                 xAxisPos = height / 2;
+                yAxisPos = width / 2;
+
                 System.out.println("Canvas size: " + width + " x " + height);
             }
         });
@@ -63,7 +66,11 @@ public class Canvas extends JPanel {
                 System.out.format("Mouse dragged by: %d, %d\n", deltaX, deltaY);
 
                 xAxisPos += deltaY;
+                yAxisPos += deltaX;
+
                 xCenter += deltaX;
+                yCenter += deltaY;
+
                 initialClick = currentDrag;
 
                 repaint();
@@ -168,24 +175,32 @@ public class Canvas extends JPanel {
         g2.setColor(Color.gray);
         g2.setStroke(new BasicStroke(1));
 
-        // calculate number of horizontal lines above x-axis
-        int lineCount = height / (2 * cellSize);
-
-        // draw horizontal guidelines
-        for (int i = 0; i <= lineCount; i++) {
-            int y0 = xAxisPos + i * cellSize;
+        // draw horizontal guidelines above x-axis
+        int lineCount = xAxisPos / (cellSize);
+        for (int i = 1; i <= lineCount; i++) {
             int y1 = xAxisPos - i * cellSize;
-            g2.drawLine(0, y0, width, y0); // draw guideline below x axis
             g2.drawLine(0, y1, width, y1); // draw guideline above x axis
         }
 
-        // draw vertical guidelines
-        lineCount = width / (2 * cellSize);
-        for (int i = 0; i <= lineCount; i++) {
-            int x0 = width / 2 + i * cellSize;
-            int x1 = width / 2 - i * cellSize;
-            g2.drawLine(x0, 0, x0, height);
-            g2.drawLine(x1, 0, x1, height);
+        // draw horizontal guidelines below x-axis
+        lineCount = (height - xAxisPos) / (cellSize);
+        for (int i = 1; i <= lineCount; i++) {
+            int y0 = xAxisPos + i * cellSize;
+            g2.drawLine(0, y0, width, y0); // draw guideline below x axis
+        }
+
+        // draw vertical guidelines before y-axis
+        lineCount = yAxisPos / (cellSize);
+        for (int i = 1; i <= lineCount; i++) {
+            int x0 = yAxisPos - i * cellSize;
+            g2.drawLine(x0, 0, x0, height); // line before y axis
+        }
+
+        // draw vertical guidelines after y-axis
+        lineCount = (width - yAxisPos) / (cellSize);
+        for (int i = 1; i <= lineCount; i++) {
+            int x1 = yAxisPos + i * cellSize;
+            g2.drawLine(x1, 0, x1, height); // line after y axis
         }
 
     }
@@ -194,19 +209,19 @@ public class Canvas extends JPanel {
         g2.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(2)); // Set line thickness
 
-        g2.drawLine(width / 2 + xCenter * cellSize, 0, width / 2 + xCenter * cellSize, height); // vertical axis
+        g2.drawLine(yAxisPos, 0, yAxisPos, height); // vertical axis
 
         // label ticks on positive vertical axis
         for (int i = 1; i <= width / (2 * cellSize); i++) {
-            g2.drawString(Integer.valueOf(xCenter + i).toString(), xCenter + width / 2,
+            g2.drawString(Integer.valueOf(xCenter + i).toString(), yAxisPos,
                     yCenter + height / 2 - i * cellSize);
         }
 
         // label ticks on negative vertical axis
         for (int i = 1; i <= width / (2 * cellSize); i++) {
-            String label = Integer.valueOf(-i).toString();
+            String label = Integer.valueOf(xCenter - i).toString();
 
-            g2.drawString(label, xCenter + width / 2,
+            g2.drawString(label, yAxisPos,
                     yCenter + height / 2 + i * cellSize);
         }
     }
@@ -216,7 +231,7 @@ public class Canvas extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.scale(scaleFactor, scaleFactor);
         drawHorizontalAxis(g2);
-        // drawVerticalAxis(g2);
+        drawVerticalAxis(g2);
         drawGuidelines(g2);
     }
 }
