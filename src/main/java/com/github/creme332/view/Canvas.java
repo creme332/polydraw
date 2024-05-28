@@ -68,9 +68,6 @@ public class Canvas extends JPanel {
                 xAxisPos += deltaY;
                 yAxisPos += deltaX;
 
-                xCenter += deltaX;
-                yCenter += deltaY;
-
                 initialClick = currentDrag;
 
                 repaint();
@@ -155,19 +152,21 @@ public class Canvas extends JPanel {
         if (xAxisPos >= 0 && xAxisPos <= height)
             g2.drawLine(0, xAxisPos, width, xAxisPos);
 
-        // label origin
-        g2.drawString(Integer.valueOf(xCenter).toString(), width / 2, labelYPos);
+        // label center of x axis
+        g2.drawString(Integer.valueOf(xCenter).toString(), yAxisPos, labelYPos);
 
         // label ticks on positive horizontal axis
-        for (int i = 1; i <= width / (2 * cellSize); i++) {
-            int labelX = width / 2 + i * cellSize;
+        for (int i = 1; i <= (width - yAxisPos) / (cellSize); i++) {
+            int labelX = yAxisPos + i * cellSize;
             g2.drawString(Integer.valueOf(xCenter + i).toString(), labelX, labelYPos);
+            // g2.drawLine(labelX, 0, labelX, height);
         }
 
         // label ticks on negative horizontal axis
-        for (int i = -1; i >= -width / (2 * cellSize); i--) {
-            int labelX = width / 2 + i * cellSize;
+        for (int i = -1; i >= -yAxisPos / (cellSize); i--) {
+            int labelX = yAxisPos + i * cellSize;
             g2.drawString(Integer.valueOf(xCenter + i).toString(), labelX, labelYPos);
+            // g2.drawLine(labelX, 0, labelX, height);
         }
     }
 
@@ -215,18 +214,18 @@ public class Canvas extends JPanel {
             g2.drawLine(yAxisPos, 0, yAxisPos, height); // vertical axis
 
         // label center of vertical axis
-        g2.drawString(Integer.valueOf(yCenter).toString(), labelYPos, height/2);
+        g2.drawString(Integer.valueOf(yCenter).toString(), labelYPos, xAxisPos);
 
         // label ticks on positive vertical axis
-        for (int i = 1; i <= width / (2 * cellSize); i++) {
-            int labelY = height / 2 - i * cellSize;
+        for (int i = 1; i <= xAxisPos / (cellSize); i++) {
+            int labelY = xAxisPos - i * cellSize;
             g2.drawString(Integer.valueOf(yCenter + i).toString(), labelYPos,
                     labelY);
         }
 
         // label ticks on negative vertical axis
-        for (int i = 1; i <= width / (2 * cellSize); i++) {
-            int labelY = height / 2 + i * cellSize;
+        for (int i = 1; i <= (height - xAxisPos) / (cellSize); i++) {
+            int labelY = xAxisPos + i * cellSize;
 
             String label = Integer.valueOf(yCenter - i).toString();
 
@@ -238,8 +237,8 @@ public class Canvas extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.scale(scaleFactor, scaleFactor);
+        drawGuidelines(g2);
         drawHorizontalAxis(g2);
         drawVerticalAxis(g2);
-        drawGuidelines(g2);
     }
 }
