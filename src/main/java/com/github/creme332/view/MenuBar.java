@@ -11,6 +11,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 
+import org.kordamp.ikonli.swing.FontIcon;
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
+
 import com.github.creme332.utils.IconLoader;
 
 public class MenuBar extends JMenuBar {
@@ -22,6 +25,7 @@ public class MenuBar extends JMenuBar {
 
     public MenuBar() throws Exception {
         IconLoader loader = new IconLoader();
+        FontIcon icon;
 
         // Build the menu for cursor
         menu = new JMenu();
@@ -82,10 +86,10 @@ public class MenuBar extends JMenuBar {
         menu = new JMenu();
         menu.setIcon(loader.loadIcon("/icons/triangle.png", 50));
 
-        menuItem = new JMenuItem("Polygon", loader.loadIcon("/icons/ellipse.png", 50));
+        menuItem = new JMenuItem("Polygon", loader.loadIcon("/icons/triangle.png", 50));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Regular Polygon", loader.loadIcon("/icons/ellipse.png", 50));
+        menuItem = new JMenuItem("Regular Polygon", loader.loadIcon("/icons/regular-polygon.png", 50));
         menu.add(menuItem);
 
         this.add(menu);
@@ -107,18 +111,19 @@ public class MenuBar extends JMenuBar {
 
         // move menu
         menu = new JMenu();
-        menu.setIcon(loader.loadIcon("/icons/move.png", 50));
+        menu.setIcon(FontIcon.of(BootstrapIcons.ARROWS_MOVE, 35));
 
-        menuItem = new JMenuItem("Move Graphics View", loader.loadIcon("/icons/move.png", 50));
+        menuItem = new JMenuItem("Move Graphics View", FontIcon.of(BootstrapIcons.ARROWS_MOVE, 35));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Zoom In", loader.loadIcon("/icons/zoom-in.png", 50));
+        menuItem = new JMenuItem("Zoom In", FontIcon.of(BootstrapIcons.ZOOM_IN, 35));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Zoom Out", loader.loadIcon("/icons/zoom-out.png", 50));
+        menuItem = new JMenuItem("Zoom Out", FontIcon.of(BootstrapIcons.ZOOM_OUT, 35));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Delete", loader.loadIcon("/icons/eraser.png", 30));
+        icon = FontIcon.of(BootstrapIcons.ERASER, 40);
+        menuItem = new JMenuItem("Delete", icon);
         menu.add(menuItem);
 
         this.add(menu);
@@ -128,16 +133,19 @@ public class MenuBar extends JMenuBar {
 
         // undo button
         JButton btn = new JButton();
-        btn.setIcon(loader.loadIcon("/icons/undo.png", 50));
+        btn.setIcon(FontIcon.of(BootstrapIcons.ARROW_COUNTERCLOCKWISE, 40));
+        btn.setBorderPainted(false);
         leftPanel.add(btn);
 
         // redo button
         btn = new JButton();
-        btn.setIcon(loader.loadIcon("/icons/redo.png", 50));
+        btn.setIcon(FontIcon.of(BootstrapIcons.ARROW_CLOCKWISE, 40));
+        btn.setBorderPainted(false);
         leftPanel.add(btn);
 
         btn = new JButton();
-        btn.setIcon(loader.loadIcon("/icons/gear.png", 50));
+        btn.setIcon(FontIcon.of(BootstrapIcons.GEAR_FILL, 40));
+        btn.setBorderPainted(false);
         leftPanel.add(btn);
 
         this.add(leftPanel);

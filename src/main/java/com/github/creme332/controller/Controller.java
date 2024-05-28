@@ -3,6 +3,8 @@ package com.github.creme332.controller;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.github.creme332.utils.exception.InvalidIconSizeException;
+import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
 
 /**
@@ -12,6 +14,7 @@ public class Controller {
     private Frame frame; // frame of app
     private MenuBar menuBar;
     private Canvas canvas;
+    private Toolbar toolbar;
 
     private void playStartAnimation() {
         Timer timer = new Timer();
@@ -36,12 +39,24 @@ public class Controller {
 
     public Controller() {
         try {
+            toolbar = new Toolbar();
             menuBar = new MenuBar();
+            canvas = new Canvas(toolbar);
+            frame = new Frame(menuBar, canvas);
+        } catch (InvalidIconSizeException e) {
+            // Handle invalid icon size
+            System.err.println("Error: " + e.getMessage());
+            System.exit(1);
+        } catch (InvalidPathException e) {
+            // Handle invalid path
+            System.err.println("Error: " + e.getMessage());
+            System.exit(1);
         } catch (Exception e) {
-            System.out.println(e);
+            // Handle any other unexpected exceptions
+            System.err.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
         }
-        canvas = new Canvas();
-        frame = new Frame(menuBar, canvas);
 
         playStartAnimation();
     }
