@@ -18,6 +18,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
 import com.github.creme332.utils.IconLoader;
+import com.github.creme332.utils.exception.InvalidIconSizeException;
+import com.github.creme332.utils.exception.InvalidPathException;
 
 public class Toolbar extends JToolBar implements ActionListener {
 
@@ -29,7 +31,7 @@ public class Toolbar extends JToolBar implements ActionListener {
 
     private JButton colorBox;
 
-    public Toolbar() throws Exception {
+    public Toolbar() throws InvalidIconSizeException, InvalidPathException {
 
         framesPerSecond.setMajorTickSpacing(10);
         framesPerSecond.setMinorTickSpacing(1);
