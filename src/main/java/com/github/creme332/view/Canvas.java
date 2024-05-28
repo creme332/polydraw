@@ -18,32 +18,39 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 
 public class Canvas extends JPanel {
+    private final int TICK_PADDING_TOP = 12; // spacing between top of canvas and tick label when axis is out of sight
+    private final int TICK_PADDING_BOTTOM = 10; // spacing between bottom of canvas and tick label when axis is out of
+                                                // sight
+    private final int TICK_PADDING_LEFT = 12; // spacing between left border of canvas and tick label when axis is out
+                                              // of
+    // sight
+    private final int TICK_PADDING_RIGHT = 30; // spacing between right border of canvas and tick label when axis is out
+                                               // of
+    // sight
+    private final int MAX_CELL_SIZE = 500;
+    private final int MIN_CELL_SIZE = 30;
+
     RedSquare redSquare = new RedSquare();
     private int width;
     private int height;
 
     private Point initialClick;
-    final int cellSize = 100;
-    private int xCenter = 0; // displayed x-coordinate of canvas center
-    private int yCenter = 0; // displayed y-coordinate of canvas center
+    int cellSize = 100; // distance in pixels between each unit on axes
+
     private double scaleFactor = 1;
 
-    private int xAxisPos; // y-coordinate of x-axis relative to canvas top left
-    private int yAxisPos; // x-coordinate of y-axis relative to canvas top left
+    private int yZero; // vertical distance between top border of canvas and my cartesian origin
+    private int xZero; // horizontal distance between left border of canvas and my cartesian origin
 
     public Canvas() {
-        // add border
-        // Border border = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-        // this.setBorder(border);
-
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 width = getWidth();
                 height = getHeight();
 
-                xAxisPos = height / 2;
-                yAxisPos = width / 2;
+                yZero = height / 2;
+                xZero = width / 2;
 
                 System.out.println("Canvas size: " + width + " x " + height);
             }
@@ -65,8 +72,8 @@ public class Canvas extends JPanel {
                 int deltaY = currentDrag.y - initialClick.y;
                 System.out.format("Mouse dragged by: %d, %d\n", deltaX, deltaY);
 
-                xAxisPos += deltaY;
-                yAxisPos += deltaX;
+                yZero += deltaY;
+                xZero += deltaX;
 
                 initialClick = currentDrag;
 
@@ -80,23 +87,17 @@ public class Canvas extends JPanel {
             }
         });
 
-        // addMouseMotionListener(new MouseAdapter() {
-        // public void mouseDragged(MouseEvent e) {
-        // moveSquare(e.getX(), e.getY());
-        // }
-        // });
-
         addMouseWheelListener(new MouseAdapter() {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 System.out.println("Mouse wheel moved " + e.getScrollAmount() + " " + e.getWheelRotation());
 
                 if (e.getWheelRotation() == 1) {
                     // zoom out
-                    scaleFactor = Math.max(1, scaleFactor - 0.1);
+                    cellSize = Math.max(MIN_CELL_SIZE, cellSize - 10);
 
                 } else {
                     // zoom in
-                    scaleFactor = Math.min(30, scaleFactor + 0.1);
+                    cellSize = Math.min(MAX_CELL_SIZE, cellSize + 10);
                 }
                 repaint();
             }
@@ -140,33 +141,30 @@ public class Canvas extends JPanel {
     }
 
     private void drawHorizontalAxis(Graphics2D g2) {
-
-        // calculate yposition of floating label
-        int labelYPos = Math.min(height - 10, Math.max(12, xAxisPos));
+        // calculate y position of tick label
+        int labelYPos = Math.min(height - TICK_PADDING_BOTTOM, Math.max(TICK_PADDING_TOP, yZero));
 
         g2.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(2)); // Set line thickness
 
         // if axis is within canvas, draw horizontal line to represent horizontal
         // axis
-        if (xAxisPos >= 0 && xAxisPos <= height)
-            g2.drawLine(0, xAxisPos, width, xAxisPos);
+        if (yZero >= 0 && yZero <= height)
+            g2.drawLine(0, yZero, width, yZero);
 
         // label center of x axis
-        g2.drawString(Integer.valueOf(xCenter).toString(), yAxisPos, labelYPos);
+        g2.drawString(Integer.valueOf(0).toString(), xZero, labelYPos);
 
         // label ticks on positive horizontal axis
-        for (int i = 1; i <= (width - yAxisPos) / (cellSize); i++) {
-            int labelX = yAxisPos + i * cellSize;
-            g2.drawString(Integer.valueOf(xCenter + i).toString(), labelX, labelYPos);
-            // g2.drawLine(labelX, 0, labelX, height);
+        for (int i = 1; i <= (width - xZero) / (cellSize); i++) {
+            int labelX = xZero + i * cellSize;
+            g2.drawString(Integer.valueOf(i).toString(), labelX, labelYPos);
         }
 
         // label ticks on negative horizontal axis
-        for (int i = -1; i >= -yAxisPos / (cellSize); i--) {
-            int labelX = yAxisPos + i * cellSize;
-            g2.drawString(Integer.valueOf(xCenter + i).toString(), labelX, labelYPos);
-            // g2.drawLine(labelX, 0, labelX, height);
+        for (int i = -1; i >= -xZero / (cellSize); i--) {
+            int labelX = xZero + i * cellSize;
+            g2.drawString(Integer.valueOf(i).toString(), labelX, labelYPos);
         }
     }
 
@@ -175,30 +173,30 @@ public class Canvas extends JPanel {
         g2.setStroke(new BasicStroke(1));
 
         // draw horizontal guidelines above x-axis
-        int lineCount = xAxisPos / (cellSize);
+        int lineCount = yZero / (cellSize);
         for (int i = 1; i <= lineCount; i++) {
-            int y1 = xAxisPos - i * cellSize;
+            int y1 = yZero - i * cellSize;
             g2.drawLine(0, y1, width, y1); // draw guideline above x axis
         }
 
         // draw horizontal guidelines below x-axis
-        lineCount = (height - xAxisPos) / (cellSize);
+        lineCount = (height - yZero) / (cellSize);
         for (int i = 1; i <= lineCount; i++) {
-            int y0 = xAxisPos + i * cellSize;
+            int y0 = yZero + i * cellSize;
             g2.drawLine(0, y0, width, y0); // draw guideline below x axis
         }
 
         // draw vertical guidelines before y-axis
-        lineCount = yAxisPos / (cellSize);
+        lineCount = xZero / (cellSize);
         for (int i = 1; i <= lineCount; i++) {
-            int x0 = yAxisPos - i * cellSize;
+            int x0 = xZero - i * cellSize;
             g2.drawLine(x0, 0, x0, height); // line before y axis
         }
 
         // draw vertical guidelines after y-axis
-        lineCount = (width - yAxisPos) / (cellSize);
+        lineCount = (width - xZero) / (cellSize);
         for (int i = 1; i <= lineCount; i++) {
-            int x1 = yAxisPos + i * cellSize;
+            int x1 = xZero + i * cellSize;
             g2.drawLine(x1, 0, x1, height); // line after y axis
         }
 
@@ -208,26 +206,26 @@ public class Canvas extends JPanel {
         g2.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(2)); // Set line thickness
 
-        int labelYPos = Math.min(width - 30, Math.max(12, yAxisPos));
+        int labelYPos = Math.min(width - TICK_PADDING_RIGHT, Math.max(TICK_PADDING_LEFT, xZero));
 
-        if (yAxisPos >= 0 || yAxisPos <= width)
-            g2.drawLine(yAxisPos, 0, yAxisPos, height); // vertical axis
+        if (xZero >= 0 || xZero <= width)
+            g2.drawLine(xZero, 0, xZero, height); // vertical axis
 
         // label center of vertical axis
-        g2.drawString(Integer.valueOf(yCenter).toString(), labelYPos, xAxisPos);
+        g2.drawString(Integer.valueOf(0).toString(), labelYPos, yZero);
 
         // label ticks on positive vertical axis
-        for (int i = 1; i <= xAxisPos / (cellSize); i++) {
-            int labelY = xAxisPos - i * cellSize;
-            g2.drawString(Integer.valueOf(yCenter + i).toString(), labelYPos,
+        for (int i = 1; i <= yZero / (cellSize); i++) {
+            int labelY = yZero - i * cellSize;
+            g2.drawString(Integer.valueOf(i).toString(), labelYPos,
                     labelY);
         }
 
         // label ticks on negative vertical axis
-        for (int i = 1; i <= (height - xAxisPos) / (cellSize); i++) {
-            int labelY = xAxisPos + i * cellSize;
+        for (int i = 1; i <= (height - yZero) / (cellSize); i++) {
+            int labelY = yZero + i * cellSize;
 
-            String label = Integer.valueOf(yCenter - i).toString();
+            String label = Integer.valueOf(-i).toString();
 
             g2.drawString(label, labelYPos, labelY);
         }
