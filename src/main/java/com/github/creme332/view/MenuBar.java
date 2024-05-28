@@ -111,7 +111,7 @@ public class MenuBar extends JMenuBar {
 
         // move menu
         menu = new JMenu();
-        menu.setIcon(loader.loadIcon("/icons/move.png", 50));
+        menu.setIcon(FontIcon.of(BootstrapIcons.ARROWS_MOVE, 35));
 
         menuItem = new JMenuItem("Move Graphics View", FontIcon.of(BootstrapIcons.ARROWS_MOVE, 35));
         menu.add(menuItem);
