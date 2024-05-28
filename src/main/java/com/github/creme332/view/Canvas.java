@@ -1,11 +1,9 @@
 package com.github.creme332.view;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -42,7 +40,9 @@ public class Canvas extends JPanel {
     private int yZero; // vertical distance between top border of canvas and my cartesian origin
     private int xZero; // horizontal distance between left border of canvas and my cartesian origin
 
-    public Canvas() {
+    public Canvas(Toolbar toolbar) {
+        add(toolbar, BorderLayout.NORTH);
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -59,18 +59,18 @@ public class Canvas extends JPanel {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 initialClick = e.getPoint();
-                System.out.format("Mouse pressed: %d, %d\n", e.getX(), e.getY());
+                // System.out.format("Mouse pressed: %d, %d\n", e.getX(), e.getY());
             }
         });
 
         addMouseMotionListener(new MouseAdapter() {
             public void mouseDragged(MouseEvent e) {
-                System.out.format("Mouse dragged: %d, %d\n", e.getX(), e.getY());
+                // System.out.format("Mouse dragged: %d, %d\n", e.getX(), e.getY());
 
                 Point currentDrag = e.getPoint();
                 int deltaX = currentDrag.x - initialClick.x;
                 int deltaY = currentDrag.y - initialClick.y;
-                System.out.format("Mouse dragged by: %d, %d\n", deltaX, deltaY);
+                // System.out.format("Mouse dragged by: %d, %d\n", deltaX, deltaY);
 
                 yZero += deltaY;
                 xZero += deltaX;
@@ -89,7 +89,7 @@ public class Canvas extends JPanel {
 
         addMouseWheelListener(new MouseAdapter() {
             public void mouseWheelMoved(MouseWheelEvent e) {
-                System.out.println("Mouse wheel moved " + e.getScrollAmount() + " " + e.getWheelRotation());
+                // System.out.println("Mouse wheel moved " + e.getScrollAmount() + " " + e.getWheelRotation());
 
                 if (e.getWheelRotation() == 1) {
                     // zoom out
