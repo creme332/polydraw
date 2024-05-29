@@ -33,7 +33,7 @@ public class CircularButton extends JButton {
 
     @Override
     protected void paintBorder(Graphics g) {
-        g.setColor(Color.LIGHT_GRAY);
+        g.setColor(new Color(228, 228, 228));
         g.drawOval(0, 0, getSize().width - 1, getSize().height - 1);
     }
 
