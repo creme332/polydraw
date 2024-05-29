@@ -1,13 +1,20 @@
 package com.github.creme332.view;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.kordamp.ikonli.Ikon;
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
+import org.kordamp.ikonli.swing.FontIcon;
+
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -35,13 +42,73 @@ public class Canvas extends JPanel {
     private Point initialClick;
     int cellSize = 100; // distance in pixels between each unit on axes
 
-    private double scaleFactor = 1;
-
     private int yZero; // vertical distance between top border of canvas and my cartesian origin
     private int xZero; // horizontal distance between left border of canvas and my cartesian origin
 
+    private JButton homeButton = new CircularButton();
+    private JButton zoomInButton = new CircularButton();
+    private JButton zoomOutButton = new CircularButton();
+    private Toolbar toolbar;
+
+    /**
+     * Place zoom panel in bottom right corner of canvas.
+     */
+    private void positionZoomPanel() {
+        final int MARGIN_RIGHT = 20;
+        final int MARGIN_BOTTOM = 200;
+
+        Dimension buttonSize = homeButton.getPreferredSize();
+        int x = width - buttonSize.width - MARGIN_RIGHT;
+        int y = height - buttonSize.height - MARGIN_BOTTOM;
+
+        homeButton.setBounds(x, y, buttonSize.width, buttonSize.height);
+        zoomInButton.setBounds(x, y + 60, buttonSize.width, buttonSize.height);
+        zoomOutButton.setBounds(x, y + 120, buttonSize.width, buttonSize.height);
+    }
+
+    /**
+     * Place toolbar at middle top of canvas
+     */
+    public void positionToolbar() {
+        final int MARGIN_TOP = 25; // distance between toolbar and canvas top
+
+        // position toolbar such that center of toolbar coincides with center of canvas
+        Dimension buttonSize = toolbar.getPreferredSize();
+        Rectangle r = new Rectangle();
+        r.x = width / 2 - (int) (buttonSize.getWidth() / 2);
+        r.y = MARGIN_TOP;
+
+        r.width = (int) buttonSize.getWidth();
+        r.height = (int) buttonSize.getHeight();
+
+        toolbar.setBounds(r);
+    }
+
+    public JButton createZoomPanelButton(Ikon ikon) {
+        final int ICON_SIZE = 25;
+        final Color ICON_COLOR = new Color(116, 116, 116);
+
+        JButton btn = new CircularButton();
+        btn.setPreferredSize(new Dimension(50, 50));
+        FontIcon icon = FontIcon.of(ikon, ICON_SIZE);
+        icon.setIconColor(ICON_COLOR);
+        btn.setIcon(icon);
+        return btn;
+    }
+
     public Canvas(Toolbar toolbar) {
-        add(toolbar, BorderLayout.NORTH);
+        setLayout(null); // Use no layout manager
+
+        this.toolbar = toolbar;
+        add(toolbar);
+
+        // create buttons for zoom panel
+        homeButton = createZoomPanelButton(BootstrapIcons.HOUSE);
+        zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
+        zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
+        add(homeButton);
+        add(zoomInButton);
+        add(zoomOutButton);
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -49,8 +116,12 @@ public class Canvas extends JPanel {
                 width = getWidth();
                 height = getHeight();
 
+                // place origin at center of canvas
                 yZero = height / 2;
                 xZero = width / 2;
+
+                positionZoomPanel();
+                positionToolbar();
 
                 System.out.println("Canvas size: " + width + " x " + height);
             }
@@ -89,7 +160,9 @@ public class Canvas extends JPanel {
 
         addMouseWheelListener(new MouseAdapter() {
             public void mouseWheelMoved(MouseWheelEvent e) {
-                // System.out.println("Mouse wheel moved " + e.getScrollAmount() + " " + e.getWheelRotation());
+
+                // System.out.println("Mouse wheel moved " + e.getScrollAmount() + " " +
+                // e.getWheelRotation());
 
                 if (e.getWheelRotation() == 1) {
                     // zoom out
@@ -152,6 +225,9 @@ public class Canvas extends JPanel {
         if (yZero >= 0 && yZero <= height)
             g2.drawLine(0, yZero, width, yZero);
 
+        // set tick label color
+        g2.setColor(Color.GRAY);
+
         // label center of x axis
         g2.drawString(Integer.valueOf(0).toString(), xZero, labelYPos);
 
@@ -211,6 +287,9 @@ public class Canvas extends JPanel {
         if (xZero >= 0 || xZero <= width)
             g2.drawLine(xZero, 0, xZero, height); // vertical axis
 
+        // set tick label color
+        g2.setColor(Color.GRAY);
+
         // label center of vertical axis
         g2.drawString(Integer.valueOf(0).toString(), labelYPos, yZero);
 
@@ -224,7 +303,6 @@ public class Canvas extends JPanel {
         // label ticks on negative vertical axis
         for (int i = 1; i <= (height - yZero) / (cellSize); i++) {
             int labelY = yZero + i * cellSize;
-
             String label = Integer.valueOf(-i).toString();
 
             g2.drawString(label, labelYPos, labelY);
@@ -233,8 +311,12 @@ public class Canvas extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        Font currentFont = g.getFont();
+        Font newFont = currentFont.deriveFont(currentFont.getSize() * 1.4F);
+        g.setFont(newFont);
+
         Graphics2D g2 = (Graphics2D) g;
-        g2.scale(scaleFactor, scaleFactor);
         drawGuidelines(g2);
         drawHorizontalAxis(g2);
         drawVerticalAxis(g2);
