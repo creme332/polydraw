@@ -16,6 +16,8 @@ public class Controller {
     private Canvas canvas;
     private Toolbar toolbar;
 
+    private CanvasController canvasController;
+
     private void playStartAnimation() {
         Timer timer = new Timer();
         TimerTask showMainScreen;
@@ -41,8 +43,14 @@ public class Controller {
         try {
             toolbar = new Toolbar();
             menuBar = new MenuBar();
+
             canvas = new Canvas(toolbar);
+            canvasController = new CanvasController(canvas);
+
+
             frame = new Frame(menuBar, canvas);
+            frame.showMainScreen();
+
         } catch (InvalidIconSizeException e) {
             // Handle invalid icon size
             System.err.println("Error: " + e.getMessage());
