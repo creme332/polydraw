@@ -1,6 +1,9 @@
 package com.github.creme332.view;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+
 import javax.swing.*;
 
 import com.github.creme332.utils.IconLoader;
@@ -10,9 +13,9 @@ import com.github.creme332.utils.exception.InvalidPathException;
  * Frame of the GUI application.
  */
 public class Frame extends JFrame {
-    // frame properties
-    private int frameWidth = 1600;
-    private int frameHeight = 1000;
+    // initial frame properties
+    private final int frameWidth = 1600; // initial width
+    private final int frameHeight = 1000; // initial height
 
     // screens
     private JPanel screenContainer = new JPanel(); // a container for all screens
@@ -49,10 +52,25 @@ public class Frame extends JFrame {
         this.add(screenContainer);
 
         // add canvas to mainScreen
-        mainScreen.add(canvas);
+        mainScreen.add(canvas, BorderLayout.CENTER);
+
+        SideMenuPanel sideMenu = new SideMenuPanel();
+
+        mainScreen.add(sideMenu, BorderLayout.EAST);
+        mainScreen.setBackground(Color.gray);
 
         // add menubar to frame
         setJMenuBar(menubar);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int sideWidth = Math.min(400, getWidth() / 3);
+                System.out.println("Frame size: " + getWidth() + " x " + getHeight());
+                mainScreen.setPreferredSize(new Dimension(getWidth(), getHeight() - menubar.getHeight()));
+                sideMenu.setPreferredSize(new Dimension(sideWidth, getHeight() - menubar.getHeight()));
+            }
+        });
 
         // display frame
         this.setVisible(true);
