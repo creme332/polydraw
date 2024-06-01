@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
@@ -27,8 +28,8 @@ public class Canvas extends JPanel {
                                                // of
     // sight
 
-
     int cellSize = 100; // distance in pixels between each unit on axes
+    private float labelFontSizeScaleFactor = 1.4F;
 
     private int yZero; // vertical distance between top border of canvas and my cartesian origin
     private int xZero; // horizontal distance between left border of canvas and my cartesian origin
@@ -104,7 +105,7 @@ public class Canvas extends JPanel {
 
     }
 
-    public static void setAntialiasing(Graphics2D g2) {
+    public void setAntialiasing(Graphics2D g2) {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -240,16 +241,50 @@ public class Canvas extends JPanel {
         yZero = newYZero;
     }
 
+    public void drawShapeExample(Graphics2D g2) {
+
+        double x[] = {
+                1, 1, 1, 1, -1, -1, -1, -1,
+                0, 0, 0, 0,
+                0.618, -0.618, 0.618, -0.618,
+                1.618, 1.618, -1.618, -1.618
+        };
+
+        // y coordinates of vertices
+        double y[] = {
+                1, 1, -1, -1, 1, 1, -1, -1,
+                1.618, 1.618, -1.618, -1.618,
+                0, 0, 0, 0,
+                0.618, -0.618, 0.618, -0.618
+        };
+
+        // number of vertices
+        int numberofpoints = x.length;
+
+        // Polygon originalPolygon = new Polygon(x, y, numberofpoints);
+
+        Polygon transformedPolygon = new Polygon();
+        for (int i = 0; i < numberofpoints; i++) {
+            transformedPolygon.addPoint((int) (xZero + x[i] * cellSize), (int) (yZero - y[i] * cellSize));
+        }
+        g2.drawPolygon(transformedPolygon);
+        g2.setColor(Color.red);
+        g2.fill(transformedPolygon);
+    }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Font currentFont = g.getFont();
-        Font newFont = currentFont.deriveFont(currentFont.getSize() * 1.4F);
+        Font newFont = currentFont.deriveFont(currentFont.getSize() * labelFontSizeScaleFactor);
         g.setFont(newFont);
 
         Graphics2D g2 = (Graphics2D) g;
+        setAntialiasing(g2);
         drawGuidelines(g2);
         drawHorizontalAxis(g2);
         drawVerticalAxis(g2);
+        drawShapeExample(g2);
+
     }
 }
