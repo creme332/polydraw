@@ -87,11 +87,11 @@ public class Frame extends JFrame {
         this.setVisible(true);
     }
 
-    public void toggleMenuBarVisibility(boolean visible) {
+    public void setMenuBarVisibility(boolean visible) {
         menubar.setVisible(visible);
     }
 
-    public void toggleSideBarVisibility(boolean visible) {
+    public void setSideBarVisibility(boolean visible) {
         sideMenu.setVisible(visible);
     }
 
