@@ -22,12 +22,6 @@ public class SideMenuPanel extends JPanel {
         closeButton.setIcon(FontIcon.of(BootstrapIcons.X, 35));
         this.add(closeButton);
 
-        closeButton.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                System.out.println("Close side menu");
-                setVisible(false);
-            }
-        });
     }
 
     public JButton getCloseButton() {
