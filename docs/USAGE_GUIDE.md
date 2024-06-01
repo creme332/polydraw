@@ -1,5 +1,8 @@
 # Usage
 
+You must follow the installation instructions before proceeding.
+
+
 ## Run project
 
 Navigate to the root directory of the project:
@@ -15,19 +18,4 @@ mvn exec:java -Dexec.mainClass=com.github.creme332.App
 ```
 
 > [!TIP]
-> Alternatively, you can use an IDE with Maven configured to run the `App.java` file in the `src/main/java/com/github/creme332/App.java` folder.
-
-## Generate jar
-To create a jar file:
-
-```bash
-mvn clean compile assembly:single
-```
-
-## Generate code coverage report
-
-To generate jacoco code coverage report:
-
-```bash
-mvn jacoco:prepare-agent test install jacoco:report
-```
+> Alternatively, you can use an IDE with Maven configured to run the `App.java` file in the `src/main/java/com/github/creme332/App.java` folder. If you are using VS Code, install the [Extension Pack for Java](https://code.visualstudio.com/docs/java/java-build#_maven) and use `F5` to run the project.
