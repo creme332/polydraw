@@ -144,7 +144,7 @@ public class MenuBar extends JMenuBar {
         leftPanel.add(btn);
 
         btn = new JButton();
-        btn.setIcon(FontIcon.of(BootstrapIcons.GEAR_FILL, 40));
+        btn.setIcon(FontIcon.of(BootstrapIcons.LIST, 40));
         btn.setBorderPainted(false);
         leftPanel.add(btn);
 
