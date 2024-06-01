@@ -3,16 +3,25 @@ package com.github.creme332.controller;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.github.creme332.model.AppState;
 import com.github.creme332.view.Frame;
 
-public class FrameController {
-    Frame frame;
+public class FrameController implements PropertyChangeListener {
+    private Frame frame;
+    private AppState app;
 
-    public FrameController(Frame frame) {
+    public FrameController(AppState app, Frame frame) {
         this.frame = frame;
+        this.app = app;
+
+        app.addPropertyChangeListener(this);
+
+        app.setSideBarVisibility(false);
 
         frame.addComponentListener(new ComponentAdapter() {
             @Override
@@ -52,5 +61,14 @@ public class FrameController {
             }
         };
         timer.schedule(showMainScreen, animationDuration);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent e) {
+        String propertyName = e.getPropertyName();
+        System.out.println("received notf");
+        if ("sidebarVisibility".equals(propertyName)) {
+            frame.toggleSideBarVisibility((boolean) e.getNewValue());
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.github.creme332.controller;
 
-
+import com.github.creme332.model.AppState;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
@@ -9,6 +9,8 @@ import com.github.creme332.view.*;
  * Controls all the logic in the application by linking views and model.
  */
 public class Controller {
+    AppState app = new AppState();
+
     private Frame frame; // frame of app
     private MenuBar menuBar;
     private Canvas canvas;
@@ -29,12 +31,12 @@ public class Controller {
             canvasController = new CanvasController(canvas);
 
             frame = new Frame(canvas);
-            frameController = new FrameController(frame);
+            frameController = new FrameController(app, frame);
 
             menuBar = frame.getMyMenuBar();
-            menuController = new MenuBarController(menuBar);
+            menuController = new MenuBarController(app, menuBar);
 
-            sideController = new SideMenuController(frame.getSideMenuPanel());
+            sideController = new SideMenuController(app, frame.getSideMenuPanel());
         } catch (InvalidIconSizeException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(1);

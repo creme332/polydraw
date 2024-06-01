@@ -91,6 +91,10 @@ public class Frame extends JFrame {
         menubar.setVisible(visible);
     }
 
+    public void toggleSideBarVisibility(boolean visible) {
+        sideMenu.setVisible(visible);
+    }
+
     /**
      * Displays frame which is initially hidden.
      * 
