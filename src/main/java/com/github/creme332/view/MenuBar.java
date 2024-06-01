@@ -4,12 +4,10 @@ import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 
 import org.kordamp.ikonli.swing.FontIcon;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
@@ -18,10 +16,10 @@ import com.github.creme332.utils.IconLoader;
 
 public class MenuBar extends JMenuBar {
     // menubar frame components
-    JMenu menu, submenu;
-    JMenuItem menuItem;
-    JRadioButtonMenuItem rbMenuItem;
-    JCheckBoxMenuItem cbMenuItem;
+    private JMenu menu;
+    private JMenuItem menuItem;
+
+    private JButton sidebarButton;
 
     public MenuBar() throws Exception {
         IconLoader loader = new IconLoader();
@@ -143,11 +141,16 @@ public class MenuBar extends JMenuBar {
         btn.setBorderPainted(false);
         leftPanel.add(btn);
 
-        btn = new JButton();
-        btn.setIcon(FontIcon.of(BootstrapIcons.GEAR_FILL, 40));
-        btn.setBorderPainted(false);
-        leftPanel.add(btn);
+        // open sidebar menu button
+        sidebarButton = new JButton();
+        sidebarButton.setIcon(FontIcon.of(BootstrapIcons.LIST, 40));
+        sidebarButton.setBorderPainted(false);
+        leftPanel.add(sidebarButton);
 
         this.add(leftPanel);
+    }
+
+    public JButton getSideBarButton() {
+        return sidebarButton;
     }
 }
