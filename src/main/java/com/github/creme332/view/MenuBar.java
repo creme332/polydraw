@@ -16,23 +16,20 @@ import com.github.creme332.utils.IconLoader;
 
 public class MenuBar extends JMenuBar {
     // menubar frame components
-    private JMenu menu;
-    private JMenuItem menuItem;
-
     private JButton sidebarButton;
 
-    public MenuBar() throws Exception {
-        IconLoader loader = new IconLoader();
-        FontIcon icon;
+    IconLoader loader = new IconLoader();
 
-        // Build the menu for cursor
-        menu = new JMenu();
+
+    public JMenu createCursorMenu() throws Exception {
+        JMenu menu = new JMenu();
+        JMenuItem menuItem;
+
         menu.setIcon(loader.loadIcon("/icons/cursor.png", 50));
 
         menu.setMnemonic(KeyEvent.VK_A);
         menu.getAccessibleContext().setAccessibleDescription(
                 "The only menu in this program that has menu items");
-        this.add(menu);
 
         menuItem = new JMenuItem("Move",
                 loader.loadIcon("/icons/cursor.png", 50));
@@ -44,8 +41,13 @@ public class MenuBar extends JMenuBar {
         menuItem.setMnemonic(KeyEvent.VK_B);
         menu.add(menuItem);
 
-        // Build menu for line drawing
-        menu = new JMenu();
+        return menu;
+    }
+
+    public JMenu createLineMenu() throws Exception {
+        JMenu menu = new JMenu();
+        JMenuItem menuItem;
+
         menu.setIcon(loader.loadIcon("/icons/line.png", 50));
 
         menuItem = new JMenuItem("Line: DDA", loader.loadIcon("/icons/line.png", 50));
@@ -54,11 +56,13 @@ public class MenuBar extends JMenuBar {
 
         menuItem = new JMenuItem("Line: Bresenham", loader.loadIcon("/icons/line.png", 50));
         menu.add(menuItem);
+        return menu;
+    }
 
-        this.add(menu);
+    public JMenu createCircleMenu() throws Exception {
+        JMenu menu = new JMenu();
+        JMenuItem menuItem;
 
-        // Build menu for circle
-        menu = new JMenu();
         menu.setIcon(loader.loadIcon("/icons/circle.png", 50));
 
         menuItem = new JMenuItem("Circle with Center through Point",
@@ -69,19 +73,24 @@ public class MenuBar extends JMenuBar {
         menuItem = new JMenuItem("Circle: Center & Radius", loader.loadIcon("/icons/circle-radius.png", 50));
         menu.add(menuItem);
 
-        this.add(menu);
+        return menu;
+    }
 
-        // ellipse menu
-        menu = new JMenu();
+    public JMenu createEllipseMenu() throws Exception {
+        JMenu menu = new JMenu();
+        JMenuItem menuItem;
+
         menu.setIcon(loader.loadIcon("/icons/ellipse.png", 50));
 
         menuItem = new JMenuItem("Ellipse", loader.loadIcon("/icons/ellipse.png", 50));
         menu.add(menuItem);
+        return menu;
+    }
 
-        this.add(menu);
+    public JMenu createPolygonMenu() throws Exception {
+        JMenu menu = new JMenu();
+        JMenuItem menuItem;
 
-        // polygon menu
-        menu = new JMenu();
         menu.setIcon(loader.loadIcon("/icons/triangle.png", 50));
 
         menuItem = new JMenuItem("Polygon", loader.loadIcon("/icons/triangle.png", 50));
@@ -89,11 +98,13 @@ public class MenuBar extends JMenuBar {
 
         menuItem = new JMenuItem("Regular Polygon", loader.loadIcon("/icons/regular-polygon.png", 50));
         menu.add(menuItem);
+        return menu;
+    }
 
-        this.add(menu);
+    public JMenu createTransformationsMenu() throws Exception {
+        JMenu menu = new JMenu();
+        JMenuItem menuItem;
 
-        // transformations menu
-        menu = new JMenu();
         menu.setIcon(loader.loadIcon("/icons/reflect-about-line.png", 50));
 
         menuItem = new JMenuItem("Reflect about Line", loader.loadIcon("/icons/reflect-about-line.png", 50));
@@ -104,11 +115,13 @@ public class MenuBar extends JMenuBar {
 
         menuItem = new JMenuItem("Rotate around Point", loader.loadIcon("/icons/rotate-around-point.png", 50));
         menu.add(menuItem);
+        return menu;
+    }
 
-        this.add(menu);
+    public JMenu createGraphicsMenu() throws Exception {
+        JMenu menu = new JMenu();
+        JMenuItem menuItem;
 
-        // move menu
-        menu = new JMenu();
         menu.setIcon(FontIcon.of(BootstrapIcons.ARROWS_MOVE, 35));
 
         menuItem = new JMenuItem("Move Graphics View", FontIcon.of(BootstrapIcons.ARROWS_MOVE, 35));
@@ -120,11 +133,22 @@ public class MenuBar extends JMenuBar {
         menuItem = new JMenuItem("Zoom Out", FontIcon.of(BootstrapIcons.ZOOM_OUT, 35));
         menu.add(menuItem);
 
-        icon = FontIcon.of(BootstrapIcons.ERASER, 40);
+        FontIcon icon = FontIcon.of(BootstrapIcons.ERASER, 40);
         menuItem = new JMenuItem("Delete", icon);
         menu.add(menuItem);
 
-        this.add(menu);
+        return menu;
+    }
+
+    public MenuBar() throws Exception {
+        // create menus and add to menubar
+        this.add(createCursorMenu());
+        this.add(createLineMenu());
+        this.add(createCircleMenu());
+        this.add(createEllipseMenu());
+        this.add(createPolygonMenu());
+        this.add(createTransformationsMenu());
+        this.add(createGraphicsMenu());
 
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         leftPanel.setOpaque(false);
