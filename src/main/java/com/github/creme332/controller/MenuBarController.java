@@ -11,15 +11,29 @@ import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 
 import com.github.creme332.model.AppState;
+import com.github.creme332.model.Mode;
 import com.github.creme332.view.MenuBar;
 
 public class MenuBarController {
     private MenuBar menubar;
     private AppState app;
+
     private int activeMenuIndex = 0;
 
-    final private static MatteBorder VISIBLE_BORDER = BorderFactory.createMatteBorder(
+    final private MatteBorder VISIBLE_BORDER = BorderFactory.createMatteBorder(
             2, 2, 2, 2, new Color(97, 97, 255));
+
+    Mode[][] modes = {
+            new Mode[] { Mode.MOVE_CANVAS, Mode.DRAW_FREEHAND },
+            new Mode[] { Mode.DRAW_LINE_DDA, Mode.DRAW_LINE_BRESENHAM },
+            new Mode[] { Mode.DRAW_CIRCLE_DYNAMIC, Mode.DRAW_CIRCLE_FIXED },
+            new Mode[] { Mode.DRAW_ELLIPSE },
+            new Mode[] { Mode.DRAW_POLYGON_DYNAMIC, Mode.DRAW_REGULAR_POLYGON },
+            new Mode[] { Mode.REFLECT_ABOUT_LINE, Mode.REFLECT_ABOUT_POINT, Mode.ROTATE_AROUND_POINT },
+            new Mode[] { Mode.MOVE_GRAPHICS_VIEW, Mode.ZOOM_IN, Mode.ZOOM_OUT, Mode.DELETE }
+    };
+
+    Mode[] menuModes = new Mode[modes.length]; // currently selected option for each menu
 
     public MenuBarController(AppState app, MenuBar menu) {
         this.menubar = menu;
@@ -36,31 +50,42 @@ public class MenuBarController {
             final int menuIndex = i;
             final Border normalBorder = jMenu.getBorder();
 
+            // set initial mode of menu to first mode present
+            menuModes[i] = modes[i][0];
+
             if (i == activeMenuIndex) {
                 jMenu.setBorder(VISIBLE_BORDER);
             }
 
-            // add mouse listener to menu
+            // when user clicks on a menu
             jMenu.addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
+
                     // remove border from previously active menu
                     menu.getMenu(activeMenuIndex).setBorder(normalBorder);
 
+                    // store index of clicked menu
                     activeMenuIndex = menuIndex;
 
                     // add border to clicked menu
                     menu.getMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
+
+                    // change mode of app
+                    app.setMode(menuModes[activeMenuIndex]);
                 }
             });
 
             for (int j = 0; j < jMenu.getItemCount(); j++) {
                 JMenuItem jMenuItem = jMenu.getItem(j);
 
+                final int menuItemIndex = j;
                 // add mouse listener to menu item
                 jMenuItem.addMouseListener(new MouseAdapter() {
                     public void mousePressed(MouseEvent e) {
                         // change menu icon to icon of menu item
                         jMenu.setIcon(jMenuItem.getIcon());
+                        app.setMode(modes[menuIndex][menuItemIndex]);
+                        menuModes[activeMenuIndex] = modes[menuIndex][menuItemIndex];
                     }
                 });
             }
