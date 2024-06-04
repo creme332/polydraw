@@ -38,6 +38,7 @@ public class MenuBarController {
     public MenuBarController(AppState app, MenuBar menu) {
         this.menubar = menu;
         this.app = app;
+        app.setMode(modes[0][0]);
 
         for (int i = 0; i < menu.getMenuCount(); i++) {
             JMenu jMenu = menu.getMenu(i);
