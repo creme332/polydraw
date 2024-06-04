@@ -18,7 +18,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
 public class Canvas extends JPanel {
-    private final int TICK_PADDING_TOP = 12; // spacing between top of canvas and tick label when axis is out of sight
+    private final int TICK_PADDING_TOP = 20; // spacing between top of canvas and tick label when axis is out of sight
     private final int TICK_PADDING_BOTTOM = 10; // spacing between bottom of canvas and tick label when axis is out of
                                                 // sight
     private final int TICK_PADDING_LEFT = 12; // spacing between left border of canvas and tick label when axis is out

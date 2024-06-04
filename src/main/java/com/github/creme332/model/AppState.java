@@ -4,6 +4,8 @@ import java.beans.*;
 
 public class AppState {
     private PropertyChangeSupport support;
+    
+    private Mode mode;
 
     private boolean visibleSidebar = false;
 
@@ -20,8 +22,17 @@ public class AppState {
     }
 
     public void setSideBarVisibility(boolean newValue) {
-        System.out.println("dsad");
         support.firePropertyChange("sidebarVisibility", visibleSidebar, newValue);
         visibleSidebar = newValue;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public void setMode(Mode newMode) {
+        System.out.println("Mode: " + mode + " -> " + newMode);
+        support.firePropertyChange("mode", mode, newMode);
+        mode = newMode;
     }
 }
