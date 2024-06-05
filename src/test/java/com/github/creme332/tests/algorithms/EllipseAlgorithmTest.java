@@ -3,20 +3,23 @@ package com.github.creme332.tests.algorithms;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import com.github.creme332.algorithms.EllipseAlgorithm;
+import java.util.List;
 
 public class EllipseAlgorithmTest {
 
   @Test
   public void testValidEllipse() {
-    int[][] pixels = EllipseAlgorithm.drawEllipse(3, 2, 3, 2);
+    List<int[]> pixels = EllipseAlgorithm.drawEllipse(0, 0, 8, 6);
 
-    // Verify pixels along the major axis (horizontal in this case)
-    assertEquals(1, pixels[2][6]); // Center at (3, 2), 3 units right
-    assertEquals(1, pixels[2][0]); // Center at (3, 2), 3 units left
+    int[][] expectedArray = {
+      {0, 6}, {1, 6}, {2, 6}, {3, 6}, {4, 5}, {5, 5}, {6, 4}, {7, 3},
+      {8, 2}, {8, 1}, {8, 0}, {0, -6}, {-1, 6}, {-2, 6}, {-3, 6},
+      {-4, 5}, {-5, 5}, {-6, 4}, {-7, 3}, {-8, 2}, {-8, 1}, {-8, 0},
+      {0, -6}, {1, -6}, {2, -6}, {3, -6}, {4, -5}, {5, -5}, {6, -4},
+      {7, -3}, {8, -2}, {8, -1}, {-8, -2}, {-8, -1}, {-8, -0}
+    };
 
-    // Verify pixels along the minor axis (vertical)
-    assertEquals(1, pixels[4][3]); // Center at (3, 2), 2 units up
-    assertEquals(1, pixels[0][3]); // Center at (3, 2), 2 units down
+    assertArrayEquals(expectedArray, pixels.toArray(new int[pixels.size()][]));
   }
 
   @Test
@@ -41,39 +44,38 @@ public class EllipseAlgorithmTest {
 
   @Test
   public void testHorizontalEllipse() {
-    int[][] pixels = EllipseAlgorithm.drawEllipse(7, 3, 7, 3);
+    List<int[]> pixels = EllipseAlgorithm.drawEllipse(0, 0, 7, 3);
+    int[][] expectedArray = {
+      {0, 3}, {1, 3}, {2, 3}, {3, 3}, {4, 2}, {5, 1}, {6, 0}, {-7, 0},
+      {7, 0}, {-6, 0}, {6, 0}, {-5, 1}, {5, 1}, {-4, 2}, {4, 2},
+      {-3, 3}, {3, 3}, {-2, 3}, {2, 3}, {-1, 3}, {1, 3}, {0, -3}
+    };
 
-    // Verify wider spread along X-axis compared to Y-axis
-    int xSpread = 0;
-    for (int y = 0; y <= 6; y++) {
-      if (pixels[y][7] == 1) {
-        xSpread++;
-      }
-    }
-    assertTrue(xSpread > 0); // More pixels set on X-axis
+    assertArrayEquals(expectedArray, pixels.toArray(new int[pixels.size()][]));
   }
 
   @Test
   public void testVerticalEllipse() {
-    int[][] pixels = EllipseAlgorithm.drawEllipse(3, 7, 3, 7);
+    List<int[]> pixels = EllipseAlgorithm.drawEllipse(0, 0, 3, 7);
+    int[][] expectedArray = {
+      {0, 7}, {1, 6}, {2, 6}, {3, 5}, {-3, 5}, {3, 5}, {-2, 6}, {2, 6},
+      {-1, 6}, {1, 6}, {-0, 7}, {0, -7}, {1, -6}, {2, -6}, {3, -5},
+      {-3, -5}, {3, -5}, {-2, -6}, {2, -6}, {-1, -6}, {1, -6}, {0, -7}
+    };
 
-    // Verify wider spread along Y-axis compared to X-axis
-    int ySpread = 0;
-    for (int x = 0; x <= 6; x++) {
-      if (pixels[7][x] == 1) {
-        ySpread++;
-      }
-    }
-    assertTrue(ySpread > 0); // More pixels set on Y-axis
+    assertArrayEquals(expectedArray, pixels.toArray(new int[pixels.size()][]));
   }
 
   @Test
   public void testCenteredEllipse() {
-    int[][] pixels = EllipseAlgorithm.drawEllipse(3, 2, 3, 2);
+    List<int[]> pixels = EllipseAlgorithm.drawEllipse(0, 0, 3, 2);
+    int[][] expectedArray = {
+      {0, 2}, {1, 2}, {2, 1}, {3, 0}, {3, 0}, {3, 0}, {-3, 0},
+      {2, -1}, {1, -2}, {0, -2}, {0, 2}, {-1, 2}, {-2, 1},
+      {-3, 0}, {-2, -1}, {-1, -2}, {0, -2}
+    };
 
-    // Verify pixels are set relative to the given center coordinates
-    assertEquals(1, pixels[2 + 2][3]); // Check pixel at (3, 4)
-    assertEquals(1, pixels[2 - 2][3]); // Check pixel at (3, 0)
+    assertArrayEquals(expectedArray, pixels.toArray(new int[pixels.size()][]));
   }
-
+  
 }
