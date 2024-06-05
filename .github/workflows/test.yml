@@ -3,9 +3,13 @@ name: Run tests
 on:
   workflow_dispatch:
   push:
+    branches:
+      - "main"
+    paths:
+      - "**.java"
   pull_request:
     paths:
-      - '**.java'
+      - "**.java"
 jobs:
   build:
     runs-on: ubuntu-latest
