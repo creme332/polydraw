@@ -2,6 +2,8 @@
 
 _Confirm you have completed the following actions prior to submitting this PR._
 
+- [ ] My code is properly formatted (Use <kbd>SHIFT</kbd> + <kbd>ALT</kbd> + <kbd>F</kbd>
+ on VS Code)
 - [ ] There is an existing issue report for this PR.
 - [ ] This is not a duplicate of an existing pull request.
 - [ ] My pull request is not resolving multiple issues at once.
