@@ -25,39 +25,51 @@ public class EllipseAlgorithm {
     int x = 0;
     int y = ry;
 
-    int p = ry * ry - rx * rx * ry + (rx * rx) / 4; // Initial decision parameter
+    int rx2 = rx * rx;
+    int ry2 = ry * ry;
+    int tworx2 = 2 * rx2;
+    int twory2 = 2 * ry2;
 
-    // Region 1 - Iterate based on y until decision parameter changes sign
-    while (ry * ry * x <= rx * rx * y) {
-      setPixel(pixels, centerX, centerY, x, y);
+    int p = (int)(ry2 - (rx2 * ry) + (0.25 * rx2)); // Initial decision parameter
+
+    int px = 0;
+    int py = tworx2 * y;
+
+    // Region 1
+    while (px < py) {
+      addPixels(pixels, centerX, centerY, x, y);
       x++;
+      px += twory2;
       if (p < 0) {
-        p += 2 * ry * ry * x + ry * ry;
+        p += ry2 + px;
       } else {
         y--;
-        p += 2 * ry * ry * x - 2 * rx * rx * y + ry * ry;
+        py -= tworx2;
+        p += ry2 + px - py;
       }
     }
 
-    // Region 2 - Iterate based on x until decision parameter changes sign again
-    p = (int) Math.round(ry * ry * (x + 0.5) * (x + 0.5) + rx * rx * (y - 1) * (y - 1) - rx * rx * ry * ry);
+    // Region 2
+    p = (int)(ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2);
     while (y >= 0) {
-      setPixel(pixels, centerX, centerY, x, y);
+      addPixels(pixels, centerX, centerY, x, y);
       y--;
+      py -= tworx2;
       if (p > 0) {
-        p -= 2 * rx * rx * y + rx * rx;
+        p += rx2 - py;
       } else {
         x++;
-        p += 2 * ry * ry * x - 2 * rx * rx * y + rx * rx;
+        px += twory2;
+        p += rx2 - py + px;
       }
     }
     return pixels;
   }
 
-  private static void setPixel(List<int[]> pixels, int centerX, int centerY, int x, int y) {
-    pixels.add(new int[] {centerX + x, centerY + y});
-    pixels.add(new int[] {centerX - x, centerY + y});
-    pixels.add(new int[] {centerX + x, centerY - y});
-    pixels.add(new int[] {centerX - x, centerY - y});
+  private static void addPixels(List<int[]> pixels, int centerX, int centerY, int x, int y) {
+    pixels.add(new int[]{centerX + x, centerY + y});
+    pixels.add(new int[]{centerX - x, centerY + y});
+    pixels.add(new int[]{centerX + x, centerY - y});
+    pixels.add(new int[]{centerX - x, centerY - y});
   }
 }
