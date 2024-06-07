@@ -287,4 +287,15 @@ public class Canvas extends JPanel {
         drawShapeExample(g2);
 
     }
+    public JButton getHomeButton() {
+        return homeButton;
+    }
+    
+    public JButton getZoomInButton() {
+        return zoomInButton;
+    }
+    
+    public JButton getZoomOutButton() {
+        return zoomOutButton;
+    }
 }
