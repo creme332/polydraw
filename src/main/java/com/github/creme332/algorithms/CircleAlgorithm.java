@@ -1,5 +1,8 @@
 package com.github.creme332.algorithms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CircleAlgorithm {
 
     public static int[][] drawCircle(int centerX, int centerY, int radius) {
@@ -7,15 +10,14 @@ public class CircleAlgorithm {
             throw new IllegalArgumentException("Radius cannot be negative");
         }
 
-        int diameter = 2 * radius + 1;
-        int[][] pixels = new int[diameter][diameter];
+        List<int[]> pixelList = new ArrayList<>();
 
         int x = radius;
         int y = 0;
         int decisionParameter = 1 - radius;
 
         while (x >= y) {
-            plotCirclePoints(pixels, centerX, centerY, x, y);
+            plotCirclePoints(pixelList, centerX, centerY, x, y);
             y++;
 
             if (decisionParameter <= 0) {
@@ -26,24 +28,17 @@ public class CircleAlgorithm {
             }
         }
 
-        return pixels;
+        return pixelList.toArray(new int[pixelList.size()][]);
     }
 
-    private static void plotCirclePoints(int[][] pixels, int centerX, int centerY, int x, int y) {
-        int diameter = pixels.length;
-        plotPoint(pixels, centerX + x, centerY + y, diameter);
-        plotPoint(pixels, centerX - x, centerY + y, diameter);
-        plotPoint(pixels, centerX + x, centerY - y, diameter);
-        plotPoint(pixels, centerX - x, centerY - y, diameter);
-        plotPoint(pixels, centerX + y, centerY + x, diameter);
-        plotPoint(pixels, centerX - y, centerY + x, diameter);
-        plotPoint(pixels, centerX + y, centerY - x, diameter);
-        plotPoint(pixels, centerX - y, centerY - x, diameter);
-    }
-
-    private static void plotPoint(int[][] pixels, int x, int y, int diameter) {
-        if (x >= 0 && x < diameter && y >= 0 && y < diameter) {
-            pixels[x][y] = 1;
-        }
+    private static void plotCirclePoints(List<int[]> pixelList, int centerX, int centerY, int x, int y) {
+        pixelList.add(new int[]{centerX + x, centerY + y});
+        pixelList.add(new int[]{centerX - x, centerY + y});
+        pixelList.add(new int[]{centerX + x, centerY - y});
+        pixelList.add(new int[]{centerX - x, centerY - y});
+        pixelList.add(new int[]{centerX + y, centerY + x});
+        pixelList.add(new int[]{centerX - y, centerY + x});
+        pixelList.add(new int[]{centerX + y, centerY - x});
+        pixelList.add(new int[]{centerX - y, centerY - x});
     }
 }

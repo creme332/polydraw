@@ -1,6 +1,9 @@
 package com.github.creme332.tests.algorithms;
 
 import org.junit.Test;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 import com.github.creme332.algorithms.CircleAlgorithm;
@@ -14,26 +17,32 @@ public class CircleAlgorithmTest {
         int radius = 5;
         int[][] pixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
 
-        assertEquals(2 * radius + 1, pixels.length); // Check array size
-        assertEquals(2 * radius + 1, pixels[0].length);
+        Set<String> expectedPixels = new HashSet<>(Arrays.asList(
+            "[10, 5]", "[5, 10]", "[0, 5]", "[5, 0]", 
+            "[9, 6]", "[6, 9]", "[1, 6]", "[6, 1]",
+            "[8, 7]", "[7, 8]", "[2, 7]", "[7, 2]",
+            "[8, 3]", "[7, 4]", "[2, 3]", "[7, 6]",
+            "[8, 1]", "[7, 0]", "[2, 1]", "[7, 10]", 
+            "[9, 4]", "[6, 5]", "[1, 4]", "[6, 10]",
+            "[10, 6]", "[5, 9]", "[0, 6]", "[5, 1]",
+            "[10, 4]", "[5, 7]", "[0, 4]", "[5, 3]"
+        ));
 
-        int[][] expectedPixels = new int[][] {
-            {0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0},
-            {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-            {0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1},
-            {1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1},
-            {1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1},
-            {1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-            {1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-            {1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1},
-            {1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1},
-            {0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0},
-            {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0}
-        };
-
-        for (int i = 0; i < pixels.length; i++) {
-            assertArrayEquals(expectedPixels[i], pixels[i]);
+        Set<String> actualPixels = new HashSet<>();
+        for (int[] pixel : pixels) {
+            actualPixels.add(Arrays.toString(pixel));
         }
+
+        // Debugging output for easier comparison
+        if (!expectedPixels.equals(actualPixels)) {
+            System.out.println("Expected Pixels: " + expectedPixels);
+            System.out.println("Actual Pixels: " + actualPixels);
+            for (int[] pixel : pixels) {
+                System.out.println(Arrays.toString(pixel));
+            }
+        }
+
+        assertEquals(expectedPixels, actualPixels);
     }
 
     @Test
@@ -44,8 +53,7 @@ public class CircleAlgorithmTest {
         int[][] pixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
 
         assertEquals(1, pixels.length); // Single pixel for radius 0
-        assertEquals(1, pixels[0].length);
-        assertTrue(pixels[0][0] == 1); // Check center pixel
+        assertArrayEquals(new int[]{0, 0}, pixels[0]); // Check center pixel
     }
 
     @Test(expected = IllegalArgumentException.class)
