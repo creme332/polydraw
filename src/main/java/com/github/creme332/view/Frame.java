@@ -2,8 +2,6 @@ package com.github.creme332.view;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,9 +13,8 @@ import com.github.creme332.utils.exception.InvalidPathException;
  * Frame of the GUI application.
  */
 public class Frame extends JFrame {
-    // initial frame properties
-    private final int frameWidth = 1600; // initial width
-    private final int frameHeight = 1000; // initial height
+    private static final int INITIAL_FRAME_WIDTH = 1600;
+    private static final int INITIAL_FRAME_HEIGHT = 1000;
 
     /**
      * Layout used for screenContainer for swapping screens
@@ -47,19 +44,19 @@ public class Frame extends JFrame {
         this.setTitle("polydraw");
 
         // set frame size
-        this.setSize(frameWidth, frameHeight);
+        this.setSize(INITIAL_FRAME_WIDTH, INITIAL_FRAME_HEIGHT);
 
         // make frame resizable
         this.setResizable(true);
 
         // add close button to frame
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // set application icon
         this.setIconImage(new IconLoader().loadIcon("/icons/icosahedron.png").getImage());
 
         // center frame on startup if frame is not maximized
-        if (this.getExtendedState() != JFrame.MAXIMIZED_BOTH) {
+        if (this.getExtendedState() != MAXIMIZED_BOTH) {
             this.setLocationRelativeTo(null);
         }
 

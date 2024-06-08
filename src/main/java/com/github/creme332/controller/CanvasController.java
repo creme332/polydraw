@@ -12,43 +12,49 @@ public class CanvasController {
     private Canvas canvas;
     private Point initialClick;
 
-    public final int MAX_CELL_SIZE = 500;
-    public final int MIN_CELL_SIZE = 30;
+    public static final int MAX_CELL_SIZE = 500;
+    public static final int DEFAULT_CELL_SIZE = 100;
+    public static final int MIN_CELL_SIZE = 30;
+    public static final int ZOOM_INCREMENT = 10;
 
     public CanvasController(Canvas canvas) {
         this.canvas = canvas;
-    
+
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 handleCanvasResize();
             }
         });
-    
+
         canvas.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 handleMousePressed(e);
             }
         });
-    
+
         canvas.addMouseMotionListener(new MouseAdapter() {
+            @Override
             public void mouseMoved(MouseEvent e) {
-                // System.out.format("Mouse moved: %d, %d\n", e.getX(), e.getY());
+                // TODO document why this method is empty
             }
         });
-    
+
         canvas.addMouseMotionListener(new MouseAdapter() {
+            @Override
             public void mouseDragged(MouseEvent e) {
                 handleMouseDragged(e);
             }
         });
-    
+
         canvas.addMouseWheelListener(new MouseAdapter() {
+            @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 handleCanvasZoom(e);
             }
         });
-    
+
         // Add action listeners for the zoom panel buttons
         canvas.getHomeButton().addActionListener(e -> handleHomeButton());
         canvas.getZoomInButton().addActionListener(e -> handleZoomInButton());
@@ -56,24 +62,19 @@ public class CanvasController {
     }
 
     private void handleCanvasZoom(MouseWheelEvent e) {
-        // System.out.println("Mouse wheel moved " + e.getScrollAmount() + " " +
-        // e.getWheelRotation());
-
         if (e.getWheelRotation() == 1) {
             // zoom out
-            canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - 10));
+            canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - ZOOM_INCREMENT));
 
         } else {
             // zoom in
-            canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + 10));
+            canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + ZOOM_INCREMENT));
         }
 
         canvas.repaint();
     }
 
     private void handleMouseDragged(MouseEvent e) {
-        // System.out.format("Mouse dragged: %d, %d\n", e.getX(), e.getY());
-
         if (initialClick == null) {
             initialClick = e.getPoint();
             return;
@@ -82,7 +83,6 @@ public class CanvasController {
         Point currentDrag = e.getPoint();
         int deltaX = currentDrag.x - initialClick.x;
         int deltaY = currentDrag.y - initialClick.y;
-        // System.out.format("Mouse dragged by: %d, %d\n", deltaX, deltaY);
 
         canvas.setYZero(canvas.getYZero() + deltaY);
         canvas.setXZero(canvas.getXZero() + deltaX);
@@ -103,31 +103,25 @@ public class CanvasController {
         canvas.positionZoomPanel();
         canvas.positionToolbar();
 
-        System.out.println("Canvas size: " + width + " x " + height);
-
         canvas.repaint();
     }
 
     private void handleMousePressed(MouseEvent e) {
         initialClick = e.getPoint();
-
-        System.out.format("Mouse pressed: %d, %d\n", e.getX(), e.getY());
     }
-    // Logic for Home button
+
     private void handleHomeButton() {
-        canvas.setCellSize(100); // Set the zoom level to 1
+        canvas.setCellSize(DEFAULT_CELL_SIZE);
         canvas.repaint();
     }
 
-    // Logic for Zoom In button
     private void handleZoomInButton() {
-        canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + 10));
+        canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + ZOOM_INCREMENT));
         canvas.repaint();
     }
 
-    // Logic for Zoom Out button
     private void handleZoomOutButton() {
-        canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - 10));
+        canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - ZOOM_INCREMENT));
         canvas.repaint();
     }
 }
