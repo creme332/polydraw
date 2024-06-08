@@ -20,7 +20,7 @@ public class MenuBarController {
 
     private int activeMenuIndex = 0;
 
-    final private MatteBorder VISIBLE_BORDER = BorderFactory.createMatteBorder(
+    private static final MatteBorder VISIBLE_BORDER = BorderFactory.createMatteBorder(
             2, 2, 2, 2, new Color(97, 97, 255));
 
     Mode[][] modes = {
@@ -60,6 +60,7 @@ public class MenuBarController {
 
             // when user clicks on a menu
             jMenu.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mousePressed(MouseEvent e) {
 
                     // remove border from previously active menu
@@ -82,6 +83,7 @@ public class MenuBarController {
                 final int menuItemIndex = j;
                 // add mouse listener to menu item
                 jMenuItem.addMouseListener(new MouseAdapter() {
+                    @Override
                     public void mousePressed(MouseEvent e) {
                         // change menu icon to icon of menu item
                         jMenu.setIcon(jMenuItem.getIcon());
@@ -93,6 +95,7 @@ public class MenuBarController {
         }
 
         menu.getSideBarButton().addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 app.setSideBarVisibility(!app.getSideBarVisibility());
             }
