@@ -24,7 +24,7 @@ public class Controller {
             new ToolBarController(toolbar);
 
             canvas = new Canvas(toolbar);
-            new CanvasController(canvas);
+            new CanvasController(app, canvas);
 
             frame = new Frame(canvas);
             frameController = new FrameController(app, frame);
@@ -36,7 +36,7 @@ public class Controller {
         } catch (InvalidIconSizeException | InvalidPathException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(1);
-        }  catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Unexpected error: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);

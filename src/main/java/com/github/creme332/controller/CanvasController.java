@@ -6,18 +6,23 @@ import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
+
+import com.github.creme332.model.AppState;
+import com.github.creme332.model.Mode;
 import com.github.creme332.view.Canvas;
 
 public class CanvasController {
     private Canvas canvas;
     private Point initialClick;
+    private AppState app;
 
     public static final int MAX_CELL_SIZE = 500;
     public static final int DEFAULT_CELL_SIZE = 100;
     public static final int MIN_CELL_SIZE = 30;
     public static final int ZOOM_INCREMENT = 10;
 
-    public CanvasController(Canvas canvas) {
+    public CanvasController(AppState app, Canvas canvas) {
+        this.app = app;
         this.canvas = canvas;
 
         canvas.addComponentListener(new ComponentAdapter() {
@@ -80,16 +85,18 @@ public class CanvasController {
             return;
         }
 
-        Point currentDrag = e.getPoint();
-        int deltaX = currentDrag.x - initialClick.x;
-        int deltaY = currentDrag.y - initialClick.y;
+        if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW || app.getMode() == Mode.MOVE_CANVAS) {
+            Point currentDrag = e.getPoint();
+            int deltaX = currentDrag.x - initialClick.x;
+            int deltaY = currentDrag.y - initialClick.y;
 
-        canvas.setYZero(canvas.getYZero() + deltaY);
-        canvas.setXZero(canvas.getXZero() + deltaX);
+            canvas.setYZero(canvas.getYZero() + deltaY);
+            canvas.setXZero(canvas.getXZero() + deltaX);
 
-        initialClick = currentDrag;
+            initialClick = currentDrag;
 
-        canvas.repaint();
+            canvas.repaint();
+        }
     }
 
     private void handleCanvasResize() {
