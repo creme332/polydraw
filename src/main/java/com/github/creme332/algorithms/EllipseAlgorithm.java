@@ -1,17 +1,19 @@
 package com.github.creme332.algorithms;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EllipseAlgorithm {
 
   /**
    * This method draws an ellipse using the Midpoint Ellipse Algorithm.
    *
-   * @param centerX  X-coordinate of the ellipse's center
-   * @param centerY  Y-coordinate of the ellipse's center
-   * @param rx       Radius of the ellipse along the X-axis (horizontal radius)
-   * @param ry       Radius of the ellipse along the Y-axis (vertical radius)
+   * @param centerX X-coordinate of the ellipse's center
+   * @param centerY Y-coordinate of the ellipse's center
+   * @param rx      Radius of the ellipse along the X-axis (horizontal radius)
+   * @param ry      Radius of the ellipse along the Y-axis (vertical radius)
    * @return A list of integer arrays representing the pixels of the ellipse
    * @throws IllegalArgumentException if rx or ry are non-positive
    */
@@ -21,6 +23,7 @@ public class EllipseAlgorithm {
     }
 
     List<int[]> pixels = new ArrayList<>();
+    Set<String> pixelSet = new HashSet<>();
 
     int x = 0;
     int y = ry;
@@ -30,14 +33,14 @@ public class EllipseAlgorithm {
     int tworx2 = 2 * rx2;
     int twory2 = 2 * ry2;
 
-    int p = (int)(ry2 - (rx2 * ry) + (0.25 * rx2)); // Initial decision parameter
+    int p = (int) (ry2 - (rx2 * ry) + (0.25 * rx2)); // Initial decision parameter
 
     int px = 0;
     int py = tworx2 * y;
 
     // Region 1
     while (px < py) {
-      addPixels(pixels, centerX, centerY, x, y);
+      addPixels(pixels, pixelSet, centerX, centerY, x, y);
       x++;
       px += twory2;
       if (p < 0) {
@@ -50,9 +53,9 @@ public class EllipseAlgorithm {
     }
 
     // Region 2
-    p = (int)(ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2);
+    p = (int) (ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2);
     while (y >= 0) {
-      addPixels(pixels, centerX, centerY, x, y);
+      addPixels(pixels, pixelSet, centerX, centerY, x, y);
       y--;
       py -= tworx2;
       if (p > 0) {
@@ -66,10 +69,18 @@ public class EllipseAlgorithm {
     return pixels;
   }
 
-  private static void addPixels(List<int[]> pixels, int centerX, int centerY, int x, int y) {
-    pixels.add(new int[]{centerX + x, centerY + y});
-    pixels.add(new int[]{centerX - x, centerY + y});
-    pixels.add(new int[]{centerX + x, centerY - y});
-    pixels.add(new int[]{centerX - x, centerY - y});
+  private static void addPixels(List<int[]> pixels, Set<String> pixelSet, int centerX, int centerY, int x, int y) {
+    addPixel(pixels, pixelSet, centerX + x, centerY + y);
+    addPixel(pixels, pixelSet, centerX - x, centerY + y);
+    addPixel(pixels, pixelSet, centerX + x, centerY - y);
+    addPixel(pixels, pixelSet, centerX - x, centerY - y);
+  }
+
+  private static void addPixel(List<int[]> pixels, Set<String> pixelSet, int x, int y) {
+    String key = x + "," + y;
+    if (!pixelSet.contains(key)) {
+      pixels.add(new int[]{x, y});
+      pixelSet.add(key);
+    }
   }
 }
