@@ -19,7 +19,6 @@ public class CanvasController {
     public static final int MAX_CELL_SIZE = 500;
     public static final int DEFAULT_CELL_SIZE = 100;
     public static final int MIN_CELL_SIZE = 30;
-    public static final int ZOOM_INCREMENT = 10;
 
     public CanvasController(AppState app, Canvas canvas) {
         this.app = app;
@@ -61,21 +60,13 @@ public class CanvasController {
         });
 
         // Add action listeners for the zoom panel buttons
-        canvas.getHomeButton().addActionListener(e -> handleHomeButton());
-        canvas.getZoomInButton().addActionListener(e -> handleZoomInButton());
-        canvas.getZoomOutButton().addActionListener(e -> handleZoomOutButton());
+        canvas.getHomeButton().addActionListener(e -> resetCanvasView());
+        canvas.getZoomInButton().addActionListener(e -> updateCanvasZoom(true));
+        canvas.getZoomOutButton().addActionListener(e -> updateCanvasZoom(false));
     }
 
     private void handleCanvasZoom(MouseWheelEvent e) {
-        if (e.getWheelRotation() == 1) {
-            // zoom out
-            canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - ZOOM_INCREMENT));
-
-        } else {
-            // zoom in
-            canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + ZOOM_INCREMENT));
-        }
-
+        updateCanvasZoom(e.getWheelRotation() != 1);
         canvas.repaint();
     }
 
@@ -117,18 +108,29 @@ public class CanvasController {
         initialClick = e.getPoint();
     }
 
-    private void handleHomeButton() {
+    private void resetCanvasView() {
+        // show origin at center of canvas
+        canvas.setXZero(canvas.getWidth() / 2);
+        canvas.setYZero(canvas.getHeight() / 2);
+
+        // reset zoom level
         canvas.setCellSize(DEFAULT_CELL_SIZE);
         canvas.repaint();
     }
 
-    private void handleZoomInButton() {
-        canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + ZOOM_INCREMENT));
-        canvas.repaint();
-    }
+    /**
+     * Either zooms in or out of canvas.
+     * 
+     * @param zoomIn Zoom in if true, zoom out otherwise
+     */
+    private void updateCanvasZoom(boolean zoomIn) {
+        final int ZOOM_INCREMENT = 10;
 
-    private void handleZoomOutButton() {
-        canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - ZOOM_INCREMENT));
+        if (zoomIn) {
+            canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + ZOOM_INCREMENT));
+        } else {
+            canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - ZOOM_INCREMENT));
+        }
         canvas.repaint();
     }
 }
