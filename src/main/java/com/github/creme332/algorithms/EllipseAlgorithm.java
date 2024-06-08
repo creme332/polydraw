@@ -1,9 +1,7 @@
 package com.github.creme332.algorithms;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class EllipseAlgorithm {
 
@@ -23,7 +21,6 @@ public class EllipseAlgorithm {
     }
 
     List<int[]> pixels = new ArrayList<>();
-    Set<String> pixelSet = new HashSet<>();
 
     int x = 0;
     int y = ry;
@@ -40,7 +37,7 @@ public class EllipseAlgorithm {
 
     // Region 1
     while (px < py) {
-      addPixels(pixels, pixelSet, centerX, centerY, x, y);
+      addPixels(pixels, centerX, centerY, x, y);
       x++;
       px += twory2;
       if (p < 0) {
@@ -55,7 +52,7 @@ public class EllipseAlgorithm {
     // Region 2
     p = (int) (ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2);
     while (y >= 0) {
-      addPixels(pixels, pixelSet, centerX, centerY, x, y);
+      addPixels(pixels, centerX, centerY, x, y);
       y--;
       py -= tworx2;
       if (p > 0) {
@@ -69,18 +66,20 @@ public class EllipseAlgorithm {
     return pixels;
   }
 
-  private static void addPixels(List<int[]> pixels, Set<String> pixelSet, int centerX, int centerY, int x, int y) {
-    addPixel(pixels, pixelSet, centerX + x, centerY + y);
-    addPixel(pixels, pixelSet, centerX - x, centerY + y);
-    addPixel(pixels, pixelSet, centerX + x, centerY - y);
-    addPixel(pixels, pixelSet, centerX - x, centerY - y);
+  private static void addPixels(List<int[]> pixels, int centerX, int centerY, int x, int y) {
+    addPixel(pixels, centerX + x, centerY + y);
+    addPixel(pixels, centerX - x, centerY + y);
+    addPixel(pixels, centerX + x, centerY - y);
+    addPixel(pixels, centerX - x, centerY - y);
   }
 
-  private static void addPixel(List<int[]> pixels, Set<String> pixelSet, int x, int y) {
-    String key = x + "," + y;
-    if (!pixelSet.contains(key)) {
-      pixels.add(new int[]{x, y});
-      pixelSet.add(key);
+  private static void addPixel(List<int[]> pixels, int x, int y) {
+    // Check if the pixel already exists in the list
+    for (int[] pixel : pixels) {
+      if (pixel[0] == x && pixel[1] == y) {
+        return;
+      }
     }
+    pixels.add(new int[]{x, y});
   }
 }
