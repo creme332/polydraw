@@ -1,5 +1,7 @@
 package com.github.creme332.tests.utils;
 
+import static org.junit.Assert.assertEquals;
+
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,13 +15,13 @@ public class TestHelper {
      * pixels in the actualPixels array.
      * Additionally, it identifies any duplicate pixels in the actualPixels array.
      * 
-     * This method does NOT perform assertions.
+     * This method does NOT perform JUnit assertions.
      * 
      * @param expectedPixels The expected array of pixel coordinates.
      * @param actualPixels   The actual array of pixel coordinates to be compared
      *                       with the expected array.
      */
-    public static void compare2DArrays(int[][] expectedPixels, int[][] actualPixels) {
+    public static void compare2DArraysDebug(int[][] expectedPixels, int[][] actualPixels) {
         // Set to store the expected pixel coordinates
         Set<Point> expectedSet = new HashSet<>();
         // Populate the set with expected pixel coordinates
@@ -29,7 +31,7 @@ public class TestHelper {
 
         // Set to store the actual pixel coordinates
         Set<Point> actualSet = new HashSet<>();
-        
+
         // Set to store duplicate actual pixel coordinates
         Set<Point> duplicatePixels = new HashSet<>();
         // Populate the set with actual pixel coordinates
@@ -75,5 +77,29 @@ public class TestHelper {
                 }
             }
         }
+    }
+
+    /**
+     * Asserts that 2 arrays of pixels are identical. Order of pixels is ignored.
+     * 
+     * @param expectedPixels
+     * @param actualPixels
+     */
+    public static void assert2DArrayEquals(int[][] expectedPixels, int[][] actualPixels) {
+        // Set to store the expected pixel coordinates
+        Set<Point> expectedSet = new HashSet<>();
+        // Populate the set with expected pixel coordinates
+        for (int[] coord : expectedPixels) {
+            expectedSet.add(new Point(coord[0], coord[1]));
+        }
+
+        // Set to store the actual pixel coordinates
+        Set<Point> actualSet = new HashSet<>();
+        // Populate the set with actual pixel coordinates
+        for (int[] coord : actualPixels) {
+            actualSet.add(new Point(coord[0], coord[1]));
+        }
+
+        assertEquals(expectedSet, actualSet);
     }
 }
