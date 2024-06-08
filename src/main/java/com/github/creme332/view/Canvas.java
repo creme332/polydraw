@@ -18,21 +18,46 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
 public class Canvas extends JPanel {
-    private final int TICK_PADDING_TOP = 20; // spacing between top of canvas and tick label when axis is out of sight
-    private final int TICK_PADDING_BOTTOM = 10; // spacing between bottom of canvas and tick label when axis is out of
-                                                // sight
-    private final int TICK_PADDING_LEFT = 12; // spacing between left border of canvas and tick label when axis is out
-                                              // of
-    // sight
-    private final int TICK_PADDING_RIGHT = 30; // spacing between right border of canvas and tick label when axis is out
-                                               // of
-    // sight
+    /**
+     * Spacing (in pixels) between top of canvas and tick label when axis is out of
+     * sight.
+     */
+    private static final int TICK_PADDING_TOP = 20;
 
-    int cellSize = 100; // distance in pixels between each unit on axes
+    /**
+     * Spacing (in pixels) between bottom of canvas and tick label when axis is out
+     * of sight.
+     */
+    private static final int TICK_PADDING_BOTTOM = 10;
+
+    /**
+     * Spacing (in pixels) between left border of canvas and tick label when axis is
+     * out of sight.
+     */
+    private static final int TICK_PADDING_LEFT = 12;
+
+    /**
+     * Spacing (in pixels) between right border of canvas and tick label when axis
+     * is out of sight.
+     */
+    private static final int TICK_PADDING_RIGHT = 30;
+
+    /**
+     * Distance in pixels between each unit on axes is out of sight.
+     */
+    int cellSize = 100;
+
     private float labelFontSizeScaleFactor = 1.4F;
 
-    private int yZero; // vertical distance between top border of canvas and my cartesian origin
-    private int xZero; // horizontal distance between left border of canvas and my cartesian origin
+    /**
+     * Vertical distance between top border of canvas and my cartesian origin.
+     */
+    private int yZero;
+
+    /**
+     * Horizontal distance between left border of canvas and my cartesian origin.
+     */
+    private int xZero;
 
     private JButton homeButton = new CircularButton();
     private JButton zoomInButton = new CircularButton();
@@ -272,6 +297,7 @@ public class Canvas extends JPanel {
         g2.fill(transformedPolygon);
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
