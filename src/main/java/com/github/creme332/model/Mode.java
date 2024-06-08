@@ -25,9 +25,9 @@ public enum Mode {
     DELETE("DELETE"),
     MOVE_GRAPHICS_VIEW("MOVE_GRAPHICS_VIEW");
 
-    private final String Mode;
+    private final String mode;
 
-    Mode(String Mode) {
-        this.Mode = Mode;
+    Mode(String mode) {
+        this.mode = mode;
     }
 }
