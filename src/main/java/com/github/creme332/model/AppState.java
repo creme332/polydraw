@@ -4,13 +4,20 @@ import java.beans.*;
 
 public class AppState {
     private PropertyChangeSupport support;
-    
+
     private Mode mode;
 
     private boolean visibleSidebar = false;
 
+    private CanvasModel canvasModel;
+
     public AppState() {
+        canvasModel = new CanvasModel();
         support = new PropertyChangeSupport(this);
+    }
+
+    public CanvasModel getCanvasModel() {
+        return canvasModel;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

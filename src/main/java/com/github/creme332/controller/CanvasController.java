@@ -2,27 +2,37 @@ package com.github.creme332.controller;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 
 import com.github.creme332.model.AppState;
+import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
+import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.view.Canvas;
 
 public class CanvasController {
     private Canvas canvas;
     private Point initialClick;
     private AppState app;
+    private CanvasModel model;
 
-    public static final int MAX_CELL_SIZE = 500;
-    public static final int DEFAULT_CELL_SIZE = 100;
-    public static final int MIN_CELL_SIZE = 30;
+    private static final int MAX_CELL_SIZE = 500;
+    private static final int DEFAULT_CELL_SIZE = 100;
+    private static final int MIN_CELL_SIZE = 30;
+    private Point currentMousePosition;
+
+    private List<ShapeWrapper> shapes = new ArrayList<>();
 
     public CanvasController(AppState app, Canvas canvas) {
         this.app = app;
         this.canvas = canvas;
+        this.model = app.getCanvasModel();
 
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
@@ -41,7 +51,7 @@ public class CanvasController {
         canvas.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                // TODO document why this method is empty
+                currentMousePosition = e.getPoint();
             }
         });
 
@@ -81,8 +91,8 @@ public class CanvasController {
             int deltaX = currentDrag.x - initialClick.x;
             int deltaY = currentDrag.y - initialClick.y;
 
-            canvas.setYZero(canvas.getYZero() + deltaY);
-            canvas.setXZero(canvas.getXZero() + deltaX);
+            model.setYZero(model.getYZero() + deltaY);
+            model.setXZero(model.getXZero() + deltaX);
 
             initialClick = currentDrag;
 
@@ -91,12 +101,14 @@ public class CanvasController {
     }
 
     private void handleCanvasResize() {
+        if (model == null)
+            return;
         int width = canvas.getWidth();
         int height = canvas.getHeight();
 
         // place origin at center of canvas
-        canvas.setYZero(height / 2);
-        canvas.setXZero(width / 2);
+        model.setYZero(height / 2);
+        model.setXZero(width / 2);
 
         canvas.positionZoomPanel();
         canvas.positionToolbar();
@@ -106,15 +118,29 @@ public class CanvasController {
 
     private void handleMousePressed(MouseEvent e) {
         initialClick = e.getPoint();
+
+        if (app.getMode() == Mode.DRAW_LINE_BRESENHAM || app.getMode() == Mode.DRAW_LINE_DDA) {
+            Line2D line = new Line2D.Double();
+            line.setLine(e.getX(), e.getY(), 0, 0);
+
+            ShapeWrapper shape = new ShapeWrapper();
+            shape.setShape(line);
+
+            System.out.println("Added shape");
+            shapes.add(shape);
+        }
+
+        model.setShapes(shapes);
+        canvas.repaint();
     }
 
     private void resetCanvasView() {
         // show origin at center of canvas
-        canvas.setXZero(canvas.getWidth() / 2);
-        canvas.setYZero(canvas.getHeight() / 2);
+        model.setXZero(canvas.getWidth() / 2);
+        model.setYZero(canvas.getHeight() / 2);
 
         // reset zoom level
-        canvas.setCellSize(DEFAULT_CELL_SIZE);
+        model.setCellSize(DEFAULT_CELL_SIZE);
         canvas.repaint();
     }
 
@@ -127,9 +153,9 @@ public class CanvasController {
         final int ZOOM_INCREMENT = 10;
 
         if (zoomIn) {
-            canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + ZOOM_INCREMENT));
+            model.setCellSize(Math.min(MAX_CELL_SIZE, model.getCellSize() + ZOOM_INCREMENT));
         } else {
-            canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - ZOOM_INCREMENT));
+            model.setCellSize(Math.max(MIN_CELL_SIZE, model.getCellSize() - ZOOM_INCREMENT));
         }
         canvas.repaint();
     }

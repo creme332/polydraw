@@ -23,7 +23,7 @@ public class Controller {
             toolbar = new Toolbar();
             new ToolBarController(toolbar);
 
-            canvas = new Canvas(toolbar);
+            canvas = new Canvas(app.getCanvasModel(), toolbar);
             new CanvasController(app, canvas);
 
             frame = new Frame(canvas);
