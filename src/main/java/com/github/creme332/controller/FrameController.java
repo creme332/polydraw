@@ -29,7 +29,6 @@ public class FrameController {
                 int menuHeight = frame.getMyMenuBar().getHeight();
 
                 int sideWidth = Math.min(400, width / 3);
-                System.out.println("Frame size: " + width + " x " + height);
                 frame.getMainPanel().setPreferredSize(new Dimension(menuWidth, height - menuHeight));
                 frame.setPreferredSize(new Dimension(sideWidth, height - menuHeight));
             }

@@ -1,11 +1,11 @@
 package com.github.creme332;
 
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.github.creme332.controller.Controller;
+import com.github.creme332.view.PolydrawTheme;
 
 public class App {
     public static void main(String[] args) {
-        FlatMacLightLaf.setup();
+        PolydrawTheme.setup();
         new Controller();
     }
 }
