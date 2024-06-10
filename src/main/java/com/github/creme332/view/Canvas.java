@@ -20,7 +20,8 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 
 public class Canvas extends JPanel {
     private JButton homeButton = new CircularButton();
@@ -256,31 +257,43 @@ public class Canvas extends JPanel {
         drawGuidelines(g2);
         drawHorizontalAxis(g2);
         drawVerticalAxis(g2);
-        drawShapeExample(g2);
-
-        // Polygon a = new Polygon();
-        // Shape b;
-        // a.addPoint(0, 0);
-        // a.addPoint(500, 500);
-        // g2.drawPolygon(a);
-
-        Rectangle2D rectangle = new Rectangle2D.Double(50, 50, 100, 100);
-        rectangle.setFrame(rectangle.getX(), rectangle.getY(), 300, 300);
-        g2.setColor(Color.RED);
-        g2.fill(rectangle);
-
-        // Using Polygon
-        int[] xPoints = { 200, 250, 300 };
-        int[] yPoints = { 200, 150, 200 };
-        Shape triangle = new Polygon(xPoints, yPoints, xPoints.length);
-        g2.setColor(Color.BLUE);
-        g2.fill(triangle);
 
         for (ShapeWrapper s : model.getShapes()) {
-            g2.setColor(s.getLineColor());
-            g2.draw(s.getShape());
+            if (s.getPreview()) {
+                g2.setColor(Color.gray);
+            } else {
+                g2.setColor(s.getLineColor());
+            }
+
+            if (s.getShape() != null) {
+                Shape s1 = s.getTransformedShape(model.getTransform());
+                g2.draw(s1);
+            }
+
+            // plot points
+            for (Point2D p : s.getPlottedPoints()) {
+                Shape point = createPointAsShape(toUserSpace(p));
+
+                g2.draw(point);
+                g2.fill(point);
+            }
 
         }
+    }
+
+    private Point2D toUserSpace(Point2D mySpaceCoord) {
+        double x = mySpaceCoord.getX() * model.getCellSize() + model.getXZero();
+        double y = -mySpaceCoord.getY() * model.getCellSize() + model.getYZero();
+        return new Point2D.Double(x, y);
+    }
+
+    private Shape createPointAsShape(Point2D mySpaceCoord) {
+        double radius = 15;
+        Ellipse2D ellipse = new Ellipse2D.Double(mySpaceCoord.getX() - radius / 2, mySpaceCoord.getY() - radius / 2,
+                radius,
+                radius);
+
+        return ellipse;
     }
 
     public JButton getHomeButton() {
