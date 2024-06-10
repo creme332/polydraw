@@ -5,14 +5,20 @@ import java.util.List;
 
 public class EllipseAlgorithm {
 
+  private EllipseAlgorithm() {
+
+  }
+
   /**
-   * This method draws an ellipse using the Midpoint Ellipse Algorithm.
+   * This method calculates the pixel coordinates of an ellipse using the Midpoint
+   * Ellipse Algorithm.
    *
    * @param centerX X-coordinate of the ellipse's center
    * @param centerY Y-coordinate of the ellipse's center
    * @param rx      Radius of the ellipse along the X-axis (horizontal radius)
    * @param ry      Radius of the ellipse along the Y-axis (vertical radius)
-   * @return A list of integer arrays representing the pixels of the ellipse
+   * @return A list of integer arrays representing the x-y coordinates of each
+   *         pixel of the ellipse
    * @throws IllegalArgumentException if rx or ry are non-positive
    */
   public static List<int[]> drawEllipse(int centerX, int centerY, int rx, int ry) {
@@ -67,19 +73,31 @@ public class EllipseAlgorithm {
   }
 
   private static void addPixels(List<int[]> pixels, int centerX, int centerY, int x, int y) {
+
+    // when x = 0, (-x, y)= (x, y) and (-x, -y) = (x, -y)
+    // plot only pixels in 2 quadrants
+    if (x == 0) {
+      addPixel(pixels, centerX + x, centerY + y);
+      addPixel(pixels, centerX + x, centerY - y);
+      return;
+    }
+
+    // when y = 0, (x, -y)= (x, y) and (-x, y) = (-x, y)
+    // plot only pixels in 2 quadrants
+    if (y == 0) {
+      addPixel(pixels, centerX + x, centerY + y);
+      addPixel(pixels, centerX - x, centerY + y);
+      return;
+    }
+
+    // else plot a pixel in each quadrant
     addPixel(pixels, centerX + x, centerY + y);
-    addPixel(pixels, centerX - x, centerY + y);
     addPixel(pixels, centerX + x, centerY - y);
+    addPixel(pixels, centerX - x, centerY + y);
     addPixel(pixels, centerX - x, centerY - y);
   }
 
   private static void addPixel(List<int[]> pixels, int x, int y) {
-    // Check if the pixel already exists in the list
-    for (int[] pixel : pixels) {
-      if (pixel[0] == x && pixel[1] == y) {
-        return;
-      }
-    }
-    pixels.add(new int[]{x, y});
+    pixels.add(new int[] { x, y });
   }
 }
