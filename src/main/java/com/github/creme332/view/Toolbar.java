@@ -90,8 +90,9 @@ public class Toolbar extends JToolBar implements ActionListener {
         Color color = JColorChooser.showDialog(this,
                 "Select a color", Color.black);
 
-        // set Background color of the Container
-        colorBox.setBackground(color);
+        // set background color of the Container
+        if (color != null)
+            colorBox.setBackground(color);
     }
 
 }
