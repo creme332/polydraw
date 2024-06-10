@@ -1,9 +1,10 @@
 package com.github.creme332.tests.algorithms;
 
 import org.junit.Test;
+import com.github.creme332.algorithms.CircleAlgorithm;
+import com.github.creme332.tests.utils.TestHelper;
 
 import static org.junit.Assert.*;
-import com.github.creme332.algorithms.CircleAlgorithm;
 
 public class CircleAlgorithmTest {
 
@@ -17,30 +18,27 @@ public class CircleAlgorithmTest {
         int[][] expectedPixels = {
                 // Octant 1: (x, y)
                 { 0, 10 }, { 1, 10 }, { 2, 10 }, { 3, 10 }, { 4, 9 }, { 5, 9 }, { 6, 8 }, { 7, 7 },
-
                 // Octant 2: (y, x)
                 { 10, 0 }, { 10, 1 }, { 10, 2 }, { 10, 3 }, { 9, 4 }, { 9, 5 }, { 8, 6 },
-
                 // Octant 3: (y, -x)
                 { 10, -1 }, { 10, -2 }, { 10, -3 }, { 9, -4 }, { 9, -5 }, { 8, -6 }, { 7, -7 },
-
                 // Octant 4: (x, -y)
                 { 0, -10 }, { 1, -10 }, { 2, -10 }, { 3, -10 }, { 4, -9 }, { 5, -9 }, { 6, -8 },
-
                 // Octant 5: (-x, -y)
                 { -1, -10 }, { -2, -10 }, { -3, -10 }, { -4, -9 }, { -5, -9 }, { -6, -8 }, { -7, -7 },
-
                 // Octant 6: (-y, -x)
                 { -10, 0 }, { -10, -1 }, { -10, -2 }, { -10, -3 }, { -9, -4 }, { -9, -5 }, { -8, -6 },
-
                 // Octant 7: (-y, x)
                 { -10, 1 }, { -10, 2 }, { -10, 3 }, { -9, 4 }, { -9, 5 }, { -8, 6 }, { -7, 7 },
-
                 // Octant 8: (-x, y)
                 { -1, 10 }, { -2, 10 }, { -3, 10 }, { -4, 9 }, { -5, 9 }, { -6, 8 },
         };
 
-        assertArrayEquals(expectedPixels, actualPixels);
+        // Debugging with detailed output
+        TestHelper.compare2DArraysDebug(expectedPixels, actualPixels);
+
+        // Using the helper method for assertion
+        TestHelper.assert2DArrayEquals(expectedPixels, actualPixels);
     }
 
     @Test

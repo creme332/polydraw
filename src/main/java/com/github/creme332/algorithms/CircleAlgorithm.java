@@ -12,19 +12,23 @@ public class CircleAlgorithm {
 
         List<int[]> pixelList = new ArrayList<>();
 
-        int x = radius;
-        int y = 0;
-        int decisionParameter = 1 - radius;
+        if (radius == 0) {
+            pixelList.add(new int[] { centerX, centerY });
+        } else {
+            int x = radius;
+            int y = 0;
+            int decisionParameter = 1 - radius;
 
-        while (x >= y) {
-            plotCirclePoints(pixelList, centerX, centerY, x, y);
-            y++;
+            while (x >= y) {
+                plotCirclePoints(pixelList, centerX, centerY, x, y);
+                y++;
 
-            if (decisionParameter <= 0) {
-                decisionParameter += 2 * y + 1;
-            } else {
-                x--;
-                decisionParameter += 2 * (y - x) + 1;
+                if (decisionParameter <= 0) {
+                    decisionParameter += 2 * y + 1;
+                } else {
+                    x--;
+                    decisionParameter += 2 * (y - x) + 1;
+                }
             }
         }
 
@@ -32,13 +36,22 @@ public class CircleAlgorithm {
     }
 
     private static void plotCirclePoints(List<int[]> pixelList, int centerX, int centerY, int x, int y) {
-        pixelList.add(new int[]{centerX + x, centerY + y});
-        pixelList.add(new int[]{centerX - x, centerY + y});
-        pixelList.add(new int[]{centerX + x, centerY - y});
-        pixelList.add(new int[]{centerX - x, centerY - y});
-        pixelList.add(new int[]{centerX + y, centerY + x});
-        pixelList.add(new int[]{centerX - y, centerY + x});
-        pixelList.add(new int[]{centerX + y, centerY - x});
-        pixelList.add(new int[]{centerX - y, centerY - x});
+        addUniquePixel(pixelList, centerX + x, centerY + y);
+        addUniquePixel(pixelList, centerX - x, centerY + y);
+        addUniquePixel(pixelList, centerX + x, centerY - y);
+        addUniquePixel(pixelList, centerX - x, centerY - y);
+        addUniquePixel(pixelList, centerX + y, centerY + x);
+        addUniquePixel(pixelList, centerX - y, centerY + x);
+        addUniquePixel(pixelList, centerX + y, centerY - x);
+        addUniquePixel(pixelList, centerX - y, centerY - x);
+    }
+
+    private static void addUniquePixel(List<int[]> pixelList, int x, int y) {
+        for (int[] pixel : pixelList) {
+            if (pixel[0] == x && pixel[1] == y) {
+                return; // Pixel already exists, don't add it again
+            }
+        }
+        pixelList.add(new int[] { x, y });
     }
 }
