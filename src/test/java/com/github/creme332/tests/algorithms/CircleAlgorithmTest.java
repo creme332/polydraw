@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 public class CircleAlgorithmTest {
 
     @Test
-    public void testDrawCircle_positiveRadius() {
+    public void testValidCircleCenteredOrigin() {
         int centerX = 0;
         int centerY = 0;
         int radius = 10;
@@ -34,29 +34,34 @@ public class CircleAlgorithmTest {
                 { -1, 10 }, { -2, 10 }, { -3, 10 }, { -4, 9 }, { -5, 9 }, { -6, 8 },
         };
 
-        // Debugging with detailed output
-        TestHelper.compare2DArraysDebug(expectedPixels, actualPixels);
-
         // Using the helper method for assertion
         TestHelper.assert2DArrayEquals(expectedPixels, actualPixels);
     }
 
     @Test
-    public void testDrawCircle_zeroRadius() {
+    public void testZeroRadiusCenteredOrigin() {
         int centerX = 0;
         int centerY = 0;
         int radius = 0;
-        int[][] pixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
 
-        assertEquals(1, pixels.length); // Single pixel for radius 0
-        assertArrayEquals(new int[] { 0, 0 }, pixels[0]); // Check center pixel
+        try {
+            CircleAlgorithm.drawCircle(centerX, centerY, radius);
+            fail("Expected IllegalArgumentException for zero radii");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Radius must be positive", e.getMessage());
+        }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testDrawCircle_negativeRadius() {
+    @Test
+    public void testNegativeRadiusCenteredOrigin() {
         int centerX = 0;
         int centerY = 0;
         int radius = -5;
-        CircleAlgorithm.drawCircle(centerX, centerY, radius);
+        try {
+            CircleAlgorithm.drawCircle(centerX, centerY, radius);
+            fail("Expected IllegalArgumentException for negative radii");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Radius must be positive", e.getMessage());
+        }
     }
 }
