@@ -16,7 +16,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
@@ -71,12 +70,12 @@ public class Canvas extends JPanel {
 
     public JButton createZoomPanelButton(Ikon ikon) {
         final int ICON_SIZE = 25;
-        final Color ICON_COLOR = new Color(116, 116, 116);
+        final Color gray = new Color(116, 116, 116);
 
         JButton btn = new CircularButton();
         btn.setPreferredSize(new Dimension(50, 50));
         FontIcon icon = FontIcon.of(ikon, ICON_SIZE);
-        icon.setIconColor(ICON_COLOR);
+        icon.setIconColor(gray);
         btn.setIcon(icon);
         return btn;
     }
@@ -212,38 +211,6 @@ public class Canvas extends JPanel {
         }
     }
 
-    public void drawShapeExample(Graphics2D g2) {
-
-        double x[] = {
-                1, 1, 1, 1, -1, -1, -1, -1,
-                0, 0, 0, 0,
-                0.618, -0.618, 0.618, -0.618,
-                1.618, 1.618, -1.618, -1.618
-        };
-
-        // y coordinates of vertices
-        double y[] = {
-                1, 1, -1, -1, 1, 1, -1, -1,
-                1.618, 1.618, -1.618, -1.618,
-                0, 0, 0, 0,
-                0.618, -0.618, 0.618, -0.618
-        };
-
-        // number of vertices
-        int numberofpoints = x.length;
-
-        // Polygon originalPolygon = new Polygon(x, y, numberofpoints);
-
-        Polygon transformedPolygon = new Polygon();
-        for (int i = 0; i < numberofpoints; i++) {
-            transformedPolygon.addPoint((int) (model.getXZero() + x[i] * model.getCellSize()),
-                    (int) (model.getYZero() - y[i] * model.getCellSize()));
-        }
-        g2.drawPolygon(transformedPolygon);
-        g2.setColor(Color.red);
-        g2.fill(transformedPolygon);
-    }
-
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -258,20 +225,17 @@ public class Canvas extends JPanel {
         drawHorizontalAxis(g2);
         drawVerticalAxis(g2);
 
-        for (ShapeWrapper s : model.getShapes()) {
-            if (s.getPreview()) {
-                g2.setColor(Color.gray);
-            } else {
-                g2.setColor(s.getLineColor());
-            }
+        for (ShapeWrapper wrapper : model.getShapes()) {
+            g2.setColor(wrapper.getLineColor());
 
-            if (s.getShape() != null) {
-                Shape s1 = s.getTransformedShape(model.getTransform());
+            if (wrapper.getShape() != null) {
+                Shape s1 = wrapper.getTransformedShape(model.getTransform());
                 g2.draw(s1);
             }
 
             // plot points
-            for (Point2D p : s.getPlottedPoints()) {
+            g2.setColor(Color.BLUE);
+            for (Point2D p : wrapper.getPlottedPoints()) {
                 Shape point = createPointAsShape(toUserSpace(p));
 
                 g2.draw(point);
@@ -287,13 +251,18 @@ public class Canvas extends JPanel {
         return new Point2D.Double(x, y);
     }
 
+    /**
+     * 
+     * @param mySpaceCoord
+     * @return A point with a fixed radius irrespective of zoom level
+     */
     private Shape createPointAsShape(Point2D mySpaceCoord) {
         double radius = 15;
-        Ellipse2D ellipse = new Ellipse2D.Double(mySpaceCoord.getX() - radius / 2, mySpaceCoord.getY() - radius / 2,
+        return new Ellipse2D.Double(
+                mySpaceCoord.getX() - radius / 2,
+                mySpaceCoord.getY() - radius / 2,
                 radius,
                 radius);
-
-        return ellipse;
     }
 
     public JButton getHomeButton() {

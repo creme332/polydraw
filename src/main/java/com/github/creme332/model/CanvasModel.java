@@ -1,7 +1,6 @@
 package com.github.creme332.model;
 
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,24 +47,6 @@ public class CanvasModel {
     private int xZero;
 
     private List<ShapeWrapper> shapes = new ArrayList<>();
-    private Point2D firstPointClicked;
-    private Point2D secondPointClicked;
-
-    public Point2D getFirstClick() {
-        return firstPointClicked;
-    }
-
-    public Point2D getSecondClick() {
-        return secondPointClicked;
-    }
-
-    public void setFirstClick(Point2D p) {
-        firstPointClicked = p;
-    }
-
-    public void setSecondClick(Point2D p) {
-        secondPointClicked = p;
-    }
 
     public AffineTransform getTransform() {
         AffineTransform transform = new AffineTransform();

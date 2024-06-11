@@ -11,37 +11,25 @@ import java.awt.geom.Point2D;
 
 public class ShapeWrapper {
     private Shape shape;
-    private Color lineColor;
-    private Color fillColor;
-    private Stroke stroke;
-    private List<Point2D> plottedPoints;
-    private boolean preview;
-
-    public ShapeWrapper() {
-        preview = false;
-        plottedPoints = new ArrayList<>();
-        this.shape = null;
-        this.lineColor = null;
-        this.fillColor = null;
-        this.stroke = null;
-    }
+    private Color lineColor = Color.BLACK;;
+    private Color fillColor = Color.BLACK;
+    private Stroke stroke = new BasicStroke(1);
+    private List<Point2D> plottedPoints = new ArrayList<>();
+    private boolean preview = false;
 
     public List<Point2D> getPlottedPoints() {
         return plottedPoints;
     }
 
+    public ShapeWrapper() {
+
+    }
+
     public ShapeWrapper(Shape shape) {
-        preview = false;
-        plottedPoints = new ArrayList<>();
         this.shape = shape;
-        this.lineColor = Color.BLACK;
-        this.fillColor = Color.BLACK;
-        this.stroke = new BasicStroke(1);
     }
 
     public ShapeWrapper(Shape shape, Color lineColor, Color fillColor, Stroke stroke) {
-        preview = false;
-        plottedPoints = new ArrayList<>();
         this.shape = shape;
         this.lineColor = lineColor;
         this.fillColor = fillColor;
@@ -49,12 +37,12 @@ public class ShapeWrapper {
     }
 
     public ShapeWrapper(ShapeWrapper wrapper) {
-        preview = false;
-        plottedPoints = new ArrayList<>();
         shape = wrapper.shape;
         lineColor = wrapper.lineColor;
         fillColor = wrapper.fillColor;
         stroke = wrapper.stroke;
+        plottedPoints = wrapper.plottedPoints;
+        preview = wrapper.preview;
     }
 
     public boolean getPreview() {
