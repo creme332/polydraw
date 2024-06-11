@@ -6,7 +6,6 @@ import java.util.List;
 public class CircleAlgorithm {
 
     private CircleAlgorithm() {
-
     }
 
     public static int[][] drawCircle(int centerX, int centerY, int radius) {
@@ -36,19 +35,17 @@ public class CircleAlgorithm {
     }
 
     private static void plotCirclePoints(List<int[]> pixelList, int centerX, int centerY, int x, int y) {
-        if (y == 0) {
-            addUniquePixel(pixelList, centerX + y, centerY + x);
-            addUniquePixel(pixelList, centerX + x, centerY + y);
-            addUniquePixel(pixelList, centerX + y, centerY - x);
-            addUniquePixel(pixelList, centerX - x, centerY + y);
-            return;
-        }
-
-        if (y == x) {
+        // For radius 1, only plot the points exactly at distance 1 from the center
+        if (x == 0 && y == 1) {
             addUniquePixel(pixelList, centerX + y, centerY + x);
             addUniquePixel(pixelList, centerX - y, centerY + x);
             addUniquePixel(pixelList, centerX + y, centerY - x);
             addUniquePixel(pixelList, centerX - y, centerY - x);
+
+            addUniquePixel(pixelList, centerX + x, centerY + y);
+            addUniquePixel(pixelList, centerX - x, centerY + y);
+            addUniquePixel(pixelList, centerX + x, centerY - y);
+            addUniquePixel(pixelList, centerX - x, centerY - y);
             return;
         }
 
