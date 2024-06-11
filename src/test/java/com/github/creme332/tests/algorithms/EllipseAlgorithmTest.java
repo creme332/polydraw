@@ -2,6 +2,7 @@ package com.github.creme332.tests.algorithms;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+
 import com.github.creme332.algorithms.EllipseAlgorithm;
 import com.github.creme332.tests.utils.TestHelper;
 
@@ -111,5 +112,4 @@ public class EllipseAlgorithmTest {
 
         TestHelper.assert2DArrayEquals(expectedArray, pixels.toArray(new int[pixels.size()][]));
     }
-
 }
