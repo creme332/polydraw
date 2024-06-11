@@ -10,113 +10,115 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import org.kordamp.ikonli.swing.FontIcon;
+
+import com.github.creme332.utils.exception.InvalidIconSizeException;
+import com.github.creme332.utils.exception.InvalidPathException;
+
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
-import com.github.creme332.utils.IconLoader;
+import static com.github.creme332.utils.IconLoader.loadIcon;;
 
 public class MenuBar extends JMenuBar {
     // menubar frame components
     private JButton sidebarButton;
 
-    IconLoader loader = new IconLoader();
-
-    public JMenu createCursorMenu() throws Exception {
+    public JMenu createCursorMenu() throws InvalidIconSizeException, InvalidPathException {
         JMenu menu = new JMenu();
         JMenuItem menuItem;
 
-        menu.setIcon(loader.loadIcon("/icons/cursor.png", 50));
+        menu.setIcon(loadIcon("/icons/cursor.png", 50));
 
         menu.setMnemonic(KeyEvent.VK_A);
         menu.getAccessibleContext().setAccessibleDescription(
                 "The only menu in this program that has menu items");
 
         menuItem = new JMenuItem("Move",
-                loader.loadIcon("/icons/cursor.png", 50));
+                loadIcon("/icons/cursor.png", 50));
         menuItem.setMnemonic(KeyEvent.VK_B);
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Freehand Shape",
-                loader.loadIcon("/icons/freehand.png", 50));
+                loadIcon("/icons/freehand.png", 50));
         menuItem.setMnemonic(KeyEvent.VK_B);
         menu.add(menuItem);
 
         return menu;
     }
 
-    public JMenu createLineMenu() throws Exception {
+    public JMenu createLineMenu() throws InvalidIconSizeException, InvalidPathException {
         JMenu menu = new JMenu();
         JMenuItem menuItem;
 
-        menu.setIcon(loader.loadIcon("/icons/line.png", 50));
+        menu.setIcon(loadIcon("/icons/line.png", 50));
 
-        menuItem = new JMenuItem("Line: DDA", loader.loadIcon("/icons/line.png", 50));
+        menuItem = new JMenuItem("Line: DDA", loadIcon("/icons/line.png", 50));
         menuItem.setMnemonic(KeyEvent.VK_B);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Line: Bresenham", loader.loadIcon("/icons/line.png", 50));
+        menuItem = new JMenuItem("Line: Bresenham", loadIcon("/icons/line.png", 50));
         menu.add(menuItem);
         return menu;
     }
 
-    public JMenu createCircleMenu() throws Exception {
+    public JMenu createCircleMenu() throws InvalidIconSizeException, InvalidPathException {
         JMenu menu = new JMenu();
         JMenuItem menuItem;
 
-        menu.setIcon(loader.loadIcon("/icons/circle.png", 50));
+        menu.setIcon(loadIcon("/icons/circle.png", 50));
 
         menuItem = new JMenuItem("Circle with Center through Point",
-                loader.loadIcon("/icons/circle-center.png", 50));
+                loadIcon("/icons/circle-center.png", 50));
         menuItem.setMnemonic(KeyEvent.VK_B);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Circle: Center & Radius", loader.loadIcon("/icons/circle-radius.png", 50));
+        menuItem = new JMenuItem("Circle: Center & Radius", loadIcon("/icons/circle-radius.png", 50));
         menu.add(menuItem);
 
         return menu;
     }
 
-    public JMenu createEllipseMenu() throws Exception {
+    public JMenu createEllipseMenu() throws InvalidIconSizeException, InvalidPathException {
         JMenu menu = new JMenu();
         JMenuItem menuItem;
 
-        menu.setIcon(loader.loadIcon("/icons/ellipse.png", 50));
+        menu.setIcon(loadIcon("/icons/ellipse.png", 50));
 
-        menuItem = new JMenuItem("Ellipse", loader.loadIcon("/icons/ellipse.png", 50));
+        menuItem = new JMenuItem("Ellipse", loadIcon("/icons/ellipse.png", 50));
         menu.add(menuItem);
         return menu;
     }
 
-    public JMenu createPolygonMenu() throws Exception {
+    public JMenu createPolygonMenu() throws InvalidIconSizeException, InvalidPathException {
         JMenu menu = new JMenu();
         JMenuItem menuItem;
 
-        menu.setIcon(loader.loadIcon("/icons/triangle.png", 50));
+        menu.setIcon(loadIcon("/icons/triangle.png", 50));
 
-        menuItem = new JMenuItem("Polygon", loader.loadIcon("/icons/triangle.png", 50));
+        menuItem = new JMenuItem("Polygon", loadIcon("/icons/triangle.png", 50));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Regular Polygon", loader.loadIcon("/icons/regular-polygon.png", 50));
+        menuItem = new JMenuItem("Regular Polygon", loadIcon("/icons/regular-polygon.png", 50));
         menu.add(menuItem);
         return menu;
     }
 
-    public JMenu createTransformationsMenu() throws Exception {
+    public JMenu createTransformationsMenu() throws InvalidIconSizeException, InvalidPathException {
         JMenu menu = new JMenu();
         JMenuItem menuItem;
         FontIcon icon;
 
-        menu.setIcon(loader.loadIcon("/icons/reflect-about-line.png", 50));
+        menu.setIcon(loadIcon("/icons/reflect-about-line.png", 50));
 
-        menuItem = new JMenuItem("Reflect about Line", loader.loadIcon("/icons/reflect-about-line.png", 50));
+        menuItem = new JMenuItem("Reflect about Line", loadIcon("/icons/reflect-about-line.png", 50));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Reflect about Point", loader.loadIcon("/icons/reflect-about-point.png", 50));
+        menuItem = new JMenuItem("Reflect about Point", loadIcon("/icons/reflect-about-point.png", 50));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Rotate around Point", loader.loadIcon("/icons/rotate-around-point.png", 50));
+        menuItem = new JMenuItem("Rotate around Point", loadIcon("/icons/rotate-around-point.png", 50));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Translation", loader.loadIcon("/icons/translate-vector.png", 50));
+        menuItem = new JMenuItem("Translation", loadIcon("/icons/translate-vector.png", 50));
         menu.add(menuItem);
 
         icon = FontIcon.of(BootstrapIcons.ARROWS_ANGLE_EXPAND, 35);
@@ -134,7 +136,7 @@ public class MenuBar extends JMenuBar {
         return menu;
     }
 
-    public JMenu createGraphicsMenu() throws Exception {
+    public JMenu createGraphicsMenu() {
         JMenu menu = new JMenu();
         JMenuItem menuItem;
 

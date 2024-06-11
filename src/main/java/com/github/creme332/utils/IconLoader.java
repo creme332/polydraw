@@ -9,6 +9,10 @@ import com.github.creme332.utils.exception.InvalidPathException;
 
 public class IconLoader {
 
+    private IconLoader() {
+
+    }
+
     /**
      * Returns a resized icon from the resources folder.
      * 
@@ -18,7 +22,7 @@ public class IconLoader {
      * @throws InvalidIconSizeException if iconSize is less than 1
      * @throws InvalidPathException     if path is invalid
      */
-    public ImageIcon loadIcon(String path, int iconSize) throws InvalidIconSizeException, InvalidPathException {
+    public static ImageIcon loadIcon(String path, int iconSize) throws InvalidIconSizeException, InvalidPathException {
         if (iconSize < 1) {
             throw new InvalidIconSizeException("Icon size must be a positive integer");
         }
@@ -41,10 +45,10 @@ public class IconLoader {
      * @return
      * @throws InvalidPathException if path is invalid
      */
-    public ImageIcon loadIcon(String path) throws InvalidPathException {
+    public static ImageIcon loadIcon(String path) throws InvalidPathException {
         if (path.length() < 1 || path.charAt(0) != '/') {
             throw new InvalidPathException("Path should start with /");
         }
-        return new ImageIcon(this.getClass().getResource(path));
+        return new ImageIcon(IconLoader.class.getResource(path));
     }
 }

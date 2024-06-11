@@ -6,7 +6,7 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.github.creme332.utils.IconLoader;
+import static com.github.creme332.utils.IconLoader.loadIcon;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 /**
@@ -53,7 +53,7 @@ public class Frame extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // set application icon
-        this.setIconImage(new IconLoader().loadIcon("/icons/icosahedron.png").getImage());
+        this.setIconImage(loadIcon("/icons/icosahedron.png").getImage());
 
         // center frame on startup if frame is not maximized
         if (this.getExtendedState() != MAXIMIZED_BOTH) {
