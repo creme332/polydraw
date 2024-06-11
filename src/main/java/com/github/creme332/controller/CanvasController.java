@@ -126,9 +126,6 @@ public class CanvasController {
         model.setYZero(height / 2);
         model.setXZero(width / 2);
 
-        canvas.positionZoomPanel();
-        canvas.positionToolbar();
-
         canvas.repaint();
     }
 

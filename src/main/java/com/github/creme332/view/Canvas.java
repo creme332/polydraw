@@ -29,6 +29,7 @@ public class Canvas extends JPanel {
     private Toolbar toolbar;
 
     private CanvasModel model;
+    private Toast toast = new Toast();
 
     /**
      * Place zoom panel in bottom right corner of canvas.
@@ -49,6 +50,20 @@ public class Canvas extends JPanel {
         zoomOutButton.setBounds(x, y + 120, buttonSize.width, buttonSize.height);
     }
 
+    public void positionToast() {
+        // position toast
+        Dimension toastSize = toast.getPreferredSize();
+
+        Rectangle r = new Rectangle();
+        r.x = 30;
+        r.y = (int) (this.getHeight() - toastSize.getHeight() - 30);
+
+        r.width = (int) toastSize.getWidth();
+        r.height = (int) toastSize.getHeight();
+
+        toast.setBounds(r);
+    }
+
     /**
      * Place toolbar at middle top of canvas
      */
@@ -57,13 +72,13 @@ public class Canvas extends JPanel {
         final int canvasWidth = getWidth();
 
         // position toolbar such that center of toolbar coincides with center of canvas
-        Dimension buttonSize = toolbar.getPreferredSize();
+        Dimension toolbarSize = toolbar.getPreferredSize();
         Rectangle r = new Rectangle();
-        r.x = canvasWidth / 2 - (int) (buttonSize.getWidth() / 2);
+        r.x = canvasWidth / 2 - (int) (toolbarSize.getWidth() / 2);
         r.y = MARGIN_TOP;
 
-        r.width = (int) buttonSize.getWidth();
-        r.height = (int) buttonSize.getHeight();
+        r.width = (int) toolbarSize.getWidth();
+        r.height = (int) toolbarSize.getHeight();
 
         toolbar.setBounds(r);
     }
@@ -86,6 +101,7 @@ public class Canvas extends JPanel {
         this.model = model;
         this.toolbar = toolbar;
         add(toolbar);
+        add(toast);
 
         // create buttons for zoom panel
         homeButton = createZoomPanelButton(BootstrapIcons.HOUSE);
@@ -94,7 +110,6 @@ public class Canvas extends JPanel {
         add(homeButton);
         add(zoomInButton);
         add(zoomOutButton);
-
     }
 
     public void setAntialiasing(Graphics2D g2) {
@@ -221,6 +236,11 @@ public class Canvas extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
         setAntialiasing(g2);
+
+        positionZoomPanel();
+        positionToolbar();
+        positionToast();
+
         drawGuidelines(g2);
         drawHorizontalAxis(g2);
         drawVerticalAxis(g2);
@@ -269,9 +289,11 @@ public class Canvas extends JPanel {
         return homeButton;
     }
 
+
     public JButton getZoomInButton() {
         return zoomInButton;
     }
+
 
     public JButton getZoomOutButton() {
         return zoomOutButton;
