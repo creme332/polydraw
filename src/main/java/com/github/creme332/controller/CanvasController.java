@@ -100,9 +100,6 @@ public class CanvasController {
         canvas.setYZero(height / 2);
         canvas.setXZero(width / 2);
 
-        canvas.positionZoomPanel();
-        canvas.positionToolbar();
-
         canvas.repaint();
     }
 
