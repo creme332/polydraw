@@ -103,6 +103,7 @@ public class MenuBar extends JMenuBar {
     public JMenu createTransformationsMenu() throws Exception {
         JMenu menu = new JMenu();
         JMenuItem menuItem;
+        FontIcon icon;
 
         menu.setIcon(loader.loadIcon("/icons/reflect-about-line.png", 50));
 
@@ -115,19 +116,19 @@ public class MenuBar extends JMenuBar {
         menuItem = new JMenuItem("Rotate around Point", loader.loadIcon("/icons/rotate-around-point.png", 50));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Translation");
+        menuItem = new JMenuItem("Translation", loader.loadIcon("/icons/translate-vector.png", 50));
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Normal Rotation");
+        icon = FontIcon.of(BootstrapIcons.ARROWS_ANGLE_EXPAND, 35);
+        menuItem = new JMenuItem("Scaling", icon);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Scaling");
+        icon = FontIcon.of(BootstrapIcons.BOX_ARROW_DOWN_LEFT, 35);
+        menuItem = new JMenuItem("Shear", icon);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Shear");
-        menu.add(menuItem);
-
-        menuItem = new JMenuItem("Clipping");
+        icon = FontIcon.of(BootstrapIcons.SCISSORS, 35);
+        menuItem = new JMenuItem("Clipping", icon);
         menu.add(menuItem);
 
         return menu;
