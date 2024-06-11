@@ -3,7 +3,6 @@ package com.github.creme332.tests.algorithms;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.github.creme332.algorithms.CircleAlgorithm;
 import com.github.creme332.algorithms.EllipseAlgorithm;
 import com.github.creme332.tests.utils.TestHelper;
 
@@ -112,34 +111,5 @@ public class EllipseAlgorithmTest {
         };
 
         TestHelper.assert2DArrayEquals(expectedArray, pixels.toArray(new int[pixels.size()][]));
-    }
-
-    @Test
-    public void testCircleCenteredOriginRadiusOne() {
-        int centerX = 0;
-        int centerY = 0;
-        int radius = 1;
-        int[][] actualPixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
-
-        int[][] expectedPixels = {
-                { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 },
-                { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 }
-        };
-
-        TestHelper.assert2DArrayEquals(expectedPixels, actualPixels);
-    }
-
-    @Test
-    public void testCircleNotCenteredOriginRadiusOne() {
-        int centerX = 5;
-        int centerY = 5;
-        int radius = 1;
-        int[][] actualPixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
-
-        int[][] expectedPixels = {
-                { 6, 5 }, { 5, 4 }, { 5, 6 }, { 4, 5 }
-                };
-
-        TestHelper.assert2DArrayEquals(expectedPixels, actualPixels);
     }
 }

@@ -64,4 +64,32 @@ public class CircleAlgorithmTest {
             assertEquals("Radius must be positive", e.getMessage());
         }
     }
+
+    @Test
+    public void testCircleCenteredOriginRadiusOne() {
+        int centerX = 0;
+        int centerY = 0;
+        int radius = 1;
+        int[][] actualPixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
+
+        int[][] expectedPixels = {
+                { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 }
+        };
+
+        TestHelper.assert2DArrayEquals(expectedPixels, actualPixels);
+    }
+
+    @Test
+    public void testCircleNotCenteredOriginRadiusOne() {
+        int centerX = 5;
+        int centerY = 5;
+        int radius = 1;
+        int[][] actualPixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
+
+        int[][] expectedPixels = {
+                { 6, 5 }, { 4, 5 }, { 5, 6 }, { 5, 4 }
+        };
+
+        TestHelper.assert2DArrayEquals(expectedPixels, actualPixels);
+    }
 }
