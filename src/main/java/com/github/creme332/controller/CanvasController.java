@@ -25,11 +25,6 @@ public class CanvasController {
     private AppState app;
     private CanvasModel model;
 
-    private static final int MAX_CELL_SIZE = 500;
-    private static final int DEFAULT_CELL_SIZE = 100;
-    private static final int MIN_CELL_SIZE = 30;
-    private Point currentMousePosition;
-
     /**
      * Wrapper for shape currently being drawn.
      */
@@ -57,13 +52,13 @@ public class CanvasController {
         canvas.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                currentMousePosition = e.getPoint();
+                Point2D polySpaceMousePosition = model.toPolySpace(e.getPoint());
 
                 if ((app.getMode() == Mode.DRAW_LINE_BRESENHAM || app.getMode() == Mode.DRAW_LINE_DDA)
                         && currentWrapper != null && currentWrapper.getPlottedPoints().size() == 1) {
 
                     Line2D line = new Line2D.Double(currentWrapper.getPlottedPoints().get(0),
-                            toMySpace(currentMousePosition));
+                            polySpaceMousePosition);
                     currentWrapper.setShape(line);
                     canvas.repaint();
                 }
@@ -87,12 +82,12 @@ public class CanvasController {
 
         // Add action listeners for the zoom panel buttons
         canvas.getHomeButton().addActionListener(e -> resetCanvasView());
-        canvas.getZoomInButton().addActionListener(e -> updateCanvasZoom(true));
-        canvas.getZoomOutButton().addActionListener(e -> updateCanvasZoom(false));
+        canvas.getZoomInButton().addActionListener(e -> model.updateCanvasZoom(true));
+        canvas.getZoomOutButton().addActionListener(e -> model.updateCanvasZoom(false));
     }
 
     private void handleCanvasZoom(MouseWheelEvent e) {
-        updateCanvasZoom(e.getWheelRotation() != 1);
+        model.updateCanvasZoom(e.getWheelRotation() != 1);
         canvas.repaint();
     }
 
@@ -129,26 +124,24 @@ public class CanvasController {
         canvas.repaint();
     }
 
-    private Point2D toMySpace(Point userSpaceCoord) {
-        double x = (userSpaceCoord.getX() - model.getXZero()) / model.getCellSize();
-        double y = (model.getYZero() - userSpaceCoord.getY()) / model.getCellSize();
-        return new Point2D.Double(x, y);
-    }
-
     private void handleMousePressed(MouseEvent e) {
         if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW || app.getMode() == Mode.MOVE_CANVAS) {
             mouseDragStart = e.getPoint();
         }
 
-        if (app.getMode() == Mode.DRAW_LINE_BRESENHAM || app.getMode() == Mode.DRAW_LINE_DDA) {
+        /**
+         * Coordinates of mouse pressed in the polydraw coordinate system
+         */
+        Point2D polySpaceMousePosition = model.toPolySpace(e.getPoint());
+        System.out.println(polySpaceMousePosition);
 
+        if (app.getMode() == Mode.DRAW_LINE_BRESENHAM || app.getMode() == Mode.DRAW_LINE_DDA) {
             if (currentWrapper == null) {
                 // first coordinate of line has been selected
 
                 // create a shape wrapper
                 currentWrapper = new ShapeWrapper();
-                currentWrapper.getPlottedPoints().add(toMySpace(e.getPoint()));
-                currentWrapper.setPreview(true);
+                currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
 
                 // save wrapper
                 model.getShapes().add(currentWrapper);
@@ -158,13 +151,12 @@ public class CanvasController {
 
                 // create a line
                 Point2D lineStart = currentWrapper.getPlottedPoints().get(0);
-                Point2D lineEnd = toMySpace(e.getPoint());
+                Point2D lineEnd = polySpaceMousePosition;
                 Line2D line = new Line2D.Double();
                 line.setLine(lineStart, lineEnd);
 
                 currentWrapper.getPlottedPoints().add(lineEnd);
                 currentWrapper.setShape(line);
-                currentWrapper.setPreview(false);
 
                 currentWrapper = null;
             }
@@ -180,23 +172,7 @@ public class CanvasController {
         model.setYZero(canvas.getHeight() / 2);
 
         // reset zoom level
-        model.setCellSize(DEFAULT_CELL_SIZE);
-        canvas.repaint();
-    }
-
-    /**
-     * Either zooms in or out of canvas.
-     * 
-     * @param zoomIn Zoom in if true, zoom out otherwise
-     */
-    private void updateCanvasZoom(boolean zoomIn) {
-        final int ZOOM_INCREMENT = 10;
-
-        if (zoomIn) {
-            model.setCellSize(Math.min(MAX_CELL_SIZE, model.getCellSize() + ZOOM_INCREMENT));
-        } else {
-            model.setCellSize(Math.max(MIN_CELL_SIZE, model.getCellSize() - ZOOM_INCREMENT));
-        }
+        model.setCellSize(CanvasModel.DEFAULT_CELL_SIZE);
         canvas.repaint();
     }
 }

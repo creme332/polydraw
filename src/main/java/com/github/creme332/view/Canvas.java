@@ -28,7 +28,7 @@ public class Canvas extends JPanel {
     private JButton zoomOutButton = new CircularButton();
     private Toolbar toolbar;
 
-    private CanvasModel model;
+    private transient CanvasModel model;
     private Toast toast = new Toast();
 
     /**
@@ -192,6 +192,7 @@ public class Canvas extends JPanel {
     }
 
     private void drawVerticalAxis(Graphics2D g2) {
+        // TODO: move calculation to model
         final int canvasWidth = getWidth();
         final int canvasHeight = getHeight();
 
@@ -249,26 +250,20 @@ public class Canvas extends JPanel {
             g2.setColor(wrapper.getLineColor());
 
             if (wrapper.getShape() != null) {
-                Shape s1 = wrapper.getTransformedShape(model.getTransform());
+                Shape s1 = model.toUserSpace(wrapper.getShape());
                 g2.draw(s1);
             }
 
             // plot points
             g2.setColor(Color.BLUE);
             for (Point2D p : wrapper.getPlottedPoints()) {
-                Shape point = createPointAsShape(toUserSpace(p));
+                Shape point = createPointAsShape(model.toUserSpace(p));
 
                 g2.draw(point);
                 g2.fill(point);
             }
 
         }
-    }
-
-    private Point2D toUserSpace(Point2D mySpaceCoord) {
-        double x = mySpaceCoord.getX() * model.getCellSize() + model.getXZero();
-        double y = -mySpaceCoord.getY() * model.getCellSize() + model.getYZero();
-        return new Point2D.Double(x, y);
     }
 
     /**
@@ -289,11 +284,9 @@ public class Canvas extends JPanel {
         return homeButton;
     }
 
-
     public JButton getZoomInButton() {
         return zoomInButton;
     }
-
 
     public JButton getZoomOutButton() {
         return zoomOutButton;

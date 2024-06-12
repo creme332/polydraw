@@ -6,16 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Shape;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 public class ShapeWrapper {
     private Shape shape;
-    private Color lineColor = Color.BLACK;;
+    private Color lineColor = Color.BLACK;
     private Color fillColor = Color.BLACK;
     private Stroke stroke = new BasicStroke(1);
     private List<Point2D> plottedPoints = new ArrayList<>();
-    private boolean preview = false;
 
     public List<Point2D> getPlottedPoints() {
         return plottedPoints;
@@ -42,19 +40,6 @@ public class ShapeWrapper {
         fillColor = wrapper.fillColor;
         stroke = wrapper.stroke;
         plottedPoints = wrapper.plottedPoints;
-        preview = wrapper.preview;
-    }
-
-    public boolean getPreview() {
-        return preview;
-    }
-
-    public void setPreview(boolean b) {
-        preview = b;
-    }
-
-    public Shape getTransformedShape(AffineTransform transform) {
-        return transform.createTransformedShape(this.shape);
     }
 
     public Shape getShape() {
