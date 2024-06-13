@@ -16,23 +16,19 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import com.github.creme332.model.CanvasModel;
 
 public class Canvas extends JPanel {
-    private final int TICK_PADDING_TOP = 20; // spacing between top of canvas and tick label when axis is out of sight
-    private final int TICK_PADDING_BOTTOM = 10; // spacing between bottom of canvas and tick label when axis is out of
-                                                // sight
-    private final int TICK_PADDING_LEFT = 12; // spacing between left border of canvas and tick label when axis is out
-                                              // of
-    // sight
-    private final int TICK_PADDING_RIGHT = 30; // spacing between right border of canvas and tick label when axis is out
-                                               // of
-    // sight
+    private final int TICK_PADDING_TOP = 20;
+    private final int TICK_PADDING_BOTTOM = 10;
+    private final int TICK_PADDING_LEFT = 12;
+    private final int TICK_PADDING_RIGHT = 30;
 
-    int cellSize = 100; // distance in pixels between each unit on axes
+    int cellSize = 100;
     private float labelFontSizeScaleFactor = 1.4F;
 
-    private int yZero; // vertical distance between top border of canvas and my cartesian origin
-    private int xZero; // horizontal distance between left border of canvas and my cartesian origin
+    private int yZero;
+    private int xZero;
 
     private JButton homeButton = new CircularButton();
     private JButton zoomInButton = new CircularButton();
@@ -40,37 +36,46 @@ public class Canvas extends JPanel {
     private Toolbar toolbar;
     private Toast toast = new Toast();
 
-    /**
-     * Place zoom panel in bottom right corner of canvas.
-     */
-    public void positionZoomPanel() {
-        final int MARGIN_RIGHT = 20;
-        final int MARGIN_BOTTOM = 200;
+    private CanvasModel model; // Reference to the model
 
-        final int canvasWidth = getWidth();
-        final int canvasHeight = getHeight();
+    public Canvas(Toolbar toolbar, CanvasModel model) {
+        this.toolbar = toolbar;
+        this.model = model; // Initialize the model
+        setLayout(null);
 
-        Dimension buttonSize = homeButton.getPreferredSize();
-        int x = canvasWidth - buttonSize.width - MARGIN_RIGHT;
-        int y = canvasHeight - buttonSize.height - MARGIN_BOTTOM;
+        add(toolbar);
+        add(toast);
 
-        homeButton.setBounds(x, y, buttonSize.width, buttonSize.height);
-        zoomInButton.setBounds(x, y + 60, buttonSize.width, buttonSize.height);
-        zoomOutButton.setBounds(x, y + 120, buttonSize.width, buttonSize.height);
+        homeButton = createZoomPanelButton(BootstrapIcons.HOUSE);
+        zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
+        zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
+        add(homeButton);
+        add(zoomInButton);
+        add(zoomOutButton);
     }
 
-    public void positionToast() {
-        // position toast
-        Dimension toastSize = toast.getPreferredSize();
+    public JButton createZoomPanelButton(Ikon ikon) {
+        final int ICON_SIZE = 25;
+        final Color ICON_COLOR = new Color(116, 116, 116);
 
-        Rectangle r = new Rectangle();
-        r.x = 30;
-        r.y = (int) (this.getHeight() - toastSize.getHeight() - 30);
+        JButton btn = new CircularButton();
+        btn.setPreferredSize(new Dimension(50, 50));
+        FontIcon icon = FontIcon.of(ikon, ICON_SIZE);
+        icon.setIconColor(ICON_COLOR);
+        btn.setIcon(icon);
+        return btn;
+    }
 
-        r.width = (int) toastSize.getWidth();
-        r.height = (int) toastSize.getHeight();
+    public JButton getHomeButton() {
+        return homeButton;
+    }
 
-        toast.setBounds(r);
+    public JButton getZoomInButton() {
+        return zoomInButton;
+    }
+
+    public JButton getZoomOutButton() {
+        return zoomOutButton;
     }
 
     /**
@@ -92,39 +97,38 @@ public class Canvas extends JPanel {
         toolbar.setBounds(r);
     }
 
-    public JButton createZoomPanelButton(Ikon ikon) {
-        final int ICON_SIZE = 25;
-        final Color ICON_COLOR = new Color(116, 116, 116);
+    public void positionToast() {
+        Dimension toastSize = toast.getPreferredSize();
 
-        JButton btn = new CircularButton();
-        btn.setPreferredSize(new Dimension(50, 50));
-        FontIcon icon = FontIcon.of(ikon, ICON_SIZE);
-        icon.setIconColor(ICON_COLOR);
-        btn.setIcon(icon);
-        return btn;
+        Rectangle r = new Rectangle();
+        r.x = 30;
+        r.y = (int) (this.getHeight() - toastSize.getHeight() - 30);
+
+        r.width = (int) toastSize.getWidth();
+        r.height = (int) toastSize.getHeight();
+
+        toast.setBounds(r);
     }
 
-    public Canvas(Toolbar toolbar) {
-        setLayout(null); // Use no layout manager
+    public void positionZoomPanel() {
+        final int MARGIN_RIGHT = 20;
+        final int MARGIN_BOTTOM = 200;
 
-        this.toolbar = toolbar;
-        add(toolbar);
-        add(toast);
+        final int canvasWidth = getWidth();
+        final int canvasHeight = getHeight();
 
-        // create buttons for zoom panel
-        homeButton = createZoomPanelButton(BootstrapIcons.HOUSE);
-        zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
-        zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
-        add(homeButton);
-        add(zoomInButton);
-        add(zoomOutButton);
+        Dimension buttonSize = homeButton.getPreferredSize();
+        int x = canvasWidth - buttonSize.width - MARGIN_RIGHT;
+        int y = canvasHeight - buttonSize.height - MARGIN_BOTTOM;
+
+        homeButton.setBounds(x, y, buttonSize.width, buttonSize.height);
+        zoomInButton.setBounds(x, y + 60, buttonSize.width, buttonSize.height);
+        zoomOutButton.setBounds(x, y + 120, buttonSize.width, buttonSize.height);
     }
 
     public void setAntialiasing(Graphics2D g2) {
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     }
 
     private void drawHorizontalAxis(Graphics2D g2) {
@@ -135,7 +139,7 @@ public class Canvas extends JPanel {
         int labelYPos = Math.min(canvasHeight - TICK_PADDING_BOTTOM, Math.max(TICK_PADDING_TOP, yZero));
 
         g2.setColor(Color.BLACK);
-        g2.setStroke(new BasicStroke(2)); // Set line thickness
+        g2.setStroke(new BasicStroke(2));
 
         // if axis is within canvas, draw horizontal line to represent horizontal
         // axis
@@ -162,6 +166,10 @@ public class Canvas extends JPanel {
     }
 
     private void drawGuidelines(Graphics2D g2) {
+        if (!model.isEnableGuidelines()) {
+            return; // Do not draw guidelines if disabled
+        }
+
         final int canvasWidth = getWidth();
         final int canvasHeight = getHeight();
 
@@ -172,28 +180,28 @@ public class Canvas extends JPanel {
         int lineCount = yZero / (cellSize);
         for (int i = 1; i <= lineCount; i++) {
             int y1 = yZero - i * cellSize;
-            g2.drawLine(0, y1, canvasWidth, y1); // draw guideline above x axis
+            g2.drawLine(0, y1, canvasWidth, y1);
         }
 
         // draw horizontal guidelines below x-axis
         lineCount = (canvasHeight - yZero) / (cellSize);
         for (int i = 1; i <= lineCount; i++) {
             int y0 = yZero + i * cellSize;
-            g2.drawLine(0, y0, canvasWidth, y0); // draw guideline below x axis
+            g2.drawLine(0, y0, canvasWidth, y0);
         }
 
         // draw vertical guidelines before y-axis
         lineCount = xZero / (cellSize);
         for (int i = 1; i <= lineCount; i++) {
             int x0 = xZero - i * cellSize;
-            g2.drawLine(x0, 0, x0, canvasHeight); // line before y axis
+            g2.drawLine(x0, 0, x0, canvasHeight);
         }
 
         // draw vertical guidelines after y-axis
         lineCount = (canvasWidth - xZero) / (cellSize);
         for (int i = 1; i <= lineCount; i++) {
             int x1 = xZero + i * cellSize;
-            g2.drawLine(x1, 0, x1, canvasHeight); // line after y axis
+            g2.drawLine(x1, 0, x1, canvasHeight);
         }
 
     }
@@ -203,12 +211,12 @@ public class Canvas extends JPanel {
         final int canvasHeight = getHeight();
 
         g2.setColor(Color.BLACK);
-        g2.setStroke(new BasicStroke(2)); // Set line thickness
+        g2.setStroke(new BasicStroke(2));
 
         int labelYPos = Math.min(canvasWidth - TICK_PADDING_RIGHT, Math.max(TICK_PADDING_LEFT, xZero));
 
         if (xZero >= 0 || xZero <= canvasWidth)
-            g2.drawLine(xZero, 0, xZero, canvasHeight); // vertical axis
+            g2.drawLine(xZero, 0, xZero, canvasHeight);
 
         // set tick label color
         g2.setColor(Color.GRAY);
@@ -219,8 +227,7 @@ public class Canvas extends JPanel {
         // label ticks on positive vertical axis
         for (int i = 1; i <= yZero / (cellSize); i++) {
             int labelY = yZero - i * cellSize;
-            g2.drawString(Integer.valueOf(i).toString(), labelYPos,
-                    labelY);
+            g2.drawString(Integer.valueOf(i).toString(), labelYPos, labelY);
         }
 
         // label ticks on negative vertical axis
@@ -286,6 +293,7 @@ public class Canvas extends JPanel {
         g2.fill(transformedPolygon);
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
@@ -305,17 +313,8 @@ public class Canvas extends JPanel {
         drawVerticalAxis(g2);
         drawShapeExample(g2);
 
-    }
-
-    public JButton getHomeButton() {
-        return homeButton;
-    }
-
-    public JButton getZoomInButton() {
-        return zoomInButton;
-    }
-
-    public JButton getZoomOutButton() {
-        return zoomOutButton;
+        positionZoomPanel();
+        positionToolbar();
+        positionToast();
     }
 }

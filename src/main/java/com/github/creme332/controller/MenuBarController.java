@@ -100,5 +100,9 @@ public class MenuBarController {
                 app.setSideBarVisibility(!app.getSideBarVisibility());
             }
         });
+
+        menu.getGuidelinesButton().addActionListener(e -> {
+            app.getCanvasModel().setEnableGuidelines(!app.getCanvasModel().isEnableGuidelines());
+        });
     }
 }

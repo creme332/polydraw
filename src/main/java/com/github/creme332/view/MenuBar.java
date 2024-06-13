@@ -17,6 +17,7 @@ import com.github.creme332.utils.IconLoader;
 public class MenuBar extends JMenuBar {
     // menubar frame components
     private JButton sidebarButton;
+    private JButton guidelinesButton;
 
     IconLoader loader = new IconLoader();
 
@@ -186,10 +187,20 @@ public class MenuBar extends JMenuBar {
         sidebarButton.setBorderPainted(false);
         leftPanel.add(sidebarButton);
 
+        // new guidelines button
+        guidelinesButton = new JButton();
+        guidelinesButton.setIcon(FontIcon.of(BootstrapIcons.GRID, 40));
+        guidelinesButton.setBorderPainted(false);
+        leftPanel.add(guidelinesButton);
+
         this.add(leftPanel);
     }
 
     public JButton getSideBarButton() {
         return sidebarButton;
+    }
+
+    public JButton getGuidelinesButton() {
+        return guidelinesButton;
     }
 }

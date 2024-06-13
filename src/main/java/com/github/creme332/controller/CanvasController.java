@@ -7,6 +7,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import com.github.creme332.view.Canvas;
+import com.github.creme332.model.CanvasModel;
 
 public class CanvasController {
     private Canvas canvas;

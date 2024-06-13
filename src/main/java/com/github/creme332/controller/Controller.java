@@ -1,6 +1,7 @@
 package com.github.creme332.controller;
 
 import com.github.creme332.model.AppState;
+import com.github.creme332.model.CanvasModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
@@ -15,6 +16,7 @@ public class Controller {
     private MenuBar menuBar;
     private Canvas canvas;
     private Toolbar toolbar;
+    private CanvasModel model;
 
     private FrameController frameController;
 
@@ -23,7 +25,7 @@ public class Controller {
             toolbar = new Toolbar();
             new ToolBarController(toolbar);
 
-            canvas = new Canvas(toolbar);
+            canvas = new Canvas(toolbar,model);
             new CanvasController(canvas);
 
             frame = new Frame(canvas);
