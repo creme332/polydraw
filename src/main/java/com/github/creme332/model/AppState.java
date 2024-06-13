@@ -128,6 +128,7 @@ public class AppState {
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener("sidebarVisibility", listener);
+        support.addPropertyChangeListener("mode", listener);
     }
 
     public boolean getSideBarVisibility() {

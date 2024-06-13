@@ -4,6 +4,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -15,7 +17,7 @@ import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.view.Canvas;
 
-public class CanvasController {
+public class CanvasController implements PropertyChangeListener {
     private Canvas canvas;
 
     /**
@@ -34,6 +36,8 @@ public class CanvasController {
         this.app = app;
         this.canvas = canvas;
         this.model = app.getCanvasModel();
+
+        app.addPropertyChangeListener(this);
 
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
@@ -174,5 +178,17 @@ public class CanvasController {
         // reset zoom level
         model.setCellSize(CanvasModel.DEFAULT_CELL_SIZE);
         canvas.repaint();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent e) {
+        final String propertyName = e.getPropertyName();
+        // if mode has changed while a shape is being drawn
+        if ("mode".equals(propertyName) && currentWrapper != null) {
+            // erase incomplete shape
+            model.getShapes().remove(currentWrapper);
+            currentWrapper = null;
+            canvas.repaint();
+        }
     }
 }
