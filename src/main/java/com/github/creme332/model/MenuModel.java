@@ -29,7 +29,10 @@ public class MenuModel {
 
     public void setActiveItem(int i) {
         MenuItemModel newActiveItem = items[i];
-        support.firePropertyChange("modeChange", activeItem.getMode(), newActiveItem.getMode());
+
+        // Note: Keep OldValue = null to always fire property change when mode changes.
+        // If OldValue = NewValue, no event is fired.
+        support.firePropertyChange("modeChange", null, newActiveItem.getMode());
 
         activeItem = newActiveItem;
     }
