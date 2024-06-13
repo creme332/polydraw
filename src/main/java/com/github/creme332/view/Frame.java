@@ -39,7 +39,7 @@ public class Frame extends JFrame {
     SideMenuPanel sideMenu = new SideMenuPanel();
     MenuBar menubar = null;
 
-    public Frame(Canvas canvas) throws InvalidPathException {
+    public Frame(Canvas canvas, MenuBar menubar) throws InvalidPathException {
         // set frame title
         this.setTitle("polydraw");
 
@@ -61,12 +61,7 @@ public class Frame extends JFrame {
         }
 
         // add menubar to frame
-        try {
-            menubar = new MenuBar();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+        this.menubar = menubar;
         setJMenuBar(menubar);
 
         // setup screen container

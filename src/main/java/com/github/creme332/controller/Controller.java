@@ -20,17 +20,17 @@ public class Controller {
 
     public Controller() {
         try {
+            menuBar = new MenuBar(app.getMenuModels());
+            new MenuBarController(app, menuBar);
+
             toolbar = new Toolbar();
             new ToolBarController(toolbar);
 
             canvas = new Canvas(app.getCanvasModel(), toolbar);
             new CanvasController(app, canvas);
 
-            frame = new Frame(canvas);
+            frame = new Frame(canvas, menuBar);
             frameController = new FrameController(app, frame);
-
-            menuBar = frame.getMyMenuBar();
-            new MenuBarController(app, menuBar);
 
             new SideMenuController(app, frame.getSideMenuPanel());
         } catch (InvalidIconSizeException | InvalidPathException e) {
