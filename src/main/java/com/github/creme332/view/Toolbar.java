@@ -17,53 +17,54 @@ import javax.swing.JToolBar;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
-import com.github.creme332.utils.IconLoader;
+import static com.github.creme332.utils.IconLoader.loadIcon;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 public class Toolbar extends JToolBar implements ActionListener {
 
-    static final int FPS_MIN = 1;
-    static final int FPS_MAX = 13;
-    static final int FPS_INIT = 1; // initial frames per second
-    JSlider framesPerSecond = new JSlider(JSlider.HORIZONTAL,
-            FPS_MIN, FPS_MAX, FPS_INIT);
+    static final int THICKNESS_MIN = 1;
+    static final int THICKNESS_MAX = 13;
+    static final int THICKNESS_INIT = 1;
+
+    /**
+     * A slider for line thickness.
+     */
+    JSlider thicknessSlider = new JSlider(javax.swing.SwingConstants.HORIZONTAL,
+            THICKNESS_MIN, THICKNESS_MAX, THICKNESS_INIT);
 
     private JButton colorBox;
 
     public Toolbar() throws InvalidIconSizeException, InvalidPathException {
 
-        framesPerSecond.setMajorTickSpacing(10);
-        framesPerSecond.setMinorTickSpacing(1);
-        // framesPerSecond.setPaintTicks(true);
-        // framesPerSecond.setPaintLabels(true);
+        thicknessSlider.setMajorTickSpacing(10);
+        thicknessSlider.setMinorTickSpacing(1);
 
         // add border
         Border border = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         this.setBorder(border);
 
-        IconLoader loader = new IconLoader();
         // add a menu
         JMenuBar menuBar = new JMenuBar();
 
         JMenu menu = new JMenu();
         menu.setToolTipText("Set line style");
 
-        menu.setIcon(loader.loadIcon("/icons/solid-line.png", 50));
+        menu.setIcon(loadIcon("/icons/solid-line.png", 50));
 
         JMenuItem menuItem = new JMenuItem("Solid Line",
-                loader.loadIcon("/icons/solid-line.png", 50));
+                loadIcon("/icons/solid-line.png", 50));
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Dashed Line",
-                loader.loadIcon("/icons/dashed-line.png", 50));
+                loadIcon("/icons/dashed-line.png", 50));
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Dotted Line",
-                loader.loadIcon("/icons/dotted-line.png", 50));
+                loadIcon("/icons/dotted-line.png", 50));
         menu.add(menuItem);
 
-        menu.add(framesPerSecond);
+        menu.add(thicknessSlider);
 
         menuBar.add(menu);
 
@@ -80,18 +81,16 @@ public class Toolbar extends JToolBar implements ActionListener {
         colorBox.addActionListener(this);
 
         this.add(menuBar);
-
     }
 
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Choose color");
-
         // color chooser Dialog Box
         Color color = JColorChooser.showDialog(this,
                 "Select a color", Color.black);
 
-        // set Background color of the Container
-        colorBox.setBackground(color);
+        // set background color of the Container
+        if (color != null)
+            colorBox.setBackground(color);
     }
 
 }

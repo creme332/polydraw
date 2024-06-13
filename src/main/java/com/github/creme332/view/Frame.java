@@ -6,7 +6,7 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.github.creme332.utils.IconLoader;
+import static com.github.creme332.utils.IconLoader.loadIcon;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 /**
@@ -39,7 +39,7 @@ public class Frame extends JFrame {
     SideMenuPanel sideMenu = new SideMenuPanel();
     MenuBar menubar = null;
 
-    public Frame(Canvas canvas) throws InvalidPathException {
+    public Frame(Canvas canvas, MenuBar menubar) throws InvalidPathException {
         // set frame title
         this.setTitle("polydraw");
 
@@ -53,7 +53,7 @@ public class Frame extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // set application icon
-        this.setIconImage(new IconLoader().loadIcon("/icons/icosahedron.png").getImage());
+        this.setIconImage(loadIcon("/icons/icosahedron.png").getImage());
 
         // center frame on startup if frame is not maximized
         if (this.getExtendedState() != MAXIMIZED_BOTH) {
@@ -61,12 +61,7 @@ public class Frame extends JFrame {
         }
 
         // add menubar to frame
-        try {
-            menubar = new MenuBar();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+        this.menubar = menubar;
         setJMenuBar(menubar);
 
         // setup screen container

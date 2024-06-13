@@ -2,23 +2,38 @@ package com.github.creme332.controller;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
+
+import com.github.creme332.model.AppState;
+import com.github.creme332.model.CanvasModel;
+import com.github.creme332.model.Mode;
+import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.view.Canvas;
 
 public class CanvasController {
     private Canvas canvas;
-    private Point initialClick;
 
-    public static final int MAX_CELL_SIZE = 500;
-    public static final int DEFAULT_CELL_SIZE = 100;
-    public static final int MIN_CELL_SIZE = 30;
-    public static final int ZOOM_INCREMENT = 10;
+    /**
+     * Used to store coordinate where mouse drag started
+     */
+    private Point mouseDragStart;
+    private AppState app;
+    private CanvasModel model;
 
-    public CanvasController(Canvas canvas) {
+    /**
+     * Wrapper for shape currently being drawn.
+     */
+    private ShapeWrapper currentWrapper;
+
+    public CanvasController(AppState app, Canvas canvas) {
+        this.app = app;
         this.canvas = canvas;
+        this.model = app.getCanvasModel();
 
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
@@ -37,7 +52,17 @@ public class CanvasController {
         canvas.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                // TODO document why this method is empty
+                Point2D polySpaceMousePosition = model.toPolySpace(e.getPoint());
+
+                if ((app.getMode() == Mode.DRAW_LINE_BRESENHAM || app.getMode() == Mode.DRAW_LINE_DDA)
+                        && currentWrapper != null && currentWrapper.getPlottedPoints().size() == 1) {
+
+                    Line2D line = new Line2D.Double(currentWrapper.getPlottedPoints().get(0),
+                            polySpaceMousePosition);
+                    currentWrapper.setShape(line);
+                    canvas.repaint();
+                }
+
             }
         });
 
@@ -56,69 +81,98 @@ public class CanvasController {
         });
 
         // Add action listeners for the zoom panel buttons
-        canvas.getHomeButton().addActionListener(e -> handleHomeButton());
-        canvas.getZoomInButton().addActionListener(e -> handleZoomInButton());
-        canvas.getZoomOutButton().addActionListener(e -> handleZoomOutButton());
+        canvas.getHomeButton().addActionListener(e -> resetCanvasView());
+        canvas.getZoomInButton().addActionListener(e -> model.updateCanvasZoom(true));
+        canvas.getZoomOutButton().addActionListener(e -> model.updateCanvasZoom(false));
     }
 
     private void handleCanvasZoom(MouseWheelEvent e) {
-        if (e.getWheelRotation() == 1) {
-            // zoom out
-            canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - ZOOM_INCREMENT));
-
-        } else {
-            // zoom in
-            canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + ZOOM_INCREMENT));
-        }
-
+        model.updateCanvasZoom(e.getWheelRotation() != 1);
         canvas.repaint();
     }
 
     private void handleMouseDragged(MouseEvent e) {
-        if (initialClick == null) {
-            initialClick = e.getPoint();
+        if (mouseDragStart == null) {
+            mouseDragStart = e.getPoint();
             return;
         }
 
-        Point currentDrag = e.getPoint();
-        int deltaX = currentDrag.x - initialClick.x;
-        int deltaY = currentDrag.y - initialClick.y;
+        if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW || app.getMode() == Mode.MOVE_CANVAS) {
+            Point currentDrag = e.getPoint();
+            int deltaX = currentDrag.x - mouseDragStart.x;
+            int deltaY = currentDrag.y - mouseDragStart.y;
 
-        canvas.setYZero(canvas.getYZero() + deltaY);
-        canvas.setXZero(canvas.getXZero() + deltaX);
+            model.setYZero(model.getYZero() + deltaY);
+            model.setXZero(model.getXZero() + deltaX);
 
-        initialClick = currentDrag;
+            mouseDragStart = currentDrag;
 
-        canvas.repaint();
+            canvas.repaint();
+        }
     }
 
     private void handleCanvasResize() {
+        if (model == null)
+            return;
         int width = canvas.getWidth();
         int height = canvas.getHeight();
 
         // place origin at center of canvas
-        canvas.setYZero(height / 2);
-        canvas.setXZero(width / 2);
+        model.setYZero(height / 2);
+        model.setXZero(width / 2);
 
         canvas.repaint();
     }
 
     private void handleMousePressed(MouseEvent e) {
-        initialClick = e.getPoint();
-    }
+        if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW || app.getMode() == Mode.MOVE_CANVAS) {
+            mouseDragStart = e.getPoint();
+        }
 
-    private void handleHomeButton() {
-        canvas.setCellSize(DEFAULT_CELL_SIZE);
+        /**
+         * Coordinates of mouse pressed in the polydraw coordinate system
+         */
+        Point2D polySpaceMousePosition = model.toPolySpace(e.getPoint());
+        System.out.println(polySpaceMousePosition);
+
+        if (app.getMode() == Mode.DRAW_LINE_BRESENHAM || app.getMode() == Mode.DRAW_LINE_DDA) {
+            if (currentWrapper == null) {
+                // first coordinate of line has been selected
+
+                // create a shape wrapper
+                currentWrapper = new ShapeWrapper();
+                currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
+
+                // save wrapper
+                model.getShapes().add(currentWrapper);
+
+            } else {
+                // second coordinate has now been selected
+
+                // create a line
+                Point2D lineStart = currentWrapper.getPlottedPoints().get(0);
+                Point2D lineEnd = polySpaceMousePosition;
+                Line2D line = new Line2D.Double();
+                line.setLine(lineStart, lineEnd);
+
+                currentWrapper.getPlottedPoints().add(lineEnd);
+                currentWrapper.setShape(line);
+
+                currentWrapper = null;
+            }
+
+        }
+
         canvas.repaint();
     }
 
-    private void handleZoomInButton() {
-        canvas.setCellSize(Math.min(MAX_CELL_SIZE, canvas.getCellSize() + ZOOM_INCREMENT));
-        canvas.repaint();
-    }
+    private void resetCanvasView() {
+        // show origin at center of canvas
+        model.setXZero(canvas.getWidth() / 2);
+        model.setYZero(canvas.getHeight() / 2);
 
-    private void handleZoomOutButton() {
-        canvas.setCellSize(Math.max(MIN_CELL_SIZE, canvas.getCellSize() - ZOOM_INCREMENT));
+        // reset zoom level
+        model.setCellSize(CanvasModel.DEFAULT_CELL_SIZE);
         canvas.repaint();
     }
 }
