@@ -20,7 +20,6 @@ public class MenuBar extends JMenuBar {
 
     IconLoader loader = new IconLoader();
 
-
     public JMenu createCursorMenu() throws Exception {
         JMenu menu = new JMenu();
         JMenuItem menuItem;
@@ -115,6 +114,22 @@ public class MenuBar extends JMenuBar {
 
         menuItem = new JMenuItem("Rotate around Point", loader.loadIcon("/icons/rotate-around-point.png", 50));
         menu.add(menuItem);
+
+        menuItem = new JMenuItem("Translation");
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Normal Rotation");
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Scaling");
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Shear");
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Clipping");
+        menu.add(menuItem);
+
         return menu;
     }
 
