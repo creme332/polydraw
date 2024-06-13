@@ -265,7 +265,6 @@ public class Canvas extends JPanel {
                 1.618, 1.618, -1.618, -1.618
         };
 
-        // y coordinates of vertices
         double y[] = {
                 1, 1, -1, -1, 1, 1, -1, -1,
                 1.618, 1.618, -1.618, -1.618,
