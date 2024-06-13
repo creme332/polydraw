@@ -25,6 +25,8 @@ public class AppState {
 
     Map<Mode, Integer> modeToMenuMapper;
 
+    Screen currentScreen = Screen.MAIN_SCREEN;
+
     public AppState() {
         try {
             menuModels = createMenuModels();
@@ -104,6 +106,15 @@ public class AppState {
         };
     }
 
+    public void switchScreen(Screen newScreen) {
+        support.firePropertyChange("screen", currentScreen, newScreen);
+        currentScreen = newScreen;
+    }
+
+    public Screen getCurrentScreen() {
+        return currentScreen;
+    }
+
     private Map<Mode, Integer> initModeToMenuMapper() {
         Map<Mode, Integer> mapper = new EnumMap<>(Mode.class);
         for (int i = 0; i < menuModels.length; i++) {
@@ -129,6 +140,7 @@ public class AppState {
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener("sidebarVisibility", listener);
         support.addPropertyChangeListener("mode", listener);
+        support.addPropertyChangeListener("screen", listener);
     }
 
     public boolean getSideBarVisibility() {

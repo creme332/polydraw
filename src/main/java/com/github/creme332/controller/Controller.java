@@ -29,7 +29,10 @@ public class Controller {
             canvas = new Canvas(app.getCanvasModel(), toolbar);
             new CanvasController(app, canvas);
 
-            frame = new Frame(canvas, menuBar);
+            TutorialCenter tutorialCenter = new TutorialCenter();
+            new TutorialController(tutorialCenter);
+
+            frame = new Frame(canvas, menuBar, tutorialCenter);
             frameController = new FrameController(app, frame);
 
             new SideMenuController(app, frame.getSideMenuPanel());

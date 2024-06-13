@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
+
+import com.github.creme332.model.Screen;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 /**
@@ -22,12 +24,12 @@ public class Frame extends JFrame {
     private CardLayout cl = new CardLayout();
 
     /**
-     * A container for mainScreen and splashScreen
+     * A container for all screens.
      */
     private JPanel screenContainer = new JPanel(cl);
 
     /**
-     * Screen which is displayed on startup
+     * Loading screen which is displayed on startup
      */
     private SplashScreen splashScreen = new SplashScreen();
 
@@ -36,10 +38,17 @@ public class Frame extends JFrame {
      */
     private JPanel mainScreen = new JPanel(new BorderLayout());
 
+    /**
+     * A sidemenu for main screen.
+     */
     SideMenuPanel sideMenu = new SideMenuPanel();
+
+    /**
+     * A menubar for main screen.
+     */
     MenuBar menubar = null;
 
-    public Frame(Canvas canvas, MenuBar menubar) throws InvalidPathException {
+    public Frame(Canvas canvas, MenuBar menubar, TutorialCenter tutorialCenter) throws InvalidPathException {
         // set frame title
         this.setTitle("polydraw");
 
@@ -65,8 +74,10 @@ public class Frame extends JFrame {
         setJMenuBar(menubar);
 
         // setup screen container
-        screenContainer.add(splashScreen, "splashScreen");
-        screenContainer.add(mainScreen, "mainScreen");
+        screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.toString());
+        screenContainer.add(mainScreen, Screen.MAIN_SCREEN.toString());
+        screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.toString());
+
         this.add(screenContainer);
 
         // add canvas to mainScreen
@@ -87,18 +98,24 @@ public class Frame extends JFrame {
         sideMenu.setVisible(visible);
     }
 
-    /**
-     * Displays frame which is initially hidden.
-     * 
-     * Call this function once all components have been added to the frame
-     * to ensure proper rendering.
-     */
-    public void showMainScreen() {
-        cl.show(screenContainer, "mainScreen");
-    }
-
-    public void showSplashScreen() {
-        cl.show(screenContainer, "splashScreen");
+    public void showScreen(Screen screen) {
+        switch (screen) {
+            case SPLASH_SCREEN:
+                cl.show(screenContainer, Screen.SPLASH_SCREEN.toString());
+                break;
+            case MAIN_SCREEN:
+                menubar.setVisible(true);
+                cl.show(screenContainer, Screen.MAIN_SCREEN.toString());
+                break;
+            case TUTORIAL_SCREEN:
+                // hide menubar and sidemenu belonging to main screen
+                menubar.setVisible(false);
+                sideMenu.setVisible(false);
+                cl.show(screenContainer, Screen.TUTORIAL_SCREEN.toString());
+                break;
+            default:
+                break;
+        }
     }
 
     public SideMenuPanel getSideMenuPanel() {
