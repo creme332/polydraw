@@ -35,7 +35,7 @@ public class AppState {
         }
 
         visibleSidebar = false;
-        mode = Mode.DRAW_FREEHAND;
+        mode = Mode.MOVE_CANVAS;
         canvasModel = new CanvasModel();
 
         support = new PropertyChangeSupport(this);
