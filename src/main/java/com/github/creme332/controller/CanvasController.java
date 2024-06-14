@@ -36,7 +36,6 @@ public class CanvasController implements PropertyChangeListener {
         this.app = app;
         this.canvas = canvas;
         this.model = app.getCanvasModel();
-        model.addPropertyChangeListener(this);
 
         app.addPropertyChangeListener(this);
 
@@ -190,8 +189,7 @@ public class CanvasController implements PropertyChangeListener {
             model.getShapes().remove(currentWrapper);
             currentWrapper = null;
             canvas.repaint();
-        }
-        if ("guidelines".equals(propertyName)) {
+        } else if ("showAxesAndLabels".equals(propertyName)) {
             canvas.repaint();
         }
     }

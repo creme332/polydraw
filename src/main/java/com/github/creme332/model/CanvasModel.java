@@ -60,6 +60,7 @@ public class CanvasModel {
     private List<ShapeWrapper> shapes = new ArrayList<>();
 
     private boolean enableGuidelines = true; // Variable to track guidelines visibility
+    private boolean axesVisible = true; // Variable to track axes visibility
 
     /**
      * 
@@ -198,5 +199,13 @@ public class CanvasModel {
     public void setGuidelinesEnabled(boolean enableGuidelines) {
         support.firePropertyChange("guidelines", this.enableGuidelines, enableGuidelines);
         this.enableGuidelines = enableGuidelines;
+    }
+
+    public boolean isAxesVisible() {
+        return axesVisible;
+    }
+
+    public void setAxesVisible(boolean axesVisible) {
+        this.axesVisible = axesVisible;
     }
 }
