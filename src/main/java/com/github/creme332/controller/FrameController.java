@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.github.creme332.model.AppState;
-import com.github.creme332.model.Mode;
+import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Screen;
 import com.github.creme332.view.Frame;
 
@@ -45,29 +45,18 @@ public class FrameController implements PropertyChangeListener {
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_1:
-                    case KeyEvent.VK_ESCAPE:
-                        app.setMode(Mode.MOVE_CANVAS);
-                        break;
-                    case KeyEvent.VK_2:
-                        app.setMode(Mode.DRAW_LINE_DDA);
-                        break;
-                    case KeyEvent.VK_3:
-                        app.setMode(Mode.DRAW_CIRCLE_DYNAMIC); // Chosen dynamic circle drawing mode
-                        break;
-                    case KeyEvent.VK_4:
-                        app.setMode(Mode.DRAW_ELLIPSE);
-                        break;
-                    case KeyEvent.VK_5:
-                        app.setMode(Mode.DRAW_POLYGON_DYNAMIC); // Chosen dynamic polygon drawing mode
-                        break;
-                    case KeyEvent.VK_6:
-                        app.setMode(Mode.REFLECT_ABOUT_LINE); // Chosen line reflection mode
-                        break;
-                    case KeyEvent.VK_7:
-                        app.setMode(Mode.MOVE_GRAPHICS_VIEW);
-                        break;
+                MenuModel[] menuModels = app.getMenuModels();
+
+                // if Esc is pressed, select mode in first menu
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    app.setMode(menuModels[0].getActiveItem().getMode());
+                    return;
+                }
+
+                // if key number k is pressed, select mode in k-th menu where k = 1, 2, ...
+                for (int i = 0; i < menuModels.length; i++) {
+                    if (e.getKeyCode() == (KeyEvent.VK_1 + i))
+                        app.setMode(menuModels[i].getActiveItem().getMode());
                 }
             }
         });
