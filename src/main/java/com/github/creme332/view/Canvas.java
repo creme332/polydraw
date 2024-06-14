@@ -230,7 +230,6 @@ public class Canvas extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
 
         Font currentFont = g.getFont();
         Font newFont = currentFont.deriveFont(currentFont.getSize() * model.getLabelFontSizeSF());
@@ -239,15 +238,13 @@ public class Canvas extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         setAntialiasing(g2);
 
-        if (model.isGuidelinesEnabled()) {
-            drawGuidelines(g2d);
-        }
-
         positionZoomPanel();
         positionToolbar();
         positionToast();
 
-        drawGuidelines(g2);
+        if (model.isGuidelinesEnabled()) {
+            drawGuidelines(g2);
+        }
         drawHorizontalAxis(g2);
         drawVerticalAxis(g2);
 

@@ -3,6 +3,8 @@ package com.github.creme332.model;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,8 @@ public class CanvasModel {
     public static final int ZOOM_INCREMENT = 10;
 
     private float labelFontSizeScaleFactor = 1.4F;
+
+    private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     /**
      * Vertical distance between top border of canvas and the polydraw origin.
@@ -147,6 +151,10 @@ public class CanvasModel {
         }
     }
 
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener("guidelines", listener);
+    }
+
     public List<ShapeWrapper> getShapes() {
         return shapes;
     }
@@ -188,6 +196,7 @@ public class CanvasModel {
     }
 
     public void setGuidelinesEnabled(boolean enableGuidelines) {
+        support.firePropertyChange("guidelines", this.enableGuidelines, enableGuidelines);
         this.enableGuidelines = enableGuidelines;
     }
 }
