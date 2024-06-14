@@ -55,6 +55,8 @@ public class CanvasModel {
 
     private List<ShapeWrapper> shapes = new ArrayList<>();
 
+    private boolean enableGuidelines = true; // Variable to track guidelines visibility
+
     /**
      * 
      * @return Transformation required to convert a coordinate in the polydraw
@@ -179,5 +181,13 @@ public class CanvasModel {
 
     public void setYZero(int newYZero) {
         yZero = newYZero;
+    }
+
+    public boolean isGuidelinesEnabled() {
+        return enableGuidelines;
+    }
+
+    public void setGuidelinesEnabled(boolean enableGuidelines) {
+        this.enableGuidelines = enableGuidelines;
     }
 }
