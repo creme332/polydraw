@@ -3,12 +3,15 @@ package com.github.creme332.controller;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.github.creme332.model.AppState;
+import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Screen;
 import com.github.creme332.view.Frame;
 
@@ -36,6 +39,25 @@ public class FrameController implements PropertyChangeListener {
                 int sideWidth = Math.min(400, width / 3);
                 frame.getMainPanel().setPreferredSize(new Dimension(menuWidth, height - menuHeight));
                 frame.setPreferredSize(new Dimension(sideWidth, height - menuHeight));
+            }
+        });
+
+        frame.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                MenuModel[] menuModels = app.getMenuModels();
+
+                // if Esc is pressed, select mode in first menu
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    app.setMode(menuModels[0].getActiveItem().getMode());
+                    return;
+                }
+
+                // if key number k is pressed, select mode in k-th menu where k = 1, 2, ...
+                for (int i = 0; i < menuModels.length; i++) {
+                    if (e.getKeyCode() == (KeyEvent.VK_1 + i))
+                        app.setMode(menuModels[i].getActiveItem().getMode());
+                }
             }
         });
     }

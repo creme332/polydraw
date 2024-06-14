@@ -33,6 +33,8 @@ public class MenuBarController implements PropertyChangeListener {
         this.app = app;
         this.menuModels = app.getMenuModels();
 
+        app.addPropertyChangeListener(this);
+
         activeMenuIndex = app.getModeToMenuMapper().get(app.getMode());
         defaultBorder = menubar.getMenu(0).getBorder();
 
@@ -107,6 +109,19 @@ public class MenuBarController implements PropertyChangeListener {
 
             // update global mode
             app.setMode(newMode);
+        }
+
+        if ("mode".equals(propertyName)) {
+            Mode newMode = (Mode) e.getNewValue();
+
+            // remove border from previously active menu
+            menubar.getMenu(activeMenuIndex).setBorder(defaultBorder);
+
+            // store index of new active menu
+            activeMenuIndex = app.getModeToMenuMapper().get(newMode);
+
+            // add border to clicked menu
+            menubar.getMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
         }
     }
 }
