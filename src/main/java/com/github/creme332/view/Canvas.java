@@ -242,7 +242,9 @@ public class Canvas extends JPanel {
         positionToolbar();
         positionToast();
 
-        drawGuidelines(g2);
+        if (model.isGuidelinesEnabled()) {
+            drawGuidelines(g2);
+        }
         drawHorizontalAxis(g2);
         drawVerticalAxis(g2);
 

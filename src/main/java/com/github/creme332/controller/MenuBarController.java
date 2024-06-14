@@ -13,6 +13,7 @@ import javax.swing.border.MatteBorder;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
+import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
 import com.github.creme332.view.MenuBar;
 
@@ -76,6 +77,15 @@ public class MenuBarController implements PropertyChangeListener {
             public void mousePressed(MouseEvent e) {
                 // toggle sidebar visibility
                 app.setSideBarVisibility(!app.getSideBarVisibility());
+            }
+        });
+
+        menubar.getGuidelinesButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // toggle guidelines visibility
+                CanvasModel canvasModel = app.getCanvasModel();
+                canvasModel.setGuidelinesEnabled(!canvasModel.isGuidelinesEnabled());
             }
         });
     }

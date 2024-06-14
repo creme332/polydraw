@@ -17,6 +17,7 @@ import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
 public class MenuBar extends JMenuBar {
     private JButton sidebarButton;
+    private JButton guidelinesButton; // Button to toggle guidelines
 
     public MenuBar(MenuModel[] menus) {
         // add menus to menubar
@@ -47,7 +48,13 @@ public class MenuBar extends JMenuBar {
         btn.setBorderPainted(false);
         leftPanel.add(btn);
 
-        // open sidebar menu button
+        // guidelines button
+        guidelinesButton = new JButton();
+        guidelinesButton.setIcon(FontIcon.of(BootstrapIcons.GRID_3X3, 37));
+        guidelinesButton.setBorderPainted(false);
+        leftPanel.add(guidelinesButton);
+
+        // sidebar menu button
         sidebarButton = new JButton();
         sidebarButton.setIcon(FontIcon.of(BootstrapIcons.LIST, 40));
         sidebarButton.setBorderPainted(false);
@@ -58,5 +65,9 @@ public class MenuBar extends JMenuBar {
 
     public JButton getSideBarButton() {
         return sidebarButton;
+    }
+
+    public JButton getGuidelinesButton() {
+        return guidelinesButton;
     }
 }
