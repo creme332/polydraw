@@ -144,6 +144,7 @@ public class CanvasModel {
      * @param zoomIn Zoom in if true, zoom out otherwise
      */
     public void updateCanvasZoom(boolean zoomIn) {
+        support.firePropertyChange("guidelines", null, zoomIn);
         if (zoomIn) {
             setCellSize(Math.min(CanvasModel.MAX_CELL_SIZE, getCellSize() + CanvasModel.ZOOM_INCREMENT));
         } else {
@@ -153,6 +154,7 @@ public class CanvasModel {
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener("guidelines", listener);
+        support.addPropertyChangeListener("zoomChange", listener);
     }
 
     public List<ShapeWrapper> getShapes() {

@@ -191,7 +191,7 @@ public class CanvasController implements PropertyChangeListener {
             currentWrapper = null;
             canvas.repaint();
         }
-        if ("guidelines".equals(propertyName)) {
+        if ("guidelines".equals(propertyName) || "zoomChange".equals(propertyName)) {
             canvas.repaint();
         }
     }
