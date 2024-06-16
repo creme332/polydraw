@@ -33,15 +33,16 @@ public class CanvasModel {
      */
     public static final int TICK_PADDING_RIGHT = 30;
 
-    /**
-     * Distance in pixels between each unit on axes is out of sight.
-     */
-    int cellSize = 100;
-
     public static final int MAX_CELL_SIZE = 500;
+    public static final int MIN_CELL_SIZE = 1;
     public static final int DEFAULT_CELL_SIZE = 100;
-    public static final int MIN_CELL_SIZE = 30;
-    public static final int ZOOM_INCREMENT = 10;
+    public static final int ZOOM_INCREMENT = 1;
+
+    /**
+     * Distance in pixels between each unit on axes. It guaranteed to be within
+     * MIN_CELL_SIZEa and MAX_CELL_SIZE
+     */
+    int cellSize = Math.max(MIN_CELL_SIZE, Math.min(DEFAULT_CELL_SIZE, MAX_CELL_SIZE));
 
     private float labelFontSizeScaleFactor = 1.4F;
 
