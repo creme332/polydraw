@@ -1,5 +1,6 @@
 package com.github.creme332.model;
 
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -135,7 +136,10 @@ public class CanvasModel {
      * @return
      */
     public Point2D toPolySpace(Point2D point) {
-        return getPolySpaceTransform().transform(point, null);
+        Point2D polySpaceMousePosition = getPolySpaceTransform().transform(point, null);
+
+        return new Point((int) Math.round(polySpaceMousePosition.getX()),
+                (int) Math.round(polySpaceMousePosition.getY()));
     }
 
     /**
