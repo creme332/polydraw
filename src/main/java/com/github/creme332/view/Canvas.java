@@ -108,8 +108,11 @@ public class Canvas extends JPanel {
         zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
         zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
         add(homeButton);
+        homeButton.setToolTipText("Home Button");
         add(zoomInButton);
+        zoomInButton.setToolTipText("Zoom in");
         add(zoomOutButton);
+        zoomOutButton.setToolTipText("Zoom out");
     }
 
     public void setAntialiasing(Graphics2D g2) {

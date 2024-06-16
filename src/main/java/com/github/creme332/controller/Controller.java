@@ -20,7 +20,7 @@ public class Controller {
 
     public Controller() {
         try {
-            menuBar = new MenuBar(app.getMenuModels());
+            menuBar = new MenuBar();
             new MenuBarController(app, menuBar);
 
             toolbar = new Toolbar();
