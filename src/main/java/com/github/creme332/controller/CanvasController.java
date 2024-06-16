@@ -11,6 +11,7 @@ import java.awt.Polygon;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.Color;
 
 import com.github.creme332.algorithms.CircleAlgorithm;
 import com.github.creme332.model.AppState;
@@ -34,6 +35,8 @@ public class CanvasController implements PropertyChangeListener {
      * Wrapper for shape currently being drawn.
      */
     private ShapeWrapper currentWrapper;
+
+    private ShapeWrapper shadowPointWrapper = new ShapeWrapper();
 
     public CanvasController(AppState app, Canvas canvas) {
         this.app = app;
@@ -62,6 +65,13 @@ public class CanvasController implements PropertyChangeListener {
             public void mouseMoved(MouseEvent e) {
                 Point2D polySpaceMousePosition = model.toPolySpace(e.getPoint());
 
+                model.getShapes().remove(shadowPointWrapper);
+                shadowPointWrapper = new ShapeWrapper();
+                shadowPointWrapper.setFillColor(Color.GRAY);
+                shadowPointWrapper.getPlottedPoints().add(polySpaceMousePosition);
+                model.getShapes().add(shadowPointWrapper);
+
+                canvas.repaint();
                 if ((app.getMode() == Mode.DRAW_LINE_BRESENHAM || app.getMode() == Mode.DRAW_LINE_DDA)
                         && currentWrapper != null && currentWrapper.getPlottedPoints().size() == 1) {
 
@@ -80,8 +90,6 @@ public class CanvasController implements PropertyChangeListener {
                     if (roundedRadius == 0)
                         return;
 
-                    // System.out.format("plotting center center (%d, %d) radius %d %n", (int) center.getX(),
-                    //         (int) center.getY(), roundedRadius);
 
                     currentWrapper.setShape(getCircle((int) center.getX(), (int) center.getY(), roundedRadius));
                     canvas.repaint();
