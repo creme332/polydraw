@@ -13,7 +13,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.Color;
 
-import com.github.creme332.algorithms.CircleAlgorithm;
+import com.github.creme332.algorithms.CircleCalculator;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
@@ -23,7 +23,7 @@ import com.github.creme332.view.Canvas;
 public class CanvasController implements PropertyChangeListener {
     private Canvas canvas;
 
-    private CircleAlgorithm circleCalculator = new CircleAlgorithm();
+    private CircleCalculator circleCalculator = new CircleCalculator();
     /**
      * Used to store coordinate where mouse drag started
      */
@@ -126,7 +126,7 @@ public class CanvasController implements PropertyChangeListener {
     }
 
     private Polygon getCircle(int x, int y, int radius) {
-        int[][] coordinates = circleCalculator.calculateOrderedPoints(x, y, radius);
+        int[][] coordinates = circleCalculator.getOrderedPoints(x, y, radius);
         return new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
     }
 

@@ -4,16 +4,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CircleAlgorithm {
+public class CircleCalculator {
 
+    /**
+     * A map that stores calculated coordinates for circles of different radii
+     * centered at origin.
+     * 
+     * The key is the radius and the value is a list with 2 elements. The first
+     * element is a list of x-coordinates while the second element is a list of
+     * y-coordinates.
+     */
     private HashMap<Integer, List<List<Integer>>> cache;
 
-    public CircleAlgorithm() {
+    public CircleCalculator() {
         cache = new HashMap<>();
     }
 
     /**
      * Calculates coordinates of circle starting from top and moving clockwise.
+     * Points are ordered clockwise.
      * 
      * @param centerX x-coordinate of circle center
      * @param centerY y-coordinate of circle center
@@ -21,7 +30,7 @@ public class CircleAlgorithm {
      * @return 2 arrays. The first array is the list of x-coordinates and the second
      *         array is a list of y-coordinates.
      */
-    public int[][] calculateOrderedPoints(int centerX, int centerY, int radius) {
+    public int[][] getOrderedPoints(int centerX, int centerY, int radius) {
         // check if result is already available and return it
         if (cache.containsKey(radius)) {
             List<Integer> xPoints = cache.get(radius).get(0);
@@ -31,7 +40,7 @@ public class CircleAlgorithm {
             return new int[][] { xArray, yArray };
         }
 
-        List<int[]> pixelList = calculateFirstOctant(radius);
+        final List<int[]> pixelList = getFirstOctantPoints(radius);
         List<Integer> xPoints = new ArrayList<>();
         List<Integer> yPoints = new ArrayList<>();
 
@@ -116,7 +125,7 @@ public class CircleAlgorithm {
         res.add(yPoints);
         cache.put(radius, res);
 
-        return calculateOrderedPoints(centerX, centerY, radius);
+        return getOrderedPoints(centerX, centerY, radius);
     }
 
     /**
@@ -127,7 +136,7 @@ public class CircleAlgorithm {
      * @return A 2D array where each element is an array {x, y} representing the x
      *         and y coordinates of a pixel.
      */
-    private static List<int[]> calculateFirstOctant(int radius) {
+    public static List<int[]> getFirstOctantPoints(int radius) {
         if (radius <= 0) {
             throw new IllegalArgumentException("Radius must be positive");
         }
@@ -153,7 +162,16 @@ public class CircleAlgorithm {
         return pixelList;
     }
 
-    public static int[][] drawCircle(int centerX, int centerY, int radius) {
+    /**
+     * Calculates all coordinates of pixels for circle. Points are not ordered in
+     * any way.
+     * 
+     * @param centerX x-coordinate of center
+     * @param centerY y-coordinate of center
+     * @param radius  radius of circle
+     * @return
+     */
+    public static int[][] getAllPoints(int centerX, int centerY, int radius) {
         if (radius <= 0) {
             throw new IllegalArgumentException("Radius must be positive");
         }
@@ -179,35 +197,46 @@ public class CircleAlgorithm {
         return pixelList.toArray(new int[pixelList.size()][]);
     }
 
+    /**
+     * Adds a point (x, y) in first octant as well as its corresponding points in
+     * other octants to an array. Duplicates are prevented.
+     * 
+     * 
+     * @param pixelList Array storing points
+     * @param centerX   x-coordinate of center
+     * @param centerY   y-coordinate of center
+     * @param x         x-coordinate of a point in first octant
+     * @param y         y-coordinate of a point in first octant
+     */
     private static void plotCirclePoints(List<int[]> pixelList, int centerX, int centerY, int x, int y) {
         if (x == 0) {
-            addUniquePixel(pixelList, centerX + x, centerY + y);
-            addUniquePixel(pixelList, centerX + y, centerY + x);
-            addUniquePixel(pixelList, centerX + x, centerY - y);
-            addUniquePixel(pixelList, centerX - y, centerY + x);
+            addToArray(pixelList, centerX + x, centerY + y);
+            addToArray(pixelList, centerX + y, centerY + x);
+            addToArray(pixelList, centerX + x, centerY - y);
+            addToArray(pixelList, centerX - y, centerY + x);
             return;
         }
 
         if (x == y) {
-            addUniquePixel(pixelList, centerX + x, centerY + y);
-            addUniquePixel(pixelList, centerX - x, centerY + y);
-            addUniquePixel(pixelList, centerX + x, centerY - y);
-            addUniquePixel(pixelList, centerX - x, centerY - y);
+            addToArray(pixelList, centerX + x, centerY + y);
+            addToArray(pixelList, centerX - x, centerY + y);
+            addToArray(pixelList, centerX + x, centerY - y);
+            addToArray(pixelList, centerX - x, centerY - y);
             return;
         }
 
-        addUniquePixel(pixelList, centerX + x, centerY + y);
-        addUniquePixel(pixelList, centerX - x, centerY + y);
-        addUniquePixel(pixelList, centerX + x, centerY - y);
-        addUniquePixel(pixelList, centerX - x, centerY - y);
+        addToArray(pixelList, centerX + x, centerY + y);
+        addToArray(pixelList, centerX - x, centerY + y);
+        addToArray(pixelList, centerX + x, centerY - y);
+        addToArray(pixelList, centerX - x, centerY - y);
 
-        addUniquePixel(pixelList, centerX + y, centerY + x);
-        addUniquePixel(pixelList, centerX - y, centerY + x);
-        addUniquePixel(pixelList, centerX + y, centerY - x);
-        addUniquePixel(pixelList, centerX - y, centerY - x);
+        addToArray(pixelList, centerX + y, centerY + x);
+        addToArray(pixelList, centerX - y, centerY + x);
+        addToArray(pixelList, centerX + y, centerY - x);
+        addToArray(pixelList, centerX - y, centerY - x);
     }
 
-    private static void addUniquePixel(List<int[]> pixelList, int x, int y) {
+    private static void addToArray(List<int[]> pixelList, int x, int y) {
         pixelList.add(new int[] { x, y });
     }
 }
