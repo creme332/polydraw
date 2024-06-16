@@ -282,7 +282,7 @@ public class Canvas extends JPanel {
             }
 
             // plot points
-            g2.setColor(Color.BLUE);
+            g2.setColor(wrapper.getFillColor());
             for (Point2D p : wrapper.getPlottedPoints()) {
                 Shape point = createPointAsShape(model.toUserSpace(p));
 
