@@ -1,9 +1,11 @@
 package com.github.creme332.view;
 
 import javax.swing.*;
+
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
+import org.kordamp.ikonli.swing.FontIcon;
+
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.creme332.view.tutorial.GridItem;
@@ -13,66 +15,77 @@ public class TutorialCenter extends JPanel {
     private JTextField searchField;
     private JButton searchButton;
     private JPanel gridPanel;
-    private List<GridItem> gridItems;
+    private List<GridItem> gridItems = new ArrayList<>();
+
+    public JButton createBackButton() {
+        JButton btn = new JButton(); // Back button with arrow icon
+        btn.setBorderPainted(false);
+        FontIcon icon = FontIcon.of(BootstrapIcons.ARROW_LEFT_CIRCLE);
+        icon.setIconSize(40);
+        btn.setIcon(icon);
+        return btn;
+    }
+
+    public JTextField createSearchField() {
+        JTextField field = new JTextField("Search Polydraw Tutorials", 100);
+        field.setForeground(Color.GRAY);
+
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals("Search Polydraw Tutorials")) {
+                    field.setText("");
+                    field.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().isEmpty()) {
+                    field.setForeground(Color.GRAY);
+                    field.setText("Search Polydraw Tutorials");
+                }
+            }
+        });
+
+        return field;
+    }
+
+    public JButton createSearchButton() {
+        JButton btn = new JButton("Search");
+        FontIcon icon = FontIcon.of(BootstrapIcons.SEARCH);
+        icon.setIconSize(30);
+        btn.setIcon(icon);
+        return btn;
+    }
 
     public TutorialCenter() {
         setLayout(new BorderLayout());
 
         // Create the top panel with back button and search field
         JPanel topPanel = new JPanel(new BorderLayout());
-        backButton = new JButton("<"); // Back button with arrow icon
-        JPanel searchPanel = new JPanel(new BorderLayout());
-
-        searchField = new JTextField("Search Polydraw Tutorials");
-        searchField.setPreferredSize(new Dimension(200, 30)); // Adjusted size
-        searchField.setForeground(Color.GRAY);
-
-        searchField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (searchField.getText().equals("Search Polydraw Tutorials")) {
-                    searchField.setText("");
-                    searchField.setForeground(Color.BLACK);
-                }
-            }
-
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (searchField.getText().isEmpty()) {
-                    searchField.setForeground(Color.GRAY);
-                    searchField.setText("Search Polydraw Tutorials");
-                }
-            }
-        });
-
-        searchButton = new JButton("Enter");
-        searchButton.setPreferredSize(new Dimension(75, 30)); // Adjusted size
-
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                filterGridItems(searchField.getText());
-            }
-        });
-
-        searchPanel.add(searchField, BorderLayout.CENTER);
-        searchPanel.add(searchButton, BorderLayout.EAST);
-
-        topPanel.add(backButton, BorderLayout.WEST);
-        topPanel.add(searchPanel, BorderLayout.CENTER);
-
         add(topPanel, BorderLayout.NORTH);
 
+        // create top panel components
+        backButton = createBackButton();
+        topPanel.add(backButton, BorderLayout.WEST);
+
+        searchField = createSearchField();
+        topPanel.add(searchField, BorderLayout.CENTER);
+
+        searchButton = createSearchButton();
+        topPanel.add(searchButton, BorderLayout.EAST);
+
         // Create the grid panel to hold GridItems
-        gridPanel = new JPanel(new GridLayout(2, 3, 10, 10)); // 2 rows, 3 columns, 10px horizontal and vertical gaps
-        gridPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Make grid lines black
-        gridItems = new ArrayList<>();
+        gridPanel = new JPanel(new GridLayout(2, 2, 10, 10));
 
         // Create GridItems and add them to the grid panel
-        gridItems.add(new GridItem("Getting Started", "path/to/getting_started_image.png"));
-        gridItems.add(new GridItem("Draw Line", "path/to/draw_line_image.png"));
-        gridItems.add(new GridItem("Draw Circle", "path/to/draw_circle_image.png"));
-        gridItems.add(new GridItem("Draw Polygon", "path/to/draw_polygon_image.png"));
-        gridItems.add(new GridItem("Rotating Polygons", "path/to/rotating_polygons_image.png"));
-        gridItems.add(new GridItem("Translating Polygons", "path/to/translating_polygons_image.png"));
+        gridItems.add(new GridItem("Getting Started", null));
+        gridItems.add(new GridItem("Draw Line", null));
+        gridItems.add(new GridItem("Draw Circle", null));
+        gridItems.add(new GridItem("Draw Polygon", null));
+        gridItems.add(new GridItem("Rotating Polygons", null));
+        gridItems.add(new GridItem("Translating Polygons", null));
 
         for (GridItem item : gridItems) {
             gridPanel.add(item);
@@ -80,12 +93,9 @@ public class TutorialCenter extends JPanel {
 
         // Wrap gridPanel in a JScrollPane to make it scrollable
         JScrollPane scrollPane = new JScrollPane(gridPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
-
-        // Ensure the grid panel is scrollable by setting a preferred size
-        gridPanel.setPreferredSize(new Dimension(800, 600)); // Adjust size as necessary
     }
 
     public JButton getBackButton() {
@@ -106,12 +116,11 @@ public class TutorialCenter extends JPanel {
         } else {
             // Otherwise, filter the items based on the query
             for (GridItem item : gridItems) {
-                if (item.getHeading().toLowerCase().contains(query.toLowerCase())) {
-                    gridPanel.add(item);
-                }
+                // if (item.getHeading().toLowerCase().contains(query.toLowerCase())) {
+                // gridPanel.add(item);
+                // }
             }
         }
-        gridPanel.revalidate();
         gridPanel.repaint();
     }
 }
