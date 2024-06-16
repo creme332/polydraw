@@ -142,13 +142,14 @@ public class Canvas extends JPanel {
         g2.drawString(Integer.toString(0), model.getXZero(), labelYPos);
 
         // label ticks on positive horizontal axis
-        for (int i = 1; i <= (canvasWidth - model.getXZero()) / (model.getCellSize()); i++) {
+        int interval = getLabelInterval();
+        for (int i = interval; i <= (canvasWidth - model.getXZero()) / (model.getCellSize()); i += interval) {
             int labelX = model.getXZero() + i * model.getCellSize();
             g2.drawString(Integer.toString(i), labelX, labelYPos);
         }
 
         // label ticks on negative horizontal axis
-        for (int i = -1; i >= -model.getXZero() / (model.getCellSize()); i--) {
+        for (int i = -interval; i >= -model.getXZero() / (model.getCellSize()); i -= interval) {
             int labelX = model.getXZero() + i * model.getCellSize();
             g2.drawString(Integer.toString(i), labelX, labelYPos);
         }
@@ -191,6 +192,27 @@ public class Canvas extends JPanel {
 
     }
 
+    private int getLabelInterval() {
+        int threshold = 40;
+        int cellSize = model.getCellSize();
+
+        if (cellSize >= threshold)
+            return 1;
+
+        if (cellSize >= 30)
+            return 2;
+
+        if (cellSize >= 20)
+            return 5;
+        if (cellSize >= 10)
+            return 10;
+        if (cellSize >= 6)
+            return 20;
+        if (cellSize >= 3)
+            return 60;
+        return 120;
+    }
+
     private void drawVerticalAxis(Graphics2D g2) {
         // TODO: move calculation to model
         final int canvasWidth = getWidth();
@@ -212,14 +234,17 @@ public class Canvas extends JPanel {
         g2.drawString(Integer.toString(0), labelYPos, model.getYZero());
 
         // label ticks on positive vertical axis
-        for (int i = 1; i <= model.getYZero() / (model.getCellSize()); i++) {
+        int interval = getLabelInterval();
+        int labelCount = model.getYZero() / (model.getCellSize());
+        for (int i = interval; i <= labelCount; i += interval) {
             int labelY = model.getYZero() - i * model.getCellSize();
             g2.drawString(Integer.toString(i), labelYPos,
                     labelY);
         }
 
         // label ticks on negative vertical axis
-        for (int i = 1; i <= (canvasHeight - model.getYZero()) / (model.getCellSize()); i++) {
+        labelCount = (canvasHeight - model.getYZero()) / (model.getCellSize());
+        for (int i = interval; i <= labelCount; i += interval) {
             int labelY = model.getYZero() + i * model.getCellSize();
             String label = Integer.toString(-i);
 
