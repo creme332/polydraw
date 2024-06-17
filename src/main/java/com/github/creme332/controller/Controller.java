@@ -24,7 +24,7 @@ public class Controller {
             new MenuBarController(app, menuBar);
 
             toolbar = new Toolbar();
-            new ToolBarController(toolbar);
+            new ToolBarController(toolbar, app.getCanvasModel());
 
             canvas = new Canvas(app.getCanvasModel(), toolbar);
             new CanvasController(app, canvas);
