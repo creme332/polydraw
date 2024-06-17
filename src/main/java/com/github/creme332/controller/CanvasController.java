@@ -184,15 +184,20 @@ public class CanvasController implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
-        // if mode has changed while a shape is being drawn
+
+        // if mode from AppState has changed while a shape is being drawn
         if ("mode".equals(propertyName) && currentWrapper != null) {
             // erase incomplete shape
             model.getShapes().remove(currentWrapper);
             currentWrapper = null;
             canvas.repaint();
+            return;
         }
-        if ("guidelines".equals(propertyName) || "zoomChange".equals(propertyName)) {
+
+        // if guidelines were toggled or zoom was changed or axes were toggled
+        if ("enableGuidelines".equals(propertyName) || "zoomChange".equals(propertyName) || "axesVisible".equals(propertyName)) {
             canvas.repaint();
+            return;
         }
     }
 }

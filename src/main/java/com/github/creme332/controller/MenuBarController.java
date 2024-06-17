@@ -90,6 +90,15 @@ public class MenuBarController implements PropertyChangeListener {
                 canvasModel.setGuidelinesEnabled(!canvasModel.isGuidelinesEnabled());
             }
         });
+
+        menubar.getToggleAxesButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // toggle axes visibility
+                CanvasModel canvasModel = app.getCanvasModel();
+                canvasModel.setAxesVisible(!canvasModel.isAxesVisible());
+            }
+        });
     }
 
     @Override

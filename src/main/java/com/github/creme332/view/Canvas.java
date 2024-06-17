@@ -107,6 +107,7 @@ public class Canvas extends JPanel {
         homeButton = createZoomPanelButton(BootstrapIcons.HOUSE);
         zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
         zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
+
         add(homeButton);
         add(zoomInButton);
         add(zoomOutButton);
@@ -163,7 +164,7 @@ public class Canvas extends JPanel {
 
         // draw horizontal guidelines above x-axis
         int lineCount = model.getYZero() / (model.getCellSize());
-        for (int i = 1; i <= lineCount; i++) {
+        for (int i = 0; i <= lineCount; i++) {
             int y1 = model.getYZero() - i * model.getCellSize();
             g2.drawLine(0, y1, canvasWidth, y1); // draw guideline above x axis
         }
@@ -177,7 +178,7 @@ public class Canvas extends JPanel {
 
         // draw vertical guidelines before y-axis
         lineCount = model.getXZero() / (model.getCellSize());
-        for (int i = 1; i <= lineCount; i++) {
+        for (int i = 0; i <= lineCount; i++) {
             int x0 = model.getXZero() - i * model.getCellSize();
             g2.drawLine(x0, 0, x0, canvasHeight); // line before y axis
         }
@@ -245,8 +246,11 @@ public class Canvas extends JPanel {
         if (model.isGuidelinesEnabled()) {
             drawGuidelines(g2);
         }
-        drawHorizontalAxis(g2);
-        drawVerticalAxis(g2);
+
+        if (model.isAxesVisible()) {
+            drawHorizontalAxis(g2);
+            drawVerticalAxis(g2);
+        }
 
         for (ShapeWrapper wrapper : model.getShapes()) {
             g2.setColor(wrapper.getLineColor());
