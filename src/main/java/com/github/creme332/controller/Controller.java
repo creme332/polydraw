@@ -30,9 +30,8 @@ public class Controller {
             canvas = new Canvas(app.getCanvasModel(), toolbar);
             new CanvasController(app, canvas);
 
-            TutorialScreenModel tutorialModel = new TutorialScreenModel();
-            TutorialCenter tutorialCenter = new TutorialCenter(tutorialModel);
-            new TutorialController(tutorialCenter, tutorialModel, app);
+            TutorialCenter tutorialCenter = new TutorialCenter(app.getTutorialScreenModel());
+            new TutorialController(app, tutorialCenter);
 
             frame = new Frame(canvas, menuBar, tutorialCenter);
             frameController = new FrameController(app, frame);
