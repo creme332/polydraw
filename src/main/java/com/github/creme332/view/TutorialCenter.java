@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
