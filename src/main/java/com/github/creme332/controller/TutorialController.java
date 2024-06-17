@@ -5,8 +5,6 @@ import com.github.creme332.model.Screen;
 import com.github.creme332.model.TutorialScreenModel;
 import com.github.creme332.view.TutorialCenter;
 import com.github.creme332.view.tutorial.GridItem;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,33 +13,19 @@ public class TutorialController {
     private TutorialScreenModel model;
     private AppState appState;
 
-    public TutorialController(TutorialCenter view, TutorialScreenModel model, AppState appState) {
+    public TutorialController(AppState appState, TutorialCenter view) {
         this.view = view;
-        this.model = model;
+        this.model = appState.getTutorialScreenModel();
         this.appState = appState;
         initialize();
     }
 
     private void initialize() {
         // Add action listener for the back button
-        view.getBackButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleBackButton();
-            }
-        });
+        view.getBackButton().addActionListener(e -> appState.switchScreen(Screen.MAIN_SCREEN));
 
         // Add action listener for the search field
-        view.getSearchField().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleSearch();
-            }
-        });
-    }
-
-    private void handleBackButton() {
-        appState.switchScreen(Screen.MAIN_SCREEN);
+        view.getSearchField().addActionListener(e -> handleSearch());
     }
 
     private void handleSearch() {
@@ -55,8 +39,8 @@ public class TutorialController {
             filteredItems = model.getGridItems();
         } else {
             filteredItems = model.getGridItems().stream()
-                .filter(item -> item.getHeading().toLowerCase().contains(query.toLowerCase()))
-                .collect(Collectors.toList());
+                    .filter(item -> item.getHeading().toLowerCase().contains(query.toLowerCase()))
+                    .collect(Collectors.toList());
         }
         view.updateGrid(filteredItems);
     }
