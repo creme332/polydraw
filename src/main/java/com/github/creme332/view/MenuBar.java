@@ -12,6 +12,9 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.model.MenuItemModel;
 import com.github.creme332.model.MenuModel;
+import com.github.creme332.utils.IconLoader;
+import com.github.creme332.utils.exception.InvalidIconSizeException;
+import com.github.creme332.utils.exception.InvalidPathException;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
@@ -20,7 +23,7 @@ public class MenuBar extends JMenuBar {
     private JButton guidelinesButton; // Button to toggle guidelines
     private JButton toggleAxesButton; // Button to toggle axes visibility
 
-    public MenuBar(MenuModel[] menus) {
+    public MenuBar(MenuModel[] menus) throws InvalidIconSizeException, InvalidPathException {
         
         // add menus to menubar
         for (MenuModel menuModel : menus) {
@@ -58,7 +61,7 @@ public class MenuBar extends JMenuBar {
 
         // toggle axes button
         toggleAxesButton = new JButton();
-        toggleAxesButton.setIcon(FontIcon.of(BootstrapIcons.EYE, 40));
+        toggleAxesButton.setIcon(IconLoader.loadIcon("/icons/axes.png", 40));
         toggleAxesButton.setBorderPainted(false);
         leftPanel.add(toggleAxesButton);
 
