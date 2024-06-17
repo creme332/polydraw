@@ -181,29 +181,29 @@ public class CanvasController implements PropertyChangeListener {
         canvas.repaint();
     }
 
-    public void toggleAxesVisibility() {
-        model.setAxesVisible(!model.isAxesVisible());
-        canvas.repaint();
-    }
-
-    public void toggleGuidelinesVisibility() {
-        model.setGuidelinesEnabled(!model.isGuidelinesEnabled());
-        canvas.repaint();
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
-        // if mode has changed while a shape is being drawn
+
+        // if mode from AppState has changed while a shape is being drawn
         if ("mode".equals(propertyName) && currentWrapper != null) {
             // erase incomplete shape
             model.getShapes().remove(currentWrapper);
             currentWrapper = null;
             canvas.repaint();
-        } else if ("axesVisible".equals(propertyName)) {
+            return;
+        }
+
+        // if axesVisible property from CanvasModel has changed
+        if ("axesVisible".equals(propertyName)) {
             canvas.repaint();
-        } else if ("guidelines".equals(propertyName)) {
+            return;
+        }
+
+        // if enableGuidelines property from CanvasModel has changed
+        if ("enableGuidelines".equals(propertyName)) {
             canvas.repaint();
+            return;
         }
     }
 }
