@@ -26,7 +26,6 @@ public class Canvas extends JPanel {
     private JButton homeButton = new CircularButton();
     private JButton zoomInButton = new CircularButton();
     private JButton zoomOutButton = new CircularButton();
-    private JButton toggleAxesButton = new CircularButton(); // New toggle button
     private Toolbar toolbar;
 
     private transient CanvasModel model;
@@ -108,15 +107,10 @@ public class Canvas extends JPanel {
         homeButton = createZoomPanelButton(BootstrapIcons.HOUSE);
         zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
         zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
-        toggleAxesButton = createZoomPanelButton(BootstrapIcons.EYE); // New button
 
         add(homeButton);
         add(zoomInButton);
         add(zoomOutButton);
-        add(toggleAxesButton); // Add new button to the canvas
-
-        // Add action listener to toggle button
-        toggleAxesButton.addActionListener(e -> toggleAxesVisibility());
     }
 
     public void setAntialiasing(Graphics2D g2) {
@@ -246,20 +240,17 @@ public class Canvas extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         setAntialiasing(g2);
 
-        if (model.isGuidelinesEnabled()) {
-            drawGuidelines(g2d);
-        }
-
         positionZoomPanel();
         positionToolbar();
         positionToast();
 
+        if (model.isGuidelinesEnabled()) {
         if (model.isAxesVisible()) { // Check if axes should be drawn
-            drawGuidelines(g2);
+            drawGuidelines(g2d);
+        }
             drawHorizontalAxis(g2);
             drawVerticalAxis(g2);
-        }
-
+         }
         for (ShapeWrapper wrapper : model.getShapes()) {
             g2.setColor(wrapper.getLineColor());
 
@@ -294,11 +285,6 @@ public class Canvas extends JPanel {
                 radius);
     }
 
-    private void toggleAxesVisibility() {
-        model.setAxesVisible(!model.isAxesVisible());
-        repaint();
-    }
-
     public JButton getHomeButton() {
         return homeButton;
     }
@@ -309,9 +295,5 @@ public class Canvas extends JPanel {
 
     public JButton getZoomOutButton() {
         return zoomOutButton;
-    }
-
-    public JButton getToggleAxesButton() {
-        return toggleAxesButton;
     }
 }

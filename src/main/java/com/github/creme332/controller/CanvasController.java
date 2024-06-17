@@ -38,6 +38,7 @@ public class CanvasController implements PropertyChangeListener {
         this.model = app.getCanvasModel();
 
         app.addPropertyChangeListener(this);
+        model.addPropertyChangeListener(this);
 
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
@@ -180,6 +181,16 @@ public class CanvasController implements PropertyChangeListener {
         canvas.repaint();
     }
 
+    public void toggleAxesVisibility() {
+        model.setAxesVisible(!model.isAxesVisible());
+        canvas.repaint();
+    }
+
+    public void toggleGuidelinesVisibility() {
+        model.setGuidelinesEnabled(!model.isGuidelinesEnabled());
+        canvas.repaint();
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
@@ -190,6 +201,8 @@ public class CanvasController implements PropertyChangeListener {
             currentWrapper = null;
             canvas.repaint();
         } else if ("showAxesAndLabels".equals(propertyName)) {
+            canvas.repaint();
+        } else if ("guidelines".equals(propertyName)) {
             canvas.repaint();
         }
     }

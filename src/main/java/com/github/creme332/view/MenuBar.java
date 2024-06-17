@@ -14,12 +14,18 @@ import com.github.creme332.model.MenuItemModel;
 import com.github.creme332.model.MenuModel;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
+import com.github.creme332.controller.CanvasController;
 
 public class MenuBar extends JMenuBar {
     private JButton sidebarButton;
     private JButton guidelinesButton; // Button to toggle guidelines
+    private JButton toggleAxesButton; // Button to toggle axes visibility
 
-    public MenuBar(MenuModel[] menus) {
+    private CanvasController controller;
+
+    public MenuBar(MenuModel[] menus, CanvasController controller) {
+        this.controller = controller;
+        
         // add menus to menubar
         for (MenuModel menuModel : menus) {
             JMenu menu = new JMenu();
@@ -52,7 +58,15 @@ public class MenuBar extends JMenuBar {
         guidelinesButton = new JButton();
         guidelinesButton.setIcon(FontIcon.of(BootstrapIcons.GRID_3X3, 37));
         guidelinesButton.setBorderPainted(false);
+        guidelinesButton.addActionListener(e -> controller.toggleGuidelinesVisibility()); // Add action listener
         leftPanel.add(guidelinesButton);
+
+        // toggle axes button
+        toggleAxesButton = new JButton();
+        toggleAxesButton.setIcon(FontIcon.of(BootstrapIcons.EYE, 40));
+        toggleAxesButton.setBorderPainted(false);
+        toggleAxesButton.addActionListener(e -> controller.toggleAxesVisibility()); // Add action listener
+        leftPanel.add(toggleAxesButton);
 
         // sidebar menu button
         sidebarButton = new JButton();
@@ -69,5 +83,9 @@ public class MenuBar extends JMenuBar {
 
     public JButton getGuidelinesButton() {
         return guidelinesButton;
+    }
+
+    public JButton getToggleAxesButton() {
+        return toggleAxesButton;
     }
 }
