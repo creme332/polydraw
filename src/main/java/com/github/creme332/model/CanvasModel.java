@@ -154,6 +154,7 @@ public class CanvasModel {
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener("guidelines", listener);
+        support.addPropertyChangeListener("axesVisible", listener);
     }
 
     public List<ShapeWrapper> getShapes() {
@@ -206,6 +207,7 @@ public class CanvasModel {
     }
 
     public void setAxesVisible(boolean axesVisible) {
+        support.firePropertyChange("axesVisible", this.axesVisible, axesVisible);
         this.axesVisible = axesVisible;
     }
 }

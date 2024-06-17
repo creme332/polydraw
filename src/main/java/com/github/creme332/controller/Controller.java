@@ -20,13 +20,10 @@ public class Controller {
 
     public Controller() {
         try {
-            toolbar = new Toolbar();
-            canvas = new Canvas(app.getCanvasModel(), toolbar);
-            CanvasController canvasController = new CanvasController(app, canvas);
-
-            menuBar = new MenuBar(app.getMenuModels(), canvasController);
+            menuBar = new MenuBar(app.getMenuModels());
             new MenuBarController(app, menuBar);
 
+            toolbar = new Toolbar();
             new ToolBarController(toolbar);
 
             canvas = new Canvas(app.getCanvasModel(), toolbar);
@@ -50,4 +47,5 @@ public class Controller {
 
         frameController.playStartAnimation();
     }
+
 }
