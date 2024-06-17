@@ -1,6 +1,7 @@
 package com.github.creme332.controller;
 
 import com.github.creme332.model.AppState;
+import com.github.creme332.model.TutorialScreenModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
@@ -29,8 +30,9 @@ public class Controller {
             canvas = new Canvas(app.getCanvasModel(), toolbar);
             new CanvasController(app, canvas);
 
-            TutorialCenter tutorialCenter = new TutorialCenter();
-            new TutorialController(tutorialCenter);
+            TutorialScreenModel tutorialModel = new TutorialScreenModel();
+            TutorialCenter tutorialCenter = new TutorialCenter(tutorialModel);
+            new TutorialController(tutorialCenter, tutorialModel, app);
 
             frame = new Frame(canvas, menuBar, tutorialCenter);
             frameController = new FrameController(app, frame);
@@ -47,5 +49,4 @@ public class Controller {
 
         frameController.playStartAnimation();
     }
-
 }

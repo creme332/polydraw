@@ -6,7 +6,13 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class GridItem extends JPanel {
+    private String heading;
+    private Icon icon;
+
     public GridItem(String heading, Icon icon) {
+        this.heading = heading;
+        this.icon = icon;
+
         // Set layout manager
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(300, 300));
@@ -28,5 +34,13 @@ public class GridItem extends JPanel {
         title.setBorder(new EmptyBorder(10, 10, 10, 0));
         title.putClientProperty("FlatLaf.style", "font: 110% $semibold.font");
         add(title);
+    }
+
+    public String getHeading() {
+        return heading;
+    }
+
+    public Icon getIcon() {
+        return icon;
     }
 }
