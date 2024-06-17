@@ -176,8 +176,7 @@ public class CanvasController implements PropertyChangeListener {
         model.setXZero(canvas.getWidth() / 2);
         model.setYZero(canvas.getHeight() / 2);
 
-        // reset zoom level
-        model.setCellSize(CanvasModel.DEFAULT_CELL_SIZE);
+        model.resetZoom();
         canvas.repaint();
     }
 
@@ -195,7 +194,8 @@ public class CanvasController implements PropertyChangeListener {
         }
 
         // if guidelines were toggled or zoom was changed or axes were toggled
-        if ("enableGuidelines".equals(propertyName) || "zoomChange".equals(propertyName) || "axesVisible".equals(propertyName)) {
+        if ("enableGuidelines".equals(propertyName) || "cellSize".equals(propertyName)
+                || "axesVisible".equals(propertyName)) {
             canvas.repaint();
             return;
         }
