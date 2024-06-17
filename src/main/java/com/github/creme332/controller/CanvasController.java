@@ -194,14 +194,8 @@ public class CanvasController implements PropertyChangeListener {
             return;
         }
 
-        // if axesVisible property from CanvasModel has changed
-        if ("axesVisible".equals(propertyName)) {
-            canvas.repaint();
-            return;
-        }
-
-        // if enableGuidelines property from CanvasModel has changed
-        if ("enableGuidelines".equals(propertyName)) {
+        // if guidelines were toggled or zoom was changed or axes were toggled
+        if ("enableGuidelines".equals(propertyName) || "zoomChange".equals(propertyName) || "axesVisible".equals(propertyName)) {
             canvas.repaint();
             return;
         }
