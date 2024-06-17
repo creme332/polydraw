@@ -153,7 +153,7 @@ public class CanvasModel {
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener("guidelines", listener);
+        support.addPropertyChangeListener("enableGuidelines", listener);
         support.addPropertyChangeListener("axesVisible", listener);
     }
 
@@ -198,7 +198,7 @@ public class CanvasModel {
     }
 
     public void setGuidelinesEnabled(boolean enableGuidelines) {
-        support.firePropertyChange("guidelines", this.enableGuidelines, enableGuidelines);
+        support.firePropertyChange("enableGuidelines", this.enableGuidelines, enableGuidelines);
         this.enableGuidelines = enableGuidelines;
     }
 
