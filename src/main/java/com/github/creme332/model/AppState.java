@@ -21,6 +21,8 @@ public class AppState {
 
     private CanvasModel canvasModel;
 
+    TutorialScreenModel tutorialModel;
+
     private MenuModel[] menuModels;
 
     Map<Mode, Integer> modeToMenuMapper;
@@ -38,9 +40,15 @@ public class AppState {
 
         visibleSidebar = false;
         mode = Mode.MOVE_CANVAS;
+
+        tutorialModel = new TutorialScreenModel();
         canvasModel = new CanvasModel();
 
         support = new PropertyChangeSupport(this);
+    }
+
+    public TutorialScreenModel getTutorialScreenModel() {
+        return tutorialModel;
     }
 
     private MenuModel[] createMenuModels() throws InvalidIconSizeException, InvalidPathException {

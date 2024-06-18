@@ -1,66 +1,46 @@
 package com.github.creme332.view.tutorial;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 
 public class GridItem extends JPanel {
     private String heading;
-    private String imageHeaderPath;
+    private Icon icon;
 
-    private JLabel headingLabel;
-    private JLabel imageHeaderLabel;
-
-    public GridItem(String heading, String imageHeaderPath) {
+    public GridItem(String heading, Icon icon) {
         this.heading = heading;
-        this.imageHeaderPath = imageHeaderPath;
+        this.icon = icon;
 
-        // Initialize the labels
-        headingLabel = new JLabel(heading, SwingConstants.CENTER);
-        imageHeaderLabel = new JLabel(new ImageIcon(imageHeaderPath), SwingConstants.CENTER);
+        // Set layout manager
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setPreferredSize(new Dimension(300, 300));
+        // set border
+        setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        // Customize the appearance of the labels if necessary
-        headingLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        headingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        // Create image container
+        JPanel imageContainer = new JPanel(new BorderLayout());
+        imageContainer.setBackground(Color.LIGHT_GRAY);
 
-        // Set preferred sizes based on the given dimensions
-        headingLabel.setPreferredSize(new Dimension(60, 10)); // 6cm x 1cm
-        imageHeaderLabel.setPreferredSize(new Dimension(70, 40)); // 7cm x 4cm
+        // add image to image container
+        JLabel image = new JLabel();
+        image.setIcon(icon);
+        imageContainer.add(image);
+        add(imageContainer);
 
-        // Set layout manager for this panel
-        setLayout(new BorderLayout());
-
-        // Create a panel for the image with padding
-        JPanel imagePanel = new JPanel();
-        imagePanel.setLayout(new GridBagLayout());
-        imagePanel.setPreferredSize(new Dimension(70, 40)); // 7cm x 4cm
-        imagePanel.add(imageHeaderLabel);
-        imagePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // Add labels to the panel
-        add(imagePanel, BorderLayout.CENTER);
-        add(headingLabel, BorderLayout.SOUTH);
+        // add title
+        JLabel title = new JLabel(heading);
+        title.setBorder(new EmptyBorder(10, 10, 10, 0));
+        title.putClientProperty("FlatLaf.style", "font: 110% $semibold.font");
+        add(title);
     }
 
     public String getHeading() {
         return heading;
     }
 
-    public void setHeading(String heading) {
-        this.heading = heading;
-        headingLabel.setText(heading);
-    }
-
-    public String getImageHeader() {
-        return imageHeaderPath;
-    }
-
-    public void setImageHeader(String imageHeaderPath) {
-        this.imageHeaderPath = imageHeaderPath;
-        imageHeaderLabel.setIcon(new ImageIcon(imageHeaderPath));
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(70, 50); // 7cm width x (4cm + 1cm) height
+    public Icon getIcon() {
+        return icon;
     }
 }
