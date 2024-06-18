@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -46,20 +44,9 @@ public class ZoomPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 2;
         this.add(zoomOutButton, gbc);
-
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                // get current dimensions
-                int width = getWidth();
-                int height = getHeight();
-
-                System.out.format("Zoom panel dimensions = %d x %d %n", width, height);
-            }
-        });
     }
 
-    public JButton createZoomPanelButton(Ikon ikon) {
+    private JButton createZoomPanelButton(Ikon ikon) {
         final int ICON_SIZE = 30;
         final int BUTTON_SIZE = 60;
         final Color gray = new Color(116, 116, 116);
