@@ -1,13 +1,14 @@
 package com.github.creme332.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
@@ -17,8 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToolBar;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
+import javax.swing.border.EmptyBorder;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
 
@@ -31,7 +31,7 @@ public class Toolbar extends JToolBar implements ActionListener {
     static final int THICKNESS_MIN = 1;
     static final int THICKNESS_MAX = 13;
     static final int THICKNESS_INIT = 1;
-    
+
     private JLabel thicknessLabel = new JLabel(String.valueOf(THICKNESS_INIT)); // Line thickness label
     private List<JMenuItem> lineTypeMenuItems = new ArrayList<>();
 
@@ -47,11 +47,14 @@ public class Toolbar extends JToolBar implements ActionListener {
 
         thicknessSlider.setMajorTickSpacing(10);
         thicknessSlider.setMinorTickSpacing(1);
+        thicknessSlider.setPreferredSize(new Dimension(160, 10));
 
         // Add thickness label to the right of the slider
-        JPanel thicknessPanel = new JPanel();
-        thicknessPanel.add(thicknessSlider);
-        thicknessPanel.add(thicknessLabel);
+        JPanel thicknessPanel = new JPanel(new BorderLayout());
+        thicknessPanel.setBorder(new EmptyBorder(new Insets(0, 0, 0, 10)));
+        thicknessPanel.setOpaque(false);
+        thicknessPanel.add(thicknessSlider, BorderLayout.WEST);
+        thicknessPanel.add(thicknessLabel, BorderLayout.EAST);
 
         // add a menu
         JMenuBar menuBar = new JMenuBar();
@@ -98,7 +101,8 @@ public class Toolbar extends JToolBar implements ActionListener {
             colorBox.setBackground(color);
     }
 
-        private JMenuItem createLineTypeMenuItem(String name, String iconPath) throws InvalidIconSizeException, InvalidPathException {
+    private JMenuItem createLineTypeMenuItem(String name, String iconPath)
+            throws InvalidIconSizeException, InvalidPathException {
         JMenuItem menuItem = new JMenuItem(name, loadIcon(iconPath, 50));
         menuItem.setActionCommand(name);
         return menuItem;
