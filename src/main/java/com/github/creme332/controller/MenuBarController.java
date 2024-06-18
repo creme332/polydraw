@@ -15,6 +15,7 @@ import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
+import com.github.creme332.model.Screen;
 import com.github.creme332.view.MenuBar;
 
 public class MenuBarController implements PropertyChangeListener {
@@ -90,6 +91,8 @@ public class MenuBarController implements PropertyChangeListener {
                 canvasModel.setGuidelinesEnabled(!canvasModel.isGuidelinesEnabled());
             }
         });
+
+        menubar.getHelpButton().addActionListener(e -> app.switchScreen(Screen.TUTORIAL_SCREEN));
 
         menubar.getToggleAxesButton().addMouseListener(new MouseAdapter() {
             @Override
