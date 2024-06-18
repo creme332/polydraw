@@ -1,116 +1,30 @@
 package com.github.creme332.view;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import org.kordamp.ikonli.Ikon;
-import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
-import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.ShapeWrapper;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
+/**
+ * Drawing board for coordinate system.
+ */
 public class Canvas extends JPanel {
-    private JButton homeButton = new CircularButton();
-    private JButton zoomInButton = new CircularButton();
-    private JButton zoomOutButton = new CircularButton();
-    private Toolbar toolbar;
 
     private transient CanvasModel model;
-    private Toast toast = new Toast();
 
-    /**
-     * Place zoom panel in bottom right corner of canvas.
-     */
-    public void positionZoomPanel() {
-        final int MARGIN_RIGHT = 20;
-        final int MARGIN_BOTTOM = 200;
-
-        final int canvasWidth = getWidth();
-        final int canvasHeight = getHeight();
-
-        Dimension buttonSize = homeButton.getPreferredSize();
-        int x = canvasWidth - buttonSize.width - MARGIN_RIGHT;
-        int y = canvasHeight - buttonSize.height - MARGIN_BOTTOM;
-
-        homeButton.setBounds(x, y, buttonSize.width, buttonSize.height);
-        zoomInButton.setBounds(x, y + 60, buttonSize.width, buttonSize.height);
-        zoomOutButton.setBounds(x, y + 120, buttonSize.width, buttonSize.height);
-    }
-
-    public void positionToast() {
-        // position toast
-        Dimension toastSize = toast.getPreferredSize();
-
-        Rectangle r = new Rectangle();
-        r.x = 30;
-        r.y = (int) (this.getHeight() - toastSize.getHeight() - 30);
-
-        r.width = (int) toastSize.getWidth();
-        r.height = (int) toastSize.getHeight();
-
-        toast.setBounds(r);
-    }
-
-    /**
-     * Place toolbar at middle top of canvas
-     */
-    public void positionToolbar() {
-        final int MARGIN_TOP = 25; // distance between toolbar and canvas top
-        final int canvasWidth = getWidth();
-
-        // position toolbar such that center of toolbar coincides with center of canvas
-        Dimension toolbarSize = toolbar.getPreferredSize();
-        Rectangle r = new Rectangle();
-        r.x = canvasWidth / 2 - (int) (toolbarSize.getWidth() / 2);
-        r.y = MARGIN_TOP;
-
-        r.width = (int) toolbarSize.getWidth();
-        r.height = (int) toolbarSize.getHeight();
-
-        toolbar.setBounds(r);
-    }
-
-    public JButton createZoomPanelButton(Ikon ikon) {
-        final int ICON_SIZE = 25;
-        final Color gray = new Color(116, 116, 116);
-
-        JButton btn = new CircularButton();
-        btn.setPreferredSize(new Dimension(50, 50));
-        FontIcon icon = FontIcon.of(ikon, ICON_SIZE);
-        icon.setIconColor(gray);
-        btn.setIcon(icon);
-        return btn;
-    }
-
-    public Canvas(CanvasModel model, Toolbar toolbar) {
+    public Canvas(CanvasModel model) {
         setLayout(null); // Use no layout manager
-
         this.model = model;
-        this.toolbar = toolbar;
-        add(toolbar);
-        add(toast);
-
-        // create buttons for zoom panel
-        homeButton = createZoomPanelButton(BootstrapIcons.HOUSE);
-        zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
-        zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
-
-        add(homeButton);
-        add(zoomInButton);
-        add(zoomOutButton);
     }
 
     public void setAntialiasing(Graphics2D g2) {
@@ -239,10 +153,6 @@ public class Canvas extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         setAntialiasing(g2);
 
-        positionZoomPanel();
-        positionToolbar();
-        positionToast();
-
         if (model.isGuidelinesEnabled()) {
             drawGuidelines(g2);
         }
@@ -284,17 +194,5 @@ public class Canvas extends JPanel {
                 mySpaceCoord.getY() - radius / 2,
                 radius,
                 radius);
-    }
-
-    public JButton getHomeButton() {
-        return homeButton;
-    }
-
-    public JButton getZoomInButton() {
-        return zoomInButton;
-    }
-
-    public JButton getZoomOutButton() {
-        return zoomOutButton;
     }
 }

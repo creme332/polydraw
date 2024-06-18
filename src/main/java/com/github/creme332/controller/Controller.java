@@ -14,7 +14,6 @@ public class Controller {
     private Frame frame; // frame of app
     private MenuBar menuBar;
     private Canvas canvas;
-    private Toolbar toolbar;
 
     private FrameController frameController;
 
@@ -23,16 +22,18 @@ public class Controller {
             menuBar = new MenuBar(app.getMenuModels());
             new MenuBarController(app, menuBar);
 
-            toolbar = new Toolbar();
-            new ToolBarController(toolbar);
+            CanvasConsole canvasConsole = new CanvasConsole();
 
-            canvas = new Canvas(app.getCanvasModel(), toolbar);
+            new ToolBarController(canvasConsole.getToolbar());
+            new ZoomPanelController(app.getCanvasModel(), canvasConsole.getZoomPanel());
+
+            canvas = new Canvas(app.getCanvasModel());
             new CanvasController(app, canvas);
 
             TutorialCenter tutorialCenter = new TutorialCenter();
             new TutorialController(tutorialCenter);
 
-            frame = new Frame(canvas, menuBar, tutorialCenter);
+            frame = new Frame(canvas, canvasConsole, menuBar, tutorialCenter);
             frameController = new FrameController(app, frame);
 
             new SideMenuController(app, frame.getSideMenuPanel());
@@ -44,7 +45,6 @@ public class Controller {
             e.printStackTrace();
             System.exit(1);
         }
-
         frameController.playStartAnimation();
     }
 
