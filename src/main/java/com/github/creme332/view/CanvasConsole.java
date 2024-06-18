@@ -1,8 +1,10 @@
 package com.github.creme332.view;
 
 import java.awt.BorderLayout;
+import java.awt.Insets;
 
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
@@ -33,6 +35,7 @@ public class CanvasConsole extends JPanel {
         add(topPanel, BorderLayout.NORTH);
 
         JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.setBorder(new EmptyBorder(new Insets(0, 20, 10, 0)));
         southPanel.setOpaque(false);
 
         southPanel.add(toast, BorderLayout.WEST);
