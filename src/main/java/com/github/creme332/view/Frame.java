@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
@@ -48,7 +49,12 @@ public class Frame extends JFrame {
      */
     MenuBar menubar = null;
 
-    public Frame(Canvas canvas, MenuBar menubar, TutorialCenter tutorialCenter) throws InvalidPathException {
+    CanvasConsole canvasConsole;
+
+    JLayeredPane layeredPane;
+
+    public Frame(Canvas canvas, CanvasConsole console, MenuBar menubar, TutorialCenter tutorialCenter)
+            throws InvalidPathException {
         // set frame title
         this.setTitle("polydraw");
 
@@ -73,18 +79,24 @@ public class Frame extends JFrame {
         this.menubar = menubar;
         setJMenuBar(menubar);
 
+        this.canvasConsole = console;
+
+        // setup layered pane
+        layeredPane = new JLayeredPane();
+        layeredPane.add(canvas, Integer.valueOf(1));
+        layeredPane.add(console, Integer.valueOf(2));
+        // layeredPane.add(sideMenu, Integer.valueOf(3));
+
+        canvas.setBounds(0, 0, 600, 600);
+        console.setBounds(0, 0, 600, 600);
+        // add layeredPane to mainScreen
+        mainScreen.add(layeredPane, BorderLayout.CENTER);
+
         // setup screen container
         screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.toString());
         screenContainer.add(mainScreen, Screen.MAIN_SCREEN.toString());
         screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.toString());
-
         this.add(screenContainer);
-
-        // add canvas to mainScreen
-        mainScreen.add(canvas, BorderLayout.CENTER);
-
-        // add side menu to main screen
-        mainScreen.add(sideMenu, BorderLayout.EAST);
 
         // display frame
         this.setVisible(true);
@@ -118,8 +130,16 @@ public class Frame extends JFrame {
         }
     }
 
+    public JLayeredPane getPane() {
+        return layeredPane;
+    }
+
     public SideMenuPanel getSideMenuPanel() {
         return sideMenu;
+    }
+
+    public CanvasConsole getCanvasConsole() {
+        return canvasConsole;
     }
 
     public MenuBar getMyMenuBar() {
