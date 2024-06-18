@@ -24,7 +24,7 @@ public class CanvasConsole extends JPanel {
         setLayout(new BorderLayout());
 
         try {
-            toolbar = new Toolbar(model.getLineType(), model.getFillColor());
+            toolbar = new Toolbar(model.getLineType(), model.getFillColor(), model.getLineThickness());
         } catch (InvalidIconSizeException | InvalidPathException e) {
             e.printStackTrace();
             System.exit(0);

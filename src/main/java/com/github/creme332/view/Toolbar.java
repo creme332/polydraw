@@ -25,10 +25,9 @@ public class Toolbar extends JToolBar {
 
     private static final int THICKNESS_MIN = 1;
     private static final int THICKNESS_MAX = 13;
-    private static final int THICKNESS_INIT = 1;
     private static final int ICON_SIZE = 50;
 
-    private JLabel thicknessLabel = new JLabel(String.valueOf(THICKNESS_INIT)); // Line thickness label
+    private JLabel thicknessLabel; // Line thickness label
 
     /**
      * A square that displays current fill color.
@@ -43,10 +42,14 @@ public class Toolbar extends JToolBar {
     /**
      * A slider for line thickness.
      */
-    JSlider thicknessSlider = new JSlider(javax.swing.SwingConstants.HORIZONTAL,
-            THICKNESS_MIN, THICKNESS_MAX, THICKNESS_INIT);
+    JSlider thicknessSlider;
 
-    public Toolbar(LineType defaultLineType, Color defaultColor) throws InvalidIconSizeException, InvalidPathException {
+    public Toolbar(LineType defaultLineType, Color defaultColor, int defaultLineThickness)
+            throws InvalidIconSizeException, InvalidPathException {
+        thicknessLabel = new JLabel(String.valueOf(defaultLineThickness));
+
+        thicknessSlider = new JSlider(javax.swing.SwingConstants.HORIZONTAL,
+                THICKNESS_MIN, THICKNESS_MAX, defaultLineThickness);
         thicknessSlider.setMajorTickSpacing(10);
         thicknessSlider.setMinorTickSpacing(1);
         thicknessSlider.setPreferredSize(new Dimension(160, 10));

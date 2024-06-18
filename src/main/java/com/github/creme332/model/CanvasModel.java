@@ -49,7 +49,7 @@ public class CanvasModel {
     private float labelFontSizeScaleFactor = 1.4F;
 
     private LineType lineType = LineType.SOLID;
-    private int lineThickness = 1;
+    private int lineThickness = 3;
     private Color fillColor = Color.BLACK;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
