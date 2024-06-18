@@ -113,11 +113,6 @@ public class CanvasController implements PropertyChangeListener {
                 handleCanvasZoom(e);
             }
         });
-
-        // Add action listeners for the zoom panel buttons
-        canvas.getHomeButton().addActionListener(e -> resetCanvasView());
-        canvas.getZoomInButton().addActionListener(e -> model.updateCanvasZoom(true));
-        canvas.getZoomOutButton().addActionListener(e -> model.updateCanvasZoom(false));
     }
 
     private void handleCanvasZoom(MouseWheelEvent e) {
@@ -261,28 +256,24 @@ public class CanvasController implements PropertyChangeListener {
         canvas.repaint();
     }
 
-    private void resetCanvasView() {
-        // show origin at center of canvas
-        model.setXZero(canvas.getWidth() / 2);
-        model.setYZero(canvas.getHeight() / 2);
-
-        // reset zoom level
-        model.setCellSize(CanvasModel.DEFAULT_CELL_SIZE);
-        canvas.repaint();
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
-        // if mode has changed while a shape is being drawn
+
+        // if mode from AppState has changed while a shape is being drawn
         if ("mode".equals(propertyName) && currentWrapper != null) {
             // erase incomplete shape
             model.getShapes().remove(currentWrapper);
             currentWrapper = null;
             canvas.repaint();
+            return;
         }
-        if ("guidelines".equals(propertyName) || "zoomChange".equals(propertyName)) {
+
+        // if guidelines were toggled or zoom was changed or axes were toggled
+        if ("enableGuidelines".equals(propertyName) || "cellSize".equals(propertyName)
+                || "axesVisible".equals(propertyName)) {
             canvas.repaint();
+            return;
         }
     }
 }
