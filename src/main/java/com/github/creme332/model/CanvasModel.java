@@ -46,9 +46,9 @@ public class CanvasModel {
 
     private float labelFontSizeScaleFactor = 1.4F;
 
-    private LineType lineType = LineType.SOLID; // default value
-    private int lineThickness = 1; // default value
-    private Color fillColor = Color.BLACK; // default value
+    private LineType lineType = LineType.SOLID;
+    private int lineThickness = 1;
+    private Color fillColor = Color.BLACK;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     /**
@@ -168,6 +168,9 @@ public class CanvasModel {
         support.addPropertyChangeListener("enableGuidelines", listener);
         support.addPropertyChangeListener("axesVisible", listener);
         support.addPropertyChangeListener("cellSize", listener);
+        support.addPropertyChangeListener("lineThickness", listener);
+        support.addPropertyChangeListener("lineType", listener);
+        support.addPropertyChangeListener("fillColor", listener);
     }
 
     public List<ShapeWrapper> getShapes() {
@@ -216,8 +219,8 @@ public class CanvasModel {
     }
 
     public void setLineType(LineType lineType) {
+        support.firePropertyChange("lineType", this.lineType, lineType);
         this.lineType = lineType;
-        support.firePropertyChange("lineType", null, lineType);
     }
 
     public int getLineThickness() {
