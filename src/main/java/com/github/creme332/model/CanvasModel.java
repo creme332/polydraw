@@ -64,6 +64,7 @@ public class CanvasModel {
     private List<ShapeWrapper> shapes = new ArrayList<>();
 
     private boolean enableGuidelines = true; // Variable to track guidelines visibility
+    private boolean axesVisible = true; // Variable to track axes visibility
 
     /**
      * 
@@ -148,17 +149,25 @@ public class CanvasModel {
      * @param zoomIn Zoom in if true, zoom out otherwise
      */
     public void updateCanvasZoom(boolean zoomIn) {
-        support.firePropertyChange("guidelines", null, zoomIn);
+        int newCellSize;
         if (zoomIn) {
-            setCellSize(Math.min(CanvasModel.MAX_CELL_SIZE, getCellSize() + CanvasModel.ZOOM_INCREMENT));
+            newCellSize = (Math.min(CanvasModel.MAX_CELL_SIZE, getCellSize() + CanvasModel.ZOOM_INCREMENT));
         } else {
-            setCellSize(Math.max(CanvasModel.MIN_CELL_SIZE, getCellSize() - CanvasModel.ZOOM_INCREMENT));
+            newCellSize = (Math.max(CanvasModel.MIN_CELL_SIZE, getCellSize() - CanvasModel.ZOOM_INCREMENT));
         }
+        support.firePropertyChange("cellSize", cellSize, newCellSize);
+        cellSize = newCellSize;
+    }
+
+    public void resetZoom() {
+        support.firePropertyChange("cellSize", cellSize, DEFAULT_CELL_SIZE);
+        cellSize = DEFAULT_CELL_SIZE;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener("guidelines", listener);
-        support.addPropertyChangeListener("zoomChange", listener);
+        support.addPropertyChangeListener("enableGuidelines", listener);
+        support.addPropertyChangeListener("axesVisible", listener);
+        support.addPropertyChangeListener("cellSize", listener);
     }
 
     public List<ShapeWrapper> getShapes() {
@@ -175,10 +184,6 @@ public class CanvasModel {
 
     public float getLabelFontSizeSF() {
         return labelFontSizeScaleFactor;
-    }
-
-    public void setCellSize(int newCellSize) {
-        cellSize = newCellSize;
     }
 
     public int getXZero() {
@@ -202,7 +207,7 @@ public class CanvasModel {
     }
 
     public void setGuidelinesEnabled(boolean enableGuidelines) {
-        support.firePropertyChange("guidelines", this.enableGuidelines, enableGuidelines);
+        support.firePropertyChange("enableGuidelines", this.enableGuidelines, enableGuidelines);
         this.enableGuidelines = enableGuidelines;
     }
 
@@ -220,8 +225,8 @@ public class CanvasModel {
     }
 
     public void setLineThickness(int lineThickness) {
+        support.firePropertyChange("lineThickness", this.lineThickness, lineThickness);
         this.lineThickness = lineThickness;
-        support.firePropertyChange("lineThickness", null, lineThickness);
     }
 
     public Color getFillColor() {
@@ -229,7 +234,16 @@ public class CanvasModel {
     }
 
     public void setFillColor(Color fillColor) {
+        support.firePropertyChange("fillColor", this.fillColor, fillColor);
         this.fillColor = fillColor;
-        support.firePropertyChange("fillColor", null, fillColor);
+    }
+
+    public boolean isAxesVisible() {
+        return axesVisible;
+    }
+
+    public void setAxesVisible(boolean axesVisible) {
+        support.firePropertyChange("axesVisible", this.axesVisible, axesVisible);
+        this.axesVisible = axesVisible;
     }
 }
