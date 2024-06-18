@@ -2,8 +2,8 @@ package com.github.creme332.model;
 
 public enum LineType {
     SOLID("Solid Line", "/icons/solid-line.png"),
-    DOTTED("Dotted Line", "/icons/dashed-line.png"),
-    DASHED("Dashed Line", "/icons/dotted-line.png");
+    DOTTED("Dotted Line", "/icons/dotted-line.png"),
+    DASHED("Dashed Line", "/icons/dashed-line.png");
 
     private final String iconPath;
     private final String description;
