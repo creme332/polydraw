@@ -84,11 +84,6 @@ public class CanvasController implements PropertyChangeListener {
                 handleCanvasZoom(e);
             }
         });
-
-        // Add action listeners for the zoom panel buttons
-        canvas.getHomeButton().addActionListener(e -> resetCanvasView());
-        canvas.getZoomInButton().addActionListener(e -> model.updateCanvasZoom(true));
-        canvas.getZoomOutButton().addActionListener(e -> model.updateCanvasZoom(false));
     }
 
     private void handleCanvasZoom(MouseWheelEvent e) {
@@ -171,16 +166,6 @@ public class CanvasController implements PropertyChangeListener {
         canvas.repaint();
     }
 
-    private void resetCanvasView() {
-        // show origin at center of canvas
-        model.setXZero(canvas.getWidth() / 2);
-        model.setYZero(canvas.getHeight() / 2);
-
-        // reset zoom level
-        model.setCellSize(CanvasModel.DEFAULT_CELL_SIZE);
-        canvas.repaint();
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
@@ -195,7 +180,8 @@ public class CanvasController implements PropertyChangeListener {
         }
 
         // if guidelines were toggled or zoom was changed or axes were toggled
-        if ("enableGuidelines".equals(propertyName) || "zoomChange".equals(propertyName) || "axesVisible".equals(propertyName)) {
+        if ("enableGuidelines".equals(propertyName) || "cellSize".equals(propertyName)
+                || "axesVisible".equals(propertyName)) {
             canvas.repaint();
             return;
         }

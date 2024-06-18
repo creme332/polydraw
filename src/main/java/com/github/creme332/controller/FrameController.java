@@ -10,6 +10,8 @@ import java.beans.PropertyChangeListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JLayeredPane;
+
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Screen;
@@ -19,47 +21,75 @@ public class FrameController implements PropertyChangeListener {
     private Frame frame;
     private AppState app;
 
-    public FrameController(AppState app, Frame frame) {
+    public FrameController(AppState model, Frame frame) {
         this.frame = frame;
-        this.app = app;
+        this.app = model;
 
-        app.addPropertyChangeListener(this);
+        model.addPropertyChangeListener(this);
 
         frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                // get current frame dimensions
-                int width = frame.getWidth();
-                int height = frame.getHeight();
+                resizeEverything();
 
-                // get menubar dimensions
-                int menuWidth = frame.getMyMenuBar().getWidth();
-                int menuHeight = frame.getMyMenuBar().getHeight();
-
-                int sideWidth = Math.min(400, width / 3);
-                frame.getMainPanel().setPreferredSize(new Dimension(menuWidth, height - menuHeight));
-                frame.setPreferredSize(new Dimension(sideWidth, height - menuHeight));
             }
         });
 
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                MenuModel[] menuModels = app.getMenuModels();
+                MenuModel[] menuModels = model.getMenuModels();
 
                 // if Esc is pressed, select mode in first menu
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    app.setMode(menuModels[0].getActiveItem().getMode());
+                    model.setMode(menuModels[0].getActiveItem().getMode());
                     return;
                 }
 
                 // if key number k is pressed, select mode in k-th menu where k = 1, 2, ...
                 for (int i = 0; i < menuModels.length; i++) {
                     if (e.getKeyCode() == (KeyEvent.VK_1 + i))
-                        app.setMode(menuModels[i].getActiveItem().getMode());
+                        model.setMode(menuModels[i].getActiveItem().getMode());
                 }
             }
         });
+    }
+
+    private void resizeEverything() {
+        int frameWidth = frame.getWidth();
+        int frameHeight = frame.getHeight();
+        System.out.format("Frame dimensions = %d x %d %n", frameWidth, frameHeight);
+
+        int menuBarHeight = frame.getMyMenuBar().getHeight();
+        System.out.format("Menubar dimensions = %d x %d %n", frameWidth, menuBarHeight);
+
+        int sideBarWidth = app.getSideBarVisibility() ? Math.max(800, frameWidth / 3) : 0;
+        System.out.format("Sidebar dimensions = %d x %d %n", sideBarWidth, frameHeight - menuBarHeight);
+
+        // update sidebar dimensions
+        // frame.getSideMenuPanel().setPreferredSize(new Dimension(sideBarWidth,
+        // frameHeight - menuBarHeight));
+
+        // update main panel dimensions
+        frame.getMainPanel().setPreferredSize(new Dimension(frameWidth, frameHeight - menuBarHeight));
+
+        // update pane dimensions
+        JLayeredPane pane = frame.getPane();
+        pane.setPreferredSize(new Dimension(frameWidth, frameHeight - menuBarHeight));
+        System.out.format("Pane dimensions = %d x %d %n", pane.getWidth(),
+                pane.getHeight());
+
+        // update size of canvas control
+        pane.getComponent(0).setBounds(0, 0, frameWidth - 80,
+                frameHeight - menuBarHeight - 100);
+
+        // temporarily hide the canvas control. without this, the canvas console does
+        // not render its new size when frame is maximized.
+        pane.getComponent(0).setVisible(false);
+        pane.getComponent(0).setVisible(true);
+
+        // update canvas size
+        pane.getComponent(1).setBounds(0, 0, frameWidth, frameHeight - menuBarHeight);
     }
 
     public void playStartAnimation() {
@@ -81,6 +111,7 @@ public class FrameController implements PropertyChangeListener {
                 if (app.getCurrentScreen().equals(Screen.TUTORIAL_SCREEN)) {
                     frame.showScreen(Screen.TUTORIAL_SCREEN);
                 }
+                resizeEverything();
 
                 timer.cancel();
                 timer.purge();
@@ -98,6 +129,8 @@ public class FrameController implements PropertyChangeListener {
 
             if (Screen.TUTORIAL_SCREEN.equals(e.getNewValue()))
                 frame.showScreen(Screen.TUTORIAL_SCREEN);
+
+            resizeEverything();
         }
     }
 
