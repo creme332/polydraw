@@ -84,11 +84,6 @@ public class CanvasController implements PropertyChangeListener {
                 handleCanvasZoom(e);
             }
         });
-
-        // Add action listeners for the zoom panel buttons
-        canvas.getHomeButton().addActionListener(e -> resetCanvasView());
-        canvas.getZoomInButton().addActionListener(e -> model.updateCanvasZoom(true));
-        canvas.getZoomOutButton().addActionListener(e -> model.updateCanvasZoom(false));
     }
 
     private void handleCanvasZoom(MouseWheelEvent e) {
@@ -168,15 +163,6 @@ public class CanvasController implements PropertyChangeListener {
 
         }
 
-        canvas.repaint();
-    }
-
-    private void resetCanvasView() {
-        // show origin at center of canvas
-        model.setXZero(canvas.getWidth() / 2);
-        model.setYZero(canvas.getHeight() / 2);
-
-        model.resetZoom();
         canvas.repaint();
     }
 
