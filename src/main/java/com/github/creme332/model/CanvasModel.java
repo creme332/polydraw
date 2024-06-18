@@ -168,9 +168,6 @@ public class CanvasModel {
         support.addPropertyChangeListener("enableGuidelines", listener);
         support.addPropertyChangeListener("axesVisible", listener);
         support.addPropertyChangeListener("cellSize", listener);
-        support.addPropertyChangeListener("lineThickness", listener);
-        support.addPropertyChangeListener("lineType", listener);
-        support.addPropertyChangeListener("fillColor", listener);
     }
 
     public List<ShapeWrapper> getShapes() {
@@ -219,7 +216,6 @@ public class CanvasModel {
     }
 
     public void setLineType(LineType lineType) {
-        support.firePropertyChange("lineType", this.lineType, lineType);
         this.lineType = lineType;
     }
 
@@ -228,7 +224,6 @@ public class CanvasModel {
     }
 
     public void setLineThickness(int lineThickness) {
-        support.firePropertyChange("lineThickness", this.lineThickness, lineThickness);
         this.lineThickness = lineThickness;
     }
 
@@ -237,7 +232,6 @@ public class CanvasModel {
     }
 
     public void setFillColor(Color fillColor) {
-        support.firePropertyChange("fillColor", this.fillColor, fillColor);
         this.fillColor = fillColor;
     }
 
