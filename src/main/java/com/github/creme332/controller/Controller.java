@@ -31,7 +31,7 @@ public class Controller {
             new CanvasController(app, canvas);
 
             TutorialCenter tutorialCenter = new TutorialCenter();
-            new TutorialController(app, tutorialCenter);
+            new TutorialController(tutorialCenter);
 
             frame = new Frame(canvas, canvasConsole, menuBar, tutorialCenter);
             frameController = new FrameController(app, frame);
