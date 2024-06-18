@@ -1,13 +1,13 @@
 package com.github.creme332.controller;
 
+import java.awt.Color;
+
+import javax.swing.JColorChooser;
+import javax.swing.JMenuItem;
+
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.LineType;
 import com.github.creme332.view.Toolbar;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
-import com.github.creme332.utils.exception.InvalidPathException;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class ToolBarController {
     private Toolbar toolbar;
@@ -31,14 +31,15 @@ public class ToolBarController {
             }
         });
 
-        toolbar.getLineTypeMenuItems().forEach(item -> item.addActionListener(e -> {
-            LineType lineType = LineType.valueOf(item.getText().toUpperCase());
-            canvasModel.setLineType(lineType);
-            try {
-                toolbar.updateLineTypeIcon(lineType);
-            } catch (InvalidIconSizeException | InvalidPathException ex) {
-                ex.printStackTrace();
-            }
-        }));
+        // add action listener to each line type menu item
+        for (int i = 0; i < LineType.values().length; i++) {
+            JMenuItem item = toolbar.getLineTypeMenu().getItem(i);
+
+            final LineType currentLine = LineType.values()[i];
+            item.addActionListener(e -> {
+                canvasModel.setLineType(currentLine);
+                toolbar.displayLineIcon(currentLine);
+            });
+        }
     }
 }
