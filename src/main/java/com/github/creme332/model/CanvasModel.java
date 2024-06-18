@@ -7,6 +7,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Color;
 
 public class CanvasModel {
     /**
@@ -45,6 +46,9 @@ public class CanvasModel {
 
     private float labelFontSizeScaleFactor = 1.4F;
 
+    private LineType lineType = LineType.SOLID;
+    private int lineThickness = 1;
+    private Color fillColor = Color.BLACK;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     /**
@@ -205,6 +209,30 @@ public class CanvasModel {
     public void setGuidelinesEnabled(boolean enableGuidelines) {
         support.firePropertyChange("enableGuidelines", this.enableGuidelines, enableGuidelines);
         this.enableGuidelines = enableGuidelines;
+    }
+
+    public LineType getLineType() {
+        return lineType;
+    }
+
+    public void setLineType(LineType lineType) {
+        this.lineType = lineType;
+    }
+
+    public int getLineThickness() {
+        return lineThickness;
+    }
+
+    public void setLineThickness(int lineThickness) {
+        this.lineThickness = lineThickness;
+    }
+
+    public Color getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
     }
 
     public boolean isAxesVisible() {

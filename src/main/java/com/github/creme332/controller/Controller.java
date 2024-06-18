@@ -22,9 +22,9 @@ public class Controller {
             menuBar = new MenuBar(app.getMenuModels());
             new MenuBarController(app, menuBar);
 
-            CanvasConsole canvasConsole = new CanvasConsole();
+            CanvasConsole canvasConsole = new CanvasConsole(app.getCanvasModel());
 
-            new ToolBarController(canvasConsole.getToolbar());
+            new ToolBarController(canvasConsole.getToolbar(), app.getCanvasModel());
             new ZoomPanelController(app.getCanvasModel(), canvasConsole.getZoomPanel());
 
             canvas = new Canvas(app.getCanvasModel());

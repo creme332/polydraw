@@ -6,6 +6,7 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.github.creme332.model.CanvasModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
@@ -18,12 +19,12 @@ public class CanvasConsole extends JPanel {
     private Toast toast = new Toast();
     private ZoomPanel zoomPanel = new ZoomPanel();
 
-    public CanvasConsole() {
+    public CanvasConsole(CanvasModel model) {
         setOpaque(false); // make panel transparent
         setLayout(new BorderLayout());
 
         try {
-            toolbar = new Toolbar();
+            toolbar = new Toolbar(model.getLineType(), model.getFillColor());
         } catch (InvalidIconSizeException | InvalidPathException e) {
             e.printStackTrace();
             System.exit(0);
