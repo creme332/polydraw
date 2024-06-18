@@ -3,6 +3,7 @@ package com.github.creme332.view;
 import javax.swing.JPanel;
 
 import com.github.creme332.model.CanvasModel;
+import com.github.creme332.model.LineType;
 import com.github.creme332.model.ShapeWrapper;
 
 import java.awt.BasicStroke;
@@ -12,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
@@ -178,6 +180,8 @@ public class Canvas extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         setAntialiasing(g2);
 
+        final Stroke defaultStroke = g2.getStroke();
+
         if (model.isGuidelinesEnabled()) {
             drawGuidelines(g2);
         }
@@ -189,6 +193,7 @@ public class Canvas extends JPanel {
 
         for (ShapeWrapper wrapper : model.getShapes()) {
             g2.setColor(wrapper.getLineColor());
+            g2.setStroke(getStroke(wrapper.getLineType(), wrapper.getLineThickness()));
 
             if (wrapper.getShape() != null) {
                 Shape s1 = model.toUserSpace(wrapper.getShape());
@@ -196,6 +201,7 @@ public class Canvas extends JPanel {
             }
 
             // plot points
+            g2.setStroke(defaultStroke);
             g2.setColor(wrapper.getFillColor());
             for (Point2D p : wrapper.getPlottedPoints()) {
                 Shape point = createPointAsShape(model.toUserSpace(p));
@@ -204,6 +210,24 @@ public class Canvas extends JPanel {
                 g2.fill(point);
             }
 
+        }
+    }
+
+    private Stroke getStroke(LineType lineType, int thickness) {
+        switch (lineType) {
+            case SOLID:
+                // Set the stroke of the copy, not the original
+                return new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                        0, new float[] { 1 }, 0);
+            case DASHED:
+                return new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                        0, new float[] { 12 }, 0);
+            case DOTTED:
+                return new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                        0, new float[] { 4 }, 0);
+            default:
+                return new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                        0, new float[] { 1 }, 0);
         }
     }
 

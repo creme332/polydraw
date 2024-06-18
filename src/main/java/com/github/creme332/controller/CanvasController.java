@@ -90,7 +90,6 @@ public class CanvasController implements PropertyChangeListener {
                     if (roundedRadius == 0)
                         return;
 
-
                     currentWrapper.setShape(getCircle((int) center.getX(), (int) center.getY(), roundedRadius));
                     canvas.repaint();
                     return;
@@ -174,7 +173,8 @@ public class CanvasController implements PropertyChangeListener {
                 // first coordinate of line has been selected
 
                 // create a shape wrapper
-                currentWrapper = new ShapeWrapper();
+                currentWrapper = new ShapeWrapper(model.getFillColor(), model.getFillColor(), model.getLineType(),
+                        model.getLineThickness());
                 currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
 
                 // save wrapper
@@ -201,7 +201,8 @@ public class CanvasController implements PropertyChangeListener {
                 // center has been selected
 
                 // create a shape wrapper
-                currentWrapper = new ShapeWrapper();
+                currentWrapper = new ShapeWrapper(model.getFillColor(), model.getFillColor(), model.getLineType(),
+                        model.getLineThickness());
                 currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
 
                 // save wrapper
@@ -229,7 +230,8 @@ public class CanvasController implements PropertyChangeListener {
                 // first foci has been selected
 
                 // create a shape wrapper
-                currentWrapper = new ShapeWrapper();
+                currentWrapper = new ShapeWrapper(model.getFillColor(), model.getFillColor(), model.getLineType(),
+                        model.getLineThickness());
                 currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
 
                 // save wrapper
