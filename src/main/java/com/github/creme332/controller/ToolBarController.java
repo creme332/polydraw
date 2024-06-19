@@ -10,13 +10,7 @@ import com.github.creme332.model.LineType;
 import com.github.creme332.view.Toolbar;
 
 public class ToolBarController {
-    private Toolbar toolbar;
-    private CanvasModel canvasModel;
-
     public ToolBarController(Toolbar toolbar, CanvasModel canvasModel) { // Update the constructor
-        this.toolbar = toolbar;
-        this.canvasModel = canvasModel;
-
         toolbar.getThicknessSlider().addChangeListener(e -> {
             int thickness = toolbar.getThicknessSlider().getValue();
             canvasModel.setLineThickness(thickness);

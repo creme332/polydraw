@@ -98,10 +98,10 @@ public class Frame extends JFrame {
         layeredPane = new JLayeredPane();
         layeredPane.add(canvas, Integer.valueOf(1));
         layeredPane.add(canvasConsole, Integer.valueOf(2));
-        // layeredPane.add(sideMenu, Integer.valueOf(3));
 
         canvas.setBounds(0, 0, 600, 600);
         canvasConsole.setBounds(0, 0, 600, 600);
+        
         // add layeredPane to mainScreen
         mainScreen.add(layeredPane, BorderLayout.CENTER);
 

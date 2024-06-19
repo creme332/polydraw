@@ -38,8 +38,8 @@ public class TutorialCenter extends JPanel {
 
         // Wrap gridPanel in a JScrollPane to make it scrollable
         scrollPane = new JScrollPane(gridPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); // Change to horizontal
+        scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         add(scrollPane, BorderLayout.CENTER);
     }
 
@@ -53,13 +53,14 @@ public class TutorialCenter extends JPanel {
     }
 
     private JTextField createSearchField() {
-        JTextField field = new JTextField("Search Polydraw Tutorials", 100);
+        String placeholder = "Search Polydraw Tutorials";
+        JTextField field = new JTextField(placeholder, 100);
         field.setForeground(Color.GRAY);
 
         field.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (field.getText().equals("Search Polydraw Tutorials")) {
+                if (field.getText().equals(placeholder)) {
                     field.setText("");
                     field.setForeground(Color.BLACK);
                 }
@@ -69,7 +70,7 @@ public class TutorialCenter extends JPanel {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (field.getText().isEmpty()) {
                     field.setForeground(Color.GRAY);
-                    field.setText("Search Polydraw Tutorials");
+                    field.setText(placeholder);
                 }
             }
         });
