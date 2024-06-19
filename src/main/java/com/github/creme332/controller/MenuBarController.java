@@ -3,9 +3,14 @@ package com.github.creme332.controller;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JMenu;
 import javax.swing.border.Border;
@@ -16,6 +21,7 @@ import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.Screen;
+import com.github.creme332.view.Canvas;
 import com.github.creme332.view.MenuBar;
 
 public class MenuBarController implements PropertyChangeListener {
@@ -66,7 +72,7 @@ public class MenuBarController implements PropertyChangeListener {
 
                     JMenu clickedMenu = (JMenu) e.getComponent();
 
-                    // add border to clicked menu
+                    // add border to clickedMenu
                     clickedMenu.setBorder(VISIBLE_BORDER);
 
                     // update global mode using menu model for clicked menu
@@ -102,6 +108,14 @@ public class MenuBarController implements PropertyChangeListener {
                 canvasModel.setAxesVisible(!canvasModel.isAxesVisible());
             }
         });
+
+        menubar.getExportButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // export canvas as image
+                exportCanvasAsImage();
+            }
+        });
     }
 
     @Override
@@ -134,6 +148,35 @@ public class MenuBarController implements PropertyChangeListener {
 
             // add border to clicked menu
             menubar.getMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
+        }
+    }
+
+    private void exportCanvasAsImage() {
+        System.out.println("Export button clicked");
+        Canvas canvas = app.getCanvas(); // Ensure this returns a valid Canvas object
+        if (canvas == null) {
+            System.out.println("Canvas is null");
+            return;
+        }
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+        System.out.println("Canvas width: " + width + ", height: " + height);
+    
+        // Create a BufferedImage
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = image.createGraphics();
+    
+        // Paint the canvas to the BufferedImage
+        canvas.paint(g2); // Ensure this method is correctly painting the canvas
+        g2.dispose();
+    
+        // Save the BufferedImage as a PNG file
+        try {
+            File outputfile = new File("canvas.png");
+            ImageIO.write(image, "png", outputfile);
+            System.out.println("Canvas exported as image: " + outputfile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
