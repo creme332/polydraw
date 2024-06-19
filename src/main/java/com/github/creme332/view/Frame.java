@@ -37,18 +37,13 @@ public class Frame extends JFrame {
     private SplashScreen splashScreen = new SplashScreen();
 
     /**
-     * A container for canvas.
-     */
-    private JPanel mainScreen = new JPanel(new BorderLayout());
-
-    /**
      * A menubar for main screen.
      */
     MenuBar menubar = null;
 
     CanvasConsole canvasConsole;
 
-    JLayeredPane layeredPane;
+    JLayeredPane canvasScreen;
 
     Canvas canvas;
 
@@ -90,19 +85,16 @@ public class Frame extends JFrame {
         setJMenuBar(menubar);
 
         // setup layered pane
-        layeredPane = new JLayeredPane();
-        layeredPane.add(canvas, Integer.valueOf(1));
-        layeredPane.add(canvasConsole, Integer.valueOf(2));
+        canvasScreen = new JLayeredPane();
+        canvasScreen.add(canvas, Integer.valueOf(1));
+        canvasScreen.add(canvasConsole, Integer.valueOf(2));
 
         canvas.setBounds(0, 0, 600, 600);
         canvasConsole.setBounds(0, 0, 600, 600);
 
-        // add layeredPane to mainScreen
-        mainScreen.add(layeredPane);
-
         // setup screen container
         screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.toString());
-        screenContainer.add(mainScreen, Screen.MAIN_SCREEN.toString());
+        screenContainer.add(canvasScreen, Screen.MAIN_SCREEN.toString());
         screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.toString());
         this.add(screenContainer);
 
@@ -132,8 +124,8 @@ public class Frame extends JFrame {
         }
     }
 
-    public JLayeredPane getPane() {
-        return layeredPane;
+    public JLayeredPane getCanvasScreen() {
+        return canvasScreen;
     }
 
     public TutorialCenter getTutorialCenter() {
@@ -150,13 +142,5 @@ public class Frame extends JFrame {
 
     public Canvas getMyCanvas() {
         return canvas;
-    }
-
-    /**
-     * 
-     * @return Container panel for canvas and sidebar
-     */
-    public JPanel getMainPanel() {
-        return mainScreen;
     }
 }
