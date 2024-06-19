@@ -18,7 +18,7 @@ public class Toast extends JPanel {
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setBorder(new EmptyBorder(40, 10, 40, 100));
 
-        instructionLabel = new JLabel("Drag or select object");
+        instructionLabel = new JLabel("<html>Drag or select object</html>");
         instructionLabel.setForeground(Color.WHITE);
         instructionLabel.setBorder(new EmptyBorder(40, 10, 40, 100));
 
@@ -46,6 +46,27 @@ public class Toast extends JPanel {
     }
 
     public void setInstructionText(String text) {
+        if (text.length() > 30) {
+            instructionLabel.setText("<html>" + formatHtmlText(text) + "</html>");
+            instructionLabel.setPreferredSize(new Dimension(500, instructionLabel.getPreferredSize().height));
+        } else {
         instructionLabel.setText(text);
+        instructionLabel.setText(text);
+            instructionLabel.setText(text);
+        }
+    }
+
+
+    private String formatHtmlText(String text) {
+        StringBuilder htmlText = new StringBuilder();
+        int index = 0;
+        while (index < text.length()) {
+            htmlText.append(text.substring(index, Math.min(index + 30, text.length())));
+            if (index + 30 < text.length()) {
+                htmlText.append("<br>");
+            }
+            index += 30;
+        }
+        return htmlText.toString();
     }
 }
