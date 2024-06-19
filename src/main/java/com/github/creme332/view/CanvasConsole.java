@@ -18,13 +18,35 @@ public class CanvasConsole extends JPanel {
     private Toolbar toolbar;
     private Toast toast = new Toast();
     private ZoomPanel zoomPanel = new ZoomPanel();
+    SideMenuPanel sideMenu = new SideMenuPanel();
 
-    public CanvasConsole(CanvasModel model) {
+    transient CanvasModel canvasModel;
+
+    public CanvasConsole(CanvasModel canvasModel, boolean isSidebarVisible) {
+        this.canvasModel = canvasModel;
+
         setOpaque(false); // make panel transparent
         setLayout(new BorderLayout());
 
+        this.add(createMainPanel(), BorderLayout.CENTER);
+
+        sideMenu.setVisible(isSidebarVisible);
+
+        this.add(sideMenu, BorderLayout.EAST);
+    }
+
+    /**
+     * Main panel contains control buttons and is always visible.
+     * 
+     * @return
+     */
+    public JPanel createMainPanel() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setOpaque(false); // make panel transparent
+
         try {
-            toolbar = new Toolbar(model.getLineType(), model.getFillColor(), model.getLineThickness());
+            toolbar = new Toolbar(canvasModel.getLineType(), canvasModel.getFillColor(),
+                    canvasModel.getLineThickness());
         } catch (InvalidIconSizeException | InvalidPathException e) {
             e.printStackTrace();
             System.exit(0);
@@ -33,20 +55,26 @@ public class CanvasConsole extends JPanel {
         JPanel topPanel = new JPanel();
         topPanel.setOpaque(false);
         topPanel.add(toolbar);
-        add(topPanel, BorderLayout.NORTH);
+        mainPanel.add(topPanel, BorderLayout.NORTH);
 
         JPanel southPanel = new JPanel(new BorderLayout());
         southPanel.setBorder(new EmptyBorder(new Insets(0, 20, 10, 0)));
         southPanel.setOpaque(false);
 
         southPanel.add(toast, BorderLayout.WEST);
-        add(southPanel, BorderLayout.SOUTH);
+        mainPanel.add(southPanel, BorderLayout.SOUTH);
 
         JPanel eastPanel = new JPanel(new BorderLayout());
         eastPanel.setOpaque(false);
 
         eastPanel.add(zoomPanel, BorderLayout.SOUTH);
-        add(eastPanel, BorderLayout.EAST);
+        mainPanel.add(eastPanel, BorderLayout.EAST);
+
+        return mainPanel;
+    }
+
+    public SideMenuPanel getSidebar() {
+        return sideMenu;
     }
 
     public Toolbar getToolbar() {

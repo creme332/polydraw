@@ -25,7 +25,7 @@ public class Controller {
             new CanvasController(app, frame.getMyCanvas());
             new TutorialController(app, frame.getTutorialCenter());
             new ToolBarController(frame.getCanvasConsole().getToolbar(), app.getCanvasModel());
-            new SideMenuController(app, frame.getSideMenuPanel());
+            new SideMenuController(app, frame.getCanvasConsole().getSidebar());
 
             // play start animation
             frameController.playStartAnimation();

@@ -39,23 +39,13 @@ public class Frame extends JFrame {
     private SplashScreen splashScreen = new SplashScreen();
 
     /**
-     * A container for canvas and side menu
-     */
-    private JPanel mainScreen = new JPanel(new BorderLayout());
-
-    /**
-     * A sidebar for main screen.
-     */
-    SideMenuPanel sideMenu = new SideMenuPanel();
-
-    /**
      * A menubar for main screen.
      */
     MenuBar menubar = null;
 
     CanvasConsole canvasConsole;
 
-    JLayeredPane layeredPane;
+    JLayeredPane canvasScreen;
 
     Canvas canvas;
 
@@ -98,7 +88,7 @@ public class Frame extends JFrame {
         toast.setVisible(false);
 
         menubar = new MenuBar(app.getMenuModels());
-        canvasConsole = new CanvasConsole(app.getCanvasModel());
+        canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getSideBarVisibility());
         canvas = new Canvas(app.getCanvasModel());
         tutorialCenter = new TutorialCenter(app.getTutorialScreenModel());
 
@@ -106,19 +96,16 @@ public class Frame extends JFrame {
         setJMenuBar(menubar);
 
         // setup layered pane
-        layeredPane = new JLayeredPane();
-        layeredPane.add(canvas, Integer.valueOf(1));
-        layeredPane.add(canvasConsole, Integer.valueOf(2));
-        // layeredPane.add(sideMenu, Integer.valueOf(3));
+        canvasScreen = new JLayeredPane();
+        canvasScreen.add(canvas, Integer.valueOf(1));
+        canvasScreen.add(canvasConsole, Integer.valueOf(2));
 
         canvas.setBounds(0, 0, 600, 600);
         canvasConsole.setBounds(0, 0, 600, 600);
-        // add layeredPane to mainScreen
-        mainScreen.add(layeredPane, BorderLayout.CENTER);
 
         // setup screen container
         screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.toString());
-        screenContainer.add(mainScreen, Screen.MAIN_SCREEN.toString());
+        screenContainer.add(canvasScreen, Screen.MAIN_SCREEN.toString());
         screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.toString());
         this.add(screenContainer);
 
@@ -128,10 +115,6 @@ public class Frame extends JFrame {
 
     public void setMenuBarVisibility(boolean visible) {
         menubar.setVisible(visible);
-    }
-
-    public void setSideBarVisibility(boolean visible) {
-        sideMenu.setVisible(visible);
     }
 
     public void showScreen(Screen screen) {
@@ -144,9 +127,7 @@ public class Frame extends JFrame {
                 cl.show(screenContainer, Screen.MAIN_SCREEN.toString());
                 break;
             case TUTORIAL_SCREEN:
-                // hide menubar and sidemenu belonging to main screen
                 menubar.setVisible(false);
-                sideMenu.setVisible(false);
                 cl.show(screenContainer, Screen.TUTORIAL_SCREEN.toString());
                 break;
             default:
@@ -154,12 +135,8 @@ public class Frame extends JFrame {
         }
     }
 
-    public JLayeredPane getPane() {
-        return layeredPane;
-    }
-
-    public SideMenuPanel getSideMenuPanel() {
-        return sideMenu;
+    public JLayeredPane getCanvasScreen() {
+        return canvasScreen;
     }
 
     public TutorialCenter getTutorialCenter() {
@@ -176,17 +153,5 @@ public class Frame extends JFrame {
 
     public Canvas getMyCanvas() {
         return canvas;
-    }
-
-    /**
-     * 
-     * @return Container panel for canvas and sidebar
-     */
-    public JPanel getMainPanel() {
-        return mainScreen;
-    }
-
-    public Toast getToast() {
-        return toast;
     }
 }

@@ -13,15 +13,15 @@ import com.github.creme332.utils.exception.InvalidPathException;
 import static com.github.creme332.utils.IconLoader.loadIcon;
 
 public class AppState {
-    private PropertyChangeSupport support;
+    private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    private Mode mode;
+    private Mode mode = Mode.MOVE_CANVAS;
 
-    private boolean visibleSidebar;
+    private boolean visibleSidebar = false;
 
-    private CanvasModel canvasModel;
+    private CanvasModel canvasModel = new CanvasModel();
 
-    TutorialScreenModel tutorialModel;
+    TutorialScreenModel tutorialModel = new TutorialScreenModel();
 
     private MenuModel[] menuModels;
 
@@ -37,14 +37,6 @@ public class AppState {
             System.out.println(e.getMessage());
             System.exit(0);
         }
-
-        visibleSidebar = false;
-        mode = Mode.MOVE_CANVAS;
-
-        tutorialModel = new TutorialScreenModel();
-        canvasModel = new CanvasModel();
-
-        support = new PropertyChangeSupport(this);
     }
 
     public TutorialScreenModel getTutorialScreenModel() {

@@ -10,17 +10,16 @@ import com.github.creme332.view.SideMenuPanel;
 
 public class SideMenuController implements PropertyChangeListener {
     private SideMenuPanel sidebar;
-    private AppState app;
 
     public SideMenuController(AppState app, SideMenuPanel sidebar) {
         this.sidebar = sidebar;
-        this.app = app;
 
         app.addPropertyChangeListener(this);
 
         sidebar.setVisible(app.getSideBarVisibility());
 
         sidebar.getCloseButton().addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 System.out.println("Close side menu");
                 app.setSideBarVisibility(false);
