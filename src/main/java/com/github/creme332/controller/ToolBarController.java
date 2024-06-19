@@ -13,7 +13,7 @@ public class ToolBarController {
     private Toolbar toolbar;
     private CanvasModel canvasModel;
 
-    public ToolBarController(Toolbar toolbar, CanvasModel canvasModel) {
+    public ToolBarController(Toolbar toolbar, CanvasModel canvasModel) { // Update the constructor
         this.toolbar = toolbar;
         this.canvasModel = canvasModel;
 
@@ -28,6 +28,10 @@ public class ToolBarController {
             if (color != null) {
                 canvasModel.setFillColor(color);
                 toolbar.getColorBox().setBackground(color);
+
+                // request focus again otherwise keyboard shortcuts will stop working after
+                // opening color dialog
+                toolbar.getTopLevelAncestor().requestFocus();
             }
         });
 

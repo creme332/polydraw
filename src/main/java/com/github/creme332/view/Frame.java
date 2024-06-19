@@ -9,7 +9,9 @@ import javax.swing.JPanel;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
 
+import com.github.creme332.model.AppState;
 import com.github.creme332.model.Screen;
+import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 /**
@@ -40,7 +42,7 @@ public class Frame extends JFrame {
     private JPanel mainScreen = new JPanel(new BorderLayout());
 
     /**
-     * A sidemenu for main screen.
+     * A sidebar for main screen.
      */
     SideMenuPanel sideMenu = new SideMenuPanel();
 
@@ -53,8 +55,11 @@ public class Frame extends JFrame {
 
     JLayeredPane layeredPane;
 
-    public Frame(Canvas canvas, CanvasConsole console, MenuBar menubar, TutorialCenter tutorialCenter)
-            throws InvalidPathException {
+    Canvas canvas;
+
+    TutorialCenter tutorialCenter;
+
+    public void initFrameProperties() throws InvalidPathException {
         // set frame title
         this.setTitle("polydraw");
 
@@ -75,20 +80,28 @@ public class Frame extends JFrame {
             this.setLocationRelativeTo(null);
         }
 
-        // add menubar to frame
-        this.menubar = menubar;
-        setJMenuBar(menubar);
+    }
 
-        this.canvasConsole = console;
+    public Frame(AppState app)
+            throws InvalidPathException, InvalidIconSizeException {
+        initFrameProperties();
+
+        menubar = new MenuBar(app.getMenuModels());
+        canvasConsole = new CanvasConsole(app.getCanvasModel());
+        canvas = new Canvas(app.getCanvasModel());
+        tutorialCenter = new TutorialCenter(app.getTutorialScreenModel());
+
+        // add menubar to frame
+        setJMenuBar(menubar);
 
         // setup layered pane
         layeredPane = new JLayeredPane();
         layeredPane.add(canvas, Integer.valueOf(1));
-        layeredPane.add(console, Integer.valueOf(2));
+        layeredPane.add(canvasConsole, Integer.valueOf(2));
         // layeredPane.add(sideMenu, Integer.valueOf(3));
 
         canvas.setBounds(0, 0, 600, 600);
-        console.setBounds(0, 0, 600, 600);
+        canvasConsole.setBounds(0, 0, 600, 600);
         // add layeredPane to mainScreen
         mainScreen.add(layeredPane, BorderLayout.CENTER);
 
@@ -138,12 +151,20 @@ public class Frame extends JFrame {
         return sideMenu;
     }
 
+    public TutorialCenter getTutorialCenter() {
+        return tutorialCenter;
+    }
+
     public CanvasConsole getCanvasConsole() {
         return canvasConsole;
     }
 
     public MenuBar getMyMenuBar() {
         return menubar;
+    }
+
+    public Canvas getMyCanvas() {
+        return canvas;
     }
 
     /**
