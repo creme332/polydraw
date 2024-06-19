@@ -37,14 +37,9 @@ public class Frame extends JFrame {
     private SplashScreen splashScreen = new SplashScreen();
 
     /**
-     * A container for canvas and side menu
+     * A container for canvas.
      */
     private JPanel mainScreen = new JPanel(new BorderLayout());
-
-    /**
-     * A sidebar for main screen.
-     */
-    SideMenuPanel sideMenu = new SideMenuPanel();
 
     /**
      * A menubar for main screen.
@@ -87,7 +82,7 @@ public class Frame extends JFrame {
         initFrameProperties();
 
         menubar = new MenuBar(app.getMenuModels());
-        canvasConsole = new CanvasConsole(app.getCanvasModel());
+        canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getSideBarVisibility());
         canvas = new Canvas(app.getCanvasModel());
         tutorialCenter = new TutorialCenter(app.getTutorialScreenModel());
 
@@ -101,9 +96,9 @@ public class Frame extends JFrame {
 
         canvas.setBounds(0, 0, 600, 600);
         canvasConsole.setBounds(0, 0, 600, 600);
-        
+
         // add layeredPane to mainScreen
-        mainScreen.add(layeredPane, BorderLayout.CENTER);
+        mainScreen.add(layeredPane);
 
         // setup screen container
         screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.toString());
@@ -119,10 +114,6 @@ public class Frame extends JFrame {
         menubar.setVisible(visible);
     }
 
-    public void setSideBarVisibility(boolean visible) {
-        sideMenu.setVisible(visible);
-    }
-
     public void showScreen(Screen screen) {
         switch (screen) {
             case SPLASH_SCREEN:
@@ -133,9 +124,7 @@ public class Frame extends JFrame {
                 cl.show(screenContainer, Screen.MAIN_SCREEN.toString());
                 break;
             case TUTORIAL_SCREEN:
-                // hide menubar and sidemenu belonging to main screen
                 menubar.setVisible(false);
-                sideMenu.setVisible(false);
                 cl.show(screenContainer, Screen.TUTORIAL_SCREEN.toString());
                 break;
             default:
@@ -145,10 +134,6 @@ public class Frame extends JFrame {
 
     public JLayeredPane getPane() {
         return layeredPane;
-    }
-
-    public SideMenuPanel getSideMenuPanel() {
-        return sideMenu;
     }
 
     public TutorialCenter getTutorialCenter() {

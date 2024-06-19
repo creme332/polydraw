@@ -63,13 +63,6 @@ public class FrameController implements PropertyChangeListener {
         int menuBarHeight = frame.getMyMenuBar().getHeight();
         System.out.format("Menubar dimensions = %d x %d %n", frameWidth, menuBarHeight);
 
-        int sideBarWidth = app.getSideBarVisibility() ? Math.max(800, frameWidth / 3) : 0;
-        System.out.format("Sidebar dimensions = %d x %d %n", sideBarWidth, frameHeight - menuBarHeight);
-
-        // update sidebar dimensions
-        // frame.getSideMenuPanel().setPreferredSize(new Dimension(sideBarWidth,
-        // frameHeight - menuBarHeight));
-
         // update main panel dimensions
         frame.getMainPanel().setPreferredSize(new Dimension(frameWidth, frameHeight - menuBarHeight));
 
@@ -80,13 +73,19 @@ public class FrameController implements PropertyChangeListener {
                 pane.getHeight());
 
         // update size of canvas control
-        pane.getComponent(0).setBounds(0, 0, frameWidth - 80,
+        pane.getComponent(0).setBounds(0, 0, frameWidth,
                 frameHeight - menuBarHeight - 100);
 
         // temporarily hide the canvas control. without this, the canvas console does
         // not render its new size when frame is maximized.
         pane.getComponent(0).setVisible(false);
         pane.getComponent(0).setVisible(true);
+
+        // update sidebar dimensions
+        int sideBarWidth = Math.min(500, frameWidth / 3);
+        System.out.format("Sidebar dimensions = %d x %d %n", sideBarWidth, frameHeight - menuBarHeight);
+        frame.getCanvasConsole().getSidebar().setPreferredSize(new Dimension(sideBarWidth,
+                frameHeight - menuBarHeight));
 
         // update canvas size
         pane.getComponent(1).setBounds(0, 0, frameWidth, frameHeight - menuBarHeight);
