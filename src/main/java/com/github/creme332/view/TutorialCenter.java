@@ -93,6 +93,10 @@ public class TutorialCenter extends JPanel {
         return searchField;
     }
 
+    public JButton getSearchButton() {
+        return searchButton;
+    }
+
     public void updateGrid(List<GridItem> gridItems) {
         gridPanel.removeAll();
         populateGrid(gridItems);
