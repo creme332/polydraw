@@ -3,6 +3,9 @@ package com.github.creme332.controller;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.view.ZoomPanel;
 
+/**
+ * Controller for ZoomPanel in CanvasConsole.
+ */
 public class ZoomPanelController {
     CanvasModel model;
     ZoomPanel view;

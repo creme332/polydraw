@@ -9,12 +9,15 @@ import com.github.creme332.view.tutorial.GridItem;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TutorialController {
+/**
+ * Controller for TutorialScreen.
+ */
+public class TutorialScreenController {
     private TutorialCenter view;
     private TutorialScreenModel model;
     private AppState appState;
 
-    public TutorialController(AppState appState, TutorialCenter view) {
+    public TutorialScreenController(AppState appState, TutorialCenter view) {
         this.view = view;
         this.model = appState.getTutorialScreenModel();
         this.appState = appState;
