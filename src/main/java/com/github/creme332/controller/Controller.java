@@ -1,7 +1,6 @@
 package com.github.creme332.controller;
 
 import com.github.creme332.model.AppState;
-import com.github.creme332.model.TutorialScreenModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
@@ -24,17 +23,18 @@ public class Controller {
             new MenuBarController(app, menuBar);
 
             CanvasConsole canvasConsole = new CanvasConsole(app.getCanvasModel());
+            TutorialCenter tutorialCenter = new TutorialCenter(app.getTutorialScreenModel());
 
-            new ToolBarController(canvasConsole.getToolbar(), app.getCanvasModel());
+            frame = new Frame(canvas, canvasConsole, menuBar, tutorialCenter);
+
+            new ToolBarController(canvasConsole.getToolbar(), app.getCanvasModel(), frame); 
             new ZoomPanelController(app.getCanvasModel(), canvasConsole.getZoomPanel());
 
             canvas = new Canvas(app.getCanvasModel());
             new CanvasController(app, canvas);
 
-            TutorialCenter tutorialCenter = new TutorialCenter(app.getTutorialScreenModel());
             new TutorialController(app, tutorialCenter);
 
-            frame = new Frame(canvas, canvasConsole, menuBar, tutorialCenter);
             frameController = new FrameController(app, frame);
 
             new SideMenuController(app, frame.getSideMenuPanel());
