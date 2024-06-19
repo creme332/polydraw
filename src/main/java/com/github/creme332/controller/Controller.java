@@ -9,43 +9,27 @@ import com.github.creme332.view.*;
  * Controls all the logic in the application by linking views and model.
  */
 public class Controller {
-    AppState app = new AppState();
-
-    private Frame frame; // frame of app
-    private MenuBar menuBar;
-    private Canvas canvas;
-
-    private FrameController frameController;
 
     public Controller() {
+        AppState app = new AppState();
+        FrameController frameController;
         try {
-            menuBar = new MenuBar(app.getMenuModels());
-            new MenuBarController(app, menuBar);
-
-            CanvasConsole canvasConsole = new CanvasConsole(app.getCanvasModel());
-            TutorialCenter tutorialCenter = new TutorialCenter(app.getTutorialScreenModel());
-
-            frame = new Frame(canvas, canvasConsole, menuBar, tutorialCenter);
-
-            new ToolBarController(canvasConsole.getToolbar(), app.getCanvasModel(), frame); 
-            new ZoomPanelController(app.getCanvasModel(), canvasConsole.getZoomPanel());
-
-            canvas = new Canvas(app.getCanvasModel());
-            new CanvasController(app, canvas);
-
-            new TutorialController(app, tutorialCenter);
-
+            Frame frame = new Frame(app);
             frameController = new FrameController(app, frame);
 
+            // create controllers for views
+            new MenuBarController(app, frame.getMyMenuBar());
+            new ZoomPanelController(app.getCanvasModel(), frame.getCanvasConsole().getZoomPanel());
+            new CanvasController(app, frame.getMyCanvas());
+            new TutorialController(app, frame.getTutorialCenter());
+            new ToolBarController(frame.getCanvasConsole().getToolbar(), app.getCanvasModel());
             new SideMenuController(app, frame.getSideMenuPanel());
+
+            // play start animation
+            frameController.playStartAnimation();
         } catch (InvalidIconSizeException | InvalidPathException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(1);
-        } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
-            e.printStackTrace();
-            System.exit(1);
         }
-        frameController.playStartAnimation();
     }
 }
