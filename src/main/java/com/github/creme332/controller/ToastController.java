@@ -24,33 +24,28 @@ public class ToastController implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if ("mode".equals(evt.getPropertyName())) {
             Mode newMode = (Mode) evt.getNewValue();
+
             toast.setTitleText(newMode.getTitle());
             toast.setInstructionText(newMode.getInstructions());
 
-            // Show toast for 10 seconds
             showTemporaryToast();
         }
     }
 
     private void showTemporaryToast() {
-        // Cancel previous timer if exists
-        if (timer != null) {
-            timer.cancel();
-        }
-
-        // Schedule a new timer to hide the toast after 10 seconds
+        final long TOAST_VISIBILITY_DURATION_SECONDS = 3;
+        toast.setVisible(true);
         timer = new Timer();
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                // Clear toast after 10 seconds
-                clearToast();
-            }
-        }, 10000); // 10 seconds
-    }
+                // Hide toast after 10 seconds
+                toast.setVisible(false);
 
-    private void clearToast() {
-        toast.setTitleText("");
-        toast.setInstructionText("");
+                timer.cancel();
+                timer.purge();
+            }
+        }, TOAST_VISIBILITY_DURATION_SECONDS * 1000);
     }
 }
