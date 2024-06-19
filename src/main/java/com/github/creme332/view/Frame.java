@@ -2,8 +2,6 @@ package com.github.creme332.view;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.Point;
 
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -51,8 +49,6 @@ public class Frame extends JFrame {
 
     TutorialCenter tutorialCenter;
 
-    private Toast toast;
-
     public void initFrameProperties() throws InvalidPathException {
         // set frame title
         this.setTitle("polydraw");
@@ -78,14 +74,7 @@ public class Frame extends JFrame {
 
     public Frame(AppState app)
             throws InvalidPathException, InvalidIconSizeException {
-        toast = new Toast();
         initFrameProperties();
-
-        // Add toast to the frame
-        this.setLayout(null); // Use null layout for absolute positioning
-        add(toast);
-        toast.setBounds(20, this.getHeight() - 140, 400, 80); // Adjust coordinates as needed
-        toast.setVisible(false);
 
         menubar = new MenuBar(app.getMenuModels());
         canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getSideBarVisibility());

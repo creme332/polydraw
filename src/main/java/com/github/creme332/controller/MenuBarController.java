@@ -5,8 +5,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.JMenu;
@@ -19,7 +17,6 @@ import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.Screen;
 import com.github.creme332.view.MenuBar;
-import com.github.creme332.view.Toast;
 
 public class MenuBarController implements PropertyChangeListener {
     private MenuBar menubar;
@@ -31,13 +28,11 @@ public class MenuBarController implements PropertyChangeListener {
     MenuModel[] menuModels;
     int activeMenuIndex;
     Border defaultBorder;
-    private Toast toast;
 
-    public MenuBarController(AppState app, MenuBar menubar, Toast toast) {
+    public MenuBarController(AppState app, MenuBar menubar) {
         this.menubar = menubar;
         this.app = app;
         this.menuModels = app.getMenuModels();
-        this.toast = toast;
 
         app.addPropertyChangeListener(this);
 
@@ -53,7 +48,7 @@ public class MenuBarController implements PropertyChangeListener {
             menuModel.addPropertyChangeListener(this);
 
             // create a menu controller
-            new MenuController(menuModel, jMenu, app, toast);
+            new MenuController(menuModel, jMenu);
 
             if (i == activeMenuIndex) {
                 jMenu.setBorder(VISIBLE_BORDER);
@@ -76,9 +71,6 @@ public class MenuBarController implements PropertyChangeListener {
 
                     // update global mode using menu model for clicked menu
                     app.setMode(menuModel.getActiveItem().getMode());
-
-                    // Show toast
-                    showTemporaryToast(menuModel.getActiveItem().getMode());
                 }
             });
         }
@@ -112,28 +104,36 @@ public class MenuBarController implements PropertyChangeListener {
         });
     }
 
-    private void showTemporaryToast(Mode mode) {
-        toast.setTitleText(mode.getTitle());
-        toast.setInstructionText(mode.getInstructions());
-        toast.setVisible(true);
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                toast.setVisible(false);
-            }
-        }, 10000);
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent e) {
-        if (e.getPropertyName().equals("activeItem")) {
-            int oldMenuIndex = activeMenuIndex;
-            activeMenuIndex = app.getModeToMenuMapper().get(app.getMode());
-            menubar.getMenu(oldMenuIndex).setBorder(defaultBorder);
+        String propertyName = e.getPropertyName();
+        if ("modeChange".equals(propertyName)) {
+            Mode newMode = (Mode) e.getNewValue();
+
+            // remove border from previously active menu
+            menubar.getMenu(activeMenuIndex).setBorder(defaultBorder);
+
+            // store index of clicked menu
+            activeMenuIndex = app.getModeToMenuMapper().get(newMode);
+
+            // add border to clicked menu
             menubar.getMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
-        } else if (e.getPropertyName().equals("sideBarVisibility")) {
-            menubar.getSideBarButton().setSelected((boolean) e.getNewValue());
+
+            // update global mode
+            app.setMode(newMode);
+        }
+
+        if ("mode".equals(propertyName)) {
+            Mode newMode = (Mode) e.getNewValue();
+
+            // remove border from previously active menu
+            menubar.getMenu(activeMenuIndex).setBorder(defaultBorder);
+
+            // store index of new active menu
+            activeMenuIndex = app.getModeToMenuMapper().get(newMode);
+
+            // add border to clicked menu
+            menubar.getMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
         }
     }
 }
