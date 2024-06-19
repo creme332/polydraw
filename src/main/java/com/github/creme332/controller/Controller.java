@@ -17,8 +17,10 @@ public class Controller {
             Frame frame = new Frame(app);
             frameController = new FrameController(app, frame);
 
+            Toast toast = frame.getToast();
+            
             // create controllers for views
-            new MenuBarController(app, frame.getMyMenuBar());
+            new MenuBarController(app, frame.getMyMenuBar(), toast);
             new ZoomPanelController(app.getCanvasModel(), frame.getCanvasConsole().getZoomPanel());
             new CanvasController(app, frame.getMyCanvas());
             new TutorialController(app, frame.getTutorialCenter());

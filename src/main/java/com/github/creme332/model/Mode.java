@@ -1,39 +1,49 @@
 package com.github.creme332.model;
 
 public enum Mode {
-    MOVE_CANVAS("MOVE_CANVAS"),
-    DRAW_FREEHAND("DRAW_FREEHAND"),
+    MOVE_CANVAS("Move", "Drag or select object"),
+    DRAW_FREEHAND("Freehand Shape", "Sketch a function or geometric object"),
 
-    DRAW_LINE_DDA("DRAW_LINE_DDA"),
-    DRAW_LINE_BRESENHAM("DRAW_LINE_BRESENHAM"),
+    DRAW_LINE_DDA("Line: DDA", "Select two points or positions"),
+    DRAW_LINE_BRESENHAM("Line: Bresenham", "Select two points or positions"),
 
-    DRAW_CIRCLE_DYNAMIC("DRAW_CIRCLE_DYNAMIC"),
-    DRAW_CIRCLE_FIXED("DRAW_CIRCLE_FIXED"),
+    DRAW_CIRCLE_DYNAMIC("Circle with Center through Point", "Select center point, then point on circle"),
+    DRAW_CIRCLE_FIXED("Circle: Center & Radius", "Select center point, then enter radius"),
 
-    DRAW_ELLIPSE("DRAW_ELLIPSE"),
+    DRAW_ELLIPSE("Ellipse", "Select two foci, then point on ellipse"),
 
-    DRAW_POLYGON_DYNAMIC("DRAW_POLYGON_DYNAMIC"),
-    DRAW_REGULAR_POLYGON("DRAW_REGULAR_POLYGON"),
+    DRAW_POLYGON_DYNAMIC("Polygon", "Select all vertices, then first vertex again"),
+    DRAW_REGULAR_POLYGON("Regular Polygon", "Select two points, then enter number of vertices"),
 
-    REFLECT_ABOUT_LINE("REFLECT_ABOUT_LINE"),
-    REFLECT_ABOUT_POINT("REFLECT_ABOUT_POINT"),
+    REFLECT_ABOUT_LINE("Reflect about Line", "Select object to reflect, then line of reflection"),
+    REFLECT_ABOUT_POINT("Reflect about Point", "Select object to reflect, then center point"),
 
-    ROTATE_AROUND_POINT("ROTATE_AROUND_POINT"),
+    ROTATE_AROUND_POINT("Rotate around Point", "Select object to rotateand center point, then enter angle"),
 
-    ZOOM_IN("ZOOM_IN"),
-    ZOOM_OUT("ZOOM_OUT"),
-    DELETE("DELETE"),
-    MOVE_GRAPHICS_VIEW("MOVE_GRAPHICS_VIEW"),
+    ZOOM_IN("Zoom In", "Click/tap to zoom (or Mouse Wheel)"),
+    ZOOM_OUT("Zoom Out", "Click/tap to zoom (or Mouse Wheel)"),
+    DELETE("Delete", "Select object which should be deleted"),
+    MOVE_GRAPHICS_VIEW("Move Graphics View", "Drag white background or axis"),
 
-    TRANSLATION("TRANSLATION"),
-    NORMAL_ROTATION("NORMAL_ROTATION"),
-    SCALING("SCALING"),
-    SHEAR("SHEAR"),
-    CLIPPING("CLIPPING");
+    TRANSLATION("Translation", "Translate the shape"),
+    NORMAL_ROTATION("Normal Rotation", "Rotate the shape normally"),
+    SCALING("Scaling", "Scale the shape"),
+    SHEAR("Shear", "Shear the shape"),
+    CLIPPING("Clipping", "Clip the shape");
 
-    private final String mode;
+    private final String title;
+    private final String instructions;
 
-    Mode(String mode) {
-        this.mode = mode;
+    Mode(String title, String instructions) {
+        this.title = title;
+        this.instructions = instructions;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getInstructions() {
+        return instructions;
     }
 }

@@ -2,8 +2,8 @@ package com.github.creme332.view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
+import com.github.creme332.model.Mode;
 
 public class Toast extends JPanel {
     private JLabel titleLabel;
@@ -13,14 +13,14 @@ public class Toast extends JPanel {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(400, 80));
 
-        titleLabel = new JLabel("Move");
+        titleLabel = new JLabel();
         titleLabel.putClientProperty("FlatLaf.style", "font: $h3.font");
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBorder(new EmptyBorder(40, 10, 40, 100));
+        titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        instructionLabel = new JLabel("Drag or select object");
+        instructionLabel = new JLabel();
         instructionLabel.setForeground(Color.WHITE);
-        instructionLabel.setBorder(new EmptyBorder(40, 10, 40, 100));
+        instructionLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JPanel textPanel = new JPanel(new GridLayout(2, 1));
         textPanel.setOpaque(false);
@@ -31,6 +31,7 @@ public class Toast extends JPanel {
         setBorder(BorderFactory.createLineBorder(new Color(45, 45, 45), 1));
 
         add(textPanel, BorderLayout.CENTER);
+        setVisible(false);
     }
 
     public String getTitleText() {
