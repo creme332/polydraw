@@ -1,11 +1,13 @@
 package com.github.creme332.view;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
 import java.awt.*;
 import java.util.List;
-import com.github.creme332.view.tutorial.GridItem;
+import com.github.creme332.view.tutorial.TutorialCard;
 import com.github.creme332.model.TutorialScreenModel;
 
 public class TutorialCenter extends JPanel {
@@ -33,7 +35,9 @@ public class TutorialCenter extends JPanel {
         topPanel.add(searchButton, BorderLayout.EAST);
 
         // Create the grid panel to hold GridItems
-        gridPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        final int GRID_GAP = 10; // px
+        gridPanel = new JPanel(new GridLayout(2, 2, GRID_GAP, GRID_GAP));
+        gridPanel.setBorder(new EmptyBorder(new Insets(GRID_GAP, GRID_GAP, 0, 0)));
         populateGrid(model.getGridItems());
 
         // Wrap gridPanel in a JScrollPane to make it scrollable
@@ -98,15 +102,15 @@ public class TutorialCenter extends JPanel {
         return searchButton;
     }
 
-    public void updateGrid(List<GridItem> gridItems) {
+    public void updateGrid(List<TutorialCard> gridItems) {
         gridPanel.removeAll();
         populateGrid(gridItems);
         gridPanel.revalidate();
         gridPanel.repaint();
     }
 
-    private void populateGrid(List<GridItem> gridItems) {
-        for (GridItem item : gridItems) {
+    private void populateGrid(List<TutorialCard> gridItems) {
+        for (TutorialCard item : gridItems) {
             gridPanel.add(item);
         }
     }

@@ -5,7 +5,7 @@ import com.github.creme332.model.Screen;
 import com.github.creme332.model.TutorialScreenModel;
 import com.github.creme332.utils.FuzzySearching;
 import com.github.creme332.view.TutorialCenter;
-import com.github.creme332.view.tutorial.GridItem;
+import com.github.creme332.view.tutorial.TutorialCard;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +39,7 @@ public class TutorialScreenController {
     }
 
     private void filterGridItems(String query) {
-        List<GridItem> filteredItems;
+        List<TutorialCard> filteredItems;
         if (query.isEmpty() || query.equals("Search Polydraw Tutorials")) {
             filteredItems = model.getGridItems();
         } else {
