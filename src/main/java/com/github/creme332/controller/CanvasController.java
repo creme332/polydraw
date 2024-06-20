@@ -6,12 +6,19 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 import com.github.creme332.algorithms.CircleCalculator;
 import com.github.creme332.model.AppState;
@@ -258,6 +265,22 @@ public class CanvasController implements PropertyChangeListener {
         canvas.repaint();
     }
 
+    private void handleCanvasExport() {
+        BufferedImage image = canvas.toImage();
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showSaveDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                ImageIO.write(image, "png", file);
+                System.out.println("Canvas exported as image: " + file.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        app.setPrintingCanvas(false);
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
@@ -276,6 +299,11 @@ public class CanvasController implements PropertyChangeListener {
                 || "axesVisible".equals(propertyName)) {
             canvas.repaint();
             return;
+        }
+
+        // if printingCanvas property has changed to true, handle export
+        if ("printingCanvas".equals(propertyName) && (Boolean) e.getNewValue() == true) {
+            handleCanvasExport();
         }
     }
 }

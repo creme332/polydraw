@@ -22,6 +22,8 @@ public class AppState {
 
     private boolean visibleSidebar = false;
 
+    private boolean printingCanvas = false;
+
     private CanvasModel canvasModel = new CanvasModel();
 
     TutorialScreenModel tutorialModel = new TutorialScreenModel();
@@ -144,6 +146,7 @@ public class AppState {
         support.addPropertyChangeListener("sidebarVisibility", listener);
         support.addPropertyChangeListener("mode", listener);
         support.addPropertyChangeListener("screen", listener);
+        support.addPropertyChangeListener("printingCanvas", listener);
     }
 
     public boolean getSideBarVisibility() {
@@ -165,11 +168,12 @@ public class AppState {
         mode = newMode;
     }
 
-    public Canvas getCanvas() {
-        return canvas;
+    public boolean isPrintingCanvas() {
+        return printingCanvas;
     }
 
-    public void setCanvas(Canvas canvas) {
-        this.canvas = canvas;
+    public void setPrintingCanvas(boolean printingCanvas) {
+        support.firePropertyChange("printingCanvas", this.printingCanvas, printingCanvas);
+        this.printingCanvas = printingCanvas;
     }
 }

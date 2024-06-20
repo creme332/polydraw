@@ -116,7 +116,7 @@ public class MenuBarController implements PropertyChangeListener {
             @Override
             public void mousePressed(MouseEvent e) {
                 // export canvas as image
-                exportCanvasAsImage();
+                app.setPrintingCanvas(true);
             }
         });
     }
@@ -151,35 +151,6 @@ public class MenuBarController implements PropertyChangeListener {
 
             // add border to clicked menu
             menubar.getMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
-        }
-    }
-
-    private void exportCanvasAsImage() {
-        System.out.println("Export button clicked");
-        Canvas canvas = app.getCanvas(); // Ensure this returns a valid Canvas object
-        if (canvas == null) {
-            System.out.println("Canvas is null");
-            return;
-        }
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
-        System.out.println("Canvas width: " + width + ", height: " + height);
-    
-        // Create a BufferedImage
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = image.createGraphics();
-    
-        // Paint the canvas to the BufferedImage
-        canvas.paint(g2); // Ensure this method is correctly painting the canvas
-        g2.dispose();
-    
-        // Save the BufferedImage as a PNG file
-        try {
-            File outputfile = new File("canvas.png");
-            ImageIO.write(image, "png", outputfile);
-            System.out.println("Canvas exported as image: " + outputfile.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
