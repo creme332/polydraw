@@ -3,34 +3,36 @@ package com.github.creme332.view;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import com.github.creme332.model.Mode;
+
 import java.awt.*;
 
 public class Toast extends JPanel {
     private JLabel titleLabel;
     private JLabel instructionLabel;
 
-    public Toast() {
-        setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(400, 80));
+    /**
+     * Maximum number of characters on a line before line wrapping occurs.
+     */
+    private static final int MAX_LINE_SIZE = 30;
 
-        titleLabel = new JLabel("Move");
+    public Toast(Mode defaultMode) {
+        setLayout(new BorderLayout());
+        setBackground(new Color(47, 47, 51));
+        setPreferredSize(new Dimension(400, 100));
+        setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
+
+        titleLabel = new JLabel(defaultMode.getTitle());
         titleLabel.putClientProperty("FlatLaf.style", "font: $h3.font");
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBorder(new EmptyBorder(40, 10, 40, 100));
 
-        instructionLabel = new JLabel("<html>Drag or select object</html>");
+        instructionLabel = new JLabel();
         instructionLabel.setForeground(Color.WHITE);
-        instructionLabel.setBorder(new EmptyBorder(40, 10, 40, 100));
+        instructionLabel.setBorder(new EmptyBorder(10, 0, 0, 0));
+        setInstructionText(defaultMode.getInstructions());
 
-        JPanel textPanel = new JPanel(new GridLayout(2, 1));
-        textPanel.setOpaque(false);
-        textPanel.add(titleLabel);
-        textPanel.add(instructionLabel);
-
-        setBackground(new Color(47, 47, 51));
-        setBorder(BorderFactory.createLineBorder(new Color(45, 45, 45), 1));
-
-        add(textPanel, BorderLayout.CENTER);
+        add(titleLabel, BorderLayout.NORTH);
+        add(instructionLabel, BorderLayout.CENTER);
     }
 
     public String getTitleText() {
@@ -46,26 +48,22 @@ public class Toast extends JPanel {
     }
 
     public void setInstructionText(String text) {
-        if (text.length() > 30) {
+        if (text.length() > MAX_LINE_SIZE) {
             instructionLabel.setText("<html>" + formatHtmlText(text) + "</html>");
-            instructionLabel.setPreferredSize(new Dimension(500, instructionLabel.getPreferredSize().height));
         } else {
-        instructionLabel.setText(text);
-        instructionLabel.setText(text);
             instructionLabel.setText(text);
         }
     }
-
 
     private String formatHtmlText(String text) {
         StringBuilder htmlText = new StringBuilder();
         int index = 0;
         while (index < text.length()) {
-            htmlText.append(text.substring(index, Math.min(index + 30, text.length())));
-            if (index + 30 < text.length()) {
+            htmlText.append(text.substring(index, Math.min(index + MAX_LINE_SIZE, text.length())));
+            if (index + MAX_LINE_SIZE < text.length()) {
                 htmlText.append("<br>");
             }
-            index += 30;
+            index += MAX_LINE_SIZE;
         }
         return htmlText.toString();
     }
