@@ -10,7 +10,7 @@ import java.awt.*;
  */
 public class TutorialCard extends JPanel {
     private String heading;
-    private Icon icon;
+    private transient Icon icon;
 
     public TutorialCard(String heading, Icon icon) {
         this.heading = heading;
