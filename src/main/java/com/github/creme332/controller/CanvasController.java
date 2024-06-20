@@ -265,20 +265,34 @@ public class CanvasController implements PropertyChangeListener {
         canvas.repaint();
     }
 
+    /**
+     * Exports canvas to image.
+     * <br>
+     * <ol>
+     * <li>https://stackoverflow.com/a/14369955/17627866</li>
+     * <li>
+     * https://stackoverflow.com/questions/17690275/exporting-a-jpanel-to-an-image
+     * </li>
+     * </ol>
+     */
     private void handleCanvasExport() {
         BufferedImage image = canvas.toImage();
         JFileChooser fileChooser = new JFileChooser();
-        int returnValue = fileChooser.showSaveDialog(null);
+
+        fileChooser.setDialogTitle("Choose folder to save image");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false); // disable the "All files" option.
+
+        int returnValue = fileChooser.showOpenDialog(null);
+
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
+            String imagePath = fileChooser.getSelectedFile() + "/canvas.png";
             try {
-                ImageIO.write(image, "png", file);
-                System.out.println("Canvas exported as image: " + file.getAbsolutePath());
+                ImageIO.write(image, "png", new File(imagePath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        app.setPrintingCanvas(false);
     }
 
     @Override
@@ -302,7 +316,7 @@ public class CanvasController implements PropertyChangeListener {
         }
 
         // if printingCanvas property has changed to true, handle export
-        if ("printingCanvas".equals(propertyName) && (Boolean) e.getNewValue() == true) {
+        if ("printingCanvas".equals(propertyName) && (boolean) e.getNewValue()) {
             handleCanvasExport();
         }
     }
