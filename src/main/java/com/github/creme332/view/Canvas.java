@@ -84,34 +84,35 @@ public class Canvas extends JPanel {
     private void drawGuidelines(Graphics2D g2) {
         final int canvasWidth = getWidth();
         final int canvasHeight = getHeight();
+        int interval = getLabelInterval();
 
         g2.setColor(Color.gray);
         g2.setStroke(new BasicStroke(1));
 
         // draw horizontal guidelines above x-axis
         int lineCount = model.getYZero() / (model.getCellSize());
-        for (int i = 0; i <= lineCount; i++) {
+        for (int i = 0; i <= lineCount; i += interval) {
             int y1 = model.getYZero() - i * model.getCellSize();
             g2.drawLine(0, y1, canvasWidth, y1); // draw guideline above x axis
         }
 
         // draw horizontal guidelines below x-axis
         lineCount = (canvasHeight - model.getYZero()) / (model.getCellSize());
-        for (int i = 1; i <= lineCount; i++) {
+        for (int i = 0; i <= lineCount; i += interval) {
             int y0 = model.getYZero() + i * model.getCellSize();
             g2.drawLine(0, y0, canvasWidth, y0); // draw guideline below x axis
         }
 
         // draw vertical guidelines before y-axis
         lineCount = model.getXZero() / (model.getCellSize());
-        for (int i = 0; i <= lineCount; i++) {
+        for (int i = 0; i <= lineCount; i += interval) {
             int x0 = model.getXZero() - i * model.getCellSize();
             g2.drawLine(x0, 0, x0, canvasHeight); // line before y axis
         }
 
         // draw vertical guidelines after y-axis
         lineCount = (canvasWidth - model.getXZero()) / (model.getCellSize());
-        for (int i = 1; i <= lineCount; i++) {
+        for (int i = 0; i <= lineCount; i += interval) {
             int x1 = model.getXZero() + i * model.getCellSize();
             g2.drawLine(x1, 0, x1, canvasHeight); // line after y axis
         }
