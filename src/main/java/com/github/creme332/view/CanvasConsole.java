@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.github.creme332.model.CanvasModel;
+import com.github.creme332.model.Mode;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
@@ -16,14 +17,15 @@ import com.github.creme332.utils.exception.InvalidPathException;
  */
 public class CanvasConsole extends JPanel {
     private Toolbar toolbar;
-    private Toast toast = new Toast();
+    private Toast toast;
     private ZoomPanel zoomPanel = new ZoomPanel();
     SideMenuPanel sideMenu = new SideMenuPanel();
 
     transient CanvasModel canvasModel;
 
-    public CanvasConsole(CanvasModel canvasModel, boolean isSidebarVisible) {
+    public CanvasConsole(CanvasModel canvasModel, boolean isSidebarVisible, Mode defaultMode) {
         this.canvasModel = canvasModel;
+        toast = new Toast(defaultMode);
 
         setOpaque(false); // make panel transparent
         setLayout(new BorderLayout());
