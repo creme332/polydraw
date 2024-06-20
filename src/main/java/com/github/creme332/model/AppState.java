@@ -9,13 +9,10 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
-import com.github.creme332.view.Canvas;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
 
 public class AppState {
-    private Canvas canvas;
-
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     private Mode mode = Mode.MOVE_CANVAS;
