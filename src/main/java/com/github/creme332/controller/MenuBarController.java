@@ -80,6 +80,9 @@ public class MenuBarController implements PropertyChangeListener {
 
                     // update global mode using menu model for clicked menu
                     app.setMode(menuModel.getActiveItem().getMode());
+
+                    // display updated toast
+                    app.activateToast();
                 }
             });
         }
@@ -138,6 +141,9 @@ public class MenuBarController implements PropertyChangeListener {
 
             // update global mode
             app.setMode(newMode);
+
+            // display updated toast
+            app.activateToast();
         }
 
         if ("mode".equals(propertyName)) {
