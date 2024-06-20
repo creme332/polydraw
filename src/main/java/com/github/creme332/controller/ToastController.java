@@ -11,22 +11,20 @@ import java.util.TimerTask;
 
 public class ToastController implements PropertyChangeListener {
     private Toast toast;
-    private AppState appState;
     private Timer timer;
 
     public ToastController(AppState appState, Toast toast) {
-        this.appState = appState;
         this.toast = toast;
         appState.addPropertyChangeListener(this);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("mode".equals(evt.getPropertyName())) {
-            Mode newMode = (Mode) evt.getNewValue();
+        if ("activateToast".equals(evt.getPropertyName())) {
+            Mode currentMode = (Mode) evt.getNewValue();
 
-            toast.setTitleText(newMode.getTitle());
-            toast.setInstructionText(newMode.getInstructions());
+            toast.setTitleText(currentMode.getTitle());
+            toast.setInstructionText(currentMode.getInstructions());
 
             showTemporaryToast();
         }

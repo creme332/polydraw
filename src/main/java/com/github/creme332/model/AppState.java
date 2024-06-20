@@ -141,10 +141,19 @@ public class AppState {
         support.addPropertyChangeListener("sidebarVisibility", listener);
         support.addPropertyChangeListener("mode", listener);
         support.addPropertyChangeListener("screen", listener);
+        support.addPropertyChangeListener("activateToast", listener);
     }
 
     public boolean getSideBarVisibility() {
         return visibleSidebar;
+    }
+
+    /**
+     * Informs ToastController that toast must be displayed and updated. Property
+     * change is guaranteed to get fired.
+     */
+    public void activateToast() {
+        support.firePropertyChange("activateToast", null, mode);
     }
 
     public void setSideBarVisibility(boolean newValue) {
