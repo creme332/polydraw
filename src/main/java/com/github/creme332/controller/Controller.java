@@ -20,12 +20,9 @@ public class Controller {
 
             // create controllers for views
             new MenuBarController(app, frame.getMyMenuBar());
-            new ZoomPanelController(app.getCanvasModel(), frame.getCanvasConsole().getZoomPanel());
             new CanvasController(app, frame.getMyCanvas());
             new TutorialScreenController(app, frame.getTutorialCenter());
-            new ToolBarController(frame.getCanvasConsole().getToolbar(), app.getCanvasModel());
-            new SideMenuController(app, frame.getCanvasConsole().getSidebar());
-            new ToastController(app, frame.getCanvasConsole().getToast());
+            new CanvasConsoleController(frame.getCanvasConsole(), app);
 
             // play start animation
             frameController.playStartAnimation();
