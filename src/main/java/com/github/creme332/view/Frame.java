@@ -1,6 +1,5 @@
 package com.github.creme332.view;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
 import javax.swing.JFrame;
