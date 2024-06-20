@@ -18,6 +18,10 @@ import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Screen;
 import com.github.creme332.view.Frame;
 
+/**
+ * Controller responsible for switching screens and resizing components as
+ * required.
+ */
 public class FrameController implements PropertyChangeListener {
     private Frame frame;
     private AppState app;
@@ -74,7 +78,7 @@ public class FrameController implements PropertyChangeListener {
         Component canvas = canvasScreen.getComponent(1);
 
         // update canvas control dimensions
-        canvasControl.setBounds(0, 0, frameWidth -80,
+        canvasControl.setBounds(0, 0, frameWidth - 80,
                 frameHeight - menuBarHeight - 100);
 
         // temporarily hide the canvas control. without this, the canvas console does

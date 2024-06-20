@@ -24,6 +24,9 @@ import com.github.creme332.model.Screen;
 import com.github.creme332.view.Canvas;
 import com.github.creme332.view.MenuBar;
 
+/**
+ * Controller responsible for managing MenuBar.
+ */
 public class MenuBarController implements PropertyChangeListener {
     private MenuBar menubar;
     private AppState app;

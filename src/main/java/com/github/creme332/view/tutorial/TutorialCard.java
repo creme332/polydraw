@@ -5,11 +5,14 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 
-public class GridItem extends JPanel {
+/**
+ * Tutorial card displayed in TutorialCenter.
+ */
+public class TutorialCard extends JPanel {
     private String heading;
     private Icon icon;
 
-    public GridItem(String heading, Icon icon) {
+    public TutorialCard(String heading, Icon icon) {
         this.heading = heading;
         this.icon = icon;
 

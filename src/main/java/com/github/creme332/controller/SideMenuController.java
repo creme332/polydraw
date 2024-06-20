@@ -8,6 +8,9 @@ import java.beans.PropertyChangeListener;
 import com.github.creme332.model.AppState;
 import com.github.creme332.view.SideMenuPanel;
 
+/**
+ * Controller responsible for managing sidebar in CanvasConsole.
+ */
 public class SideMenuController implements PropertyChangeListener {
     private SideMenuPanel sidebar;
 

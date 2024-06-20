@@ -9,6 +9,9 @@ import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.LineType;
 import com.github.creme332.view.Toolbar;
 
+/**
+ * Controller for managing Toolbar in CanvasConsole.
+ */
 public class ToolBarController {
     public ToolBarController(Toolbar toolbar, CanvasModel canvasModel) { // Update the constructor
         toolbar.getThicknessSlider().addChangeListener(e -> {

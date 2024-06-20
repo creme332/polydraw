@@ -6,7 +6,8 @@ import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
 
 /**
- * Controls all the logic in the application by linking views and model.
+ * Main controller for application responsible for creating application model
+ * and controllers of screens.
  */
 public class Controller {
 
@@ -21,7 +22,7 @@ public class Controller {
             new MenuBarController(app, frame.getMyMenuBar());
             new ZoomPanelController(app.getCanvasModel(), frame.getCanvasConsole().getZoomPanel());
             new CanvasController(app, frame.getMyCanvas());
-            new TutorialController(app, frame.getTutorialCenter());
+            new TutorialScreenController(app, frame.getTutorialCenter());
             new ToolBarController(frame.getCanvasConsole().getToolbar(), app.getCanvasModel());
             new SideMenuController(app, frame.getCanvasConsole().getSidebar());
 
