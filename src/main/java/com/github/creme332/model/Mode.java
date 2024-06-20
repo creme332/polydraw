@@ -18,18 +18,18 @@ public enum Mode {
     REFLECT_ABOUT_LINE("Reflect about Line", "Select object to reflect, then line of reflection"),
     REFLECT_ABOUT_POINT("Reflect about Point", "Select object to reflect, then center point"),
 
-    ROTATE_AROUND_POINT("Rotate around Point", "Select object to rotateand center point, then enter angle"),
+    ROTATE_AROUND_POINT("Rotate around Point", "Select object to rotate and center point, then enter angle"),
 
     ZOOM_IN("Zoom In", "Click/tap to zoom (or Mouse Wheel)"),
     ZOOM_OUT("Zoom Out", "Click/tap to zoom (or Mouse Wheel)"),
     DELETE("Delete", "Select object which should be deleted"),
     MOVE_GRAPHICS_VIEW("Move Graphics View", "Drag white background or axis"),
 
-    TRANSLATION("Translation", "Translate the shape"),
-    NORMAL_ROTATION("Normal Rotation", "Rotate the shape normally"),
-    SCALING("Scaling", "Scale the shape"),
-    SHEAR("Shear", "Shear the shape"),
-    CLIPPING("Clipping", "Clip the shape");
+    TRANSLATION("Translation", "Select object to translate"),
+    NORMAL_ROTATION("Normal Rotation", "Select object to rotate"),
+    SCALING("Scaling", "Select object to scale then enter scaling factor"),
+    SHEAR("Shear", "Select object to translate, then enter scaling factor"),
+    CLIPPING("Clipping", "Draw clipping region with mouse drag");
 
     private final String title;
     private final String instructions;
