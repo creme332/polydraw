@@ -6,12 +6,19 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 import com.github.creme332.algorithms.CircleCalculator;
 import com.github.creme332.model.AppState;
@@ -258,6 +265,36 @@ public class CanvasController implements PropertyChangeListener {
         canvas.repaint();
     }
 
+    /**
+     * Exports canvas to image.
+     * <br>
+     * <ol>
+     * <li>https://stackoverflow.com/a/14369955/17627866</li>
+     * <li>
+     * https://stackoverflow.com/questions/17690275/exporting-a-jpanel-to-an-image
+     * </li>
+     * </ol>
+     */
+    private void handleCanvasExport() {
+        BufferedImage image = canvas.toImage();
+        JFileChooser fileChooser = new JFileChooser();
+
+        fileChooser.setDialogTitle("Choose folder to save image");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false); // disable the "All files" option.
+
+        int returnValue = fileChooser.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            String imagePath = fileChooser.getSelectedFile() + "/canvas.png";
+            try {
+                ImageIO.write(image, "png", new File(imagePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
@@ -276,6 +313,11 @@ public class CanvasController implements PropertyChangeListener {
                 || "axesVisible".equals(propertyName)) {
             canvas.repaint();
             return;
+        }
+
+        // if printingCanvas property has changed to true, handle export
+        if ("printingCanvas".equals(propertyName) && (boolean) e.getNewValue()) {
+            handleCanvasExport();
         }
     }
 }

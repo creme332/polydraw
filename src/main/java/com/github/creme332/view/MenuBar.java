@@ -23,6 +23,7 @@ public class MenuBar extends JMenuBar {
     private JButton guidelinesButton; // Button to toggle guidelines
     private JButton toggleAxesButton; // Button to toggle axes visibility
     private JButton helpButton;
+    private JButton exportButton; // Button to export canvas as image
 
     public MenuBar(MenuModel[] menus) throws InvalidIconSizeException, InvalidPathException {
 
@@ -72,6 +73,12 @@ public class MenuBar extends JMenuBar {
         helpButton.setBorderPainted(false);
         leftPanel.add(helpButton);
 
+        // export button
+        exportButton = new JButton();
+        exportButton.setIcon(FontIcon.of(BootstrapIcons.CAMERA, 37)); // Use an appropriate icon for export
+        exportButton.setBorderPainted(false);
+        leftPanel.add(exportButton);
+
         // sidebar menu button
         sidebarButton = new JButton();
         sidebarButton.setIcon(FontIcon.of(BootstrapIcons.LIST, 40));
@@ -95,5 +102,9 @@ public class MenuBar extends JMenuBar {
 
     public JButton getHelpButton() {
         return helpButton;
+    }
+
+    public JButton getExportButton() {
+        return exportButton;
     }
 }

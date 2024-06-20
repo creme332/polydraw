@@ -16,6 +16,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 
 /**
  * Drawing board for coordinate system.
@@ -34,6 +35,14 @@ public class Canvas extends JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    }
+
+    public BufferedImage toImage() {
+        BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+        paintComponent(g2d);
+        g2d.dispose();
+        return image;
     }
 
     private void drawHorizontalAxis(Graphics2D g2) {

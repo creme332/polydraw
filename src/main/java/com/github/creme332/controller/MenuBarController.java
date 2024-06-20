@@ -69,7 +69,7 @@ public class MenuBarController implements PropertyChangeListener {
 
                     JMenu clickedMenu = (JMenu) e.getComponent();
 
-                    // add border to clicked menu
+                    // add border to clickedMenu
                     clickedMenu.setBorder(VISIBLE_BORDER);
 
                     // update global mode using menu model for clicked menu
@@ -106,6 +106,14 @@ public class MenuBarController implements PropertyChangeListener {
                 // toggle axes visibility
                 CanvasModel canvasModel = app.getCanvasModel();
                 canvasModel.setAxesVisible(!canvasModel.isAxesVisible());
+            }
+        });
+
+        menubar.getExportButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // export canvas as image
+                app.startPrintingProcess();
             }
         });
     }

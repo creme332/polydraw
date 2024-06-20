@@ -141,6 +141,7 @@ public class AppState {
         support.addPropertyChangeListener("sidebarVisibility", listener);
         support.addPropertyChangeListener("mode", listener);
         support.addPropertyChangeListener("screen", listener);
+        support.addPropertyChangeListener("printingCanvas", listener);
         support.addPropertyChangeListener("activateToast", listener);
     }
 
@@ -169,5 +170,9 @@ public class AppState {
         System.out.println("Mode: " + mode + " -> " + newMode);
         support.firePropertyChange("mode", mode, newMode);
         mode = newMode;
+    }
+
+    public void startPrintingProcess() {
+        support.firePropertyChange("printingCanvas", null, true);
     }
 }
