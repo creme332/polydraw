@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import java.awt.Point;
 import java.awt.Polygon;
@@ -289,8 +290,10 @@ public class CanvasController implements PropertyChangeListener {
             String imagePath = fileChooser.getSelectedFile() + "/canvas.png";
             try {
                 ImageIO.write(image, "png", new File(imagePath));
+                JOptionPane.showMessageDialog(canvas, "Image successfully saved at " + imagePath);
             } catch (IOException e) {
                 e.printStackTrace();
+                System.exit(0);
             }
         }
         canvas.getTopLevelAncestor().requestFocus();
