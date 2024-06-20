@@ -3,14 +3,9 @@ package com.github.creme332.controller;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JMenu;
 import javax.swing.border.Border;
@@ -21,7 +16,6 @@ import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.Screen;
-import com.github.creme332.view.Canvas;
 import com.github.creme332.view.MenuBar;
 
 /**
@@ -119,7 +113,7 @@ public class MenuBarController implements PropertyChangeListener {
             @Override
             public void mousePressed(MouseEvent e) {
                 // export canvas as image
-                app.setPrintingCanvas(true);
+                app.startPrintingProcess();
             }
         });
     }

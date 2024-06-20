@@ -19,8 +19,6 @@ public class AppState {
 
     private boolean visibleSidebar = false;
 
-    private boolean printingCanvas = false;
-
     private CanvasModel canvasModel = new CanvasModel();
 
     TutorialScreenModel tutorialModel = new TutorialScreenModel();
@@ -174,12 +172,7 @@ public class AppState {
         mode = newMode;
     }
 
-    public boolean isPrintingCanvas() {
-        return printingCanvas;
-    }
-
-    public void setPrintingCanvas(boolean printingCanvas) {
-        support.firePropertyChange("printingCanvas", this.printingCanvas, printingCanvas);
-        this.printingCanvas = printingCanvas;
+    public void startPrintingProcess() {
+        support.firePropertyChange("printingCanvas", null, true);
     }
 }
