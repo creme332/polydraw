@@ -21,8 +21,6 @@ public class AppState {
 
     private CanvasModel canvasModel = new CanvasModel();
 
-    TutorialScreenModel tutorialModel = new TutorialScreenModel();
-
     private MenuModel[] menuModels;
 
     Map<Mode, Integer> modeToMenuMapper;
@@ -37,10 +35,6 @@ public class AppState {
             System.out.println(e.getMessage());
             System.exit(0);
         }
-    }
-
-    public TutorialScreenModel getTutorialScreenModel() {
-        return tutorialModel;
     }
 
     private MenuModel[] createMenuModels() throws InvalidIconSizeException, InvalidPathException {

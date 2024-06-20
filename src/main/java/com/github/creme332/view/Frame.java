@@ -78,7 +78,7 @@ public class Frame extends JFrame {
         menubar = new MenuBar(app.getMenuModels());
         canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getSideBarVisibility(), app.getMode());
         canvas = new Canvas(app.getCanvasModel());
-        tutorialCenter = new TutorialCenter(app.getTutorialScreenModel());
+        tutorialCenter = new TutorialCenter();
 
         // add menubar to frame
         setJMenuBar(menubar);
