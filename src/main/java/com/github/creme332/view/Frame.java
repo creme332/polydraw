@@ -112,6 +112,7 @@ public class Frame extends JFrame {
                 cl.show(screenContainer, Screen.SPLASH_SCREEN.toString());
                 break;
             case MAIN_SCREEN:
+                requestFocus();
                 menubar.setVisible(true);
                 cl.show(screenContainer, Screen.MAIN_SCREEN.toString());
                 break;

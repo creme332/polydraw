@@ -293,6 +293,7 @@ public class CanvasController implements PropertyChangeListener {
                 e.printStackTrace();
             }
         }
+        canvas.getTopLevelAncestor().requestFocus();
     }
 
     @Override
