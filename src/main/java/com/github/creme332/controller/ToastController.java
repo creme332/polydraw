@@ -33,9 +33,17 @@ public class ToastController implements PropertyChangeListener {
     }
 
     private void showTemporaryToast() {
-        final long TOAST_VISIBILITY_DURATION_SECONDS = 3;
-        toast.setVisible(true);
+        final long TOAST_VISIBILITY_DURATION_SECONDS = 5;
+        if (timer != null) {
+            // if a previous timer is still running, cancel it.
+            timer.cancel();
+            timer.purge();
+        }
+
+        // create a new timer
         timer = new Timer();
+
+        toast.setVisible(true);
 
         timer.schedule(new TimerTask() {
             @Override
@@ -43,8 +51,10 @@ public class ToastController implements PropertyChangeListener {
                 // Hide toast after 10 seconds
                 toast.setVisible(false);
 
+                // cancel timer
                 timer.cancel();
                 timer.purge();
+                timer = null;
             }
         }, TOAST_VISIBILITY_DURATION_SECONDS * 1000);
     }
