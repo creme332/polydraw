@@ -21,8 +21,41 @@ public class CircleCalculator {
     }
 
     /**
+     * Maps a point (x, y) in first octant to some other octant using 8-way symmetry
+     * of circle.
+     * 
+     * @param x                 x-coordinate of a point in first octant.
+     * @param y                 y-coordinate of a point in the first octant.
+     * @param destinationOctant index of some octant (one-based index).
+     * @return x and y coordinates of point in new octant.
+     */
+    public static int[] transformPoint(int x, int y, int destinationOctant) {
+        switch (destinationOctant) {
+            case 1:
+                return new int[] { x, y };
+            case 2:
+                return new int[] { y, x };
+            case 3:
+                return new int[] { y, -x };
+            case 4:
+                return new int[] { x, -y };
+            case 5:
+                return new int[] { -x, -y };
+            case 6:
+                return new int[] { -y, -x };
+            case 7:
+                return new int[] { -y, x };
+            case 8:
+                return new int[] { -x, y };
+            default:
+                break;
+        }
+        throw new IllegalArgumentException("Octant must be between 1 and 8.");
+    }
+
+    /**
      * Calculates coordinates of circle starting from top and moving clockwise.
-     * Points are ordered clockwise.
+     * Points are ordered clockwise. Duplicate points may occur at x==0 and x==y.
      * 
      * @param centerX x-coordinate of circle center
      * @param centerY y-coordinate of circle center
@@ -44,80 +77,16 @@ public class CircleCalculator {
         List<Integer> xPoints = new ArrayList<>();
         List<Integer> yPoints = new ArrayList<>();
 
-        // add first octant
-        for (int i = 0; i < pixelList.size(); i++) {
-            int x = pixelList.get(i)[0];
-            int y = pixelList.get(i)[1];
-            xPoints.add(x);
-            yPoints.add(y);
-        }
+        for (int octant = 1; octant <= 8; octant++) {
+            for (int i = 0; i < pixelList.size(); i++) {
+                int pixelIndex = (octant % 2 == 0) ? pixelList.size() - i - 1 : i;
+                int x = pixelList.get(pixelIndex)[0];
+                int y = pixelList.get(pixelIndex)[1];
 
-        // add second octant
-        for (int i = pixelList.size() - 1; i > -1; i--) {
-            int x = pixelList.get(i)[0];
-            int y = pixelList.get(i)[1];
-            if (x == y)
-                continue;
-            xPoints.add(y);
-            yPoints.add(x);
-        }
-
-        // add third octant
-        for (int i = 0; i < pixelList.size(); i++) {
-            int x = pixelList.get(i)[0];
-            int y = pixelList.get(i)[1];
-            if (x == 0 || x == y)
-                continue;
-            xPoints.add(y);
-            yPoints.add(-x);
-        }
-
-        // add fourth octant
-        for (int i = pixelList.size() - 1; i > -1; i--) {
-            int x = pixelList.get(i)[0];
-            int y = pixelList.get(i)[1];
-            xPoints.add(x);
-            yPoints.add(-y);
-        }
-
-        // add 5th octant
-        for (int i = 0; i < pixelList.size(); i++) {
-            int x = pixelList.get(i)[0];
-            int y = pixelList.get(i)[1];
-            if (x == 0)
-                continue;
-            xPoints.add(-x);
-            yPoints.add(-y);
-        }
-
-        // add 6th octant
-        for (int i = pixelList.size() - 1; i > -1; i--) {
-            int x = pixelList.get(i)[0];
-            int y = pixelList.get(i)[1];
-            if (x == 0 || x == y)
-                continue;
-            xPoints.add(-y);
-            yPoints.add(-x);
-        }
-
-        // add 7th octant
-        for (int i = 0; i < pixelList.size(); i++) {
-            int x = pixelList.get(i)[0];
-            int y = pixelList.get(i)[1];
-            if (x == y)
-                continue;
-            xPoints.add(-y);
-            yPoints.add(x);
-        }
-
-        // add 8th octant
-        for (int i = pixelList.size() - 1; i > -1; i--) {
-            int x = pixelList.get(i)[0];
-            int y = pixelList.get(i)[1];
-            if (x == 0)
-                continue;
-            xPoints.add(-x);
-            yPoints.add(y);
+                int[] transformedPoint = transformPoint(x, y, octant);
+                xPoints.add(transformedPoint[0]);
+                yPoints.add(transformedPoint[1]);
+            }
         }
 
         List<List<Integer>> res = new ArrayList<>();
