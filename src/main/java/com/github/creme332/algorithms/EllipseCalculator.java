@@ -3,9 +3,9 @@ package com.github.creme332.algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EllipseAlgorithm {
+public class EllipseCalculator {
 
-  private EllipseAlgorithm() {
+  private EllipseCalculator() {
 
   }
 
