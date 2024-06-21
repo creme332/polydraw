@@ -8,7 +8,6 @@ import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 public class IconLoader {
-
     private IconLoader() {
 
     }
@@ -16,7 +15,36 @@ public class IconLoader {
     /**
      * Returns a resized icon from the resources folder.
      * 
-     * @param path     Must start with / since path is relative to resources folder.
+     * @param path   Path to image. Must start with a forward slash (/). Path is
+     *               relative to the resources folder.
+     * @param height Height in pixels
+     * @param width  Width in pixels
+     * @return
+     * @throws InvalidIconSizeException
+     * @throws InvalidPathException
+     */
+    public static ImageIcon loadIcon(String path, int height, int width)
+            throws InvalidIconSizeException, InvalidPathException {
+        if (height < 1 || width < 1) {
+            throw new InvalidIconSizeException("Icon size must be a positive integer");
+        }
+
+        try {
+            ImageIcon icon = loadIcon(path);
+            return new ImageIcon(
+                    icon.getImage().getScaledInstance(width,
+                            height,
+                            Image.SCALE_DEFAULT));
+        } catch (Exception e) {
+            throw new InvalidPathException("Failed to load icon from path: " + path, e);
+        }
+    }
+
+    /**
+     * Returns a resized icon from the resources folder.
+     * 
+     * @param path     Path to image. Must start with a forward slash (/). Path is
+     *                 relative to the resources folder.
      * @param iconSize size of icon in pixels
      * @return
      * @throws InvalidIconSizeException if iconSize is less than 1
@@ -41,7 +69,8 @@ public class IconLoader {
     /**
      * Returns an icon from the resources folder.
      * 
-     * @param path Must start with / since path is relative to resources folder.
+     * @param path Path to image. Must start with a forward slash (/). Path is
+     *             relative to the resources folder.
      * @return
      * @throws InvalidPathException if path is invalid
      */
