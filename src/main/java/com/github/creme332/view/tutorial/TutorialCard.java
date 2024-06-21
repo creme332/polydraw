@@ -24,7 +24,8 @@ public class TutorialCard extends JPanel {
 
         // Create image container
         JPanel imageContainer = new JPanel(new BorderLayout());
-        imageContainer.setBackground(Color.LIGHT_GRAY);
+        // imageContainer.setBackground(Color.LIGHT_GRAY);
+        imageContainer.setPreferredSize(new Dimension(300, 200));
 
         // add image to image container
         JLabel image = new JLabel();
@@ -32,11 +33,16 @@ public class TutorialCard extends JPanel {
         imageContainer.add(image);
         add(imageContainer);
 
-        // add title
+        // create a title container with only a top border
+        JPanel titleContainer = new JPanel();
+        titleContainer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+
+        // add title to title container
         JLabel title = new JLabel(heading);
+        titleContainer.add(title);
         title.setBorder(new EmptyBorder(10, 10, 10, 0));
         title.putClientProperty("FlatLaf.style", "font: 110% $semibold.font");
-        add(title);
+        add(titleContainer);
     }
 
     public String getHeading() {
