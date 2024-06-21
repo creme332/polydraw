@@ -1,13 +1,15 @@
 package com.github.creme332.view.tutorial;
 
-import javax.swing.JLabel;
+import static com.github.creme332.utils.IconLoader.loadIcon;
+
+import com.github.creme332.utils.exception.InvalidPathException;
 
 public class GettingStartedTutorial extends TutorialPanel {
 
-    public GettingStartedTutorial() {
-        super("Getting Started");
-        JLabel heading = new JLabel(title);
-        this.add(heading);
+    private static final String IMAGE_PATH_PREFIX = "/images/tutorials/getting-started/";
+
+    public GettingStartedTutorial() throws InvalidPathException {
+        super("Getting Started", loadIcon(IMAGE_PATH_PREFIX + "background.png"));
     }
 
 }

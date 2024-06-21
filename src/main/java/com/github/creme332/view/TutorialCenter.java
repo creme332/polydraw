@@ -7,6 +7,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.creme332.utils.exception.InvalidIconSizeException;
+import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.tutorial.DrawCircleTutorial;
 import com.github.creme332.view.tutorial.DrawLineTutorial;
 import com.github.creme332.view.tutorial.GettingStartedTutorial;
@@ -56,15 +58,20 @@ public class TutorialCenter extends JPanel {
     }
 
     private void initTutorialScreens() {
-        tutorialScreens.add(new GettingStartedTutorial());
-        tutorialScreens.add(new DrawLineTutorial());
-        tutorialScreens.add(new DrawCircleTutorial());
+        try {
+            tutorialScreens.add(new GettingStartedTutorial());
+            tutorialScreens.add(new DrawLineTutorial());
+            tutorialScreens.add(new DrawCircleTutorial());
+        } catch (InvalidPathException | InvalidIconSizeException e) {
+            e.printStackTrace();
+            System.exit(ABORT);
+        }
 
     }
 
     private void initTutorialCards() {
         for (TutorialPanel screen : tutorialScreens) {
-            tutorialCards.add(new TutorialCard(screen.getTitle(), null));
+            tutorialCards.add(new TutorialCard(screen.getTitle(), screen.getMainIcon()));
         }
     }
 
@@ -78,6 +85,7 @@ public class TutorialCenter extends JPanel {
         // Create the top panel with back button and search field
         JPanel topPanel = new JPanel(new BorderLayout());
         tutorialGrid.add(topPanel, BorderLayout.NORTH);
+        topPanel.setBorder(new EmptyBorder(new Insets(10, 0, 0, 0)));
 
         // create top panel components
         backButton = new BackButton();
