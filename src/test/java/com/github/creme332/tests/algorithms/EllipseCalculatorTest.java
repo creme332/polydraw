@@ -8,11 +8,11 @@ import com.github.creme332.tests.utils.TestHelper;
 
 import java.util.List;
 
-public class EllipseAlgorithmTest {
+public class EllipseCalculatorTest {
 
     @Test
     public void testEllipseCenteredAtOrigin() {
-        List<int[]> pixels = EllipseCalculator.drawEllipse(0, 0, 3, 2);
+        List<int[]> pixels = EllipseCalculator.getAllPoints(0, 0, 3, 2);
 
         int[][] expectedArray = {
                 // Quadrant 1
@@ -53,14 +53,14 @@ public class EllipseAlgorithmTest {
             expectedArray[i][1] += centerY;
         }
 
-        List<int[]> pixels = EllipseCalculator.drawEllipse(centerX, centerY, 8, 6);
+        List<int[]> pixels = EllipseCalculator.getAllPoints(centerX, centerY, 8, 6);
         TestHelper.assert2DArrayEquals(expectedArray, pixels.toArray(new int[pixels.size()][]));
     }
 
     @Test
     public void testZeroRadii() {
         try {
-            EllipseCalculator.drawEllipse(10, 10, 0, 0);
+            EllipseCalculator.getAllPoints(10, 10, 0, 0);
             fail("Expected IllegalArgumentException for zero radii");
         } catch (IllegalArgumentException e) {
             assertEquals("Radii must be positive values.", e.getMessage());
@@ -70,7 +70,7 @@ public class EllipseAlgorithmTest {
     @Test
     public void testNegativeRadii() {
         try {
-            EllipseCalculator.drawEllipse(10, 10, -5, -3);
+            EllipseCalculator.getAllPoints(10, 10, -5, -3);
             fail("Expected IllegalArgumentException for negative radii");
         } catch (IllegalArgumentException e) {
             assertEquals("Radii must be positive values.", e.getMessage());
@@ -79,7 +79,7 @@ public class EllipseAlgorithmTest {
 
     @Test
     public void testHorizontalEllipseAtOrigin() {
-        List<int[]> pixels = EllipseCalculator.drawEllipse(0, 0, 7, 3);
+        List<int[]> pixels = EllipseCalculator.getAllPoints(0, 0, 7, 3);
 
         int[][] expectedArray = {
                 // Quadrant 1
@@ -97,7 +97,7 @@ public class EllipseAlgorithmTest {
 
     @Test
     public void testVerticalEllipseAtOrigin() {
-        List<int[]> pixels = EllipseCalculator.drawEllipse(0, 0, 3, 7);
+        List<int[]> pixels = EllipseCalculator.getAllPoints(0, 0, 3, 7);
 
         int[][] expectedArray = {
                 // Quadrant 1

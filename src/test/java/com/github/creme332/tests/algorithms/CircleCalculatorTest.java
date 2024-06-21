@@ -6,7 +6,7 @@ import com.github.creme332.tests.utils.TestHelper;
 
 import static org.junit.Assert.*;
 
-public class CircleAlgorithmTest {
+public class CircleCalculatorTest {
 
     @Test
     public void testValidCircleCenteredOrigin() {
