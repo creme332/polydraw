@@ -7,17 +7,18 @@ import java.util.List;
 public class CircleCalculator {
 
     /**
-     * A map that stores calculated coordinates for circles of different radii
+     * A map that stores calculated coordinates of pixels in first octant of circles
+     * of different radii
      * centered at origin.
      * 
      * The key is the radius and the value is a list with 2 elements. The first
      * element is a list of x-coordinates while the second element is a list of
      * y-coordinates.
      */
-    private HashMap<Integer, List<List<Integer>>> cache;
+    private HashMap<Integer, List<List<Integer>>> firstOctantCache;
 
     public CircleCalculator() {
-        cache = new HashMap<>();
+        firstOctantCache = new HashMap<>();
     }
 
     /**
@@ -64,24 +65,24 @@ public class CircleCalculator {
      *         array is a list of y-coordinates.
      */
     public int[][] getOrderedPoints(int centerX, int centerY, int radius) {
-        // check if result is already available and return it
-        if (cache.containsKey(radius)) {
-            List<Integer> xPoints = cache.get(radius).get(0);
-            List<Integer> yPoints = cache.get(radius).get(1);
-            int[] xArray = xPoints.stream().mapToInt(i -> i + centerX).toArray();
-            int[] yArray = yPoints.stream().mapToInt(i -> i + centerY).toArray();
-            return new int[][] { xArray, yArray };
-        }
+        /**
+         * Pixels in first octant of circle centered at origin.
+         */
+        final List<List<Integer>> firstOctantList = getFirstOctantPoints(radius);
 
-        final List<int[]> pixelList = getFirstOctantPoints(radius);
+        /**
+         * Number of pixels in first octant
+         */
+        final int firstOctantSize = firstOctantList.get(0).size();
+
         List<Integer> xPoints = new ArrayList<>();
         List<Integer> yPoints = new ArrayList<>();
 
         for (int octant = 1; octant <= 8; octant++) {
-            for (int i = 0; i < pixelList.size(); i++) {
-                int pixelIndex = (octant % 2 == 0) ? pixelList.size() - i - 1 : i;
-                int x = pixelList.get(pixelIndex)[0];
-                int y = pixelList.get(pixelIndex)[1];
+            for (int i = 0; i < firstOctantSize; i++) {
+                int pixelIndex = (octant % 2 == 0) ? firstOctantSize - i - 1 : i;
+                int x = firstOctantList.get(0).get(pixelIndex);
+                int y = firstOctantList.get(1).get(pixelIndex);
 
                 int[] transformedPoint = transformPoint(x, y, octant);
                 xPoints.add(transformedPoint[0]);
@@ -89,12 +90,12 @@ public class CircleCalculator {
             }
         }
 
-        List<List<Integer>> res = new ArrayList<>();
-        res.add(xPoints);
-        res.add(yPoints);
-        cache.put(radius, res);
+        // convert arrays to primitive arrays and apply translation based on circle
+        // center coordinates
+        int[] xArray = xPoints.stream().mapToInt(i -> i + centerX).toArray();
+        int[] yArray = yPoints.stream().mapToInt(i -> i + centerY).toArray();
 
-        return getOrderedPoints(centerX, centerY, radius);
+        return new int[][] { xArray, yArray };
     }
 
     /**
@@ -102,22 +103,29 @@ public class CircleCalculator {
      * origin. Bresenham algorithm is used.
      * 
      * @param radius Radius of circle
-     * @return A 2D array where each element is an array {x, y} representing the x
-     *         and y coordinates of a pixel.
+     * @return A 2D array where the first list contains all the x-coordinates and
+     *         the second list contains all the y-coordinates.
      */
-    public static List<int[]> getFirstOctantPoints(int radius) {
+    public List<List<Integer>> getFirstOctantPoints(int radius) {
         if (radius <= 0) {
             throw new IllegalArgumentException("Radius must be positive");
         }
 
-        List<int[]> pixelList = new ArrayList<>();
+        // check if result is already available in cache and return it
+        if (firstOctantCache.containsKey(radius)) {
+            return firstOctantCache.get(radius);
+        }
+
+        List<Integer> xPoints = new ArrayList<>();
+        List<Integer> yPoints = new ArrayList<>();
 
         int x = 0;
         int y = radius;
         int decisionParameter = 1 - radius;
 
         while (x <= y) {
-            pixelList.add(new int[] { x, y });
+            xPoints.add(x);
+            yPoints.add(y);
             x++;
 
             if (decisionParameter < 0) {
@@ -128,7 +136,13 @@ public class CircleCalculator {
             }
         }
 
-        return pixelList;
+        // save result to cache
+        List<List<Integer>> result = new ArrayList<>();
+        result.add(xPoints);
+        result.add(yPoints);
+        firstOctantCache.put(radius, result);
+
+        return result;
     }
 
     /**
