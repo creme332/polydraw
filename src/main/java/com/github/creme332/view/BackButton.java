@@ -7,9 +7,12 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 public class BackButton extends JButton {
     public BackButton() {
+        super("Back");
         setOpaque(false);
         setBorderPainted(false);
         setFocusPainted(false);
+        setContentAreaFilled(false);
+        
         FontIcon icon = FontIcon.of(BootstrapIcons.ARROW_LEFT_CIRCLE);
         icon.setIconSize(40);
         setIcon(icon);
