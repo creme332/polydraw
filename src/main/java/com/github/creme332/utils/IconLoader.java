@@ -1,5 +1,6 @@
 package com.github.creme332.utils;
 
+import java.awt.Dimension;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -10,6 +11,16 @@ import com.github.creme332.utils.exception.InvalidPathException;
 public class IconLoader {
     private IconLoader() {
 
+    }
+
+    public static Dimension getScaledDimension(Dimension imageSize, Dimension boundary) {
+
+        double widthRatio = boundary.getWidth() / imageSize.getWidth();
+        double heightRatio = boundary.getHeight() / imageSize.getHeight();
+        double ratio = Math.min(widthRatio, heightRatio);
+
+        return new Dimension((int) (imageSize.width * ratio),
+                (int) (imageSize.height * ratio));
     }
 
     /**
@@ -23,17 +34,17 @@ public class IconLoader {
      * @throws InvalidIconSizeException
      * @throws InvalidPathException
      */
-    public static ImageIcon loadIcon(String path, int height, int width)
+    public static ImageIcon loadIcon(String path, Dimension dimension)
             throws InvalidIconSizeException, InvalidPathException {
-        if (height < 1 || width < 1) {
+        if (dimension.height < 1 || dimension.width < 1) {
             throw new InvalidIconSizeException("Icon size must be a positive integer");
         }
 
         try {
             ImageIcon icon = loadIcon(path);
             return new ImageIcon(
-                    icon.getImage().getScaledInstance(width,
-                            height,
+                    icon.getImage().getScaledInstance(dimension.width,
+                            dimension.height,
                             Image.SCALE_DEFAULT));
         } catch (Exception e) {
             throw new InvalidPathException("Failed to load icon from path: " + path, e);
