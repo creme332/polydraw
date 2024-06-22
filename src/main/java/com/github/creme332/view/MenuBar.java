@@ -31,10 +31,12 @@ public class MenuBar extends JMenuBar {
         for (MenuModel menuModel : menus) {
             JMenu menu = new JMenu();
             menu.setIcon(menuModel.getActiveItem().getIcon());
-
+            menu.setToolTipText(menuModel.getActiveItem().getName());
+            
             for (MenuItemModel item : menuModel.getItems()) {
                 JMenuItem menuItem = new JMenuItem(item.getName(), item.getIcon());
                 menu.add(menuItem);
+                menuItem.addActionListener(e -> menu.setToolTipText(item.getName()));
             }
 
             this.add(menu);
@@ -48,18 +50,20 @@ public class MenuBar extends JMenuBar {
         btn.setIcon(FontIcon.of(BootstrapIcons.ARROW_COUNTERCLOCKWISE, 40));
         btn.setBorderPainted(false);
         leftPanel.add(btn);
+        btn.setToolTipText("Undo");
 
         // redo button
         btn = new JButton();
         btn.setIcon(FontIcon.of(BootstrapIcons.ARROW_CLOCKWISE, 40));
         btn.setBorderPainted(false);
         leftPanel.add(btn);
-
+        btn.setToolTipText("Redo");
         // guidelines button
         guidelinesButton = new JButton();
         guidelinesButton.setIcon(FontIcon.of(BootstrapIcons.GRID_3X3, 37));
         guidelinesButton.setBorderPainted(false);
         leftPanel.add(guidelinesButton);
+        guidelinesButton.setToolTipText("Guidelines");
 
         // toggle axes button
         toggleAxesButton = new JButton();
@@ -84,6 +88,7 @@ public class MenuBar extends JMenuBar {
         sidebarButton.setIcon(FontIcon.of(BootstrapIcons.LIST, 40));
         sidebarButton.setBorderPainted(false);
         leftPanel.add(sidebarButton);
+        sidebarButton.setToolTipText("Sidebar");
 
         this.add(leftPanel);
     }
