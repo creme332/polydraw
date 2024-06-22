@@ -142,6 +142,7 @@ public class AppState {
         support.addPropertyChangeListener("mode", listener);
         support.addPropertyChangeListener("screen", listener);
         support.addPropertyChangeListener("maximizeFrame", listener);
+        support.addPropertyChangeListener("activateToast", listener);
     }
 
     public boolean getSideBarVisibility() {
