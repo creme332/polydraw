@@ -100,7 +100,8 @@ public class FrameController implements PropertyChangeListener {
         canvasControl.setVisible(true);
 
         // update sidebar dimensions
-        int sideBarWidth = Math.min(500, frameWidth / 3);
+        // int sideBarWidth = Math.min(500, frameWidth / 3);
+        int sideBarWidth = 280;
 
         System.out.format("Sidebar dimensions = %d x %d %n", sideBarWidth,
                 frameHeight - menuBarHeight);
