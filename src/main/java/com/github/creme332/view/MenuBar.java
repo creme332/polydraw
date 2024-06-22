@@ -32,7 +32,7 @@ public class MenuBar extends JMenuBar {
             JMenu menu = new JMenu();
             menu.setIcon(menuModel.getActiveItem().getIcon());
             menu.setToolTipText(menuModel.getActiveItem().getName());
-            
+
             for (MenuItemModel item : menuModel.getItems()) {
                 JMenuItem menuItem = new JMenuItem(item.getName(), item.getIcon());
                 menu.add(menuItem);
@@ -58,6 +58,7 @@ public class MenuBar extends JMenuBar {
         btn.setBorderPainted(false);
         leftPanel.add(btn);
         btn.setToolTipText("Redo");
+
         // guidelines button
         guidelinesButton = new JButton();
         guidelinesButton.setIcon(FontIcon.of(BootstrapIcons.GRID_3X3, 37));
@@ -69,18 +70,21 @@ public class MenuBar extends JMenuBar {
         toggleAxesButton = new JButton();
         toggleAxesButton.setIcon(IconLoader.loadIcon("/icons/axes.png", 40));
         toggleAxesButton.setBorderPainted(false);
+        toggleAxesButton.setToolTipText("Toggle axes");
         leftPanel.add(toggleAxesButton);
 
         // help button
         helpButton = new JButton();
         helpButton.setIcon(FontIcon.of(BootstrapIcons.QUESTION_CIRCLE, 37));
         helpButton.setBorderPainted(false);
+        helpButton.setToolTipText("Toggle axes");
         leftPanel.add(helpButton);
 
         // export button
         exportButton = new JButton();
         exportButton.setIcon(FontIcon.of(BootstrapIcons.CAMERA, 37)); // Use an appropriate icon for export
         exportButton.setBorderPainted(false);
+        exportButton.setToolTipText("Export canvas");
         leftPanel.add(exportButton);
 
         // sidebar menu button
@@ -88,7 +92,7 @@ public class MenuBar extends JMenuBar {
         sidebarButton.setIcon(FontIcon.of(BootstrapIcons.LIST, 40));
         sidebarButton.setBorderPainted(false);
         leftPanel.add(sidebarButton);
-        sidebarButton.setToolTipText("Sidebar");
+        sidebarButton.setToolTipText("Toggle sidebar");
 
         this.add(leftPanel);
     }
