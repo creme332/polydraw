@@ -64,7 +64,7 @@ public class MenuBar extends JMenuBar {
         guidelinesButton.setIcon(FontIcon.of(BootstrapIcons.GRID_3X3, 37));
         guidelinesButton.setBorderPainted(false);
         leftPanel.add(guidelinesButton);
-        guidelinesButton.setToolTipText("Guidelines");
+        guidelinesButton.setToolTipText("Toggle guidelines");
 
         // toggle axes button
         toggleAxesButton = new JButton();
@@ -77,7 +77,7 @@ public class MenuBar extends JMenuBar {
         helpButton = new JButton();
         helpButton.setIcon(FontIcon.of(BootstrapIcons.QUESTION_CIRCLE, 37));
         helpButton.setBorderPainted(false);
-        helpButton.setToolTipText("Toggle axes");
+        helpButton.setToolTipText("Help");
         leftPanel.add(helpButton);
 
         // export button
