@@ -18,11 +18,10 @@ public class Controller {
             Frame frame = new Frame(app);
             frameController = new FrameController(app, frame);
 
-            // create controllers for views
-            new MenuBarController(app, frame.getMyMenuBar());
+            // create controllers for main screens
             new CanvasController(app, frame.getMyCanvas());
+            new CanvasConsoleController(app, frame.getCanvasConsole());
             new TutorialScreenController(app, frame.getTutorialCenter());
-            new CanvasConsoleController(frame.getCanvasConsole(), app);
 
             // play start animation
             frameController.playStartAnimation();

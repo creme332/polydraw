@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import com.github.creme332.algorithms.CircleCalculator;
+import com.github.creme332.algorithms.EllipseCalculator;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
@@ -32,6 +33,7 @@ public class CanvasController implements PropertyChangeListener {
     private Canvas canvas;
 
     private CircleCalculator circleCalculator = new CircleCalculator();
+    private EllipseCalculator ellipseCalculator = new EllipseCalculator();
     /**
      * Used to store coordinate where mouse drag started
      */
@@ -101,7 +103,25 @@ public class CanvasController implements PropertyChangeListener {
                     currentWrapper.setShape(getCircle((int) center.getX(), (int) center.getY(), roundedRadius));
                     canvas.repaint();
                     return;
+                }
 
+                if (app.getMode() == Mode.DRAW_ELLIPSE && currentWrapper != null
+                        && currentWrapper.getPlottedPoints().size() == 2) {
+                    // create an ellipse
+                    Point2D center = currentWrapper.getPlottedPoints().get(0);
+                    int ry = (int) Math.abs(currentWrapper.getPlottedPoints().get(1).distance(center));
+                    int rx = (int) Math.abs(polySpaceMousePosition.distance(center));
+
+                    if (rx == 0 || ry == 0) {
+                        return;
+                    }
+                    
+                    int[][] coordinates = ellipseCalculator.getOrderedPoints((int) center.getX(), (int) center.getY(),
+                            rx, ry);
+                    Polygon ellipse = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
+                    currentWrapper.setShape(ellipse);
+                    canvas.repaint();
+                    return;
                 }
 
             }
@@ -235,7 +255,7 @@ public class CanvasController implements PropertyChangeListener {
 
         if (app.getMode() == Mode.DRAW_ELLIPSE) {
             if (currentWrapper == null) {
-                // first foci has been selected
+                // center of ellipse has been selected
 
                 // create a shape wrapper
                 currentWrapper = new ShapeWrapper(model.getFillColor(), model.getFillColor(), model.getLineType(),
@@ -246,15 +266,25 @@ public class CanvasController implements PropertyChangeListener {
                 model.getShapes().add(currentWrapper);
 
             } else {
-                // second foci has now been selected
                 if (currentWrapper.getPlottedPoints().size() == 1) {
+                    // second point has now been selected
                     currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
                 } else {
                     // third point has been selected
                     currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
 
                     // create an ellipse
-                    Polygon ellipse = new Polygon();
+                    Point2D center = currentWrapper.getPlottedPoints().get(0);
+                    int ry = (int) Math.abs(currentWrapper.getPlottedPoints().get(1).distance(center));
+                    int rx = (int) Math.abs(currentWrapper.getPlottedPoints().get(2).distance(center));
+
+                    if (rx == 0 || ry == 0) {
+                        return;
+                    }
+
+                    int[][] coordinates = ellipseCalculator.getOrderedPoints((int) center.getX(), (int) center.getY(),
+                            rx, ry);
+                    Polygon ellipse = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
 
                     currentWrapper.setShape(ellipse);
 

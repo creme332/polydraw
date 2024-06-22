@@ -18,7 +18,7 @@ public class AppState {
     private Mode mode = Mode.MOVE_CANVAS;
 
     private boolean visibleSidebar = false;
-
+    private boolean maximizeFrame = false;
     private CanvasModel canvasModel = new CanvasModel();
 
     private MenuModel[] menuModels;
@@ -135,8 +135,7 @@ public class AppState {
         support.addPropertyChangeListener("sidebarVisibility", listener);
         support.addPropertyChangeListener("mode", listener);
         support.addPropertyChangeListener("screen", listener);
-        support.addPropertyChangeListener("printingCanvas", listener);
-        support.addPropertyChangeListener("activateToast", listener);
+        support.addPropertyChangeListener("maximizeFrame", listener);
     }
 
     public boolean getSideBarVisibility() {
@@ -166,6 +165,16 @@ public class AppState {
         mode = newMode;
     }
 
+    public boolean isMaximizeFrame() {
+        return maximizeFrame;
+    }
+
+    public void setMaximizeFrame(boolean maximizeFrame) {
+        support.firePropertyChange("maximizeFrame", this.maximizeFrame,
+                maximizeFrame);
+        this.maximizeFrame = maximizeFrame;
+    }
+    
     public void startPrintingProcess() {
         support.firePropertyChange("printingCanvas", null, true);
     }
