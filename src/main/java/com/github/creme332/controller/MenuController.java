@@ -9,7 +9,7 @@ import javax.swing.JMenuItem;
 import com.github.creme332.model.MenuModel;
 
 /**
- * Controller for a JMenu
+ * Controller for a JMenu found in MenuBar.
  */
 public class MenuController {
     MenuModel model;

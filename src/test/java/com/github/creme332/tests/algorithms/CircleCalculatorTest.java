@@ -1,19 +1,19 @@
 package com.github.creme332.tests.algorithms;
 
 import org.junit.Test;
-import com.github.creme332.algorithms.CircleAlgorithm;
+import com.github.creme332.algorithms.CircleCalculator;
 import com.github.creme332.tests.utils.TestHelper;
 
 import static org.junit.Assert.*;
 
-public class CircleAlgorithmTest {
+public class CircleCalculatorTest {
 
     @Test
     public void testValidCircleCenteredOrigin() {
         int centerX = 0;
         int centerY = 0;
         int radius = 10;
-        int[][] actualPixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
+        int[][] actualPixels = CircleCalculator.getAllPoints(centerX, centerY, radius);
 
         int[][] expectedPixels = {
                 // Octant 1: (x, y)
@@ -45,7 +45,7 @@ public class CircleAlgorithmTest {
         int radius = 0;
 
         try {
-            CircleAlgorithm.drawCircle(centerX, centerY, radius);
+            CircleCalculator.getAllPoints(centerX, centerY, radius);
             fail("Expected IllegalArgumentException for zero radii");
         } catch (IllegalArgumentException e) {
             assertEquals("Radius must be positive", e.getMessage());
@@ -58,7 +58,7 @@ public class CircleAlgorithmTest {
         int centerY = 0;
         int radius = -5;
         try {
-            CircleAlgorithm.drawCircle(centerX, centerY, radius);
+            CircleCalculator.getAllPoints(centerX, centerY, radius);
             fail("Expected IllegalArgumentException for negative radii");
         } catch (IllegalArgumentException e) {
             assertEquals("Radius must be positive", e.getMessage());
@@ -70,7 +70,7 @@ public class CircleAlgorithmTest {
         int centerX = 0;
         int centerY = 0;
         int radius = 1;
-        int[][] actualPixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
+        int[][] actualPixels = CircleCalculator.getAllPoints(centerX, centerY, radius);
 
         int[][] expectedPixels = {
                 { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 }
@@ -84,7 +84,7 @@ public class CircleAlgorithmTest {
         int centerX = 5;
         int centerY = 5;
         int radius = 1;
-        int[][] actualPixels = CircleAlgorithm.drawCircle(centerX, centerY, radius);
+        int[][] actualPixels = CircleCalculator.getAllPoints(centerX, centerY, radius);
 
         int[][] expectedPixels = {
                 { 6, 5 }, { 4, 5 }, { 5, 6 }, { 5, 4 }

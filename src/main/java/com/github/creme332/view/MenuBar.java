@@ -12,14 +12,21 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.model.MenuItemModel;
 import com.github.creme332.model.MenuModel;
+import com.github.creme332.utils.IconLoader;
+import com.github.creme332.utils.exception.InvalidIconSizeException;
+import com.github.creme332.utils.exception.InvalidPathException;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
 public class MenuBar extends JMenuBar {
     private JButton sidebarButton;
     private JButton guidelinesButton; // Button to toggle guidelines
+    private JButton toggleAxesButton; // Button to toggle axes visibility
+    private JButton helpButton;
+    private JButton exportButton; // Button to export canvas as image
 
-    public MenuBar(MenuModel[] menus) {
+    public MenuBar(MenuModel[] menus) throws InvalidIconSizeException, InvalidPathException {
+
         // add menus to menubar
         for (MenuModel menuModel : menus) {
             JMenu menu = new JMenu();
@@ -58,6 +65,24 @@ public class MenuBar extends JMenuBar {
         leftPanel.add(guidelinesButton);
         guidelinesButton.setToolTipText("Guidelines");
 
+        // toggle axes button
+        toggleAxesButton = new JButton();
+        toggleAxesButton.setIcon(IconLoader.loadIcon("/icons/axes.png", 40));
+        toggleAxesButton.setBorderPainted(false);
+        leftPanel.add(toggleAxesButton);
+
+        // help button
+        helpButton = new JButton();
+        helpButton.setIcon(FontIcon.of(BootstrapIcons.QUESTION_CIRCLE, 37));
+        helpButton.setBorderPainted(false);
+        leftPanel.add(helpButton);
+
+        // export button
+        exportButton = new JButton();
+        exportButton.setIcon(FontIcon.of(BootstrapIcons.CAMERA, 37)); // Use an appropriate icon for export
+        exportButton.setBorderPainted(false);
+        leftPanel.add(exportButton);
+
         // sidebar menu button
         sidebarButton = new JButton();
         sidebarButton.setIcon(FontIcon.of(BootstrapIcons.LIST, 40));
@@ -74,5 +99,17 @@ public class MenuBar extends JMenuBar {
 
     public JButton getGuidelinesButton() {
         return guidelinesButton;
+    }
+
+    public JButton getToggleAxesButton() {
+        return toggleAxesButton;
+    }
+
+    public JButton getHelpButton() {
+        return helpButton;
+    }
+
+    public JButton getExportButton() {
+        return exportButton;
     }
 }

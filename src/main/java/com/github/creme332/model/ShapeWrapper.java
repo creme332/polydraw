@@ -1,19 +1,21 @@
 package com.github.creme332.model;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.Point2D;
 
 public class ShapeWrapper {
     private Shape shape;
     private Color lineColor = Color.BLACK;
     private Color fillColor = Color.BLACK;
-    private Stroke stroke = new BasicStroke(1);
+    private LineType lineType = LineType.SOLID;
+    /**
+     * Coordinates plotted by user.
+     */
     private List<Point2D> plottedPoints = new ArrayList<>();
+    private int lineThickness;
 
     public List<Point2D> getPlottedPoints() {
         return plottedPoints;
@@ -27,18 +29,25 @@ public class ShapeWrapper {
         this.shape = shape;
     }
 
-    public ShapeWrapper(Shape shape, Color lineColor, Color fillColor, Stroke stroke) {
+    public ShapeWrapper(Color lineColor, Color fillColor, LineType lineType, int lineThickness) {
+        this.lineColor = lineColor;
+        this.fillColor = fillColor;
+        this.lineType = lineType;
+        this.lineThickness = lineThickness;
+    }
+
+    public ShapeWrapper(Shape shape, Color lineColor, Color fillColor, LineType lineType) {
         this.shape = shape;
         this.lineColor = lineColor;
         this.fillColor = fillColor;
-        this.stroke = stroke;
+        this.lineType = lineType;
     }
 
     public ShapeWrapper(ShapeWrapper wrapper) {
         shape = wrapper.shape;
         lineColor = wrapper.lineColor;
         fillColor = wrapper.fillColor;
-        stroke = wrapper.stroke;
+        lineType = wrapper.lineType;
         plottedPoints = wrapper.plottedPoints;
     }
 
@@ -62,15 +71,23 @@ public class ShapeWrapper {
         return fillColor;
     }
 
+    public void setLineThickness(int lineThickness) {
+        this.lineThickness = lineThickness;
+    }
+
+    public int getLineThickness() {
+        return lineThickness;
+    }
+
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
     }
 
-    public Stroke getStroke() {
-        return stroke;
+    public LineType getLineType() {
+        return lineType;
     }
 
-    public void setStroke(Stroke stroke) {
-        this.stroke = stroke;
+    public void setLineType(LineType lineType) {
+        this.lineType = lineType;
     }
 }

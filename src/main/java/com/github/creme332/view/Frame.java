@@ -1,14 +1,16 @@
 package com.github.creme332.view;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
 
+import com.github.creme332.model.AppState;
 import com.github.creme332.model.Screen;
+import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 /**
@@ -34,21 +36,19 @@ public class Frame extends JFrame {
     private SplashScreen splashScreen = new SplashScreen();
 
     /**
-     * A container for canvas and side menu
-     */
-    private JPanel mainScreen = new JPanel(new BorderLayout());
-
-    /**
-     * A sidemenu for main screen.
-     */
-    SideMenuPanel sideMenu = new SideMenuPanel();
-
-    /**
      * A menubar for main screen.
      */
     MenuBar menubar = null;
 
-    public Frame(Canvas canvas, MenuBar menubar, TutorialCenter tutorialCenter) throws InvalidPathException {
+    CanvasConsole canvasConsole;
+
+    JLayeredPane canvasScreen;
+
+    Canvas canvas;
+
+    TutorialCenter tutorialCenter;
+
+    public void initFrameProperties() throws InvalidPathException {
         // set frame title
         this.setTitle("polydraw");
 
@@ -69,22 +69,33 @@ public class Frame extends JFrame {
             this.setLocationRelativeTo(null);
         }
 
+    }
+
+    public Frame(AppState app)
+            throws InvalidPathException, InvalidIconSizeException {
+        initFrameProperties();
+
+        menubar = new MenuBar(app.getMenuModels());
+        canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getSideBarVisibility(), app.getMode());
+        canvas = new Canvas(app.getCanvasModel());
+        tutorialCenter = new TutorialCenter(app.getTutorialScreenModel());
+
         // add menubar to frame
-        this.menubar = menubar;
         setJMenuBar(menubar);
+
+        // setup layered pane
+        canvasScreen = new JLayeredPane();
+        canvasScreen.add(canvas, Integer.valueOf(1));
+        canvasScreen.add(canvasConsole, Integer.valueOf(2));
+
+        canvas.setBounds(0, 0, 600, 600);
+        canvasConsole.setBounds(0, 0, 600, 600);
 
         // setup screen container
         screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.toString());
-        screenContainer.add(mainScreen, Screen.MAIN_SCREEN.toString());
+        screenContainer.add(canvasScreen, Screen.MAIN_SCREEN.toString());
         screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.toString());
-
         this.add(screenContainer);
-
-        // add canvas to mainScreen
-        mainScreen.add(canvas, BorderLayout.CENTER);
-
-        // add side menu to main screen
-        mainScreen.add(sideMenu, BorderLayout.EAST);
 
         // display frame
         this.setVisible(true);
@@ -94,23 +105,18 @@ public class Frame extends JFrame {
         menubar.setVisible(visible);
     }
 
-    public void setSideBarVisibility(boolean visible) {
-        sideMenu.setVisible(visible);
-    }
-
     public void showScreen(Screen screen) {
         switch (screen) {
             case SPLASH_SCREEN:
                 cl.show(screenContainer, Screen.SPLASH_SCREEN.toString());
                 break;
             case MAIN_SCREEN:
+                requestFocus();
                 menubar.setVisible(true);
                 cl.show(screenContainer, Screen.MAIN_SCREEN.toString());
                 break;
             case TUTORIAL_SCREEN:
-                // hide menubar and sidemenu belonging to main screen
                 menubar.setVisible(false);
-                sideMenu.setVisible(false);
                 cl.show(screenContainer, Screen.TUTORIAL_SCREEN.toString());
                 break;
             default:
@@ -118,19 +124,23 @@ public class Frame extends JFrame {
         }
     }
 
-    public SideMenuPanel getSideMenuPanel() {
-        return sideMenu;
+    public JLayeredPane getCanvasScreen() {
+        return canvasScreen;
+    }
+
+    public TutorialCenter getTutorialCenter() {
+        return tutorialCenter;
+    }
+
+    public CanvasConsole getCanvasConsole() {
+        return canvasConsole;
     }
 
     public MenuBar getMyMenuBar() {
         return menubar;
     }
 
-    /**
-     * 
-     * @return Container panel for canvas and sidebar
-     */
-    public JPanel getMainPanel() {
-        return mainScreen;
+    public Canvas getMyCanvas() {
+        return canvas;
     }
 }

@@ -18,6 +18,10 @@ _Tell us which issue this PR fixes._
 
 This pull request Fixes #XX
 
+## Screenshot of UI
+
+_If you have modified the UI (e.g., added a component, screen, ...) include screenshots._
+
 ## Additional Information
 
 _If needed, provide additional information about your pull request._

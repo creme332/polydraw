@@ -15,8 +15,12 @@ import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
+import com.github.creme332.model.Screen;
 import com.github.creme332.view.MenuBar;
 
+/**
+ * Controller responsible for managing MenuBar.
+ */
 public class MenuBarController implements PropertyChangeListener {
     private MenuBar menubar;
     private AppState app;
@@ -65,11 +69,14 @@ public class MenuBarController implements PropertyChangeListener {
                     //add a MouseListener to each JMenuItem to update the tooltip text  when the item is clicked.
                     JMenu clickedMenu = (JMenu) e.getComponent();
 
-                    // add border to clicked menu
+                    // add border to clickedMenu
                     clickedMenu.setBorder(VISIBLE_BORDER);
 
                     // update global mode using menu model for clicked menu
                     app.setMode(menuModel.getActiveItem().getMode());
+
+                    // display updated toast
+                    app.activateToast();
                 }
             });
         }
@@ -88,6 +95,25 @@ public class MenuBarController implements PropertyChangeListener {
                 // toggle guidelines visibility
                 CanvasModel canvasModel = app.getCanvasModel();
                 canvasModel.setGuidelinesEnabled(!canvasModel.isGuidelinesEnabled());
+            }
+        });
+
+        menubar.getHelpButton().addActionListener(e -> app.switchScreen(Screen.TUTORIAL_SCREEN));
+
+        menubar.getToggleAxesButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // toggle axes visibility
+                CanvasModel canvasModel = app.getCanvasModel();
+                canvasModel.setAxesVisible(!canvasModel.isAxesVisible());
+            }
+        });
+
+        menubar.getExportButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // export canvas as image
+                app.startPrintingProcess();
             }
         });
     }
@@ -109,6 +135,9 @@ public class MenuBarController implements PropertyChangeListener {
 
             // update global mode
             app.setMode(newMode);
+
+            // display updated toast
+            app.activateToast();
         }
 
         if ("mode".equals(propertyName)) {

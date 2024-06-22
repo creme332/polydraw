@@ -13,13 +13,15 @@ import com.github.creme332.utils.exception.InvalidPathException;
 import static com.github.creme332.utils.IconLoader.loadIcon;
 
 public class AppState {
-    private PropertyChangeSupport support;
+    private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    private Mode mode;
+    private Mode mode = Mode.MOVE_CANVAS;
 
-    private boolean visibleSidebar;
+    private boolean visibleSidebar = false;
 
-    private CanvasModel canvasModel;
+    private CanvasModel canvasModel = new CanvasModel();
+
+    TutorialScreenModel tutorialModel = new TutorialScreenModel();
 
     private MenuModel[] menuModels;
 
@@ -35,12 +37,10 @@ public class AppState {
             System.out.println(e.getMessage());
             System.exit(0);
         }
+    }
 
-        visibleSidebar = false;
-        mode = Mode.MOVE_CANVAS;
-        canvasModel = new CanvasModel();
-
-        support = new PropertyChangeSupport(this);
+    public TutorialScreenModel getTutorialScreenModel() {
+        return tutorialModel;
     }
 
     private MenuModel[] createMenuModels() throws InvalidIconSizeException, InvalidPathException {
@@ -141,10 +141,20 @@ public class AppState {
         support.addPropertyChangeListener("sidebarVisibility", listener);
         support.addPropertyChangeListener("mode", listener);
         support.addPropertyChangeListener("screen", listener);
+        support.addPropertyChangeListener("printingCanvas", listener);
+        support.addPropertyChangeListener("activateToast", listener);
     }
 
     public boolean getSideBarVisibility() {
         return visibleSidebar;
+    }
+
+    /**
+     * Informs ToastController that toast must be displayed and updated. Property
+     * change is guaranteed to get fired.
+     */
+    public void activateToast() {
+        support.firePropertyChange("activateToast", null, mode);
     }
 
     public void setSideBarVisibility(boolean newValue) {
@@ -160,5 +170,9 @@ public class AppState {
         System.out.println("Mode: " + mode + " -> " + newMode);
         support.firePropertyChange("mode", mode, newMode);
         mode = newMode;
+    }
+
+    public void startPrintingProcess() {
+        support.firePropertyChange("printingCanvas", null, true);
     }
 }

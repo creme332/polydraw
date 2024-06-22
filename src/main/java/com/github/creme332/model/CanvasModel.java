@@ -1,5 +1,6 @@
 package com.github.creme332.model;
 
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -7,6 +8,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Color;
 
 public class CanvasModel {
     /**
@@ -33,18 +35,22 @@ public class CanvasModel {
      */
     public static final int TICK_PADDING_RIGHT = 30;
 
-    /**
-     * Distance in pixels between each unit on axes is out of sight.
-     */
-    int cellSize = 100;
-
     public static final int MAX_CELL_SIZE = 500;
+    public static final int MIN_CELL_SIZE = 1;
     public static final int DEFAULT_CELL_SIZE = 100;
-    public static final int MIN_CELL_SIZE = 30;
-    public static final int ZOOM_INCREMENT = 10;
+    public static final int ZOOM_INCREMENT = 1;
+
+    /**
+     * Distance in pixels between each unit on axes. It guaranteed to be within
+     * MIN_CELL_SIZEa and MAX_CELL_SIZE
+     */
+    int cellSize = Math.max(MIN_CELL_SIZE, Math.min(DEFAULT_CELL_SIZE, MAX_CELL_SIZE));
 
     private float labelFontSizeScaleFactor = 1.4F;
 
+    private LineType lineType = LineType.SOLID;
+    private int lineThickness = 3;
+    private Color fillColor = Color.BLACK;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     /**
@@ -60,6 +66,7 @@ public class CanvasModel {
     private List<ShapeWrapper> shapes = new ArrayList<>();
 
     private boolean enableGuidelines = true; // Variable to track guidelines visibility
+    private boolean axesVisible = true; // Variable to track axes visibility
 
     /**
      * 
@@ -134,7 +141,10 @@ public class CanvasModel {
      * @return
      */
     public Point2D toPolySpace(Point2D point) {
-        return getPolySpaceTransform().transform(point, null);
+        Point2D polySpaceMousePosition = getPolySpaceTransform().transform(point, null);
+
+        return new Point((int) Math.round(polySpaceMousePosition.getX()),
+                (int) Math.round(polySpaceMousePosition.getY()));
     }
 
     /**
@@ -144,17 +154,25 @@ public class CanvasModel {
      * @param zoomIn Zoom in if true, zoom out otherwise
      */
     public void updateCanvasZoom(boolean zoomIn) {
-        support.firePropertyChange("guidelines", null, zoomIn);
+        int newCellSize;
         if (zoomIn) {
-            setCellSize(Math.min(CanvasModel.MAX_CELL_SIZE, getCellSize() + CanvasModel.ZOOM_INCREMENT));
+            newCellSize = (Math.min(CanvasModel.MAX_CELL_SIZE, getCellSize() + CanvasModel.ZOOM_INCREMENT));
         } else {
-            setCellSize(Math.max(CanvasModel.MIN_CELL_SIZE, getCellSize() - CanvasModel.ZOOM_INCREMENT));
+            newCellSize = (Math.max(CanvasModel.MIN_CELL_SIZE, getCellSize() - CanvasModel.ZOOM_INCREMENT));
         }
+        support.firePropertyChange("cellSize", cellSize, newCellSize);
+        cellSize = newCellSize;
+    }
+
+    public void resetZoom() {
+        support.firePropertyChange("cellSize", cellSize, DEFAULT_CELL_SIZE);
+        cellSize = DEFAULT_CELL_SIZE;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener("guidelines", listener);
-        support.addPropertyChangeListener("zoomChange", listener);
+        support.addPropertyChangeListener("enableGuidelines", listener);
+        support.addPropertyChangeListener("axesVisible", listener);
+        support.addPropertyChangeListener("cellSize", listener);
     }
 
     public List<ShapeWrapper> getShapes() {
@@ -171,10 +189,6 @@ public class CanvasModel {
 
     public float getLabelFontSizeSF() {
         return labelFontSizeScaleFactor;
-    }
-
-    public void setCellSize(int newCellSize) {
-        cellSize = newCellSize;
     }
 
     public int getXZero() {
@@ -198,7 +212,40 @@ public class CanvasModel {
     }
 
     public void setGuidelinesEnabled(boolean enableGuidelines) {
-        support.firePropertyChange("guidelines", this.enableGuidelines, enableGuidelines);
+        support.firePropertyChange("enableGuidelines", this.enableGuidelines, enableGuidelines);
         this.enableGuidelines = enableGuidelines;
+    }
+
+    public LineType getLineType() {
+        return lineType;
+    }
+
+    public void setLineType(LineType lineType) {
+        this.lineType = lineType;
+    }
+
+    public int getLineThickness() {
+        return lineThickness;
+    }
+
+    public void setLineThickness(int lineThickness) {
+        this.lineThickness = lineThickness;
+    }
+
+    public Color getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
+    }
+
+    public boolean isAxesVisible() {
+        return axesVisible;
+    }
+
+    public void setAxesVisible(boolean axesVisible) {
+        support.firePropertyChange("axesVisible", this.axesVisible, axesVisible);
+        this.axesVisible = axesVisible;
     }
 }
