@@ -1,6 +1,9 @@
 package com.github.creme332.view.tutorial;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
+import static com.github.creme332.utils.IconLoader.getScaledDimension;
+
+import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
@@ -14,7 +17,8 @@ public class DrawLineTutorial extends TutorialPanel {
     private static final String IMAGE_PATH_PREFIX = "/images/tutorials/draw-line/";
 
     public DrawLineTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super("Draw Line", loadIcon(IMAGE_PATH_PREFIX + "background.png"));
+        super("Draw Line", loadIcon(IMAGE_PATH_PREFIX + "background.png",
+                getScaledDimension(new Dimension(795, 580), TutorialCard.IMAGE_DIMENSION)));
 
         try {
             // Insert text
@@ -22,7 +26,7 @@ public class DrawLineTutorial extends TutorialPanel {
                     "In this tutorial you will learn how to draw a line using DDA or Bresenham line algorithm.\n\n",
                     regular);
 
-            ImageIcon icon = loadIcon(IMAGE_PATH_PREFIX + "draw-line.gif", 593, 1000);
+            ImageIcon icon = loadIcon(IMAGE_PATH_PREFIX + "draw-line.gif", new Dimension(1000, 593));
             StyleConstants.setIcon(imageStyle, icon);
             doc.insertString(doc.getLength(), " ", imageStyle);
 
