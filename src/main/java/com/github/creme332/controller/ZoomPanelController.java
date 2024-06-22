@@ -1,5 +1,6 @@
 package com.github.creme332.controller;
 
+import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.view.ZoomPanel;
 
@@ -7,16 +8,17 @@ import com.github.creme332.view.ZoomPanel;
  * Controller for ZoomPanel in CanvasConsole.
  */
 public class ZoomPanelController {
-    CanvasModel model;
+    CanvasModel canvasModel;
     ZoomPanel view;
 
-    public ZoomPanelController(CanvasModel model, ZoomPanel view) {
-        this.model = model;
+    public ZoomPanelController(AppState appState, ZoomPanel view) {
+        this.canvasModel = appState.getCanvasModel();
         this.view = view;
 
         // Add action listeners for the zoom panel buttons
-        view.getHomeButton().addActionListener(e -> model.resetZoom());
-        view.getZoomInButton().addActionListener(e -> model.updateCanvasZoom(true));
-        view.getZoomOutButton().addActionListener(e -> model.updateCanvasZoom(false));
+        view.getHomeButton().addActionListener(e -> canvasModel.resetZoom());
+        view.getZoomInButton().addActionListener(e -> canvasModel.updateCanvasZoom(true));
+        view.getZoomOutButton().addActionListener(e -> canvasModel.updateCanvasZoom(false));
+        view.getFullScreenButton().addActionListener(e -> appState.setMaximizeFrame(!appState.isMaximizeFrame()));
     }
 }

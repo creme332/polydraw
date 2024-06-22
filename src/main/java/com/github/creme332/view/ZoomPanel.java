@@ -18,6 +18,7 @@ public class ZoomPanel extends JPanel {
     private JButton homeButton = new CircularButton();
     private JButton zoomInButton = new CircularButton();
     private JButton zoomOutButton = new CircularButton();
+    private JButton fullScreenButton = new CircularButton();
 
     public ZoomPanel() {
         setOpaque(false);
@@ -28,6 +29,12 @@ public class ZoomPanel extends JPanel {
         homeButton = createZoomPanelButton(BootstrapIcons.HOUSE);
         zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
         zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
+        fullScreenButton = createZoomPanelButton(BootstrapIcons.ARROWS_FULLSCREEN);
+
+        // add tooltips to zoom panel buttons
+        homeButton.setToolTipText("Reset zoom");
+        zoomInButton.setToolTipText("Zoom in");
+        zoomOutButton.setToolTipText("Zoom out button");
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(20, 0, 0, 0);
@@ -44,6 +51,8 @@ public class ZoomPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 2;
         this.add(zoomOutButton, gbc);
+        gbc.gridy = 3;
+        this.add(fullScreenButton, gbc); // Add new button to panel
     }
 
     private JButton createZoomPanelButton(Ikon ikon) {
@@ -70,5 +79,9 @@ public class ZoomPanel extends JPanel {
 
     public JButton getZoomOutButton() {
         return zoomOutButton;
+    }
+
+    public JButton getFullScreenButton() {
+        return fullScreenButton;
     }
 }
