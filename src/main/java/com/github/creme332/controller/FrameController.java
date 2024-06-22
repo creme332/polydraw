@@ -30,6 +30,9 @@ public class FrameController implements PropertyChangeListener {
         this.frame = frame;
         this.app = model;
 
+        // create controller for menubar of frame
+        new MenuBarController(app, frame.getMyMenuBar());
+
         model.addPropertyChangeListener(this);
 
         frame.addComponentListener(new ComponentAdapter() {

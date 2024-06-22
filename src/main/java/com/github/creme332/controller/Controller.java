@@ -17,15 +17,12 @@ public class Controller {
         try {
             Frame frame = new Frame(app);
             frameController = new FrameController(app, frame);
-            // create controllers for views
-            new MenuBarController(app, frame.getMyMenuBar());
-            new ZoomPanelController(app.getCanvasModel(),
-                    frame.getCanvasConsole().getZoomPanel(), app);
+
+            // create controllers for main screens
             new CanvasController(app, frame.getMyCanvas());
+            new CanvasConsoleController(app, frame.getCanvasConsole());
             new TutorialScreenController(app, frame.getTutorialCenter());
-            new ToolBarController(frame.getCanvasConsole().getToolbar(),
-                    app.getCanvasModel());
-            new SideMenuController(app, frame.getCanvasConsole().getSidebar());
+
             // play start animation
             frameController.playStartAnimation();
         } catch (InvalidIconSizeException | InvalidPathException e) {
