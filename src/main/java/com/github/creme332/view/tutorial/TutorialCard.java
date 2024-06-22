@@ -12,20 +12,30 @@ public class TutorialCard extends JPanel {
     private String heading;
     private transient Icon icon;
 
+    /**
+     * Dimensions of tutorial card.
+     */
+    public static final Dimension DIMENSION = new Dimension(450, 300);
+
+    /**
+     * Dimensions of image on tutorial card.
+     */
+    public static final Dimension IMAGE_DIMENSION = new Dimension(DIMENSION.width, DIMENSION.height - 100);
+
     public TutorialCard(String heading, Icon icon) {
         this.heading = heading;
         this.icon = icon;
 
         // Set layout manager
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension(300, 300));
+        setPreferredSize(DIMENSION);
+
         // set border
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         // Create image container
         JPanel imageContainer = new JPanel(new BorderLayout());
-        // imageContainer.setBackground(Color.LIGHT_GRAY);
-        imageContainer.setPreferredSize(new Dimension(300, 200));
+        imageContainer.setPreferredSize(new Dimension(DIMENSION.width, DIMENSION.height - IMAGE_DIMENSION.height));
 
         // add image to image container
         JLabel image = new JLabel();
