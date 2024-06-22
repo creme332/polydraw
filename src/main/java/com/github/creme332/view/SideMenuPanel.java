@@ -10,15 +10,17 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
 
 public class SideMenuPanel extends JPanel {
     // Buttons
-    JButton newCanvasButton = new JButton("New Canvas", FontIcon.of(BootstrapIcons.FILE_EARMARK, 20));
-    JButton exportImageButton = new JButton("Export Image", FontIcon.of(BootstrapIcons.IMAGE, 20));
-    JButton tutorialsButton = new JButton("Tutorials", FontIcon.of(BootstrapIcons.BOOK, 20));
+    JButton newCanvasButton = createButton("New Canvas", BootstrapIcons.FILE_EARMARK);
+    JButton exportImageButton = createButton("Export Image", BootstrapIcons.IMAGE);
+    JButton tutorialsButton = createButton("Tutorials", BootstrapIcons.BOOK);
 
     // Settings
     JLabel settingsLabel = new JLabel("Settings");
@@ -36,28 +38,17 @@ public class SideMenuPanel extends JPanel {
         // General settings
         this.setPreferredSize(new Dimension(275, 600));
 
+        // Adding buttons
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(0, 0, 0, 0);
-
-        // Button settings
-        newCanvasButton.setFocusPainted(false);
-        exportImageButton.setFocusPainted(false);
-        tutorialsButton.setFocusPainted(false);
-
-        // Adding buttons
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(20, 10, 10, 10);
+        gbc.weightx = 1;
+
         add(newCanvasButton, gbc);
 
         gbc.gridy++;
-        gbc.insets = new Insets(10, 10, 10, 10);
         add(exportImageButton, gbc);
 
         gbc.gridy++;
@@ -92,5 +83,16 @@ public class SideMenuPanel extends JPanel {
         gbc.gridy++;
         gbc.insets = new Insets(0, 10, 10, 10);
         add(fontSizeSlider, gbc);
+    }
+
+    private JButton createButton(String text, BootstrapIcons icon) {
+        JButton button = new JButton(text, FontIcon.of(icon, 20));
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setHorizontalAlignment(SwingConstants.LEFT);
+        button.setIconTextGap(10);
+        button.setBorder(new EmptyBorder(5, 5, 5, 5));
+        return button;
     }
 }
