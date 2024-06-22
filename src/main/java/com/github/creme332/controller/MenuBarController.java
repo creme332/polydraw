@@ -62,7 +62,7 @@ public class MenuBarController implements PropertyChangeListener {
                     menubar.getMenu(activeMenuIndex).setBorder(defaultBorder);
 
                     activeMenuIndex = menuIndex;
-
+                    //add a MouseListener to each JMenuItem to update the tooltip text  when the item is clicked.
                     JMenu clickedMenu = (JMenu) e.getComponent();
 
                     // add border to clicked menu
