@@ -8,6 +8,6 @@ public class CanvasConsoleController {
         new ToolBarController(console.getToolbar(), app.getCanvasModel());
         new SideMenuController(app, console.getSidebar());
         new ToastController(app, console.getToast());
-        new ZoomPanelController(app.getCanvasModel(), console.getZoomPanel(), app);
+        new ZoomPanelController(app, console.getZoomPanel());
     }
 }
