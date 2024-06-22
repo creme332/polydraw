@@ -30,6 +30,12 @@ public class ZoomPanel extends JPanel {
         zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
         zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
         fullScreenButton = createZoomPanelButton(BootstrapIcons.ARROWS_FULLSCREEN);
+
+        // add tooltips to zoom panel buttons
+        homeButton.setToolTipText("Reset zoom");
+        zoomInButton.setToolTipText("Zoom in");
+        zoomOutButton.setToolTipText("Zoom out button");
+
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(20, 0, 0, 0);
         gbc.gridx = 0;
