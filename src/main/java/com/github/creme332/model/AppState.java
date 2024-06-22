@@ -18,7 +18,7 @@ public class AppState {
     private Mode mode = Mode.MOVE_CANVAS;
 
     private boolean visibleSidebar = false;
-    private boolean maximizeFrame = true; // New attribute
+    private boolean maximizeFrame = false;
     private CanvasModel canvasModel = new CanvasModel();
 
     TutorialScreenModel tutorialModel = new TutorialScreenModel();
@@ -141,7 +141,7 @@ public class AppState {
         support.addPropertyChangeListener("sidebarVisibility", listener);
         support.addPropertyChangeListener("mode", listener);
         support.addPropertyChangeListener("screen", listener);
-        support.addPropertyChangeListener("maximizeFrame", listener); // New listener for maximizeFrame
+        support.addPropertyChangeListener("maximizeFrame", listener);
     }
 
     public boolean getSideBarVisibility() {
