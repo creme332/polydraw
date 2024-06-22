@@ -66,8 +66,7 @@ public class FrameController implements PropertyChangeListener {
         // Set initial frame state
         if (model.isMaximizeFrame()) {
             frame.setExtendedState(frame.getExtendedState() |
-
-                    Frame.MAXIMIZED_BOTH);
+                    java.awt.Frame.MAXIMIZED_BOTH);
         }
     }
 
@@ -94,8 +93,8 @@ public class FrameController implements PropertyChangeListener {
         // update canvas control dimensions
         canvasControl.setBounds(0, 0, frameWidth - 80,
                 frameHeight - menuBarHeight - 100);
-        // temporarily hide the canvas control. without this, the canvas console
 
+        // temporarily hide the canvas control. without this, the canvas console
         // does not render its new size when frame is maximized.
         canvasControl.setVisible(false);
         canvasControl.setVisible(true);
@@ -106,7 +105,6 @@ public class FrameController implements PropertyChangeListener {
         System.out.format("Sidebar dimensions = %d x %d %n", sideBarWidth,
                 frameHeight - menuBarHeight);
         frame.getCanvasConsole().getSidebar().setPreferredSize(new Dimension(sideBarWidth,
-
                 frameHeight - menuBarHeight));
 
         // update canvas position
@@ -152,14 +150,14 @@ public class FrameController implements PropertyChangeListener {
                 frame.showScreen(Screen.TUTORIAL_SCREEN);
 
             resizeEverything();
-        } else if ("maximizeFrame".equals(property)) { // Listen for maximizeFrame changes
+        }
 
-            if ((boolean) e.getNewValue()) {
-                frame.setExtendedState(frame.getExtendedState() |
-
-                        Frame.MAXIMIZED_BOTH);
+        if ("maximizeFrame".equals(property)) {
+            boolean maximizeFrame = (boolean) e.getNewValue();
+            if (maximizeFrame) {
+                frame.setExtendedState(frame.getExtendedState() | java.awt.Frame.MAXIMIZED_BOTH);
             } else {
-                frame.setExtendedState(Frame.NORMAL);
+                frame.setExtendedState(java.awt.Frame.NORMAL);
             }
         }
     }
