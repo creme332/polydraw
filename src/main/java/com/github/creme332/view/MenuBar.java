@@ -1,7 +1,7 @@
 package com.github.creme332.view;
 
 import java.awt.FlowLayout;
-
+import com.github.creme332.view.Menu;
 import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -29,9 +29,10 @@ public class MenuBar extends JMenuBar {
 
         // add menus to menubar
         for (MenuModel menuModel : menus) {
-            JMenu menu = new JMenu();
+            Menu menu = new Menu();// Use your custom Menu class
             menu.setIcon(menuModel.getActiveItem().getIcon());
             menu.setToolTipText(menuModel.getActiveItem().getName());
+
 
             for (MenuItemModel item : menuModel.getItems()) {
                 JMenuItem menuItem = new JMenuItem(item.getName(), item.getIcon());
