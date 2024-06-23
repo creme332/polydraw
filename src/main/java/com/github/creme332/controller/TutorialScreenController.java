@@ -2,6 +2,7 @@ package com.github.creme332.controller;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.event.DocumentEvent;
@@ -71,17 +72,32 @@ public class TutorialScreenController {
 
     }
 
+    /**
+     * Determines which cards should be displayed based on search criteria and
+     * updates view.
+     */
     private void handleSearch() {
-        String query = view.getSearchField().getText().trim();
+        final String searchQuery = view.getSearchField().getText().trim();
 
-        boolean showAllCards = query.length() < 3 ||
-                query.equals(TutorialCenter.SEARCH_PLACEHOLDER)
-                || query.isEmpty();
+        final boolean showAllCards = searchQuery.length() < 3 ||
+                searchQuery.equals(TutorialCenter.SEARCH_PLACEHOLDER)
+                || searchQuery.isEmpty();
 
-        for (TutorialCard card : view.getTutorialCards()) {
-            card.setVisible(
-                    showAllCards ||
-                            FuzzySearching.isSimilar(card.getHeading().toLowerCase(), query.toLowerCase()));
+        if (showAllCards) {
+            view.refreshGrid(view.getTutorialCards());
+            return;
         }
+
+        final ArrayList<TutorialCard> visibleTutorialCards = new ArrayList<>();
+
+        for (int i = 0; i < view.getTutorialScreens().size(); i++) {
+            TutorialPanel tutorial = view.getTutorialScreens().get(i);
+
+            if (FuzzySearching.match(searchQuery, tutorial.getModel().getKeywords())) {
+                visibleTutorialCards.add(view.getTutorialCards().get(i));
+            }
+        }
+
+        view.refreshGrid(visibleTutorialCards);
     }
 }
