@@ -21,8 +21,6 @@ public class AppState {
     private boolean maximizeFrame = false;
     private CanvasModel canvasModel = new CanvasModel();
 
-    TutorialScreenModel tutorialModel = new TutorialScreenModel();
-
     private MenuModel[] menuModels;
 
     Map<Mode, Integer> modeToMenuMapper;
@@ -37,10 +35,6 @@ public class AppState {
             System.out.println(e.getMessage());
             System.exit(0);
         }
-    }
-
-    public TutorialScreenModel getTutorialScreenModel() {
-        return tutorialModel;
     }
 
     private MenuModel[] createMenuModels() throws InvalidIconSizeException, InvalidPathException {
@@ -142,6 +136,8 @@ public class AppState {
         support.addPropertyChangeListener("mode", listener);
         support.addPropertyChangeListener("screen", listener);
         support.addPropertyChangeListener("maximizeFrame", listener);
+        support.addPropertyChangeListener("activateToast", listener);
+        support.addPropertyChangeListener("printingCanvas", listener);
     }
 
     public boolean getSideBarVisibility() {

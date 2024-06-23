@@ -1,12 +1,18 @@
 package com.github.creme332.view;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import org.kordamp.ikonli.swing.FontIcon;
 
@@ -25,11 +31,17 @@ public class MenuBar extends JMenuBar {
     private JButton helpButton;
     private JButton exportButton; // Button to export canvas as image
 
+    private List<JMenu> jmenus = new ArrayList<>();
+
     public MenuBar(MenuModel[] menus) throws InvalidIconSizeException, InvalidPathException {
+
+        setPreferredSize(new Dimension(getWidth(), 70));
+        setBorder(new EmptyBorder(new Insets(7, 0, 7, 0)));
 
         // add menus to menubar
         for (MenuModel menuModel : menus) {
-            JMenu menu = new JMenu();
+            JMenu menu = new RoundedMenu();
+            jmenus.add(menu);
             menu.setIcon(menuModel.getActiveItem().getIcon());
             menu.setToolTipText(menuModel.getActiveItem().getName());
 
@@ -38,7 +50,7 @@ public class MenuBar extends JMenuBar {
                 menu.add(menuItem);
                 menuItem.addActionListener(e -> menu.setToolTipText(item.getName()));
             }
-
+            this.add(Box.createHorizontalStrut(10));
             this.add(menu);
         }
 
@@ -95,6 +107,17 @@ public class MenuBar extends JMenuBar {
         sidebarButton.setToolTipText("Toggle sidebar");
 
         this.add(leftPanel);
+    }
+
+    /**
+     * Use this method to get the i-th JMenu in the menubar. Do not use the default
+     * getMenu() as it does not account for empty spaces and counts buttons.
+     * 
+     * @param i
+     * @return
+     */
+    public JMenu getMyMenu(int i) {
+        return jmenus.get(i);
     }
 
     public JButton getSideBarButton() {

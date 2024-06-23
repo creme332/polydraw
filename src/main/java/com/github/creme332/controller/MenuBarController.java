@@ -40,11 +40,11 @@ public class MenuBarController implements PropertyChangeListener {
         app.addPropertyChangeListener(this);
 
         activeMenuIndex = app.getModeToMenuMapper().get(app.getMode());
-        defaultBorder = menubar.getMenu(0).getBorder();
+        defaultBorder = menubar.getMyMenu(0).getBorder();
 
         // for each menu in menubar
         for (int i = 0; i < menuModels.length; i++) {
-            JMenu jMenu = menubar.getMenu(i);
+            JMenu jMenu = menubar.getMyMenu(i);
             MenuModel menuModel = menuModels[i];
 
             // listen to changes in each menu model
@@ -63,7 +63,7 @@ public class MenuBarController implements PropertyChangeListener {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     // remove border from previously active menu
-                    menubar.getMenu(activeMenuIndex).setBorder(defaultBorder);
+                    menubar.getMyMenu(activeMenuIndex).setBorder(defaultBorder);
 
                     activeMenuIndex = menuIndex;
                     //add a MouseListener to each JMenuItem to update the tooltip text  when the item is clicked.
@@ -125,13 +125,13 @@ public class MenuBarController implements PropertyChangeListener {
             Mode newMode = (Mode) e.getNewValue();
 
             // remove border from previously active menu
-            menubar.getMenu(activeMenuIndex).setBorder(defaultBorder);
+            menubar.getMyMenu(activeMenuIndex).setBorder(defaultBorder);
 
             // store index of clicked menu
             activeMenuIndex = app.getModeToMenuMapper().get(newMode);
 
             // add border to clicked menu
-            menubar.getMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
+            menubar.getMyMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
 
             // update global mode
             app.setMode(newMode);
@@ -144,13 +144,13 @@ public class MenuBarController implements PropertyChangeListener {
             Mode newMode = (Mode) e.getNewValue();
 
             // remove border from previously active menu
-            menubar.getMenu(activeMenuIndex).setBorder(defaultBorder);
+            menubar.getMyMenu(activeMenuIndex).setBorder(defaultBorder);
 
             // store index of new active menu
             activeMenuIndex = app.getModeToMenuMapper().get(newMode);
 
             // add border to clicked menu
-            menubar.getMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
+            menubar.getMyMenu(activeMenuIndex).setBorder(VISIBLE_BORDER);
         }
     }
 }
