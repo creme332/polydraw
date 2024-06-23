@@ -18,19 +18,19 @@ public class DrawLine extends DrawController {
 
     private void initWrapper(Point2D firstPoint) {
         // create a shape wrapper
-        currentWrapper = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+        preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
                 canvasModel.getLineType(),
                 canvasModel.getLineThickness());
 
         // save plotted point
-        currentWrapper.getPlottedPoints().add(firstPoint);
+        preview.getPlottedPoints().add(firstPoint);
     }
 
     private void drawShapePreview(Point2D to) {
-        Point2D from = currentWrapper.getPlottedPoints().get(0);
+        Point2D from = preview.getPlottedPoints().get(0);
 
         Line2D line = new Line2D.Double(from, to);
-        currentWrapper.setShape(line);
+        preview.setShape(line);
         canvas.repaint();
     }
 
@@ -41,7 +41,7 @@ public class DrawLine extends DrawController {
 
     @Override
     public void handleMouseMoved(Point2D polySpaceMousePosition) {
-        if (currentWrapper != null && currentWrapper.getPlottedPoints().size() == 1) {
+        if (preview != null && preview.getPlottedPoints().size() == 1) {
             // number of plotted points is 1
             drawShapePreview(polySpaceMousePosition);
         }
@@ -49,30 +49,29 @@ public class DrawLine extends DrawController {
 
     @Override
     public void handleMousePressed(Point2D polySpaceMousePosition) {
-        if (currentWrapper == null) {
+        if (preview == null) {
             // first coordinate of line has just been selected
 
             // initialize wrapper with plotted point
             initWrapper(polySpaceMousePosition);
 
             // save wrapper to canvas model
-            canvasModel.getShapes().add(currentWrapper);
+            canvasModel.getShapes().add(preview);
             return;
         }
 
         // second coordinate has now been selected
-        Point2D lineStart = currentWrapper.getPlottedPoints().get(0);
+        Point2D lineStart = preview.getPlottedPoints().get(0);
 
         Line2D line = new Line2D.Double();
         line.setLine(lineStart, polySpaceMousePosition);
 
-        currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
-        currentWrapper.setShape(line);
+        preview.getPlottedPoints().add(polySpaceMousePosition);
+        preview.setShape(line);
 
         canvas.repaint();
 
         // reset wrapper
-        currentWrapper = null;
-
-    }
+        preview = null;
+    } 
 }

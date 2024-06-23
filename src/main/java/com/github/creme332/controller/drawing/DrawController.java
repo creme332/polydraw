@@ -22,7 +22,7 @@ public abstract class DrawController {
     /**
      * Wrapper for shape currently being drawn.
      */
-    protected ShapeWrapper currentWrapper;
+    protected ShapeWrapper preview;
 
     protected DrawController(AppState app, Canvas canvas) {
         this.app = app;
@@ -84,7 +84,7 @@ public abstract class DrawController {
      * invoked when mode changes while drawing was ongoing.
      */
     public void disposePreview() {
-        canvasModel.getShapes().remove(currentWrapper);
-        currentWrapper = null;
+        canvasModel.getShapes().remove(preview);
+        preview = null;
     }
 }

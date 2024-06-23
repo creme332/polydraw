@@ -18,11 +18,11 @@ public class DrawEllipse extends DrawController {
 
     @Override
     public void handleMouseMoved(Point2D polySpaceMousePosition) {
-        if (getCanvasMode() == Mode.DRAW_ELLIPSE && currentWrapper != null
-                && currentWrapper.getPlottedPoints().size() == 2) {
+        if (getCanvasMode() == Mode.DRAW_ELLIPSE && preview != null
+                && preview.getPlottedPoints().size() == 2) {
             // create an ellipse
-            Point2D center = currentWrapper.getPlottedPoints().get(0);
-            int ry = (int) Math.abs(currentWrapper.getPlottedPoints().get(1).distance(center));
+            Point2D center = preview.getPlottedPoints().get(0);
+            int ry = (int) Math.abs(preview.getPlottedPoints().get(1).distance(center));
             int rx = (int) Math.abs(polySpaceMousePosition.distance(center));
 
             if (rx == 0 || ry == 0) {
@@ -32,37 +32,37 @@ public class DrawEllipse extends DrawController {
             int[][] coordinates = ellipseCalculator.getOrderedPoints((int) center.getX(), (int) center.getY(),
                     rx, ry);
             Polygon ellipse = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
-            currentWrapper.setShape(ellipse);
+            preview.setShape(ellipse);
             canvas.repaint();
         }
     }
 
     @Override
     public void handleMousePressed(Point2D polySpaceMousePosition) {
-        if (currentWrapper == null) {
+        if (preview == null) {
             // center of ellipse has been selected
 
             // create a shape wrapper
-            currentWrapper = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+            preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
                     canvasModel.getLineType(),
                     canvasModel.getLineThickness());
-            currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
+            preview.getPlottedPoints().add(polySpaceMousePosition);
 
             // save wrapper
-            canvasModel.getShapes().add(currentWrapper);
+            canvasModel.getShapes().add(preview);
 
         } else {
-            if (currentWrapper.getPlottedPoints().size() == 1) {
+            if (preview.getPlottedPoints().size() == 1) {
                 // second point has now been selected
-                currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
+                preview.getPlottedPoints().add(polySpaceMousePosition);
             } else {
                 // third point has been selected
-                currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
+                preview.getPlottedPoints().add(polySpaceMousePosition);
 
                 // create an ellipse
-                Point2D center = currentWrapper.getPlottedPoints().get(0);
-                int ry = (int) Math.abs(currentWrapper.getPlottedPoints().get(1).distance(center));
-                int rx = (int) Math.abs(currentWrapper.getPlottedPoints().get(2).distance(center));
+                Point2D center = preview.getPlottedPoints().get(0);
+                int ry = (int) Math.abs(preview.getPlottedPoints().get(1).distance(center));
+                int rx = (int) Math.abs(preview.getPlottedPoints().get(2).distance(center));
 
                 if (rx == 0 || ry == 0) {
                     return;
@@ -72,9 +72,9 @@ public class DrawEllipse extends DrawController {
                         rx, ry);
                 Polygon ellipse = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
 
-                currentWrapper.setShape(ellipse);
+                preview.setShape(ellipse);
 
-                currentWrapper = null;
+                preview = null;
             }
         }
 

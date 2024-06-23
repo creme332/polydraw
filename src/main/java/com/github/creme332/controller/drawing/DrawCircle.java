@@ -18,16 +18,16 @@ public class DrawCircle extends DrawController {
 
     @Override
     public void handleMouseMoved(Point2D polySpaceMousePosition) {
-        if (getCanvasMode() == Mode.DRAW_CIRCLE_DYNAMIC && currentWrapper != null
-                && currentWrapper.getPlottedPoints().size() == 1) {
+        if (getCanvasMode() == Mode.DRAW_CIRCLE_DYNAMIC && preview != null
+                && preview.getPlottedPoints().size() == 1) {
 
-            Point2D center = currentWrapper.getPlottedPoints().get(0);
+            Point2D center = preview.getPlottedPoints().get(0);
             double radius = polySpaceMousePosition.distance(center);
             int roundedRadius = (int) Math.round(radius);
             if (roundedRadius == 0)
                 return;
 
-            currentWrapper.setShape(getCircle((int) center.getX(), (int) center.getY(), roundedRadius));
+            preview.setShape(getCircle((int) center.getX(), (int) center.getY(), roundedRadius));
             canvas.repaint();
         }
 
@@ -41,32 +41,32 @@ public class DrawCircle extends DrawController {
     @Override
     public void handleMousePressed(Point2D polySpaceMousePosition) {
         if (getCanvasMode() == Mode.DRAW_CIRCLE_DYNAMIC) {
-            if (currentWrapper == null) {
+            if (preview == null) {
                 // center has been selected
 
                 // create a shape wrapper
-                currentWrapper = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+                preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
                         canvasModel.getLineType(),
                         canvasModel.getLineThickness());
-                currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
+                preview.getPlottedPoints().add(polySpaceMousePosition);
 
                 // save wrapper
-                canvasModel.getShapes().add(currentWrapper);
+                canvasModel.getShapes().add(preview);
 
             } else {
                 // second point has now been selected
-                currentWrapper.getPlottedPoints().add(polySpaceMousePosition);
+                preview.getPlottedPoints().add(polySpaceMousePosition);
 
                 // create a circle
-                Point2D center = currentWrapper.getPlottedPoints().get(0);
+                Point2D center = preview.getPlottedPoints().get(0);
                 double radius = polySpaceMousePosition.distance(center);
                 int roundedRadius = (int) Math.round(radius);
                 if (roundedRadius == 0)
                     return;
 
-                currentWrapper.setShape(getCircle((int) center.getX(), (int) center.getY(), roundedRadius));
+                preview.setShape(getCircle((int) center.getX(), (int) center.getY(), roundedRadius));
 
-                currentWrapper = null;
+                preview = null;
             }
         }
     }
@@ -75,5 +75,4 @@ public class DrawCircle extends DrawController {
     public boolean shouldDraw() {
         return getCanvasMode() == Mode.DRAW_CIRCLE_DYNAMIC || getCanvasMode() == Mode.DRAW_CIRCLE_FIXED;
     }
-
 }
