@@ -38,12 +38,11 @@ public class CanvasController implements PropertyChangeListener {
     private AppState app;
     private CanvasModel model;
 
-    /**
-     * Wrapper for shape currently being drawn.
-     */
-    private ShapeWrapper currentWrapper;
-
     private ShapeWrapper shadowPointWrapper = new ShapeWrapper();
+
+    private DrawLine lineDrawer;
+    private DrawCircle circleDrawer;
+    private DrawEllipse ellipseDrawer;
 
     public CanvasController(AppState app, Canvas canvas) {
         this.app = app;
@@ -55,9 +54,9 @@ public class CanvasController implements PropertyChangeListener {
         app.addPropertyChangeListener(this);
 
         // initialize drawing controllers
-        new DrawLine(app, canvas);
-        new DrawCircle(app, canvas);
-        new DrawEllipse(app, canvas);
+        lineDrawer = new DrawLine(app, canvas);
+        circleDrawer = new DrawCircle(app, canvas);
+        ellipseDrawer = new DrawEllipse(app, canvas);
 
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
@@ -187,11 +186,13 @@ public class CanvasController implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
 
-        // if mode from AppState has changed while a shape is being drawn
-        if ("mode".equals(propertyName) && currentWrapper != null) {
-            // erase incomplete shape
-            model.getShapes().remove(currentWrapper);
-            currentWrapper = null;
+        // if mode from AppState has changed
+        if ("mode".equals(propertyName)) {
+            lineDrawer.disposePreview();
+            circleDrawer.disposePreview();
+            ellipseDrawer.disposePreview();
+
+            // update canvas to erase any possible incomplete shape
             canvas.repaint();
             return;
         }

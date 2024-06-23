@@ -45,7 +45,6 @@ public abstract class DrawController {
                     return;
                 handleMousePressed(canvasModel.toPolySpace(e.getPoint()));
             }
-
         });
     }
 
@@ -79,4 +78,13 @@ public abstract class DrawController {
      * @return
      */
     public abstract boolean shouldDraw();
+
+    /**
+     * Reset controller to its initial state. For example, this method will be
+     * invoked when mode changes while drawing was ongoing.
+     */
+    public void disposePreview() {
+        canvasModel.getShapes().remove(currentWrapper);
+        currentWrapper = null;
+    }
 }
