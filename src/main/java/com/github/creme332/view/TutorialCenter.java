@@ -20,7 +20,7 @@ public class TutorialCenter extends JPanel {
     private JTextField searchField;
     private ArrayList<TutorialCard> tutorialCards = new ArrayList<>();
     private ArrayList<TutorialPanel> tutorialScreens = new ArrayList<>();
-
+    JPanel gridPanel;
     /**
      * Layout used for screenContainer for swapping between tutorial center and
      * tutorial page.
@@ -95,23 +95,45 @@ public class TutorialCenter extends JPanel {
         topPanel.add(searchField, BorderLayout.CENTER);
 
         // Create the grid panel to hold GridItems
-        final int GRID_GAP = 10; // px
-        final int IDEAL_COL_COUNT = 2;
-        final int ROW_COUNT = (int) Math.ceil(tutorialCards.size() / (double) IDEAL_COL_COUNT);
-
-        JPanel gridPanel = new JPanel(new GridLayout(ROW_COUNT, IDEAL_COL_COUNT, GRID_GAP, GRID_GAP));
-        gridPanel.setBorder(new EmptyBorder(new Insets(GRID_GAP, GRID_GAP, 0, 0)));
+        gridPanel = new JPanel(new GridBagLayout());
+        gridPanel.setBorder(new EmptyBorder(new Insets(10, 10, 0, 0)));
 
         // add tutorial cards to grid
-        for (TutorialCard card : tutorialCards) {
-            gridPanel.add(card);
-        }
+        refreshGrid(tutorialCards);
 
         // Wrap gridPanel in a JScrollPane to make it scrollable
         JScrollPane scrollPane = new JScrollPane(gridPanel);
         scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         tutorialGrid.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    public void refreshGrid(List<TutorialCard> visibleTutorialCards) {
+        final int COL_COUNT = 2;
+
+        gridPanel.removeAll();
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 50, 50, 0);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        int row = 0;
+        int col = 0;
+
+        for (TutorialCard card : visibleTutorialCards) {
+            gbc.gridx = col;
+            gbc.gridy = row;
+
+            gridPanel.add(card, gbc);
+
+            col++;
+            if (col == COL_COUNT) {
+                col = 0;
+                row++;
+            }
+        }
+        gridPanel.revalidate();
+        gridPanel.repaint();
     }
 
     private JTextField createSearchField() {
