@@ -40,6 +40,28 @@ public class DrawCircle extends DrawController {
 
     @Override
     public void handleMousePressed(Point2D polySpaceMousePosition) {
+        if (getCanvasMode() == Mode.DRAW_CIRCLE_FIXED) {
+            // center has been selected
+
+            // create preview and plot center
+            preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+                    canvasModel.getLineType(),
+                    canvasModel.getLineThickness());
+            preview.getPlottedPoints().add(polySpaceMousePosition);
+
+            // TODO: ask user for radius
+            int radius = 5;
+
+            preview.setShape(
+                    getCircle((int) polySpaceMousePosition.getX(), (int) polySpaceMousePosition.getY(), radius));
+
+            // save wrapper
+            canvasModel.getShapes().add(preview);
+
+            preview = null;
+            return;
+        }
+
         if (getCanvasMode() == Mode.DRAW_CIRCLE_DYNAMIC) {
             if (preview == null) {
                 // center has been selected
