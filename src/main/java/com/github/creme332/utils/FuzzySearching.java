@@ -49,6 +49,27 @@ public class FuzzySearching {
      *         false.
      */
     public static boolean isSimilar(String str1, String str2) {
-        return levenshteinDistance(str1, str2) <= 4;
+        return levenshteinDistance(str1, str2) <= 3;
+    }
+
+    /**
+     * Returns true if the search query is similar to some element
+     * of the keywords. To be similar, some word of the query must be similar to
+     * some element in the keywords array.
+     * 
+     * @param searchQuery
+     * @param keywords    Array of keywords
+     * @return
+     */
+    public static boolean match(String searchQuery, String[] keywords) {
+        String[] criteria = searchQuery.split(" ");
+        for (String keyword : keywords) {
+            for (String criterion : criteria) {
+                if (isSimilar(keyword.toLowerCase(), criterion.toLowerCase())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
