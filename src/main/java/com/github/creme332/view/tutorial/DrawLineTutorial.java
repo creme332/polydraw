@@ -9,16 +9,20 @@ import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyleConstants;
 
+import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 public class DrawLineTutorial extends TutorialPanel {
 
     private static final String IMAGE_PATH_PREFIX = "/images/tutorials/draw-line/";
+    private static final TutorialModel DRAW_LINE_MODEL = new TutorialModel("Draw Line");
 
     public DrawLineTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super("Draw Line", loadIcon(IMAGE_PATH_PREFIX + "background.png",
+        super(DRAW_LINE_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png",
                 getScaledDimension(new Dimension(795, 580), TutorialCard.IMAGE_DIMENSION)));
+        model.addKeyword("bresenham");
+        model.addKeyword("dda");
 
         try {
             // Insert text

@@ -2,7 +2,6 @@ package com.github.creme332.view.tutorial;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
@@ -19,10 +18,17 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import com.github.creme332.model.TutorialModel;
 import com.github.creme332.view.BackButton;
 
 public class TutorialPanel extends JPanel {
-    protected String title;
+    /**
+     * Tutorial title.
+     */
+    private String title;
+
+    protected transient TutorialModel model;
+
     protected JButton backButton = new BackButton();
 
     protected transient JTextPane textPane = new JTextPane();
@@ -37,12 +43,13 @@ public class TutorialPanel extends JPanel {
 
     protected transient Icon mainIcon;
 
-    public TutorialPanel(String title, Icon icon) {
+    public TutorialPanel(TutorialModel model, Icon icon) {
         setLayout(new BorderLayout());
 
+        this.model = model;
         this.mainIcon = icon;
 
-        this.title = title;
+        this.title = model.getTitle();
 
         // use center alignment for text
         SimpleAttributeSet center = new SimpleAttributeSet();
@@ -64,11 +71,9 @@ public class TutorialPanel extends JPanel {
 
         // make text pane scrollable
         JPanel scrollPaneContainer = new JPanel();
-        // scrollPaneContainer.setPreferredSize(new Dimension(600, 600));
         scrollPaneContainer.setBackground(Color.red);
 
         JScrollPane scrollPane = new JScrollPane(textPane);
-        // scrollPaneContainer.add(scrollPane);
         bodyPanel.add(scrollPane, BorderLayout.CENTER);
 
         return bodyPanel;
@@ -105,6 +110,10 @@ public class TutorialPanel extends JPanel {
 
         italic = textPane.addStyle("italic", regular);
         StyleConstants.setItalic(italic, true);
+    }
+
+    public TutorialModel getModel() {
+        return model;
     }
 
     public Icon getMainIcon() {
