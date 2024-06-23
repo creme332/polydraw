@@ -13,6 +13,16 @@ public class IconLoader {
 
     }
 
+    /**
+     * Scales the dimensions of an image while maintaining aspect ratio.
+     * <p>
+     * Reference: https://stackoverflow.com/a/32679235/17627866
+     * </p>
+     * 
+     * @param imageSize Current dimension of image
+     * @param boundary  Desired dimension of image
+     * @return Scaled dimension
+     */
     public static Dimension getScaledDimension(Dimension imageSize, Dimension boundary) {
 
         double widthRatio = boundary.getWidth() / imageSize.getWidth();
