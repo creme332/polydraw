@@ -1,5 +1,6 @@
 package com.github.creme332.view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
@@ -37,7 +38,8 @@ public class MenuBar extends JMenuBar {
 
         setPreferredSize(new Dimension(getWidth(), 70));
         setBorder(new EmptyBorder(new Insets(7, 0, 7, 0)));
-
+        setBackground(new Color(248, 248, 248));
+        
         // add menus to menubar
         for (MenuModel menuModel : menus) {
             JMenu menu = new RoundedMenu();
