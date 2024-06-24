@@ -7,6 +7,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -20,8 +22,10 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import com.github.creme332.controller.drawing.DrawCircle;
+import com.github.creme332.controller.drawing.DrawController;
 import com.github.creme332.controller.drawing.DrawEllipse;
 import com.github.creme332.controller.drawing.DrawLine;
+import com.github.creme332.controller.drawing.DrawRegularPolygon;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
@@ -40,9 +44,7 @@ public class CanvasController implements PropertyChangeListener {
 
     private ShapeWrapper shadowPointWrapper = new ShapeWrapper();
 
-    private DrawLine lineDrawer;
-    private DrawCircle circleDrawer;
-    private DrawEllipse ellipseDrawer;
+    private List<DrawController> drawControllers = new ArrayList<>();
 
     public CanvasController(AppState app, Canvas canvas) {
         this.app = app;
@@ -54,9 +56,10 @@ public class CanvasController implements PropertyChangeListener {
         app.addPropertyChangeListener(this);
 
         // initialize drawing controllers
-        lineDrawer = new DrawLine(app, canvas);
-        circleDrawer = new DrawCircle(app, canvas);
-        ellipseDrawer = new DrawEllipse(app, canvas);
+        drawControllers.add(new DrawLine(app, canvas));
+        drawControllers.add(new DrawCircle(app, canvas));
+        drawControllers.add(new DrawEllipse(app, canvas));
+        drawControllers.add(new DrawRegularPolygon(app, canvas));
 
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
@@ -188,10 +191,9 @@ public class CanvasController implements PropertyChangeListener {
 
         // if mode from AppState has changed
         if ("mode".equals(propertyName)) {
-            lineDrawer.disposePreview();
-            circleDrawer.disposePreview();
-            ellipseDrawer.disposePreview();
-
+            for (DrawController controller : drawControllers) {
+                controller.disposePreview();
+            }
             // update canvas to erase any possible incomplete shape
             canvas.repaint();
             return;
