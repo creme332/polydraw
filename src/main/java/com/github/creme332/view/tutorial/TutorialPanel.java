@@ -30,7 +30,7 @@ public class TutorialPanel extends JPanel {
     protected transient TutorialModel model;
 
     protected JButton backButton = new BackButton();
-
+    protected JPanel bodyPanel;
     protected transient JTextPane textPane = new JTextPane();
     protected transient StyledDocument doc = textPane.getStyledDocument();
 
@@ -60,7 +60,7 @@ public class TutorialPanel extends JPanel {
         textPane.setEditable(false); // Make it non-editable
 
         JPanel headerPanel = createHeaderPanel();
-        JPanel bodyPanel = createBodyPanel();
+        bodyPanel = createBodyPanel();
         this.add(headerPanel, BorderLayout.NORTH);
         this.add(bodyPanel, BorderLayout.CENTER);
     }
