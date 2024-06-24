@@ -27,6 +27,7 @@ public class Canvas extends JPanel {
 
     public Canvas(CanvasModel model) {
         setLayout(null); // Use no layout manager
+        setBackground(Color.white);
         this.model = model;
     }
 
