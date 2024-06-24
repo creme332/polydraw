@@ -2,8 +2,11 @@ package com.github.creme332.view.tutorial;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Tutorial card displayed in TutorialCenter.
@@ -53,6 +56,21 @@ public class TutorialCard extends JPanel {
         title.setBorder(new EmptyBorder(10, 10, 10, 0));
         title.putClientProperty("FlatLaf.style", "font: 110% $semibold.font");
         add(titleContainer);
+
+        // Add mouse listener for hover effect
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setBorder(new LineBorder(Color.BLACK, 3));
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                setCursor(Cursor.getDefaultCursor());
+            }
+        });
     }
 
     public String getHeading() {
