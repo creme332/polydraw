@@ -85,8 +85,8 @@ public class Frame extends JFrame {
 
         // setup layered pane
         canvasScreen = new JLayeredPane();
-        canvasScreen.add(canvas, Integer.valueOf(1));
-        canvasScreen.add(canvasConsole, Integer.valueOf(2));
+        canvasScreen.add(canvas, JLayeredPane.DEFAULT_LAYER);
+        canvasScreen.add(canvasConsole, JLayeredPane.PALETTE_LAYER);
 
         canvas.setBounds(0, 0, 600, 600);
         canvasConsole.setBounds(0, 0, 600, 600);

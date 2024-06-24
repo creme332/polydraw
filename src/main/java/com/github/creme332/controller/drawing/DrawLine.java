@@ -61,15 +61,7 @@ public class DrawLine extends DrawController {
         }
 
         // second coordinate has now been selected
-        Point2D lineStart = preview.getPlottedPoints().get(0);
-
-        Line2D line = new Line2D.Double();
-        line.setLine(lineStart, polySpaceMousePosition);
-
         preview.getPlottedPoints().add(polySpaceMousePosition);
-        preview.setShape(line);
-
-        canvas.repaint();
 
         // reset wrapper
         preview = null;

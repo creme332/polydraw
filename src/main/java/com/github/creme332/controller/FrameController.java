@@ -17,6 +17,7 @@ import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Screen;
 import com.github.creme332.view.Frame;
+import com.github.creme332.view.SideMenuPanel;
 
 /**
  * Controller responsible for switching screens and resizing components as
@@ -100,7 +101,8 @@ public class FrameController implements PropertyChangeListener {
         canvasControl.setVisible(true);
 
         // update sidebar dimensions
-        int sideBarWidth = Math.min(500, frameWidth / 3);
+        // int sideBarWidth = Math.min(500, frameWidth / 3);
+        int sideBarWidth = SideMenuPanel.PREFERRED_WIDTH;
 
         System.out.format("Sidebar dimensions = %d x %d %n", sideBarWidth,
                 frameHeight - menuBarHeight);
