@@ -13,13 +13,24 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.Dimension;
+
 import com.github.creme332.model.TutorialModel;
+import com.github.creme332.utils.exception.InvalidIconSizeException;
+import com.github.creme332.utils.exception.InvalidPathException;
+import static com.github.creme332.utils.IconLoader.getScaledDimension;
+import static com.github.creme332.utils.IconLoader.loadIcon;
+
 
 public class KeyboardTutorial extends TutorialPanel {
 
-    public KeyboardTutorial(TutorialModel model, Icon icon) {
-        super(model, icon);
-        createTable();
+    private static final String IMAGE_PATH_PREFIX = "";
+    private static final TutorialModel KEYBOARD_TUTORIAL_MODEL = new TutorialModel("Keyboard Shortcuts");
+
+    public KeyboardTutorial() throws InvalidPathException, InvalidIconSizeException {
+        super(KEYBOARD_TUTORIAL_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png",
+                getScaledDimension(new Dimension(753, 453), TutorialCard.IMAGE_DIMENSION)));
+                createTable();
     }
 
     private void createTable() {
