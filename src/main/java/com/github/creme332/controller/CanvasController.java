@@ -189,6 +189,12 @@ public class CanvasController implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
 
+        // if canvas was cleared
+        if ("clearCanvas".equals(propertyName)) {
+            canvas.repaint();
+            return;
+        }
+
         // if mode from AppState has changed
         if ("mode".equals(propertyName)) {
             for (DrawController controller : drawControllers) {

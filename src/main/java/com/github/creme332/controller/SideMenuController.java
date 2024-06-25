@@ -52,7 +52,7 @@ public class SideMenuController implements PropertyChangeListener {
         CanvasModel canvasModel = app.getCanvasModel();
 
         // New button
-        sidebar.getNewCanvasButton().addActionListener(e -> canvasModel.clearShapes());
+        sidebar.getNewCanvasButton().addActionListener(e -> canvasModel.clearCanvas());
 
         // Export Image button
         sidebar.getExportImageButton().addActionListener(e -> app.startPrintingProcess());

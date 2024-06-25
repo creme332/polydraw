@@ -108,9 +108,11 @@ public class CanvasModel {
         return transform;
     }
 
-    public void clearShapes() {
+    public void clearCanvas() {
+        int oldSize = shapes.size();
         shapes.clear();
-        support.firePropertyChange("shapes", null, null);  // notify listeners that shapes have changed
+        // notify listeners that number of shapes on canvas has changed
+        support.firePropertyChange("clearCanvas", oldSize, shapes.size());
     }
 
     /**
@@ -178,6 +180,7 @@ public class CanvasModel {
         support.addPropertyChangeListener("enableGuidelines", listener);
         support.addPropertyChangeListener("axesVisible", listener);
         support.addPropertyChangeListener("cellSize", listener);
+        support.addPropertyChangeListener("clearCanvas", listener);
     }
 
     public List<ShapeWrapper> getShapes() {
