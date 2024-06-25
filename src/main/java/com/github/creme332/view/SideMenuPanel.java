@@ -34,6 +34,7 @@ public class SideMenuPanel extends JPanel {
     JCheckBox gridLinesCheckBox;
     JCheckBox axesCheckbox;
     JComboBox<String> fontSizeSelector;
+    JButton resetButton;
 
     public static final int BORDER_SIZE = 2;
     public static final int PREFERRED_WIDTH = 275;
@@ -113,7 +114,7 @@ public class SideMenuPanel extends JPanel {
                 new String[] { "12 pt", "16 pt", "18 pt", "20 pt", "24 pt", "28 pt" });
         formPanel.add(fontSizeSelector, gbc);
 
-        JButton resetButton = new JButton("Reset");
+        resetButton = new JButton("Reset");  // Initialize resetButton here
         resetButton.putClientProperty("FlatLaf.style", "background: #FFB8B8");
         settingsPanel.add(resetButton, BorderLayout.SOUTH);
 
@@ -183,6 +184,10 @@ public class SideMenuPanel extends JPanel {
 
     public JButton getAboutButton() {
         return aboutButton;
+    }
+
+    public JButton getResetButton() {
+        return resetButton;
     }
 
     public JCheckBox getGridLinesCheckBox() {
