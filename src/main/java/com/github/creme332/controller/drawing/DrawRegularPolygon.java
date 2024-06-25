@@ -83,6 +83,10 @@ public class DrawRegularPolygon extends DrawController {
 
         int result = JOptionPane.showConfirmDialog(null, panel, "Regular Polygon", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
+
+        // request focus again otherwise keyboard shortcuts will not work
+        canvas.getTopLevelAncestor().requestFocus();
+        
         if (result == JOptionPane.OK_OPTION) {
             try {
                 return Integer.parseInt(numSidesField.getText());
