@@ -13,7 +13,7 @@ public enum Mode {
     DRAW_ELLIPSE("Ellipse", "Select two foci, then point on ellipse"),
 
     DRAW_POLYGON_DYNAMIC("Polygon", "Select all vertices, then first vertex again"),
-    DRAW_REGULAR_POLYGON("Regular Polygon", "Select two points, then enter number of vertices"),
+    DRAW_REGULAR_POLYGON("Regular Polygon", "Select center, then enter number of vertices"),
 
     REFLECT_ABOUT_LINE("Reflect about Line", "Select object to reflect, then line of reflection"),
     REFLECT_ABOUT_POINT("Reflect about Point", "Select object to reflect, then center point"),
