@@ -2,7 +2,6 @@ package com.github.creme332.controller.drawing;
 
 import java.awt.Polygon;
 import java.awt.geom.Point2D;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
@@ -20,7 +19,6 @@ public class DrawRegularPolygon extends DrawController {
 
     public DrawRegularPolygon(AppState app, Canvas canvas) {
         super(app, canvas);
-        numSides = getNumSidesFromUser();
     }
 
     @Override
@@ -40,11 +38,24 @@ public class DrawRegularPolygon extends DrawController {
     @Override
     public void handleMousePressed(Point2D polySpaceMousePosition) {
         if (preview == null) {
+            // center of polygon has been input
+
+            // initialize shape preview
             preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
                     canvasModel.getLineType(),
                     canvasModel.getLineThickness());
             preview.getPlottedPoints().add(polySpaceMousePosition);
+
+            // add preview to model
             canvasModel.getShapes().add(preview);
+
+            // ask user to enter number of sides
+            numSides = inputVertices();
+
+            if (numSides < 3) {
+                // invalid input => cancel operation
+                disposePreview();
+            }
             return;
         }
 
@@ -58,21 +69,27 @@ public class DrawRegularPolygon extends DrawController {
         return getCanvasMode() == Mode.DRAW_REGULAR_POLYGON;
     }
 
-    private int getNumSidesFromUser() {
+    /**
+     * Asks user to enter number of vertices for polygon. If input value is invalid
+     * or if operation is cancelled, -1 is returned.
+     * 
+     * @return
+     */
+    private int inputVertices() {
         JTextField numSidesField = new JTextField(5);
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Enter number of sides:"));
+        panel.add(new JLabel("Vertices:"));
         panel.add(numSidesField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Number of Sides", JOptionPane.OK_CANCEL_OPTION,
+        int result = JOptionPane.showConfirmDialog(null, panel, "Regular Polygon", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             try {
                 return Integer.parseInt(numSidesField.getText());
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid input. Defaulting to 5 sides.");
+                return -1;
             }
         }
-        return 5; // default to 5 sides if input is invalid or cancelled
+        return -1;
     }
 }
