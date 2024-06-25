@@ -65,6 +65,7 @@ public class MenuBarController implements PropertyChangeListener {
                     menubar.getMyMenu(activeMenuIndex).setBorder(defaultBorder);
 
                     activeMenuIndex = menuIndex;
+                    
                     // add border to clickedMenu
                     jMenu.setBorder(VISIBLE_BORDER);
 
