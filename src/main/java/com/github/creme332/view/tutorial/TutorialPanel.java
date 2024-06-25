@@ -66,12 +66,8 @@ public class TutorialPanel extends JPanel {
     }
 
     public JPanel createBodyPanel() {
-        JPanel bodyPanel = new JPanel(new BorderLayout());
+        bodyPanel = new JPanel(new BorderLayout());
         bodyPanel.setBorder(new EmptyBorder(new Insets(0, 100, 0, 100)));
-
-        // make text pane scrollable
-        JPanel scrollPaneContainer = new JPanel();
-        scrollPaneContainer.setBackground(Color.red);
 
         JScrollPane scrollPane = new JScrollPane(textPane);
         bodyPanel.add(scrollPane, BorderLayout.CENTER);
