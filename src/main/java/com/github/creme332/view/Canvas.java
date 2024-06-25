@@ -202,7 +202,7 @@ public class Canvas extends JPanel {
             drawVerticalAxis(g2);
         }
 
-        for (ShapeWrapper wrapper : model.getShapes()) {
+        for (ShapeWrapper wrapper : model.getShapesCopy()) {
             g2.setColor(wrapper.getLineColor());
             g2.setStroke(getStroke(wrapper.getLineType(), wrapper.getLineThickness()));
 

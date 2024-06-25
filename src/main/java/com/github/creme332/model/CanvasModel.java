@@ -183,8 +183,26 @@ public class CanvasModel {
         support.addPropertyChangeListener("clearCanvas", listener);
     }
 
-    public List<ShapeWrapper> getShapes() {
-        return shapes;
+    /**
+     * 
+     * @return A copy of the current shapes that should be displayed
+     */
+    public List<ShapeWrapper> getShapesCopy() {
+        ArrayList<ShapeWrapper> copy = new ArrayList<>();
+
+        for (ShapeWrapper wrapper : shapes) {
+            copy.add(new ShapeWrapper(wrapper));
+        }
+
+        return copy;
+    }
+
+    public void addShape(ShapeWrapper wrapper) {
+        shapes.add(wrapper);
+    }
+
+    public void removeShape(ShapeWrapper wrapper) {
+        shapes.remove(wrapper);
     }
 
     public void setShapes(List<ShapeWrapper> shapes) {
