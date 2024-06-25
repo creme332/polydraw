@@ -1,12 +1,16 @@
 package com.github.creme332.view;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import com.github.creme332.utils.IconLoader;
+import static com.github.creme332.utils.IconLoader.loadIcon;
+
+import com.github.creme332.model.AppState;
+import com.github.creme332.model.Screen;
+import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 /**
@@ -22,24 +26,29 @@ public class Frame extends JFrame {
     private CardLayout cl = new CardLayout();
 
     /**
-     * A container for mainScreen and splashScreen
+     * A container for all screens.
      */
     private JPanel screenContainer = new JPanel(cl);
 
     /**
-     * Screen which is displayed on startup
+     * Loading screen which is displayed on startup
      */
     private SplashScreen splashScreen = new SplashScreen();
 
     /**
-     * A container for canvas and side menu
+     * A menubar for main screen.
      */
-    private JPanel mainScreen = new JPanel(new BorderLayout());
-
-    SideMenuPanel sideMenu = new SideMenuPanel();
     MenuBar menubar = null;
 
-    public Frame(Canvas canvas) throws InvalidPathException {
+    CanvasConsole canvasConsole;
+
+    JLayeredPane canvasScreen;
+
+    Canvas canvas;
+
+    TutorialCenter tutorialCenter;
+
+    public void initFrameProperties() throws InvalidPathException {
         // set frame title
         this.setTitle("polydraw");
 
@@ -53,32 +62,40 @@ public class Frame extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // set application icon
-        this.setIconImage(new IconLoader().loadIcon("/icons/icosahedron.png").getImage());
+        this.setIconImage(loadIcon("/icons/icosahedron.png").getImage());
 
         // center frame on startup if frame is not maximized
         if (this.getExtendedState() != MAXIMIZED_BOTH) {
             this.setLocationRelativeTo(null);
         }
 
+    }
+
+    public Frame(AppState app)
+            throws InvalidPathException, InvalidIconSizeException {
+        initFrameProperties();
+
+        menubar = new MenuBar(app.getMenuModels());
+        canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getSideBarVisibility(), app.getMode());
+        canvas = new Canvas(app.getCanvasModel());
+        tutorialCenter = new TutorialCenter();
+
         // add menubar to frame
-        try {
-            menubar = new MenuBar();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
         setJMenuBar(menubar);
 
+        // setup layered pane
+        canvasScreen = new JLayeredPane();
+        canvasScreen.add(canvas, JLayeredPane.DEFAULT_LAYER);
+        canvasScreen.add(canvasConsole, JLayeredPane.PALETTE_LAYER);
+
+        canvas.setBounds(0, 0, 600, 600);
+        canvasConsole.setBounds(0, 0, 600, 600);
+
         // setup screen container
-        screenContainer.add(splashScreen, "splashScreen");
-        screenContainer.add(mainScreen, "mainScreen");
+        screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.toString());
+        screenContainer.add(canvasScreen, Screen.MAIN_SCREEN.toString());
+        screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.toString());
         this.add(screenContainer);
-
-        // add canvas to mainScreen
-        mainScreen.add(canvas, BorderLayout.CENTER);
-
-        // add side menu to main screen
-        mainScreen.add(sideMenu, BorderLayout.EAST);
 
         // display frame
         this.setVisible(true);
@@ -88,37 +105,42 @@ public class Frame extends JFrame {
         menubar.setVisible(visible);
     }
 
-    public void setSideBarVisibility(boolean visible) {
-        sideMenu.setVisible(visible);
+    public void showScreen(Screen screen) {
+        switch (screen) {
+            case SPLASH_SCREEN:
+                cl.show(screenContainer, Screen.SPLASH_SCREEN.toString());
+                break;
+            case MAIN_SCREEN:
+                requestFocus();
+                menubar.setVisible(true);
+                cl.show(screenContainer, Screen.MAIN_SCREEN.toString());
+                break;
+            case TUTORIAL_SCREEN:
+                menubar.setVisible(false);
+                cl.show(screenContainer, Screen.TUTORIAL_SCREEN.toString());
+                break;
+            default:
+                break;
+        }
     }
 
-    /**
-     * Displays frame which is initially hidden.
-     * 
-     * Call this function once all components have been added to the frame
-     * to ensure proper rendering.
-     */
-    public void showMainScreen() {
-        cl.show(screenContainer, "mainScreen");
+    public JLayeredPane getCanvasScreen() {
+        return canvasScreen;
     }
 
-    public void showSplashScreen() {
-        cl.show(screenContainer, "splashScreen");
+    public TutorialCenter getTutorialCenter() {
+        return tutorialCenter;
     }
 
-    public SideMenuPanel getSideMenuPanel() {
-        return sideMenu;
+    public CanvasConsole getCanvasConsole() {
+        return canvasConsole;
     }
 
     public MenuBar getMyMenuBar() {
         return menubar;
     }
 
-    /**
-     * 
-     * @return Container panel for canvas and sidebar
-     */
-    public JPanel getMainPanel() {
-        return mainScreen;
+    public Canvas getMyCanvas() {
+        return canvas;
     }
 }

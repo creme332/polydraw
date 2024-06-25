@@ -1,4 +1,4 @@
-package com.github.creme332.view;
+package com.github.creme332.utils;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
