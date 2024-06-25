@@ -19,9 +19,6 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.model.MenuItemModel;
 import com.github.creme332.model.MenuModel;
-import com.github.creme332.utils.IconLoader;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
-import com.github.creme332.utils.exception.InvalidPathException;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
@@ -31,12 +28,12 @@ public class MenuBar extends JMenuBar {
 
     private List<JMenu> jmenus = new ArrayList<>();
 
-    public MenuBar(MenuModel[] menus) throws InvalidIconSizeException, InvalidPathException {
+    public MenuBar(MenuModel[] menus) {
 
         setPreferredSize(new Dimension(getWidth(), 70));
         setBorder(new EmptyBorder(new Insets(7, 0, 7, 0)));
         setBackground(new Color(248, 248, 248));
-        
+
         // add menus to menubar
         for (MenuModel menuModel : menus) {
             JMenu menu = new RoundedMenu();
