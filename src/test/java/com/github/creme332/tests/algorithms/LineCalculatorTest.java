@@ -15,7 +15,7 @@ public class LineCalculatorTest {
                 { 2, 3 }, { 3, 3 }, { 4, 4 }, { 5, 4 }, { 6, 5 }, { 7, 5 }, { 8, 6 }, { 9, 7 }, { 10, 8 }
         };
 
-        int[][] result = LineCalculator.DDA(x0, y0, x1, y1);
+        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
         TestHelper.assert2DArrayEquals(expected, result);
     }
 
@@ -37,7 +37,7 @@ public class LineCalculatorTest {
                 { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 5, 1 }
         };
 
-        int[][] result = LineCalculator.DDA(x0, y0, x1, y1);
+        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
         TestHelper.assert2DArrayEquals(expected, result);
     }
 
@@ -59,7 +59,7 @@ public class LineCalculatorTest {
                 { 1, 1 }, { 1, 2 }, { 1, 3 }, { 1, 4 }, { 1, 5 }
         };
 
-        int[][] result = LineCalculator.DDA(x0, y0, x1, y1);
+        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
         TestHelper.assert2DArrayEquals(expected, result);
     }
 

@@ -5,7 +5,7 @@ public class LineCalculator {
 
     }
 
-    public static int[][] DDA(int x0, int y0, int x1, int y1) {
+    public static int[][] dda(int x0, int y0, int x1, int y1) {
         int dx = x1 - x0;
         int dy = y1 - y0;
         int steps = Math.max(Math.abs(dx), Math.abs(dy));
