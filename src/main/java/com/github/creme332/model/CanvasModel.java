@@ -205,6 +205,10 @@ public class CanvasModel {
         shapes.remove(wrapper);
     }
 
+    public void removeShape(int i) {
+        shapes.remove(i);
+    }
+
     public void setShapes(List<ShapeWrapper> shapes) {
         this.shapes = shapes;
     }
