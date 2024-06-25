@@ -42,7 +42,7 @@ public class CanvasController implements PropertyChangeListener {
     private AppState app;
     private CanvasModel model;
 
-    private ShapeWrapper shadowPointWrapper = new ShapeWrapper();
+    // private ShapeWrapper shadowPointWrapper = new ShapeWrapper();
 
     private List<DrawController> drawControllers = new ArrayList<>();
 
@@ -80,13 +80,13 @@ public class CanvasController implements PropertyChangeListener {
             public void mouseMoved(MouseEvent e) {
                 Point2D polySpaceMousePosition = model.toPolySpace(e.getPoint());
 
-                model.getShapes().remove(shadowPointWrapper);
-                shadowPointWrapper = new ShapeWrapper();
-                shadowPointWrapper.setFillColor(Color.GRAY);
-                shadowPointWrapper.getPlottedPoints().add(polySpaceMousePosition);
-                model.getShapes().add(shadowPointWrapper);
+                // model.getShapes().remove(shadowPointWrapper);
+                // shadowPointWrapper = new ShapeWrapper();
+                // shadowPointWrapper.setFillColor(Color.GRAY);
+                // shadowPointWrapper.getPlottedPoints().add(polySpaceMousePosition);
+                // model.getShapes().add(shadowPointWrapper);
 
-                canvas.repaint();
+                // canvas.repaint();
             }
         });
 
@@ -147,6 +147,17 @@ public class CanvasController implements PropertyChangeListener {
         if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW || app.getMode() == Mode.MOVE_CANVAS) {
             mouseDragStart = e.getPoint();
             return;
+        }
+
+        Point2D polyspaceMousePosition = model.toPolySpace(e.getPoint());
+
+        if (app.getMode() == Mode.DELETE) {
+            for (int i = 0; i < model.getShapesCopy().size(); i++) {
+                ShapeWrapper wrapper = model.getShapesCopy().get(i);
+                if (wrapper.getShape().contains(polyspaceMousePosition)) {
+                    model.removeShape(i);
+                }
+            }
         }
 
         canvas.repaint();
