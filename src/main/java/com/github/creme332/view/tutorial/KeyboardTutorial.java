@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -31,18 +30,28 @@ public class KeyboardTutorial extends TutorialPanel {
     }
 
     private void createTable() {
-        // Define the table data
-        String[] columnNames = { "Keyboard shortcut", "Action" };
+        // Define the table data with application-specific shortcuts
+        String[] columnNames = { "Keyboard Shortcut", "Action" };
         Object[][] data = {
                 { "Tab", "Go to the next column.\nIf at the end of a row, go to the first cell in the next row." },
-                { "Shift+Tab",
-                        "Go to the previous column.\nIf at the end of a row, go to the last cell in the previous row." },
+                { "Shift+Tab", "Go to the previous column.\nIf at the end of a row, go to the last cell in the previous row." },
                 { "Enter", "Go to the next row in the same column." },
-                { "Home or Ctrl+Left arrow key", "Go to the first cell in a row." }
+                { "Home or Ctrl+Left arrow key", "Go to the first cell in a row." },
+                { "Esc", "Select mode in the first menu." },
+                { "1", "Select mode in the first menu." },
+                { "2", "Select mode in the second menu." },
+                { "3", "Select mode in the third menu." },
+                // Add more shortcuts as needed
         };
 
-        // Create the table model and set it to the table
-        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        // Create the table model and set it to be non-editable
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make the cells non-editable
+            }
+        };
+
         JTable table = new JTable(model) {
 
             @Override
@@ -78,12 +87,10 @@ public class KeyboardTutorial extends TutorialPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                 int row, int column) {
-            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-                    column);
+            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             label.setVerticalAlignment(JLabel.TOP);
             label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             label.setHorizontalAlignment(SwingConstants.LEFT);
-            label.setVerticalAlignment(SwingConstants.TOP);
             // Wrap text
             String text = "<html>" + value.toString().replace("\n", "<br>") + "</html>";
             label.setText(text);

@@ -18,14 +18,14 @@ import com.github.creme332.utils.DesktopApi;
  */
 public class SideMenuController implements PropertyChangeListener {
 
-    private static final String PROJECT_INFO = """
-            Polydraw is an application for drawing rasterized shapes, inspired by Geogebra Classic.
+    // private static final String PROJECT_INFO = """
+    //         Polydraw is an application for drawing rasterized shapes, inspired by Geogebra Classic.
 
-            For more information, visit our GitHub page: https://github.com/creme332/polydraw/.
+    //         For more information, visit our GitHub page: https://github.com/creme332/polydraw/.
 
-            Version: 0.0
-            License: MIT
-            """;
+    //         Version: 0.0
+    //         License: MIT
+    //         """;
 
     private SideMenuPanel sidebar;
 
@@ -71,9 +71,9 @@ public class SideMenuController implements PropertyChangeListener {
 
         // About button
         sidebar.getAboutButton().addActionListener(e -> {
-            JDialog aboutDialog = new JOptionPane(PROJECT_INFO,
-                    JOptionPane.INFORMATION_MESSAGE).createDialog("About");
-            aboutDialog.setVisible(true);
+            // JDialog aboutDialog = new JOptionPane(PROJECT_INFO,
+            //         JOptionPane.INFORMATION_MESSAGE).createDialog("About");
+            // aboutDialog.setVisible(true);
         });
 
         // Guidelines checkbox
