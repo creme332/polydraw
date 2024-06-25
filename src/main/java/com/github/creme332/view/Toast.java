@@ -21,6 +21,7 @@ public class Toast extends JPanel {
         setBackground(new Color(47, 47, 51));
         setPreferredSize(new Dimension(400, 100));
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
+        putClientProperty("FlatLaf.style", "arc: 10");
 
         titleLabel = new JLabel(defaultMode.getTitle());
         titleLabel.putClientProperty("FlatLaf.style", "font: $h3.font");

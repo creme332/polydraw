@@ -79,15 +79,6 @@ public class DrawCircle extends DrawController {
                 // second point has now been selected
                 preview.getPlottedPoints().add(polySpaceMousePosition);
 
-                // create a circle
-                Point2D center = preview.getPlottedPoints().get(0);
-                double radius = polySpaceMousePosition.distance(center);
-                int roundedRadius = (int) Math.round(radius);
-                if (roundedRadius == 0)
-                    return;
-
-                preview.setShape(getCircle((int) center.getX(), (int) center.getY(), roundedRadius));
-
                 preview = null;
             }
         }

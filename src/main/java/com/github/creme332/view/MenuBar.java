@@ -1,5 +1,6 @@
 package com.github.creme332.view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
@@ -18,25 +19,20 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.model.MenuItemModel;
 import com.github.creme332.model.MenuModel;
-import com.github.creme332.utils.IconLoader;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
-import com.github.creme332.utils.exception.InvalidPathException;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
 public class MenuBar extends JMenuBar {
     private JButton sidebarButton;
-    private JButton guidelinesButton; // Button to toggle guidelines
-    private JButton toggleAxesButton; // Button to toggle axes visibility
     private JButton helpButton;
-    private JButton exportButton; // Button to export canvas as image
 
     private List<JMenu> jmenus = new ArrayList<>();
 
-    public MenuBar(MenuModel[] menus) throws InvalidIconSizeException, InvalidPathException {
+    public MenuBar(MenuModel[] menus) {
 
         setPreferredSize(new Dimension(getWidth(), 70));
         setBorder(new EmptyBorder(new Insets(7, 0, 7, 0)));
+        setBackground(new Color(248, 248, 248));
 
         // add menus to menubar
         for (MenuModel menuModel : menus) {
@@ -71,33 +67,12 @@ public class MenuBar extends JMenuBar {
         leftPanel.add(btn);
         btn.setToolTipText("Redo");
 
-        // guidelines button
-        guidelinesButton = new JButton();
-        guidelinesButton.setIcon(FontIcon.of(BootstrapIcons.GRID_3X3, 37));
-        guidelinesButton.setBorderPainted(false);
-        leftPanel.add(guidelinesButton);
-        guidelinesButton.setToolTipText("Toggle guidelines");
-
-        // toggle axes button
-        toggleAxesButton = new JButton();
-        toggleAxesButton.setIcon(IconLoader.loadIcon("/icons/axes.png", 40));
-        toggleAxesButton.setBorderPainted(false);
-        toggleAxesButton.setToolTipText("Toggle axes");
-        leftPanel.add(toggleAxesButton);
-
         // help button
         helpButton = new JButton();
         helpButton.setIcon(FontIcon.of(BootstrapIcons.QUESTION_CIRCLE, 37));
         helpButton.setBorderPainted(false);
         helpButton.setToolTipText("Help");
         leftPanel.add(helpButton);
-
-        // export button
-        exportButton = new JButton();
-        exportButton.setIcon(FontIcon.of(BootstrapIcons.CAMERA, 37)); // Use an appropriate icon for export
-        exportButton.setBorderPainted(false);
-        exportButton.setToolTipText("Export canvas");
-        leftPanel.add(exportButton);
 
         // sidebar menu button
         sidebarButton = new JButton();
@@ -124,19 +99,7 @@ public class MenuBar extends JMenuBar {
         return sidebarButton;
     }
 
-    public JButton getGuidelinesButton() {
-        return guidelinesButton;
-    }
-
-    public JButton getToggleAxesButton() {
-        return toggleAxesButton;
-    }
-
     public JButton getHelpButton() {
         return helpButton;
-    }
-
-    public JButton getExportButton() {
-        return exportButton;
     }
 }

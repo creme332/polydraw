@@ -108,6 +108,13 @@ public class CanvasModel {
         return transform;
     }
 
+    public void clearCanvas() {
+        int oldSize = shapes.size();
+        shapes.clear();
+        // notify listeners that number of shapes on canvas has changed
+        support.firePropertyChange("clearCanvas", oldSize, shapes.size());
+    }
+
     /**
      * 
      * @param shape Shape in polydraw space
@@ -173,6 +180,7 @@ public class CanvasModel {
         support.addPropertyChangeListener("enableGuidelines", listener);
         support.addPropertyChangeListener("axesVisible", listener);
         support.addPropertyChangeListener("cellSize", listener);
+        support.addPropertyChangeListener("clearCanvas", listener);
     }
 
     public List<ShapeWrapper> getShapes() {
