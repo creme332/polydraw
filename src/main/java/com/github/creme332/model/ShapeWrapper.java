@@ -1,6 +1,7 @@
 package com.github.creme332.model;
 
 import java.awt.Color;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Shape;
@@ -11,22 +12,15 @@ public class ShapeWrapper {
     private Color lineColor = Color.BLACK;
     private Color fillColor = Color.BLACK;
     private LineType lineType = LineType.SOLID;
+    private int lineThickness = 1;
+
     /**
-     * Coordinates plotted by user.
+     * Coordinates plotted by user to create shape.
      */
     private List<Point2D> plottedPoints = new ArrayList<>();
-    private int lineThickness;
 
     public List<Point2D> getPlottedPoints() {
         return plottedPoints;
-    }
-
-    public ShapeWrapper() {
-
-    }
-
-    public ShapeWrapper(Shape shape) {
-        this.shape = shape;
     }
 
     public ShapeWrapper(Color lineColor, Color fillColor, LineType lineType, int lineThickness) {
@@ -36,19 +30,27 @@ public class ShapeWrapper {
         this.lineThickness = lineThickness;
     }
 
-    public ShapeWrapper(Shape shape, Color lineColor, Color fillColor, LineType lineType) {
-        this.shape = shape;
-        this.lineColor = lineColor;
-        this.fillColor = fillColor;
-        this.lineType = lineType;
-    }
-
+    /**
+     * Copy constructor.
+     * 
+     * @param wrapper
+     */
     public ShapeWrapper(ShapeWrapper wrapper) {
-        shape = wrapper.shape;
+        // save primitive attributes
         lineColor = wrapper.lineColor;
         fillColor = wrapper.fillColor;
         lineType = wrapper.lineType;
-        plottedPoints = wrapper.plottedPoints;
+        lineThickness = wrapper.lineThickness;
+
+        // create a new shape object
+        Polygon original = (Polygon) wrapper.shape;
+        Polygon copy = new Polygon(original.xpoints, original.ypoints, original.npoints);
+        shape = copy;
+
+        // create a new array for plotted points
+        for (Point2D point : wrapper.getPlottedPoints()) {
+            plottedPoints.add(new Point2D.Double(point.getX(), point.getY()));
+        }
     }
 
     public Shape getShape() {
