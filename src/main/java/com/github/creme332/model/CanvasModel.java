@@ -108,6 +108,11 @@ public class CanvasModel {
         return transform;
     }
 
+    public void clearShapes() {
+        shapes.clear();
+        support.firePropertyChange("shapes", null, null);  // notify listeners that shapes have changed
+    }
+
     /**
      * 
      * @param shape Shape in polydraw space

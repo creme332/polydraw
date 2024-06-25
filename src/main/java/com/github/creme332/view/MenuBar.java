@@ -27,10 +27,7 @@ import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
 public class MenuBar extends JMenuBar {
     private JButton sidebarButton;
-    private JButton guidelinesButton; // Button to toggle guidelines
-    private JButton toggleAxesButton; // Button to toggle axes visibility
     private JButton helpButton;
-    private JButton exportButton; // Button to export canvas as image
 
     private List<JMenu> jmenus = new ArrayList<>();
 
@@ -73,33 +70,12 @@ public class MenuBar extends JMenuBar {
         leftPanel.add(btn);
         btn.setToolTipText("Redo");
 
-        // guidelines button
-        guidelinesButton = new JButton();
-        guidelinesButton.setIcon(FontIcon.of(BootstrapIcons.GRID_3X3, 37));
-        guidelinesButton.setBorderPainted(false);
-        leftPanel.add(guidelinesButton);
-        guidelinesButton.setToolTipText("Toggle guidelines");
-
-        // toggle axes button
-        toggleAxesButton = new JButton();
-        toggleAxesButton.setIcon(IconLoader.loadIcon("/icons/axes.png", 40));
-        toggleAxesButton.setBorderPainted(false);
-        toggleAxesButton.setToolTipText("Toggle axes");
-        leftPanel.add(toggleAxesButton);
-
         // help button
         helpButton = new JButton();
         helpButton.setIcon(FontIcon.of(BootstrapIcons.QUESTION_CIRCLE, 37));
         helpButton.setBorderPainted(false);
         helpButton.setToolTipText("Help");
         leftPanel.add(helpButton);
-
-        // export button
-        exportButton = new JButton();
-        exportButton.setIcon(FontIcon.of(BootstrapIcons.CAMERA, 37)); // Use an appropriate icon for export
-        exportButton.setBorderPainted(false);
-        exportButton.setToolTipText("Export canvas");
-        leftPanel.add(exportButton);
 
         // sidebar menu button
         sidebarButton = new JButton();
@@ -126,19 +102,7 @@ public class MenuBar extends JMenuBar {
         return sidebarButton;
     }
 
-    public JButton getGuidelinesButton() {
-        return guidelinesButton;
-    }
-
-    public JButton getToggleAxesButton() {
-        return toggleAxesButton;
-    }
-
     public JButton getHelpButton() {
         return helpButton;
-    }
-
-    public JButton getExportButton() {
-        return exportButton;
     }
 }
