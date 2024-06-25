@@ -11,7 +11,7 @@ import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.model.TutorialModel;
-import com.github.creme332.utils.IconLoader;
+import com.github.creme332.utils.IconCellRenderer;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
@@ -48,6 +48,15 @@ public class GettingStartedTutorial extends TutorialPanel {
         mainPanel.add(zoomPanelExplanation, gbc);
         gbc.gridy++;
 
+        // Add ZoomPanel example image
+        JLabel zoomPanelImageLabel = new JLabel("Here is an example of what the Zoom Panel looks like on the Canvas:");
+        mainPanel.add(zoomPanelImageLabel, gbc);
+        gbc.gridy++;
+        ImageIcon zoomPanelIcon = loadIcon(IMAGE_PATH_PREFIX + "zoom-panel.png");
+        JLabel zoomPanelImage = new JLabel(zoomPanelIcon);
+        mainPanel.add(zoomPanelImage, gbc);
+        gbc.gridy++;
+
         // Add ZoomPanel buttons as a table
         JPanel zoomPanelTable = createButtonTable(new Object[][] {
                 { FontIcon.of(BootstrapIcons.HOUSE, 30), "Home", "Reset the view to the home position." },
@@ -62,6 +71,15 @@ public class GettingStartedTutorial extends TutorialPanel {
         JTextArea toastExplanation = createSectionText("Toast Notifications",
                 "Toast notifications provide quick information about the current mode or action being performed. The toast includes a title and instructions, helping you understand what is expected at each step.");
         mainPanel.add(toastExplanation, gbc);
+        gbc.gridy++;
+
+        // Add Toast example image
+        JLabel toastImageLabel = new JLabel("Here is an example of what a toast looks like on the Canvas:");
+        mainPanel.add(toastImageLabel, gbc);
+        gbc.gridy++;
+        ImageIcon toastIcon = loadIcon(IMAGE_PATH_PREFIX + "toast.png");
+        JLabel toastImage = new JLabel(toastIcon);
+        mainPanel.add(toastImage, gbc);
         gbc.gridy++;
 
         // Add Toast explanation as a table
@@ -100,23 +118,20 @@ public class GettingStartedTutorial extends TutorialPanel {
         // Add action buttons as a table
         JPanel actionButtonsTable = createButtonTable(new Object[][] {
                 { FontIcon.of(BootstrapIcons.LIST, 40), "Sidebar", "Toggle the sidebar visibility." },
-                { FontIcon.of(BootstrapIcons.GRID_3X3, 37), "Guidelines", "Show or hide guidelines." },
-                { IconLoader.loadIcon("/icons/axes.png", 40), "Axes", "Show or hide axes." },
                 { FontIcon.of(BootstrapIcons.QUESTION_CIRCLE, 37), "Help", "Open the help documentation." },
-                { FontIcon.of(BootstrapIcons.CAMERA, 37), "Export", "Export the current view as an image." },
                 { FontIcon.of(BootstrapIcons.ARROW_COUNTERCLOCKWISE, 40), "Undo", "Undo the last action." },
                 { FontIcon.of(BootstrapIcons.ARROW_CLOCKWISE, 40), "Redo", "Redo the last undone action." }
         });
         mainPanel.add(actionButtonsTable, gbc);
 
-        // Add scrollable area
+        // Add scrollable area with faster scrolling
         JScrollPane scrollPane = new JScrollPane(mainPanel,
                 javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         this.add(scrollPane, BorderLayout.CENTER);
-
     }
 
     private JTextArea createSectionText(String title, String content) {
@@ -137,7 +152,7 @@ public class GettingStartedTutorial extends TutorialPanel {
             @Override
             public Class<?> getColumnClass(int column) {
                 if (column == 0) {
-                    return Icon.class;
+                    return Icon.class; // Set the column class to Icon
                 } else {
                     return String.class;
                 }
@@ -149,12 +164,13 @@ public class GettingStartedTutorial extends TutorialPanel {
         table.setFillsViewportHeight(true);
         table.getColumnModel().getColumn(0).setMaxWidth(60);
 
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
 
         table.setBackground(new Color(245, 245, 245));
         table.setGridColor(new Color(200, 200, 200));
+
+        table.setOpaque(true);
+        ((DefaultTableCellRenderer) table.getDefaultRenderer(Object.class)).setOpaque(true);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.add(table.getTableHeader(), BorderLayout.PAGE_START);
@@ -173,6 +189,9 @@ public class GettingStartedTutorial extends TutorialPanel {
 
         table.setBackground(new Color(245, 245, 245));
         table.setGridColor(new Color(200, 200, 200));
+
+        table.setOpaque(true);
+        ((DefaultTableCellRenderer) table.getDefaultRenderer(Object.class)).setOpaque(true);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.add(table.getTableHeader(), BorderLayout.PAGE_START);
