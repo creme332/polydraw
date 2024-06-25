@@ -43,9 +43,11 @@ public class ShapeWrapper {
         lineThickness = wrapper.lineThickness;
 
         // create a new shape object
-        Polygon original = (Polygon) wrapper.shape;
-        Polygon copy = new Polygon(original.xpoints, original.ypoints, original.npoints);
-        shape = copy;
+        if (wrapper.shape != null) {
+            Polygon original = (Polygon) wrapper.shape;
+            Polygon copy = new Polygon(original.xpoints, original.ypoints, original.npoints);
+            shape = copy;
+        }
 
         // create a new array for plotted points
         for (Point2D point : wrapper.getPlottedPoints()) {
