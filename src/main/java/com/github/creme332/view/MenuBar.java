@@ -37,6 +37,7 @@ public class MenuBar extends JMenuBar {
         // add menus to menubar
         for (MenuModel menuModel : menus) {
             JMenu menu = new RoundedMenu();
+            menu.setOpaque(false);
             jmenus.add(menu);
             menu.setIcon(menuModel.getActiveItem().getIcon());
             menu.setToolTipText(menuModel.getActiveItem().getName());
