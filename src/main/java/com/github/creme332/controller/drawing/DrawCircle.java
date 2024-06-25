@@ -2,7 +2,10 @@ package com.github.creme332.controller.drawing;
 
 import java.awt.Polygon;
 import java.awt.geom.Point2D;
-
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import com.github.creme332.algorithms.CircleCalculator;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
@@ -49,8 +52,13 @@ public class DrawCircle extends DrawController {
                     canvasModel.getLineThickness());
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
-            // TODO: ask user for radius
-            int radius = 5;
+            // Ask user for radius
+            int radius = inputRadius();
+
+            if (radius <= 0) {
+                disposePreview();
+                return;
+            }
 
             preview.setShape(
                     getCircle((int) polySpaceMousePosition.getX(), (int) polySpaceMousePosition.getY(), radius));
@@ -87,5 +95,33 @@ public class DrawCircle extends DrawController {
     @Override
     public boolean shouldDraw() {
         return getCanvasMode() == Mode.DRAW_CIRCLE_DYNAMIC || getCanvasMode() == Mode.DRAW_CIRCLE_FIXED;
+    }
+
+    /**
+     * Asks user to enter the radius for the circle. If input value is invalid
+     * or if the operation is cancelled, -1 is returned.
+     * 
+     * @return radius
+     */
+    private int inputRadius() {
+        JTextField radiusField = new JTextField(5);
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Radius:"));
+        panel.add(radiusField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Circle: Center & Radius", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        // request focus again otherwise keyboard shortcuts will not work
+        canvas.getTopLevelAncestor().requestFocus();
+
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                return Integer.parseInt(radiusField.getText());
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        }
+        return -1;
     }
 }
