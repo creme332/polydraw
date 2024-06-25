@@ -11,11 +11,22 @@ import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.view.SideMenuPanel;
 import com.github.creme332.model.Screen;
+import com.github.creme332.utils.DesktopApi;
 
 /**
  * Controller responsible for managing sidebar in CanvasConsole.
  */
 public class SideMenuController implements PropertyChangeListener {
+
+    private static final String PROJECT_INFO = """
+            Polydraw is an application for drawing rasterized shapes, inspired by Geogebra Classic.
+
+            For more information, visit our GitHub page: https://github.com/creme332/polydraw/.
+
+            Version: 0.0
+            License: MIT
+            """;
+
     private SideMenuPanel sidebar;
 
     public SideMenuController(AppState app, SideMenuPanel sidebar) {
@@ -52,7 +63,7 @@ public class SideMenuController implements PropertyChangeListener {
         // Report Problem button
         sidebar.getReportProblemButton().addActionListener(e -> {
             try {
-                java.awt.Desktop.getDesktop().browse(new java.net.URI("https://github.com/creme332/polydraw/issues/new"));
+                DesktopApi.browse(new java.net.URI("https://github.com/creme332/polydraw/issues"));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -60,8 +71,7 @@ public class SideMenuController implements PropertyChangeListener {
 
         // About button
         sidebar.getAboutButton().addActionListener(e -> {
-            JDialog aboutDialog = new JOptionPane(
-                    "Project Description\nVersion: v0.0\nLicense: MIT",
+            JDialog aboutDialog = new JOptionPane(PROJECT_INFO,
                     JOptionPane.INFORMATION_MESSAGE).createDialog("About");
             aboutDialog.setVisible(true);
         });
