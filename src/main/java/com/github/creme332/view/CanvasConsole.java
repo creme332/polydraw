@@ -67,6 +67,7 @@ public class CanvasConsole extends JPanel {
         mainPanel.add(southPanel, BorderLayout.SOUTH);
 
         JPanel eastPanel = new JPanel(new BorderLayout());
+        eastPanel.setBorder(new EmptyBorder(new Insets(0, 0, 0, 20)));
         eastPanel.setOpaque(false);
 
         eastPanel.add(zoomPanel, BorderLayout.SOUTH);
