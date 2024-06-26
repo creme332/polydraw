@@ -202,7 +202,7 @@ public class Canvas extends JPanel {
             drawVerticalAxis(g2);
         }
 
-        for (ShapeWrapper wrapper : model.getShapes()) {
+        for (ShapeWrapper wrapper : model.getShapesCopy()) {
             g2.setColor(wrapper.getLineColor());
             g2.setStroke(getStroke(wrapper.getLineType(), wrapper.getLineThickness()));
 
@@ -211,16 +211,22 @@ public class Canvas extends JPanel {
                 g2.draw(s1);
             }
 
-            // plot points
+            // display points plotted by user
             g2.setStroke(defaultStroke);
             g2.setColor(wrapper.getFillColor());
             for (Point2D p : wrapper.getPlottedPoints()) {
                 Shape point = createPointAsShape(model.toUserSpace(p));
-
                 g2.draw(point);
                 g2.fill(point);
             }
+        }
 
+        // display current mouse position
+        if (model.getUserMousePosition() != null) {
+            Shape point = createPointAsShape(model.toUserSpace(model.getUserMousePosition()));
+            g2.setColor(Color.LIGHT_GRAY);
+            g2.draw(point);
+            g2.fill(point);
         }
     }
 

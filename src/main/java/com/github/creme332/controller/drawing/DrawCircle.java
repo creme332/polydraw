@@ -64,7 +64,7 @@ public class DrawCircle extends DrawController {
                     getCircle((int) polySpaceMousePosition.getX(), (int) polySpaceMousePosition.getY(), radius));
 
             // save wrapper
-            canvasModel.getShapes().add(preview);
+            canvasModel.addShape(preview);
 
             preview = null;
             return;
@@ -81,7 +81,7 @@ public class DrawCircle extends DrawController {
                 preview.getPlottedPoints().add(polySpaceMousePosition);
 
                 // save wrapper
-                canvasModel.getShapes().add(preview);
+                canvasModel.addShape(preview);
 
             } else {
                 // second point has now been selected

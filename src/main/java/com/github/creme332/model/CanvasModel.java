@@ -65,8 +65,36 @@ public class CanvasModel {
 
     private List<ShapeWrapper> shapes = new ArrayList<>();
 
-    private boolean enableGuidelines = true; // Variable to track guidelines visibility
-    private boolean axesVisible = true; // Variable to track axes visibility
+    /**
+     * Whether guidelines should be displayed on canvas
+     */
+    private boolean enableGuidelines = true;
+
+    /**
+     * Whether axes and labels should be displayed on canvas
+     */
+    private boolean axesVisible = true;
+
+    /**
+     * Mouse position of user on canvas in polyspace coordinates.
+     */
+    Point2D userMousePosition;
+
+    /**
+     * 
+     * @return Coordinates of user cursor in polyspace.
+     */
+    public Point2D getUserMousePosition() {
+        return userMousePosition;
+    }
+
+    /**
+     * 
+     * @param newPosition New coordinates of user cursor in polyspace.
+     */
+    public void setUserMousePosition(Point2D newPosition) {
+        userMousePosition = newPosition;
+    }
 
     /**
      * 
@@ -183,8 +211,30 @@ public class CanvasModel {
         support.addPropertyChangeListener("clearCanvas", listener);
     }
 
-    public List<ShapeWrapper> getShapes() {
-        return shapes;
+    /**
+     * 
+     * @return A copy of the current shapes that should be displayed
+     */
+    public List<ShapeWrapper> getShapesCopy() {
+        ArrayList<ShapeWrapper> copy = new ArrayList<>();
+
+        for (ShapeWrapper wrapper : shapes) {
+            copy.add(new ShapeWrapper(wrapper));
+        }
+
+        return copy;
+    }
+
+    public void addShape(ShapeWrapper wrapper) {
+        shapes.add(wrapper);
+    }
+
+    public void removeShape(ShapeWrapper wrapper) {
+        shapes.remove(wrapper);
+    }
+
+    public void removeShape(int i) {
+        shapes.remove(i);
     }
 
     public void setShapes(List<ShapeWrapper> shapes) {

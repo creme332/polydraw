@@ -47,7 +47,7 @@ public class DrawRegularPolygon extends DrawController {
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
             // add preview to model
-            canvasModel.getShapes().add(preview);
+            canvasModel.addShape(preview);
 
             // ask user to enter number of sides
             numSides = inputVertices();
@@ -86,7 +86,7 @@ public class DrawRegularPolygon extends DrawController {
 
         // request focus again otherwise keyboard shortcuts will not work
         canvas.getTopLevelAncestor().requestFocus();
-        
+
         if (result == JOptionPane.OK_OPTION) {
             try {
                 return Integer.parseInt(numSidesField.getText());
