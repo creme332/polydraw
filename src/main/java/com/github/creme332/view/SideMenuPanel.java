@@ -51,21 +51,6 @@ public class SideMenuPanel extends JPanel {
         this.add(createButtonsPanel(), BorderLayout.NORTH);
         JPanel settingsPanel = createSettingsPanel();
         this.add(settingsPanel, BorderLayout.CENTER);
-
-        // consume click events on sidebar otherwise the events will happen on the
-        // canvas below it
-        this.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                e.consume();
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                e.consume();
-            }
-        });
-
     }
 
     private JPanel createSettingsPanel() {

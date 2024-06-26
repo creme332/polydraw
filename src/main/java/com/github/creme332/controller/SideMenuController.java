@@ -6,6 +6,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
@@ -42,6 +43,20 @@ public class SideMenuController implements PropertyChangeListener {
 
         // Initialize button listeners
         initializeButtonListeners(app);
+
+        // consume click events on sidebar otherwise the events will happen on the
+        // canvas below it
+        sidebar.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                e.consume();
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                e.consume();
+            }
+        });
     }
 
     @Override
