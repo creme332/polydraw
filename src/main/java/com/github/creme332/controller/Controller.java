@@ -1,7 +1,6 @@
 package com.github.creme332.controller;
 
 import com.github.creme332.model.AppState;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
 
@@ -25,7 +24,7 @@ public class Controller {
 
             // play start animation
             frameController.playStartAnimation();
-        } catch (InvalidIconSizeException | InvalidPathException e) {
+        } catch (InvalidPathException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(1);
         }

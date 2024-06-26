@@ -10,7 +10,6 @@ import static com.github.creme332.utils.IconLoader.loadIcon;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Screen;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 /**
@@ -72,7 +71,7 @@ public class Frame extends JFrame {
     }
 
     public Frame(AppState app)
-            throws InvalidPathException, InvalidIconSizeException {
+            throws InvalidPathException {
         initFrameProperties();
 
         menubar = new MenuBar(app.getMenuModels());
@@ -92,9 +91,9 @@ public class Frame extends JFrame {
         canvasConsole.setBounds(0, 0, 600, 600);
 
         // setup screen container
-        screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.toString());
-        screenContainer.add(canvasScreen, Screen.MAIN_SCREEN.toString());
-        screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.toString());
+        screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.name());
+        screenContainer.add(canvasScreen, Screen.MAIN_SCREEN.name());
+        screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.name());
         this.add(screenContainer);
 
         // display frame
@@ -108,16 +107,16 @@ public class Frame extends JFrame {
     public void showScreen(Screen screen) {
         switch (screen) {
             case SPLASH_SCREEN:
-                cl.show(screenContainer, Screen.SPLASH_SCREEN.toString());
+                cl.show(screenContainer, Screen.SPLASH_SCREEN.name());
                 break;
             case MAIN_SCREEN:
                 requestFocus();
                 menubar.setVisible(true);
-                cl.show(screenContainer, Screen.MAIN_SCREEN.toString());
+                cl.show(screenContainer, Screen.MAIN_SCREEN.name());
                 break;
             case TUTORIAL_SCREEN:
                 menubar.setVisible(false);
-                cl.show(screenContainer, Screen.TUTORIAL_SCREEN.toString());
+                cl.show(screenContainer, Screen.TUTORIAL_SCREEN.name());
                 break;
             default:
                 break;
