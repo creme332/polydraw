@@ -1,6 +1,5 @@
 package com.github.creme332.controller;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
@@ -17,6 +16,10 @@ import javax.swing.JLayeredPane;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Screen;
+import com.github.creme332.utils.DesktopApi;
+import com.github.creme332.utils.DesktopApi.EnumOS;
+import com.github.creme332.view.Canvas;
+import com.github.creme332.view.CanvasConsole;
 import com.github.creme332.view.Frame;
 import com.github.creme332.view.MenuBar;
 import com.github.creme332.view.SideMenuPanel;
@@ -42,7 +45,6 @@ public class FrameController implements PropertyChangeListener {
             @Override
             public void componentResized(ComponentEvent e) {
                 resizeEverything();
-
             }
         });
 
@@ -73,35 +75,45 @@ public class FrameController implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Resizes frame and its components when frame dimensions changes
+     */
     private void resizeEverything() {
         int frameWidth = frame.getWidth();
         int frameHeight = frame.getHeight();
-        System.out.format("Frame dimensions = %d x %d %n", frameWidth,
-                frameHeight);
 
-        Dimension mainDimension = new Dimension(frameWidth, frameHeight - MenuBar.HEIGHT);
+        Dimension mainDimension = new Dimension(frameWidth, frameHeight - MenuBar.HEIGHT - 60);
+
+        if (DesktopApi.getOs() == EnumOS.LINUX) {
+            /**
+             * dimensions for linux are different for some unknown reason. the dimensions
+             * set below are a quick fix that prevents zoom panel and sidebar from
+             * overflowing
+             */
+
+            mainDimension = new Dimension(frameWidth - 80, frameHeight - MenuBar.HEIGHT - 100);
+        }
+
         Rectangle mainBounds = new Rectangle(mainDimension);
 
-        // update canvasScreen dimensions
         JLayeredPane canvasScreen = frame.getCanvasScreen();
-        canvasScreen.setPreferredSize(mainDimension);
-        System.out.format("canvasScreen dimensions = %d x %d %n", canvasScreen.getWidth(), canvasScreen.getHeight());
+        CanvasConsole canvasControl = (CanvasConsole) canvasScreen.getComponent(0);
+        Canvas canvas = (Canvas) canvasScreen.getComponent(1);
 
-        Component canvasControl = canvasScreen.getComponent(0);
-        Component canvas = canvasScreen.getComponent(1);
+        // update canvasScreen dimensions
+        canvasScreen.setMaximumSize(mainDimension);
 
         // update canvas control dimensions]
-        canvasControl.setPreferredSize(mainDimension);
+        canvasControl.setMaximumSize(mainDimension);
         canvasControl.setBounds(mainBounds);
+        canvasControl.revalidate();
 
-        // update sidebar dimensions
-        System.out.format("Sidebar dimensions = %d x %d %n", SideMenuPanel.PREFERRED_WIDTH,
-                frameHeight - MenuBar.HEIGHT);
-        frame.getCanvasConsole().getSidebar().setPreferredSize(new Dimension(SideMenuPanel.PREFERRED_WIDTH,
+        // update sidebar height
+        frame.getCanvasConsole().getSidebar().setMaximumSize(new Dimension(SideMenuPanel.PREFERRED_WIDTH,
                 frameHeight - MenuBar.HEIGHT));
 
         // update canvas position
-        canvas.setPreferredSize(mainDimension);
+        canvas.setMaximumSize(mainDimension);
         canvas.setBounds(mainBounds);
 
         frame.repaint();
