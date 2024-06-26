@@ -2,6 +2,7 @@ package com.github.creme332.controller;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
@@ -17,6 +18,7 @@ import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Screen;
 import com.github.creme332.view.Frame;
+import com.github.creme332.view.MenuBar;
 import com.github.creme332.view.SideMenuPanel;
 
 /**
@@ -76,41 +78,34 @@ public class FrameController implements PropertyChangeListener {
         int frameHeight = frame.getHeight();
         System.out.format("Frame dimensions = %d x %d %n", frameWidth,
                 frameHeight);
-        int menuBarHeight = frame.getMyMenuBar().getHeight();
-        System.out.format("Menubar dimensions = %d x %d %n", frameWidth,
-                menuBarHeight);
-        // update pane dimensions
-        JLayeredPane canvasScreen = frame.getCanvasScreen();
-        canvasScreen.setPreferredSize(new Dimension(frameWidth, frameHeight -
-                menuBarHeight));
-        System.out.format("Pane dimensions = %d x %d %n",
-                canvasScreen.getWidth(),
 
-                canvasScreen.getHeight());
+        Dimension mainDimension = new Dimension(frameWidth, frameHeight - MenuBar.HEIGHT);
+        Rectangle mainBounds = new Rectangle(mainDimension);
+
+        // update canvasScreen dimensions
+        JLayeredPane canvasScreen = frame.getCanvasScreen();
+        canvasScreen.setPreferredSize(mainDimension);
+        System.out.format("canvasScreen dimensions = %d x %d %n", canvasScreen.getWidth(), canvasScreen.getHeight());
 
         Component canvasControl = canvasScreen.getComponent(0);
         Component canvas = canvasScreen.getComponent(1);
 
-        // update canvas control dimensions
-        canvasControl.setBounds(0, 0, frameWidth - 80,
-                frameHeight - menuBarHeight - 100);
-
-        // temporarily hide the canvas control. without this, the canvas console
-        // does not render its new size when frame is maximized.
-        canvasControl.setVisible(false);
-        canvasControl.setVisible(true);
+        // update canvas control dimensions]
+        canvasControl.setPreferredSize(mainDimension);
+        canvasControl.setBounds(mainBounds);
 
         // update sidebar dimensions
-        // int sideBarWidth = Math.min(500, frameWidth / 3);
-        int sideBarWidth = SideMenuPanel.PREFERRED_WIDTH;
-
-        System.out.format("Sidebar dimensions = %d x %d %n", sideBarWidth,
-                frameHeight - menuBarHeight);
-        frame.getCanvasConsole().getSidebar().setPreferredSize(new Dimension(sideBarWidth,
-                frameHeight - menuBarHeight));
+        System.out.format("Sidebar dimensions = %d x %d %n", SideMenuPanel.PREFERRED_WIDTH,
+                frameHeight - MenuBar.HEIGHT);
+        frame.getCanvasConsole().getSidebar().setPreferredSize(new Dimension(SideMenuPanel.PREFERRED_WIDTH,
+                frameHeight - MenuBar.HEIGHT));
 
         // update canvas position
-        canvas.setBounds(0, 0, frameWidth, frameHeight - menuBarHeight);
+        canvas.setPreferredSize(mainDimension);
+        canvas.setBounds(mainBounds);
+
+        frame.repaint();
+        frame.revalidate();
     }
 
     public void playStartAnimation() {
