@@ -15,10 +15,10 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 public class ZoomPanel extends JPanel {
 
-    private JButton homeButton = new CircularButton();
-    private JButton zoomInButton = new CircularButton();
-    private JButton zoomOutButton = new CircularButton();
-    private JButton fullScreenButton = new CircularButton();
+    private JButton homeButton;
+    private JButton zoomInButton;
+    private JButton zoomOutButton;
+    private JButton fullScreenButton;
 
     public ZoomPanel() {
         setOpaque(false);
@@ -60,7 +60,8 @@ public class ZoomPanel extends JPanel {
         final int BUTTON_SIZE = 60;
         final Color gray = new Color(116, 116, 116);
 
-        JButton btn = new CircularButton();
+        JButton btn = new JButton();
+        btn.putClientProperty("FlatLaf.style", "arc:999"); // make buttons circular
         btn.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
 
         FontIcon icon = FontIcon.of(ikon, ICON_SIZE);
