@@ -16,8 +16,8 @@ import com.github.creme332.utils.exception.InvalidPathException;
  * Frame of the GUI application.
  */
 public class Frame extends JFrame {
-    private static final int INITIAL_FRAME_WIDTH = 1600;
-    private static final int INITIAL_FRAME_HEIGHT = 1000;
+    public static final int INITIAL_FRAME_WIDTH = 1600;
+    public static final int INITIAL_FRAME_HEIGHT = 1000;
 
     /**
      * Layout used for screenContainer for swapping screens
