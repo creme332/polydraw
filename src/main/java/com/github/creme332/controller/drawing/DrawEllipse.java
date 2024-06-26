@@ -49,7 +49,7 @@ public class DrawEllipse extends DrawController {
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
             // save wrapper
-            canvasModel.getShapes().add(preview);
+            canvasModel.addShape(preview);
 
         } else {
             if (preview.getPlottedPoints().size() == 1) {
