@@ -18,7 +18,6 @@ import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import com.github.creme332.controller.drawing.DrawCircle;
@@ -41,8 +40,6 @@ public class CanvasController implements PropertyChangeListener {
     private Point mouseDragStart;
     private AppState app;
     private CanvasModel model;
-
-    // private ShapeWrapper shadowPointWrapper = new ShapeWrapper();
 
     private List<DrawController> drawControllers = new ArrayList<>();
 
@@ -79,14 +76,8 @@ public class CanvasController implements PropertyChangeListener {
             @Override
             public void mouseMoved(MouseEvent e) {
                 Point2D polySpaceMousePosition = model.toPolySpace(e.getPoint());
-
-                // model.getShapes().remove(shadowPointWrapper);
-                // shadowPointWrapper = new ShapeWrapper();
-                // shadowPointWrapper.setFillColor(Color.GRAY);
-                // shadowPointWrapper.getPlottedPoints().add(polySpaceMousePosition);
-                // model.getShapes().add(shadowPointWrapper);
-
-                // canvas.repaint();
+                model.setUserMousePosition(polySpaceMousePosition);
+                canvas.repaint();
             }
         });
 

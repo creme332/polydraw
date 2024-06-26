@@ -65,8 +65,36 @@ public class CanvasModel {
 
     private List<ShapeWrapper> shapes = new ArrayList<>();
 
-    private boolean enableGuidelines = true; // Variable to track guidelines visibility
-    private boolean axesVisible = true; // Variable to track axes visibility
+    /**
+     * Whether guidelines should be displayed on canvas
+     */
+    private boolean enableGuidelines = true;
+
+    /**
+     * Whether axes and labels should be displayed on canvas
+     */
+    private boolean axesVisible = true;
+
+    /**
+     * Mouse position of user on canvas in polyspace coordinates.
+     */
+    Point2D userMousePosition;
+
+    /**
+     * 
+     * @return Coordinates of user cursor in polyspace.
+     */
+    public Point2D getUserMousePosition() {
+        return userMousePosition;
+    }
+
+    /**
+     * 
+     * @param newPosition New coordinates of user cursor in polyspace.
+     */
+    public void setUserMousePosition(Point2D newPosition) {
+        userMousePosition = newPosition;
+    }
 
     /**
      * 
