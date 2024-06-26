@@ -36,6 +36,10 @@ public class SideMenuController implements PropertyChangeListener {
 
         sidebar.setVisible(app.getSideBarVisibility());
 
+        // set default values in canvas settings
+        sidebar.getGridLinesCheckBox().setSelected(app.getCanvasModel().isGuidelinesEnabled());
+        sidebar.getAxesCheckBox().setSelected(app.getCanvasModel().isAxesVisible());
+
         // Initialize button listeners
         initializeButtonListeners(app);
     }
