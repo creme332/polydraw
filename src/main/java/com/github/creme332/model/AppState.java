@@ -18,7 +18,7 @@ public class AppState {
     private Mode mode = Mode.MOVE_CANVAS;
 
     private boolean visibleSidebar = false;
-    private boolean maximizeFrame = false;
+    private boolean maximizeFrame = true;
     private CanvasModel canvasModel = new CanvasModel();
 
     private MenuModel[] menuModels;
