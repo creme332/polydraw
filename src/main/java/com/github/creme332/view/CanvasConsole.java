@@ -25,16 +25,14 @@ public class CanvasConsole extends JPanel {
 
     transient CanvasModel canvasModel;
 
-    public CanvasConsole(CanvasModel canvasModel, boolean isSidebarVisible, Mode defaultMode) {
+    public CanvasConsole(CanvasModel canvasModel, Mode defaultMode) {
         this.canvasModel = canvasModel;
         toast = new Toast(defaultMode);
 
-        setOpaque(false); // make panel transparent
+        setOpaque(false);
         setLayout(new BorderLayout());
 
         this.add(createMainPanel(), BorderLayout.CENTER);
-
-        sideMenu.setVisible(isSidebarVisible);
 
         this.add(sideMenu, BorderLayout.EAST);
     }

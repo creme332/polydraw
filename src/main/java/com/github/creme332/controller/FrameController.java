@@ -76,13 +76,14 @@ public class FrameController implements PropertyChangeListener {
     }
 
     /**
-     * Resizes frame and its components when frame dimensions changes
+     * Resizes frame and its components when frame dimensions changes. This is the
+     * function responsible for setting the size of canvas and canvas control.
      */
     private void resizeEverything() {
-        int frameWidth = frame.getWidth();
-        int frameHeight = frame.getHeight();
+        final int frameWidth = frame.getWidth();
+        final int frameHeight = frame.getHeight();
 
-        Dimension mainDimension = new Dimension(frameWidth, frameHeight - MenuBar.HEIGHT - 60);
+        Dimension canvasDimension = new Dimension(frameWidth, frameHeight - MenuBar.HEIGHT - 60);
 
         if (DesktopApi.getOs() == EnumOS.LINUX) {
             /**
@@ -91,30 +92,39 @@ public class FrameController implements PropertyChangeListener {
              * overflowing
              */
 
-            mainDimension = new Dimension(frameWidth - 80, frameHeight - MenuBar.HEIGHT - 100);
+            canvasDimension = new Dimension(frameWidth - 80, frameHeight - MenuBar.HEIGHT - 100);
         }
-
-        Rectangle mainBounds = new Rectangle(mainDimension);
 
         JLayeredPane canvasScreen = frame.getCanvasScreen();
         CanvasConsole canvasControl = (CanvasConsole) canvasScreen.getComponent(0);
         Canvas canvas = (Canvas) canvasScreen.getComponent(1);
 
         // update canvasScreen dimensions
-        canvasScreen.setMaximumSize(mainDimension);
+        canvasScreen.setMaximumSize(canvasDimension);
+
+        // update canvas position
+        canvas.setMaximumSize(canvasDimension);
+        canvas.setBounds(new Rectangle(canvasDimension));
+
+        /**
+         * Calculate dimensions of canvas control, taking into account whether the
+         * sidebar is visible. Note: Hiding of the sidebar is made possible by pushing
+         * it out the frame. This makes sidebar animation easier.
+         */
+
+        final boolean sidebarEnabled = app.getSideBarVisibility();
+        final Dimension canvasControlDimension = new Dimension(
+                canvasDimension.width + (sidebarEnabled ? 0 : SideMenuPanel.PREFERRED_WIDTH),
+                canvasDimension.height);
 
         // update canvas control dimensions]
-        canvasControl.setMaximumSize(mainDimension);
-        canvasControl.setBounds(mainBounds);
+        canvasControl.setMaximumSize(canvasControlDimension);
+        canvasControl.setBounds(new Rectangle(canvasControlDimension));
         canvasControl.revalidate();
 
         // update sidebar height
         frame.getCanvasConsole().getSidebar().setMaximumSize(new Dimension(SideMenuPanel.PREFERRED_WIDTH,
                 frameHeight - MenuBar.HEIGHT));
-
-        // update canvas position
-        canvas.setMaximumSize(mainDimension);
-        canvas.setBounds(mainBounds);
 
         frame.repaint();
         frame.revalidate();
