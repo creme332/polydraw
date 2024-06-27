@@ -1,6 +1,7 @@
 package com.github.creme332.view;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Insets;
 
 import javax.swing.JPanel;
@@ -20,6 +21,7 @@ public class CanvasConsole extends JPanel {
     private Toast toast;
     private ZoomPanel zoomPanel = new ZoomPanel();
     SideMenuPanel sideMenu = new SideMenuPanel();
+    private JPanel toastContainer = new JPanel(new CardLayout());
 
     transient CanvasModel canvasModel;
 
@@ -35,6 +37,21 @@ public class CanvasConsole extends JPanel {
         sideMenu.setVisible(isSidebarVisible);
 
         this.add(sideMenu, BorderLayout.EAST);
+    }
+
+    /**
+     * Toggles visibility of toast without shifting position of other components in
+     * canvas console.
+     * 
+     * @param isVisible
+     */
+    public void toggleToastVisibility(boolean isVisible) {
+        CardLayout cl = (CardLayout) (toastContainer.getLayout());
+        if (isVisible) {
+            cl.show(toastContainer, "COMPONENT");
+        } else {
+            cl.show(toastContainer, "EMPTY");
+        }
     }
 
     /**
@@ -59,12 +76,22 @@ public class CanvasConsole extends JPanel {
         topPanel.add(toolbar);
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
+        // create toast container to be placed south
+        toastContainer.setOpaque(false);
+
         JPanel southPanel = new JPanel(new BorderLayout());
         southPanel.setBorder(new EmptyBorder(new Insets(0, 20, 10, 0)));
         southPanel.setOpaque(false);
-
         southPanel.add(toast, BorderLayout.WEST);
-        mainPanel.add(southPanel, BorderLayout.SOUTH);
+        toastContainer.add(southPanel, "COMPONENT");
+
+        JPanel emptyToastPanel = new JPanel();
+        emptyToastPanel.setOpaque(false);
+        emptyToastPanel.setPreferredSize(southPanel.getPreferredSize());
+        toastContainer.add(emptyToastPanel, "EMPTY");
+
+        toastContainer.setPreferredSize(southPanel.getPreferredSize());
+        mainPanel.add(toastContainer, BorderLayout.SOUTH);
 
         JPanel eastPanel = new JPanel(new BorderLayout());
         eastPanel.setBorder(new EmptyBorder(new Insets(0, 0, 0, 20)));
