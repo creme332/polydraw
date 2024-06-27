@@ -16,7 +16,7 @@ public class ZoomPanelController {
         this.view = view;
 
         // Add action listeners for the zoom panel buttons
-        view.getHomeButton().addActionListener(e -> canvasModel.resetZoom());
+        view.getHomeButton().addActionListener(e -> canvasModel.toStandardView());
         view.getZoomInButton().addActionListener(e -> canvasModel.updateCanvasZoom(true));
         view.getZoomOutButton().addActionListener(e -> canvasModel.updateCanvasZoom(false));
         view.getFullScreenButton().addActionListener(e -> appState.setMaximizeFrame(!appState.isMaximizeFrame()));

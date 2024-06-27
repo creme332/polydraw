@@ -9,11 +9,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -61,7 +63,8 @@ public class CanvasController implements PropertyChangeListener {
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                handleCanvasResize();
+                model.setCanvasDimension(new Dimension(canvas.getWidth(), canvas.getHeight()));
+                model.toStandardView();
             }
         });
 
@@ -121,19 +124,6 @@ public class CanvasController implements PropertyChangeListener {
         }
     }
 
-    private void handleCanvasResize() {
-        if (model == null)
-            return;
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
-
-        // place origin at center of canvas
-        model.setYZero(height / 2);
-        model.setXZero(width / 2);
-
-        canvas.repaint();
-    }
-
     private void handleMousePressed(MouseEvent e) {
         if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW || app.getMode() == Mode.MOVE_CANVAS) {
             mouseDragStart = e.getPoint();
@@ -190,9 +180,13 @@ public class CanvasController implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         final String propertyName = e.getPropertyName();
+        /**
+         * List of property names that should result only in a canvas repaint.
+         */
+        final Set<String> repaintProperties = Set.of("clearCanvas", "standardView", "enableGuidelines",
+                "cellSize", "axesVisible");
 
-        // if canvas was cleared
-        if ("clearCanvas".equals(propertyName)) {
+        if (repaintProperties.contains(propertyName)) {
             canvas.repaint();
             return;
         }
@@ -203,13 +197,6 @@ public class CanvasController implements PropertyChangeListener {
                 controller.disposePreview();
             }
             // update canvas to erase any possible incomplete shape
-            canvas.repaint();
-            return;
-        }
-
-        // if guidelines were toggled or zoom was changed or axes were toggled
-        if ("enableGuidelines".equals(propertyName) || "cellSize".equals(propertyName)
-                || "axesVisible".equals(propertyName)) {
             canvas.repaint();
             return;
         }

@@ -9,8 +9,11 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
+import java.awt.Dimension;
 
 public class CanvasModel {
+    private Dimension canvasDimension;
+
     /**
      * Spacing (in pixels) between top of canvas and tick label when axis is out of
      * sight.
@@ -88,6 +91,14 @@ public class CanvasModel {
         return userMousePosition;
     }
 
+    public void setCanvasDimension(Dimension canvasDimension) {
+        this.canvasDimension = canvasDimension;
+    }
+
+    public Dimension getCanvasDimension() {
+        return canvasDimension;
+    }
+
     /**
      * 
      * @param newPosition New coordinates of user cursor in polyspace.
@@ -162,8 +173,9 @@ public class CanvasModel {
     }
 
     /**
+     * Converts a shape in user space to polydraw space.
      * 
-     * @param shape
+     * @param shape A shape defined in user space.
      * @return
      */
     public Shape toPolySpace(Shape shape) {
@@ -171,8 +183,9 @@ public class CanvasModel {
     }
 
     /**
+     * Converts a point in user space to polydraw space.
      * 
-     * @param point
+     * @param point A point defined in user space.
      * @return
      */
     public Point2D toPolySpace(Point2D point) {
@@ -199,9 +212,32 @@ public class CanvasModel {
         cellSize = newCellSize;
     }
 
-    public void resetZoom() {
-        support.firePropertyChange("cellSize", cellSize, DEFAULT_CELL_SIZE);
+    /**
+     * Checks if canvas is its standard view. To be in standard view, the origin
+     * must be at center of screen and cell size must have its default value.
+     * 
+     * @return
+     */
+    public boolean isStandardView() {
+        if (cellSize != DEFAULT_CELL_SIZE)
+            return false;
+        if (yZero != (int) canvasDimension.getHeight() / 2)
+            return false;
+        return (xZero == (int) canvasDimension.getWidth() / 2);
+    }
+
+    /**
+     * Converts canvas to standard view.
+     */
+    public void toStandardView() {
+        if (isStandardView())
+            return;
+
+        setYZero((int) canvasDimension.getHeight() / 2);
+        setXZero((int) canvasDimension.getWidth() / 2);
         cellSize = DEFAULT_CELL_SIZE;
+
+        support.firePropertyChange("standardView", false, true);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -209,6 +245,7 @@ public class CanvasModel {
         support.addPropertyChangeListener("axesVisible", listener);
         support.addPropertyChangeListener("cellSize", listener);
         support.addPropertyChangeListener("clearCanvas", listener);
+        support.addPropertyChangeListener("standardView", listener);
     }
 
     /**
