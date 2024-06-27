@@ -155,9 +155,20 @@ public class CanvasController implements PropertyChangeListener {
      * </ol>
      */
     private void handleCanvasExport() {
-        BufferedImage image = canvas.toImage();
-        JFileChooser fileChooser = new JFileChooser();
+        // temporarily hide cursor position
+        Point2D cursorPosition = model.getUserMousePosition();
+        model.setUserMousePosition(null);
+        canvas.repaint();
 
+        // get canvas as a buffered image
+        BufferedImage image = canvas.toImage();
+
+        // display cursor again
+        model.setUserMousePosition(cursorPosition);
+        canvas.repaint();
+
+        // let user choose file location
+        JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Choose folder to save image");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setAcceptAllFileFilterUsed(false); // disable the "All files" option.
