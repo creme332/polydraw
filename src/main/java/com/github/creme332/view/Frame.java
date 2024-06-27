@@ -75,7 +75,7 @@ public class Frame extends JFrame {
         initFrameProperties();
 
         menubar = new MenuBar(app.getMenuModels());
-        canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getSideBarVisibility(), app.getMode());
+        canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getMode());
         canvas = new Canvas(app.getCanvasModel());
         tutorialCenter = new TutorialCenter();
 
