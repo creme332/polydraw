@@ -13,11 +13,13 @@ An application for drawing rasterized shapes, inspired by GeoGebra Classic.
 - Animated transformations.
 - Ellipse drawing using midpoint ellipse algorithm.
 - Polygon fill using scan fill algorithm.
-- Shape clippping using Cohen Sutherland line clipping algorithm.
+- Shape clipping using Cohen Sutherland line clipping algorithm.
 - Drag and drop to move shapes.
-- Testing with JUnit.
+- Testing with JUnit 4.
 - Responsive sidebar.
 - In-app tutorials with searching functionality.
+- Cross-platform GUI.
+- Export canvas as image.
 
 ## Documentation
 

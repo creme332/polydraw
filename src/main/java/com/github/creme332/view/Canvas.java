@@ -207,8 +207,13 @@ public class Canvas extends JPanel {
             g2.setStroke(getStroke(wrapper.getLineType(), wrapper.getLineThickness()));
 
             if (wrapper.getShape() != null) {
+                // draw shape outline
                 Shape s1 = model.toUserSpace(wrapper.getShape());
                 g2.draw(s1);
+
+                // fill shape
+                g2.setColor(wrapper.getFillColor());
+                g2.fill(s1);
             }
 
             // display points plotted by user
@@ -260,5 +265,39 @@ public class Canvas extends JPanel {
                 mySpaceCoord.getY() - radius / 2,
                 radius,
                 radius);
+    }
+
+    /**
+     * Make a color lighter.
+     * 
+     * @param color
+     *              Color to mix with white.
+     * @param ratio
+     *              White ratio (1.0 = complete white, 0.0 = color).
+     * @return Lighter color.
+     */
+    public static Color lighter(Color color, float ratio) {
+        return mergeColors(Color.WHITE, ratio, color, 1 - ratio);
+    }
+
+    /**
+     * Merges two colors. The two floating point arguments specify "how much" of the
+     * corresponding color is added to the
+     * resulting color. Both arguments should (but don't have to) add to
+     * <code>1.0</code>.
+     * <p>
+     * This method is null-safe. If one of the given colors is <code>null</code>,
+     * the other color is returned (unchanged).
+     */
+    public static Color mergeColors(Color a, float fa, Color b, float fb) {
+        if (a == null) {
+            return b;
+        }
+        if (b == null) {
+            return a;
+        }
+        return new Color((fa * a.getRed() + fb * b.getRed()) / (fa + fb) / 255f,
+                (fa * a.getGreen() + fb * b.getGreen()) / (fa + fb) / 255f,
+                (fa * a.getBlue() + fb * b.getBlue()) / (fa + fb) / 255f);
     }
 }

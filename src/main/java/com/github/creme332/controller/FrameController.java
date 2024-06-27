@@ -1,7 +1,7 @@
 package com.github.creme332.controller;
 
-import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
@@ -16,7 +16,12 @@ import javax.swing.JLayeredPane;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Screen;
+import com.github.creme332.utils.DesktopApi;
+import com.github.creme332.utils.DesktopApi.EnumOS;
+import com.github.creme332.view.Canvas;
+import com.github.creme332.view.CanvasConsole;
 import com.github.creme332.view.Frame;
+import com.github.creme332.view.MenuBar;
 import com.github.creme332.view.SideMenuPanel;
 
 /**
@@ -40,7 +45,6 @@ public class FrameController implements PropertyChangeListener {
             @Override
             public void componentResized(ComponentEvent e) {
                 resizeEverything();
-
             }
         });
 
@@ -71,46 +75,49 @@ public class FrameController implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Resizes frame and its components when frame dimensions changes
+     */
     private void resizeEverything() {
         int frameWidth = frame.getWidth();
         int frameHeight = frame.getHeight();
-        System.out.format("Frame dimensions = %d x %d %n", frameWidth,
-                frameHeight);
-        int menuBarHeight = frame.getMyMenuBar().getHeight();
-        System.out.format("Menubar dimensions = %d x %d %n", frameWidth,
-                menuBarHeight);
-        // update pane dimensions
+
+        Dimension mainDimension = new Dimension(frameWidth, frameHeight - MenuBar.HEIGHT - 60);
+
+        if (DesktopApi.getOs() == EnumOS.LINUX) {
+            /**
+             * dimensions for linux are different for some unknown reason. the dimensions
+             * set below are a quick fix that prevents zoom panel and sidebar from
+             * overflowing
+             */
+
+            mainDimension = new Dimension(frameWidth - 80, frameHeight - MenuBar.HEIGHT - 100);
+        }
+
+        Rectangle mainBounds = new Rectangle(mainDimension);
+
         JLayeredPane canvasScreen = frame.getCanvasScreen();
-        canvasScreen.setPreferredSize(new Dimension(frameWidth, frameHeight -
-                menuBarHeight));
-        System.out.format("Pane dimensions = %d x %d %n",
-                canvasScreen.getWidth(),
+        CanvasConsole canvasControl = (CanvasConsole) canvasScreen.getComponent(0);
+        Canvas canvas = (Canvas) canvasScreen.getComponent(1);
 
-                canvasScreen.getHeight());
+        // update canvasScreen dimensions
+        canvasScreen.setMaximumSize(mainDimension);
 
-        Component canvasControl = canvasScreen.getComponent(0);
-        Component canvas = canvasScreen.getComponent(1);
+        // update canvas control dimensions]
+        canvasControl.setMaximumSize(mainDimension);
+        canvasControl.setBounds(mainBounds);
+        canvasControl.revalidate();
 
-        // update canvas control dimensions
-        canvasControl.setBounds(0, 0, frameWidth - 80,
-                frameHeight - menuBarHeight - 100);
-
-        // temporarily hide the canvas control. without this, the canvas console
-        // does not render its new size when frame is maximized.
-        canvasControl.setVisible(false);
-        canvasControl.setVisible(true);
-
-        // update sidebar dimensions
-        // int sideBarWidth = Math.min(500, frameWidth / 3);
-        int sideBarWidth = SideMenuPanel.PREFERRED_WIDTH;
-
-        System.out.format("Sidebar dimensions = %d x %d %n", sideBarWidth,
-                frameHeight - menuBarHeight);
-        frame.getCanvasConsole().getSidebar().setPreferredSize(new Dimension(sideBarWidth,
-                frameHeight - menuBarHeight));
+        // update sidebar height
+        frame.getCanvasConsole().getSidebar().setMaximumSize(new Dimension(SideMenuPanel.PREFERRED_WIDTH,
+                frameHeight - MenuBar.HEIGHT));
 
         // update canvas position
-        canvas.setBounds(0, 0, frameWidth, frameHeight - menuBarHeight);
+        canvas.setMaximumSize(mainDimension);
+        canvas.setBounds(mainBounds);
+
+        frame.repaint();
+        frame.revalidate();
     }
 
     public void playStartAnimation() {
