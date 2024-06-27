@@ -43,7 +43,6 @@ public class AppState {
                         Mode.MOVE_GRAPHICS_VIEW),
                 new MenuItemModel("Zoom In", FontIcon.of(BootstrapIcons.ZOOM_IN, 35), Mode.ZOOM_IN),
                 new MenuItemModel("Zoom Out", FontIcon.of(BootstrapIcons.ZOOM_OUT, 35), Mode.ZOOM_OUT),
-                new MenuItemModel("Delete", FontIcon.of(BootstrapIcons.ERASER, 40), Mode.DELETE)
         });
 
         MenuModel transformationsMenuModel = new MenuModel(new MenuItemModel[] {
@@ -58,7 +57,6 @@ public class AppState {
                         Mode.TRANSLATION),
                 new MenuItemModel("Scaling", FontIcon.of(BootstrapIcons.ARROWS_ANGLE_EXPAND, 35), Mode.SCALING),
                 new MenuItemModel("Shear", FontIcon.of(BootstrapIcons.BOX_ARROW_DOWN_LEFT, 35), Mode.SHEAR),
-                new MenuItemModel("Clipping", FontIcon.of(BootstrapIcons.SCISSORS, 35), Mode.CLIPPING),
         });
 
         MenuModel polygonMenuModel = new MenuModel(new MenuItemModel[] {
@@ -89,6 +87,11 @@ public class AppState {
                 new MenuItemModel("Freehand Shape", loadIcon("/icons/freehand.png", 50), Mode.DRAW_FREEHAND)
         });
 
+        MenuModel deletionModel = new MenuModel(new MenuItemModel[] {
+                new MenuItemModel("Delete", FontIcon.of(BootstrapIcons.ERASER, 40), Mode.DELETE),
+                new MenuItemModel("Clip", FontIcon.of(BootstrapIcons.SCISSORS, 35), Mode.CLIPPING)
+        });
+
         return new MenuModel[] {
                 cursorMenuModel,
                 lineMenuModel,
@@ -96,7 +99,8 @@ public class AppState {
                 ellipseMenuModel,
                 polygonMenuModel,
                 transformationsMenuModel,
-                graphicsMenuModel
+                graphicsMenuModel,
+                deletionModel
         };
     }
 
@@ -176,7 +180,7 @@ public class AppState {
                 maximizeFrame);
         this.maximizeFrame = maximizeFrame;
     }
-    
+
     public void startPrintingProcess() {
         support.firePropertyChange("printingCanvas", null, true);
     }
