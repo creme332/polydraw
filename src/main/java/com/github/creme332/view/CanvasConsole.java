@@ -64,7 +64,7 @@ public class CanvasConsole extends JPanel {
         mainPanel.setOpaque(false); // make panel transparent
 
         try {
-            toolbar = new Toolbar(canvasModel.getLineType(), canvasModel.getFillColor(),
+            toolbar = new Toolbar(canvasModel.getLineType(), canvasModel.getShapeColor(),
                     canvasModel.getLineThickness());
         } catch (InvalidIconSizeException | InvalidPathException e) {
             e.printStackTrace();

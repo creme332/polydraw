@@ -41,7 +41,7 @@ public class DrawRegularPolygon extends DrawController {
             // center of polygon has been input
 
             // initialize shape preview
-            preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+            preview = new ShapeWrapper(canvasModel.getShapeColor(),
                     canvasModel.getLineType(),
                     canvasModel.getLineThickness());
             preview.getPlottedPoints().add(polySpaceMousePosition);

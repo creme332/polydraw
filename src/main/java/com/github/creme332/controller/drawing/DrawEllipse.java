@@ -43,7 +43,7 @@ public class DrawEllipse extends DrawController {
             // center of ellipse has been selected
 
             // create a shape wrapper
-            preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+            preview = new ShapeWrapper(canvasModel.getShapeColor(),
                     canvasModel.getLineType(),
                     canvasModel.getLineThickness());
             preview.getPlottedPoints().add(polySpaceMousePosition);

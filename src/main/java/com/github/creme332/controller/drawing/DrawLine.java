@@ -52,7 +52,7 @@ public class DrawLine extends DrawController {
             // first coordinate of line has just been selected
 
             // create a shape wrapper
-            preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+            preview = new ShapeWrapper(canvasModel.getShapeColor(),
                     canvasModel.getLineType(),
                     canvasModel.getLineThickness());
 

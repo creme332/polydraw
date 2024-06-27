@@ -10,7 +10,6 @@ import java.awt.geom.Point2D;
 public class ShapeWrapper {
     private Shape shape;
     private Color lineColor = Color.BLACK;
-    private Color fillColor = Color.BLACK;
     private LineType lineType = LineType.SOLID;
     private int lineThickness = 1;
 
@@ -23,9 +22,8 @@ public class ShapeWrapper {
         return plottedPoints;
     }
 
-    public ShapeWrapper(Color lineColor, Color fillColor, LineType lineType, int lineThickness) {
+    public ShapeWrapper(Color lineColor, LineType lineType, int lineThickness) {
         this.lineColor = lineColor;
-        this.fillColor = fillColor;
         this.lineType = lineType;
         this.lineThickness = lineThickness;
     }
@@ -38,7 +36,6 @@ public class ShapeWrapper {
     public ShapeWrapper(ShapeWrapper wrapper) {
         // save primitive attributes
         lineColor = wrapper.lineColor;
-        fillColor = wrapper.fillColor;
         lineType = wrapper.lineType;
         lineThickness = wrapper.lineThickness;
 
@@ -71,8 +68,12 @@ public class ShapeWrapper {
         this.lineColor = lineColor;
     }
 
+    /**
+     * Fill color is a transparent version of the line color.
+     */
     public Color getFillColor() {
-        return fillColor;
+        Color a = lineColor;
+        return new Color(a.getRed() / 255f, a.getGreen() / 255f, a.getBlue() / 255f, .2f);
     }
 
     public void setLineThickness(int lineThickness) {
@@ -81,10 +82,6 @@ public class ShapeWrapper {
 
     public int getLineThickness() {
         return lineThickness;
-    }
-
-    public void setFillColor(Color fillColor) {
-        this.fillColor = fillColor;
     }
 
     public LineType getLineType() {

@@ -47,7 +47,7 @@ public class DrawCircle extends DrawController {
             // center has been selected
 
             // create preview and plot center
-            preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+            preview = new ShapeWrapper(canvasModel.getShapeColor(),
                     canvasModel.getLineType(),
                     canvasModel.getLineThickness());
             preview.getPlottedPoints().add(polySpaceMousePosition);
@@ -75,7 +75,7 @@ public class DrawCircle extends DrawController {
                 // center has been selected
 
                 // create a shape wrapper
-                preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+                preview = new ShapeWrapper(canvasModel.getShapeColor(),
                         canvasModel.getLineType(),
                         canvasModel.getLineThickness());
                 preview.getPlottedPoints().add(polySpaceMousePosition);

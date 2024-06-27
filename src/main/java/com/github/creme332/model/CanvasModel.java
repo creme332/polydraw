@@ -51,9 +51,10 @@ public class CanvasModel {
 
     private float labelFontSizeScaleFactor = 1.4F;
 
+    // define attributes for next shape to be drawn
     private LineType lineType = LineType.SOLID;
     private int lineThickness = 3;
-    private Color fillColor = Color.BLACK;
+    private Color shapeColor = Color.BLACK;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     /**
@@ -327,12 +328,12 @@ public class CanvasModel {
         this.lineThickness = lineThickness;
     }
 
-    public Color getFillColor() {
-        return fillColor;
+    public Color getShapeColor() {
+        return shapeColor;
     }
 
-    public void setFillColor(Color fillColor) {
-        this.fillColor = fillColor;
+    public void setShapeColor(Color fillColor) {
+        this.shapeColor = fillColor;
     }
 
     public boolean isAxesVisible() {
