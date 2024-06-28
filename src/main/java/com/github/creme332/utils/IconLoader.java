@@ -2,11 +2,17 @@ package com.github.creme332.utils;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
+import com.github.creme332.view.SVGIcon;
+import com.github.weisj.jsvg.SVGDocument;
+import com.github.weisj.jsvg.geometry.size.FloatSize;
+import com.github.weisj.jsvg.parser.SVGLoader;
 
 public class IconLoader {
     private IconLoader() {
@@ -99,6 +105,27 @@ public class IconLoader {
         if (path.length() < 1 || path.charAt(0) != '/') {
             throw new InvalidPathException("Path should start with /");
         }
+
+        if (path.endsWith(".svg")) {
+            System.out.println("here");
+            SVGLoader loader = new SVGLoader();
+            SVGDocument svgDocument = loader.load(IconLoader.class.getResource(path));
+            FloatSize size = svgDocument.size();
+            System.out.println(size);
+            BufferedImage image = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+            return new ImageIcon(image);
+        }
+
         return new ImageIcon(IconLoader.class.getResource(path));
+    }
+
+    public static Icon loadSVGIcon(String path) throws InvalidPathException {
+        if (path.length() < 1 || path.charAt(0) != '/' || !path.endsWith(".svg")) {
+            throw new InvalidPathException("Path should start with / and be an SVG.");
+        }
+
+        SVGLoader loader = new SVGLoader();
+        SVGDocument svgDocument = loader.load(IconLoader.class.getResource(path));
+        return new SVGIcon(svgDocument, 50, 50);
     }
 }

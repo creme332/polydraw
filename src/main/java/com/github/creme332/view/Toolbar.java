@@ -70,7 +70,7 @@ public class Toolbar extends JToolBar {
 
         // add menu items for the different line types
         for (LineType type : LineType.values()) {
-            JMenuItem menuItem = new JMenuItem(type.getDescription(), loadIcon(type.getIconPath(), ICON_SIZE));
+            JMenuItem menuItem = new JMenuItem(type.getDescription(), type.getIcon());
             menuItem.setActionCommand(type.getDescription());
             lineMenu.add(menuItem);
         }
@@ -109,11 +109,6 @@ public class Toolbar extends JToolBar {
     }
 
     public void displayLineIcon(LineType line) {
-        try {
-            lineMenu.setIcon(loadIcon(line.getIconPath(), ICON_SIZE));
-        } catch (InvalidIconSizeException | InvalidPathException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+        lineMenu.setIcon(line.getIcon());
     }
 }
