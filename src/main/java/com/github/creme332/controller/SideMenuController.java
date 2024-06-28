@@ -1,11 +1,11 @@
 package com.github.creme332.controller;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
@@ -16,7 +16,7 @@ import com.github.creme332.utils.DesktopApi;
 /**
  * Controller responsible for managing sidebar in CanvasConsole.
  */
-public class SideMenuController implements PropertyChangeListener {
+public class SideMenuController {
 
     private static final String PROJECT_INFO = """
             Polydraw is an application for drawing rasterized shapes, inspired by Geogebra Classic.
@@ -32,20 +32,26 @@ public class SideMenuController implements PropertyChangeListener {
     public SideMenuController(AppState app, SideMenuPanel sidebar) {
         this.sidebar = sidebar;
 
-        app.addPropertyChangeListener(this);
-
-        sidebar.setVisible(app.getSideBarVisibility());
+        // set default values in canvas settings
+        sidebar.getGridLinesCheckBox().setSelected(app.getCanvasModel().isGuidelinesEnabled());
+        sidebar.getAxesCheckBox().setSelected(app.getCanvasModel().isAxesVisible());
 
         // Initialize button listeners
         initializeButtonListeners(app);
-    }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent e) {
-        String propertyName = e.getPropertyName();
-        if ("sidebarVisibility".equals(propertyName)) {
-            sidebar.setVisible((boolean) e.getNewValue());
-        }
+        // consume click events on sidebar otherwise the events will happen on the
+        // canvas below it
+        sidebar.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                e.consume();
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                e.consume();
+            }
+        });
     }
 
     private void initializeButtonListeners(AppState app) {

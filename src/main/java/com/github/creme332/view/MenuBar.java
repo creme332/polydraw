@@ -27,16 +27,18 @@ public class MenuBar extends JMenuBar {
     private JButton helpButton;
 
     private List<JMenu> jmenus = new ArrayList<>();
+    public static final int HEIGHT = 70;
 
     public MenuBar(MenuModel[] menus) {
 
-        setPreferredSize(new Dimension(getWidth(), 70));
+        setPreferredSize(new Dimension(getWidth(), HEIGHT));
         setBorder(new EmptyBorder(new Insets(7, 0, 7, 0)));
         setBackground(new Color(248, 248, 248));
 
         // add menus to menubar
         for (MenuModel menuModel : menus) {
             JMenu menu = new RoundedMenu();
+            menu.setOpaque(false);
             jmenus.add(menu);
             menu.setIcon(menuModel.getActiveItem().getIcon());
             menu.setToolTipText(menuModel.getActiveItem().getName());

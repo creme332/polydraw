@@ -84,7 +84,7 @@ public abstract class DrawController {
      * invoked when mode changes while drawing was ongoing.
      */
     public void disposePreview() {
-        canvasModel.getShapes().remove(preview);
+        canvasModel.removeShape(preview);
         preview = null;
     }
 }
