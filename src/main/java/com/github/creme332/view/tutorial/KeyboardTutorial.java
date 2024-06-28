@@ -11,6 +11,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.text.BadLocationException;
 
 import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
@@ -26,6 +27,16 @@ public class KeyboardTutorial extends TutorialPanel {
     public KeyboardTutorial() throws InvalidPathException, InvalidIconSizeException {
         super(KEYBOARD_TUTORIAL_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png",
                 getScaledDimension(new Dimension(753, 453), TutorialCard.IMAGE_DIMENSION)));
+
+        try {
+            // Insert text
+            doc.insertString(doc.getLength(),
+                    "In this tutorial you will learn how to draw a line using DDA or Bresenham line algorithm.\n\n",
+                    regular);
+            textPane.setPreferredSize(new Dimension(200, 200));
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
         createTable();
     }
 
@@ -33,15 +44,28 @@ public class KeyboardTutorial extends TutorialPanel {
         // Define the table data with application-specific shortcuts
         String[] columnNames = { "Keyboard Shortcut", "Action" };
         Object[][] data = {
-                { "Tab", "Go to the next column.\nIf at the end of a row, go to the first cell in the next row." },
-                { "Shift+Tab", "Go to the previous column.\nIf at the end of a row, go to the last cell in the previous row." },
-                { "Enter", "Go to the next row in the same column." },
-                { "Home or Ctrl+Left arrow key", "Go to the first cell in a row." },
-                { "Esc", "Select mode in the first menu." },
-                { "1", "Select mode in the first menu." },
-                { "2", "Select mode in the second menu." },
-                { "3", "Select mode in the third menu." },
-                // Add more shortcuts as needed
+                { "Ctrl + c", "Copy selected shape" },
+                { "Ctrl + v", "Paste a previously copied shape" },
+                { "Ctrl + z", "Undo" },
+                { "Ctrl + Shift + z", "Redo" },
+                { "Ctrl + p", "Export canvas" },
+                { "Ctrl + +", "Zoom in" },
+                { "Ctrl + -", "Zoom out" },
+                { "Ctrl + 0", "Zoom 100%" },
+
+                { "Esc", "Go back" },
+                { "1", "Select cursor menu" },
+                { "2", "Select line menu" },
+                { "3", "Select circle menu" },
+                { "4", "Select ellipse menu" },
+                { "5", "Select polygon menu" },
+                { "6", "Select transformations menu" },
+                { "7", "Select move menu" },
+                { "8", "Select delete menu" },
+
+                { "Alt + h", "Open help center" },
+                { "Ctrl + Shift + s", "Toggle sidebar visibility" },
+
         };
 
         // Create the table model and set it to be non-editable
@@ -53,7 +77,6 @@ public class KeyboardTutorial extends TutorialPanel {
         };
 
         JTable table = new JTable(model) {
-
             @Override
             public void doLayout() {
                 for (int row = 0; row < getRowCount(); row++) {
@@ -87,13 +110,18 @@ public class KeyboardTutorial extends TutorialPanel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                 int row, int column) {
-            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            label.setVerticalAlignment(JLabel.TOP);
+            JLabel label = new JLabel(value.toString());
+            label.setVerticalAlignment(javax.swing.SwingConstants.TOP);
             label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             label.setHorizontalAlignment(SwingConstants.LEFT);
-            // Wrap text
-            String text = "<html>" + value.toString().replace("\n", "<br>") + "</html>";
-            label.setText(text);
+
+            if (column == 0) {
+                // use monospace style for keyboard keys
+                label.putClientProperty("FlatLaf.style", "font: 105% $monospaced.font");
+            } else {
+                // Wrap text
+                label.setText("<html>" + value.toString().replace("\n", "<br>") + "</html>");
+            }
 
             return label;
         }
