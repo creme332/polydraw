@@ -179,6 +179,11 @@ public class GettingStartedTutorial extends TutorialPanel {
                     return String.class;
                 }
             }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make the cells non-editable
+            }
         };
 
         JTable table = new JTable(tableModel);
@@ -203,9 +208,14 @@ public class GettingStartedTutorial extends TutorialPanel {
     private JPanel createTextTable(Object[][] data) {
         String[] columnNames = { "Title", "Description" };
 
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make the cells non-editable
+            }
+        };
 
-        JTable table = new JTable(tableModel);
+        JTable table = new JTable(model);
         table.setRowHeight(30);
         table.setFillsViewportHeight(true);
 
