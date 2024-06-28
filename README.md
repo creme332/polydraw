@@ -20,6 +20,7 @@ An application for drawing rasterized shapes, inspired by GeoGebra Classic.
 - In-app tutorials with searching functionality.
 - Cross-platform GUI.
 - Export canvas as image.
+- Keyboard shortcuts.
 
 ## Documentation
 
