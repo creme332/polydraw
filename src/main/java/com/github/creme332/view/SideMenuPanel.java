@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,6 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -36,36 +35,27 @@ public class SideMenuPanel extends JPanel {
     JComboBox<String> fontSizeSelector;
     JButton resetButton;
 
-    public static final int BORDER_SIZE = 2;
+    public static final int BORDER_SIZE = 1;
     public static final int PREFERRED_WIDTH = 275;
 
     public SideMenuPanel() {
         setLayout(new BorderLayout());
+
+        JPanel container = new JPanel(new BorderLayout());
+        container.setOpaque(false);
         this.setPreferredSize(new Dimension(PREFERRED_WIDTH + BORDER_SIZE, getHeight()));
 
         // add a left border to the sidebar to prevent it from blending with canvas
         MatteBorder leftBorder = BorderFactory.createMatteBorder(
                 0, BORDER_SIZE, 0, 0, new Color(226, 226, 226));
-        setBorder(leftBorder);
+        container.setBorder(leftBorder);
 
-        this.add(createButtonsPanel(), BorderLayout.NORTH);
+        container.add(createButtonsPanel(), BorderLayout.NORTH);
         JPanel settingsPanel = createSettingsPanel();
-        this.add(settingsPanel, BorderLayout.CENTER);
+        container.add(settingsPanel, BorderLayout.CENTER);
 
-        // consume click events on sidebar otherwise the events will happen on the
-        // canvas below it
-        this.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                e.consume();
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                e.consume();
-            }
-        });
-
+        JScrollPane scrollPane = new JScrollPane(container);
+        this.add(scrollPane);
     }
 
     private JPanel createSettingsPanel() {
@@ -114,7 +104,7 @@ public class SideMenuPanel extends JPanel {
                 new String[] { "12 pt", "16 pt", "18 pt", "20 pt", "24 pt", "28 pt" });
         formPanel.add(fontSizeSelector, gbc);
 
-        resetButton = new JButton("Reset");  // Initialize resetButton here
+        resetButton = new JButton("Reset");
         resetButton.putClientProperty("FlatLaf.style", "background: #FFB8B8");
         settingsPanel.add(resetButton, BorderLayout.SOUTH);
 
