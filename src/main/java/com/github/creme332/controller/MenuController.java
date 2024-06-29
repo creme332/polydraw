@@ -7,6 +7,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import com.github.creme332.model.MenuModel;
+import com.github.creme332.model.Mode;
 
 /**
  * Controller for a JMenu found in MenuBar.
@@ -22,14 +23,14 @@ public class MenuController {
         // for each menu item
         for (int j = 0; j < model.getItems().length; j++) {
             JMenuItem jMenuItem = view.getItem(j);
-            final int menuItemIndex = j;
+            final Mode newMenu = model.getItems()[j];
 
             // when user clicks on a menu item
             jMenuItem.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     // update active item for this menu
-                    model.setActiveItem(menuItemIndex);
+                    model.setActiveItem(newMenu);
 
                     // change menu icon to icon of selected menu item
                     view.setIcon(model.getActiveItem().getIcon());

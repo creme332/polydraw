@@ -55,7 +55,7 @@ public class FrameController implements PropertyChangeListener {
 
                 // if Esc is pressed, select mode in first menu
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    model.setMode(menuModels[0].getActiveItem().getMode());
+                    model.setMode(menuModels[0].getActiveItem());
                     return;
                 }
 
@@ -64,7 +64,7 @@ public class FrameController implements PropertyChangeListener {
                 for (int i = 0; i < menuModels.length; i++) {
                     if (e.getKeyCode() == (KeyEvent.VK_1 + i))
 
-                        model.setMode(menuModels[i].getActiveItem().getMode());
+                        model.setMode(menuModels[i].getActiveItem());
                 }
             }
         });

@@ -4,13 +4,6 @@ import java.beans.*;
 import java.util.EnumMap;
 import java.util.Map;
 
-import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
-import org.kordamp.ikonli.swing.FontIcon;
-
-import com.github.creme332.utils.exception.InvalidPathException;
-
-import static com.github.creme332.utils.IconLoader.loadSVGIcon;
-
 public class AppState {
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
@@ -27,67 +20,52 @@ public class AppState {
     Screen currentScreen = Screen.MAIN_SCREEN;
 
     public AppState() {
-        try {
-            menuModels = createMenuModels();
-            modeToMenuMapper = initModeToMenuMapper();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.exit(0);
-        }
+        menuModels = createMenuModels();
+        modeToMenuMapper = initModeToMenuMapper();
     }
 
-    private MenuModel[] createMenuModels() throws InvalidPathException {
-        MenuModel graphicsMenuModel = new MenuModel(new MenuItemModel[] {
-                new MenuItemModel("Move Graphics View", FontIcon.of(BootstrapIcons.ARROWS_MOVE, 35),
-                        Mode.MOVE_GRAPHICS_VIEW),
-                new MenuItemModel("Zoom In", FontIcon.of(BootstrapIcons.ZOOM_IN, 35), Mode.ZOOM_IN),
-                new MenuItemModel("Zoom Out", FontIcon.of(BootstrapIcons.ZOOM_OUT, 35), Mode.ZOOM_OUT),
+    private MenuModel[] createMenuModels() {
+        MenuModel graphicsMenuModel = new MenuModel(new Mode[] {
+                Mode.MOVE_GRAPHICS_VIEW,
+                Mode.ZOOM_IN,
+                Mode.ZOOM_OUT
         });
 
-        MenuModel transformationsMenuModel = new MenuModel(new MenuItemModel[] {
-                new MenuItemModel("Reflect about Line", loadSVGIcon("/icons/reflect-about-line.svg"),
-                        Mode.REFLECT_ABOUT_LINE),
-                new MenuItemModel("Reflect about Point", loadSVGIcon("/icons/reflect-about-point.svg"),
-                        Mode.REFLECT_ABOUT_POINT),
-
-                new MenuItemModel("Rotate around Point", loadSVGIcon("/icons/rotate-around-point.svg"),
-                        Mode.ROTATE_AROUND_POINT),
-                new MenuItemModel("Translation", loadSVGIcon("/icons/translate-vector.svg"),
-                        Mode.TRANSLATION),
-                new MenuItemModel("Scaling", FontIcon.of(BootstrapIcons.ARROWS_ANGLE_EXPAND, 35), Mode.SCALING),
-                new MenuItemModel("Shear", FontIcon.of(BootstrapIcons.BOX_ARROW_DOWN_LEFT, 35), Mode.SHEAR),
+        MenuModel transformationsMenuModel = new MenuModel(new Mode[] {
+                Mode.REFLECT_ABOUT_LINE,
+                Mode.REFLECT_ABOUT_POINT,
+                Mode.ROTATE_AROUND_POINT,
+                Mode.TRANSLATION,
+                Mode.SCALING,
+                Mode.SHEAR
         });
 
-        MenuModel polygonMenuModel = new MenuModel(new MenuItemModel[] {
-                new MenuItemModel("Polygon", loadSVGIcon("/icons/triangle.svg"), Mode.DRAW_POLYGON_DYNAMIC),
-                new MenuItemModel("Regular Polygon", loadSVGIcon("/icons/regular-polygon.svg"),
-                        Mode.DRAW_REGULAR_POLYGON)
+        MenuModel polygonMenuModel = new MenuModel(new Mode[] {
+                Mode.DRAW_POLYGON_DYNAMIC,
+                Mode.DRAW_REGULAR_POLYGON
 
         });
 
-        MenuModel ellipseMenuModel = new MenuModel(new MenuItemModel[] {
-                new MenuItemModel("Ellipse", loadSVGIcon("/icons/ellipse.svg"), Mode.DRAW_ELLIPSE)
+        MenuModel ellipseMenuModel = new MenuModel(new Mode[] {
+                Mode.DRAW_ELLIPSE });
+
+        MenuModel circleMenuModel = new MenuModel(new Mode[] {
+                Mode.DRAW_CIRCLE_DYNAMIC,
+                Mode.DRAW_CIRCLE_FIXED
+
         });
 
-        MenuModel circleMenuModel = new MenuModel(new MenuItemModel[] {
-                new MenuItemModel("Circle with Center through Point",
-                        loadSVGIcon("/icons/circle.svg"), Mode.DRAW_CIRCLE_DYNAMIC),
-                new MenuItemModel("Circle: Center & Radius", loadSVGIcon("/icons/circle-radius.svg"),
-                        Mode.DRAW_CIRCLE_FIXED)
+        MenuModel lineMenuModel = new MenuModel(new Mode[] {
+                Mode.DRAW_LINE_DDA,
+                Mode.DRAW_LINE_BRESENHAM
         });
 
-        MenuModel lineMenuModel = new MenuModel(new MenuItemModel[] {
-                new MenuItemModel("Line: DDA", loadSVGIcon("/icons/line.svg"), Mode.DRAW_LINE_DDA),
-                new MenuItemModel("Line: Bresenham", loadSVGIcon("/icons/line.svg"), Mode.DRAW_LINE_BRESENHAM)
+        MenuModel cursorMenuModel = new MenuModel(new Mode[] {
+                Mode.MOVE_CANVAS
         });
 
-        MenuModel cursorMenuModel = new MenuModel(new MenuItemModel[] {
-                new MenuItemModel("Move", loadSVGIcon("/icons/cursor.svg"), Mode.MOVE_CANVAS)
-        });
-
-        MenuModel deletionModel = new MenuModel(new MenuItemModel[] {
-                new MenuItemModel("Delete", FontIcon.of(BootstrapIcons.ERASER, 40), Mode.DELETE),
-                new MenuItemModel("Clip", FontIcon.of(BootstrapIcons.SCISSORS, 35), Mode.CLIPPING)
+        MenuModel deletionModel = new MenuModel(new Mode[] {
+                Mode.DELETE, Mode.CLIPPING
         });
 
         return new MenuModel[] {
@@ -111,11 +89,17 @@ public class AppState {
         return currentScreen;
     }
 
+    /**
+     * Create a map that stores a mapping from a Mode to a menu index. This allows
+     * us to know in constant time in which menu a mode is found.
+     * 
+     * @return
+     */
     private Map<Mode, Integer> initModeToMenuMapper() {
         Map<Mode, Integer> mapper = new EnumMap<>(Mode.class);
         for (int i = 0; i < menuModels.length; i++) {
-            for (MenuItemModel item : menuModels[i].getItems()) {
-                mapper.put(item.getMode(), i);
+            for (Mode item : menuModels[i].getItems()) {
+                mapper.put(item, i);
             }
         }
         return mapper;

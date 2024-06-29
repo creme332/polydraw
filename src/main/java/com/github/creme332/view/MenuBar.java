@@ -17,8 +17,8 @@ import javax.swing.border.EmptyBorder;
 
 import org.kordamp.ikonli.swing.FontIcon;
 
-import com.github.creme332.model.MenuItemModel;
 import com.github.creme332.model.MenuModel;
+import com.github.creme332.model.Mode;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
@@ -41,12 +41,12 @@ public class MenuBar extends JMenuBar {
             menu.setOpaque(false);
             jmenus.add(menu);
             menu.setIcon(menuModel.getActiveItem().getIcon());
-            menu.setToolTipText(menuModel.getActiveItem().getName());
+            menu.setToolTipText(menuModel.getActiveItem().getTitle());
 
-            for (MenuItemModel item : menuModel.getItems()) {
-                JMenuItem menuItem = new JMenuItem(item.getName(), item.getIcon());
+            for (Mode item : menuModel.getItems()) {
+                JMenuItem menuItem = new JMenuItem(item.getTitle(), item.getIcon());
                 menu.add(menuItem);
-                menuItem.addActionListener(e -> menu.setToolTipText(item.getName()));
+                menuItem.addActionListener(e -> menu.setToolTipText(item.getTitle()));
             }
             this.add(Box.createHorizontalStrut(10));
             this.add(menu);
