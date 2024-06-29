@@ -10,6 +10,7 @@ import java.util.List;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.tutorial.DrawCircleTutorial;
+import com.github.creme332.view.tutorial.DrawEllipseTutorial;
 import com.github.creme332.view.tutorial.DrawLineTutorial;
 import com.github.creme332.view.tutorial.GettingStartedTutorial;
 import com.github.creme332.view.tutorial.KeyboardTutorial;
@@ -64,6 +65,7 @@ public class TutorialCenter extends JPanel {
             tutorialScreens.add(new DrawLineTutorial());
             tutorialScreens.add(new DrawCircleTutorial());
             tutorialScreens.add(new KeyboardTutorial());
+            tutorialScreens.add(new DrawEllipseTutorial());
         } catch (InvalidPathException | InvalidIconSizeException e) {
             e.printStackTrace();
             System.exit(ABORT);
@@ -105,8 +107,8 @@ public class TutorialCenter extends JPanel {
 
         // Wrap gridPanel in a JScrollPane to make it scrollable
         JScrollPane scrollPane = new JScrollPane(gridPanel);
-        scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         tutorialGrid.add(scrollPane, BorderLayout.CENTER);
     }
 
