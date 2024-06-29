@@ -3,7 +3,6 @@ package com.github.creme332.model;
 import javax.swing.Icon;
 
 import com.github.creme332.utils.IconLoader;
-import com.github.creme332.utils.exception.InvalidPathException;
 
 public enum LineType {
     SOLID("Solid Line", "/icons/solid-line.svg"),
@@ -23,11 +22,6 @@ public enum LineType {
     }
 
     public Icon getIcon() {
-        try {
-            return IconLoader.loadSVGIcon(iconPath);
-        } catch (InvalidPathException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return IconLoader.loadSVGIcon(iconPath);
     }
 }

@@ -114,13 +114,14 @@ public class IconLoader {
      * @return
      * @throws InvalidPathException
      */
-    public static Icon loadSVGIcon(String path) throws InvalidPathException {
+    public static Icon loadSVGIcon(String path) {
         return loadSVGIcon(path, 50, 50);
     }
 
-    public static Icon loadSVGIcon(String path, int height, int width) throws InvalidPathException {
+    public static Icon loadSVGIcon(String path, int height, int width) {
         if (path.length() < 1 || path.charAt(0) != '/' || !path.endsWith(".svg")) {
-            throw new InvalidPathException("Path should start with / and be an SVG.");
+            System.out.println("Invalid svg:" + path);
+            System.exit(0);
         }
 
         SVGLoader loader = new SVGLoader();
