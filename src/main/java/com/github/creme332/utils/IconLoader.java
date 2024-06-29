@@ -3,10 +3,14 @@ package com.github.creme332.utils;
 import java.awt.Dimension;
 import java.awt.Image;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
+import com.github.creme332.view.SVGIcon;
+import com.github.weisj.jsvg.SVGDocument;
+import com.github.weisj.jsvg.parser.SVGLoader;
 
 public class IconLoader {
     private IconLoader() {
@@ -99,6 +103,29 @@ public class IconLoader {
         if (path.length() < 1 || path.charAt(0) != '/') {
             throw new InvalidPathException("Path should start with /");
         }
+
         return new ImageIcon(IconLoader.class.getResource(path));
+    }
+
+    /**
+     * Returns a 50x50 icon
+     * 
+     * @param path Path to SVG icon
+     * @return
+     * @throws InvalidPathException
+     */
+    public static Icon loadSVGIcon(String path) {
+        return loadSVGIcon(path, 50, 50);
+    }
+
+    public static Icon loadSVGIcon(String path, int height, int width) {
+        if (path.length() < 1 || path.charAt(0) != '/' || !path.endsWith(".svg")) {
+            System.out.println("Invalid svg:" + path);
+            System.exit(0);
+        }
+
+        SVGLoader loader = new SVGLoader();
+        SVGDocument svgDocument = loader.load(IconLoader.class.getResource(path));
+        return new SVGIcon(svgDocument, height, width);
     }
 }

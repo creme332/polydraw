@@ -14,9 +14,6 @@ import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 
 public class RoundedMenu extends JMenu implements MenuListener, ChangeListener {
-    private boolean mouseOver = false;
-    private boolean selected = false;
-
     public RoundedMenu() {
         super();
         setHorizontalAlignment(SwingConstants.CENTER); // Center align text
@@ -49,13 +46,11 @@ public class RoundedMenu extends JMenu implements MenuListener, ChangeListener {
 
     @Override
     public void menuSelected(MenuEvent e) {
-        selected = true;
         repaint();
     }
 
     @Override
     public void menuDeselected(MenuEvent e) {
-        selected = false;
         repaint();
     }
 
@@ -71,8 +66,6 @@ public class RoundedMenu extends JMenu implements MenuListener, ChangeListener {
 
     @Override
     public void setArmed(boolean b) {
-        // Track mouse over state
-        mouseOver = b;
         super.setArmed(b);
         repaint();
     }

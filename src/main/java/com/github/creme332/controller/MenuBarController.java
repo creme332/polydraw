@@ -70,7 +70,7 @@ public class MenuBarController implements PropertyChangeListener {
                     jMenu.setBorder(VISIBLE_BORDER);
 
                     // update global mode using menu model for clicked menu
-                    app.setMode(menuModel.getActiveItem().getMode());
+                    app.setMode(menuModel.getActiveItem());
 
                     // display updated toast
                     app.activateToast();
