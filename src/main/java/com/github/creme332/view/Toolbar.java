@@ -15,11 +15,7 @@ import javax.swing.JSlider;
 import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
 
-import static com.github.creme332.utils.IconLoader.loadIcon;
-
 import com.github.creme332.model.LineType;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
-import com.github.creme332.utils.exception.InvalidPathException;
 
 public class Toolbar extends JToolBar {
 
@@ -44,8 +40,7 @@ public class Toolbar extends JToolBar {
      */
     JSlider thicknessSlider;
 
-    public Toolbar(LineType defaultLineType, Color defaultColor, int defaultLineThickness)
-            throws InvalidIconSizeException, InvalidPathException {
+    public Toolbar(LineType defaultLineType, Color defaultColor, int defaultLineThickness) {
         thicknessLabel = new JLabel(String.valueOf(defaultLineThickness));
 
         thicknessSlider = new JSlider(javax.swing.SwingConstants.HORIZONTAL,

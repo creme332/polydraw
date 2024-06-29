@@ -1,7 +1,6 @@
 package com.github.creme332.view.tutorial;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
