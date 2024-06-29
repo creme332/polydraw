@@ -82,8 +82,7 @@ public class AppState {
         });
 
         MenuModel cursorMenuModel = new MenuModel(new MenuItemModel[] {
-                new MenuItemModel("Move", loadSVGIcon("/icons/cursor.svg"), Mode.MOVE_CANVAS),
-                new MenuItemModel("Freehand Shape", loadSVGIcon("/icons/freehand.svg"), Mode.DRAW_FREEHAND)
+                new MenuItemModel("Move", loadSVGIcon("/icons/cursor.svg"), Mode.MOVE_CANVAS)
         });
 
         MenuModel deletionModel = new MenuModel(new MenuItemModel[] {

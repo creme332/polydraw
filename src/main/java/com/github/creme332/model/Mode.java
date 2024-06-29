@@ -2,7 +2,6 @@ package com.github.creme332.model;
 
 public enum Mode {
     MOVE_CANVAS("Move", "Drag or select object"),
-    DRAW_FREEHAND("Freehand Shape", "Sketch a function or geometric object"),
 
     DRAW_LINE_DDA("Line: DDA", "Select two points or positions"),
     DRAW_LINE_BRESENHAM("Line: Bresenham", "Select two points or positions"),
