@@ -100,6 +100,7 @@ public class TutorialCenter extends JPanel {
 
         // Create the grid panel to hold GridItems
         gridPanel = new JPanel(new GridBagLayout());
+        gridPanel.setBackground(Color.white);
         gridPanel.setBorder(new EmptyBorder(new Insets(10, 10, 0, 0)));
 
         // add tutorial cards to grid
@@ -107,8 +108,9 @@ public class TutorialCenter extends JPanel {
 
         // Wrap gridPanel in a JScrollPane to make it scrollable
         JScrollPane scrollPane = new JScrollPane(gridPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         tutorialGrid.add(scrollPane, BorderLayout.CENTER);
     }
 
