@@ -26,7 +26,8 @@ public class KeyboardTutorial extends TutorialPanel {
 
     public KeyboardTutorial() throws InvalidPathException, InvalidIconSizeException {
         super(KEYBOARD_TUTORIAL_MODEL, loadSVGIcon("/icons/keyboard.svg", TutorialCard.IMAGE_DIMENSION));
-
+        model.addKeyword("key");
+        
         try {
             // Insert text
             doc.insertString(doc.getLength(),
