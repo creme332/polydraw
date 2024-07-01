@@ -36,7 +36,6 @@ public class CanvasConsoleController implements PropertyChangeListener {
         new ZoomPanelController(app, console.getZoomPanel());
 
         if (!app.getSideBarVisibility()) {
-            System.out.println(console.getPreferredSize());
             console.setPreferredSize(console.getPreferredSize());
         }
     }

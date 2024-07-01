@@ -13,42 +13,42 @@ import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
-public class DrawLineTutorial extends TutorialPanel {
+public class DrawEllipseTutorial extends TutorialPanel {
 
-    private static final String IMAGE_PATH_PREFIX = "/images/tutorials/draw-line/";
-    private static final TutorialModel DRAW_LINE_MODEL = new TutorialModel("Draw Line");
+    private static final String IMAGE_PATH_PREFIX = "/images/tutorials/draw-ellipse/";
+    private static final TutorialModel TUTORIAL_MODEL = new TutorialModel("Draw Ellipse");
 
-    public DrawLineTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super(DRAW_LINE_MODEL, loadSVGIcon("/icons/blue-line.svg", TutorialCard.IMAGE_DIMENSION));
-        model.addKeyword("bresenham");
-        model.addKeyword("dda");
+    public DrawEllipseTutorial() throws InvalidPathException, InvalidIconSizeException {
+        super(TUTORIAL_MODEL, loadSVGIcon("/icons/ellipse.svg", TutorialCard.IMAGE_DIMENSION));
+        model.addKeyword("ellipse");
 
         try {
             // Insert text
             doc.insertString(doc.getLength(),
-                    "In this tutorial you will learn how to draw a line using either the DDA algorithm or Bresenham line algorithm.\n\n",
+                    "In this tutorial you will learn how to draw an Ellipse using the Midpoint Ellipse Algorithm.\n\n",
                     regular);
 
-            ImageIcon icon = loadIcon(IMAGE_PATH_PREFIX + "draw-line.gif", new Dimension(1000, 593));
+            ImageIcon icon = loadIcon(IMAGE_PATH_PREFIX + "draw-ellipse.gif", new Dimension(1000, 593));
             StyleConstants.setIcon(imageStyle, icon);
             doc.insertString(doc.getLength(), " ", imageStyle);
 
             doc.insertString(doc.getLength(),
-                    "\n\n1. Click on the line icon (second icon from the left) in the menu bar.\n",
-                    regular);
-            doc.insertString(doc.getLength(),
-                    "\n\n2. Choose the algorithm that you want to use from the expanded menu.\n\n",
+                    "\n\n1. Click on the ellipse icon in the menu bar to select the ellipse drawing mode.\n",
                     regular);
 
-            icon = loadIcon(IMAGE_PATH_PREFIX + "step-1.png");
+            icon = loadIcon(IMAGE_PATH_PREFIX + "step-2.png");
             StyleConstants.setIcon(imageStyle, icon);
             doc.insertString(doc.getLength(), " ", imageStyle);
 
             doc.insertString(doc.getLength(),
-                    "\n\n3. Move your mouse cursor to the canvas and click on a point where you want your line to start.\n",
+                    "\n\n2. Move your mouse cursor on the canvas and click on a point where you want your first ellipse focus to be.\n",
                     regular);
             doc.insertString(doc.getLength(),
-                    "\n\n4. Click on another point where you want your line to end.\n\n",
+                    "\n\n3. Click on another point where you want your second ellipse focus to be.\n\n",
+                    regular);
+
+            doc.insertString(doc.getLength(),
+                    "\n\n4. At this point, you can move your cursor to control the size of the ellipse. When you are done, click on a third point to complete your ellipse.\n\n",
                     regular);
 
             icon = loadIcon(IMAGE_PATH_PREFIX + "step-3.png");

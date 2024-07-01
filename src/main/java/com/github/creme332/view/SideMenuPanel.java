@@ -101,7 +101,7 @@ public class SideMenuPanel extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 2;
         fontSizeSelector = new JComboBox<>(
-                new String[] { "12 pt", "16 pt", "18 pt", "20 pt", "24 pt", "28 pt" });
+                new String[] { "12", "16", "18", "20", "24", "28" });
         formPanel.add(fontSizeSelector, gbc);
 
         resetButton = new JButton("Reset");

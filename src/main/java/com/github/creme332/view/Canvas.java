@@ -186,7 +186,7 @@ public class Canvas extends JPanel {
         super.paintComponent(g);
 
         Font currentFont = g.getFont();
-        Font newFont = currentFont.deriveFont(currentFont.getSize() * model.getLabelFontSizeSF());
+        Font newFont = currentFont.deriveFont((float) model.getLabelFontSize());
         g.setFont(newFont);
 
         Graphics2D g2 = (Graphics2D) g;
@@ -219,7 +219,7 @@ public class Canvas extends JPanel {
 
             // display points plotted by user
             g2.setStroke(defaultStroke);
-            g2.setColor(wrapper.getFillColor());
+            g2.setColor(wrapper.getLineColor());
             for (Point2D p : wrapper.getPlottedPoints()) {
                 Shape point = createPointAsShape(model.toUserSpace(p));
                 g2.draw(point);
