@@ -40,13 +40,13 @@ public class TutorialPanel extends JPanel {
     protected transient Style italic;
     protected transient Style imageStyle;
 
-    protected transient Icon mainIcon;
+    protected transient Icon previewIcon;
 
     public TutorialPanel(TutorialModel model, Icon icon) {
         setLayout(new BorderLayout());
 
         this.model = model;
-        this.mainIcon = icon;
+        this.previewIcon = icon;
 
         this.title = model.getTitle();
 
@@ -114,8 +114,8 @@ public class TutorialPanel extends JPanel {
         return model;
     }
 
-    public Icon getMainIcon() {
-        return mainIcon;
+    public Icon getPreviewIcon() {
+        return previewIcon;
     }
 
     /**

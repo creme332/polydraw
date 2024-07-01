@@ -75,7 +75,7 @@ public class TutorialCenter extends JPanel {
 
     private void initTutorialCards() {
         for (TutorialPanel screen : tutorialScreens) {
-            tutorialCards.add(new TutorialCard(screen.getTitle(), screen.getMainIcon()));
+            tutorialCards.add(new TutorialCard(screen.getTitle(), screen.getPreviewIcon()));
         }
     }
 
