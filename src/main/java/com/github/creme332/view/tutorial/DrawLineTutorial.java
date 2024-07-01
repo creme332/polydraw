@@ -1,7 +1,6 @@
 package com.github.creme332.view.tutorial;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
-import static com.github.creme332.utils.IconLoader.getScaledDimension;
 
 import java.awt.Dimension;
 
@@ -19,15 +18,14 @@ public class DrawLineTutorial extends TutorialPanel {
     private static final TutorialModel DRAW_LINE_MODEL = new TutorialModel("Draw Line");
 
     public DrawLineTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super(DRAW_LINE_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png",
-                getScaledDimension(new Dimension(795, 580), TutorialCard.IMAGE_DIMENSION)));
+        super(DRAW_LINE_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png", TutorialCard.IMAGE_DIMENSION));
         model.addKeyword("bresenham");
         model.addKeyword("dda");
 
         try {
             // Insert text
             doc.insertString(doc.getLength(),
-                    "In this tutorial you will learn how to draw a line using DDA or Bresenham line algorithm.\n\n",
+                    "In this tutorial you will learn how to draw a line using either the DDA algorithm or Bresenham line algorithm.\n\n",
                     regular);
 
             ImageIcon icon = loadIcon(IMAGE_PATH_PREFIX + "draw-line.gif", new Dimension(1000, 593));
@@ -35,10 +33,10 @@ public class DrawLineTutorial extends TutorialPanel {
             doc.insertString(doc.getLength(), " ", imageStyle);
 
             doc.insertString(doc.getLength(),
-                    "\n\n1. Click on the line icon in the menu bar.\n",
+                    "\n\n1. Click on the line icon (second icon from the left) in the menu bar.\n",
                     regular);
             doc.insertString(doc.getLength(),
-                    "\n\n2. Select the algorithm that you want to use in the expanded menu.\n\n",
+                    "\n\n2. Choose the algorithm that you want to use from the expanded menu.\n\n",
                     regular);
 
             icon = loadIcon(IMAGE_PATH_PREFIX + "step-1.png");
@@ -46,10 +44,10 @@ public class DrawLineTutorial extends TutorialPanel {
             doc.insertString(doc.getLength(), " ", imageStyle);
 
             doc.insertString(doc.getLength(),
-                    "\n\n3. Move your mouse cursor on the canvas and click on a point where you want your line to start.\n",
+                    "\n\n3. Move your mouse cursor to the canvas and click on a point where you want your line to start.\n",
                     regular);
             doc.insertString(doc.getLength(),
-                    "\n\n3. Click on another point where you want your line to end.\n\n",
+                    "\n\n4. Click on another point where you want your line to end.\n\n",
                     regular);
 
             icon = loadIcon(IMAGE_PATH_PREFIX + "step-3.png");
