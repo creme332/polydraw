@@ -1,7 +1,6 @@
 package com.github.creme332.view.tutorial;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
-import static com.github.creme332.utils.IconLoader.getScaledDimension;
 
 import java.awt.*;
 import javax.swing.*;
@@ -25,8 +24,7 @@ public class GettingStartedTutorial extends TutorialPanel {
     JPanel mainPanel = new JPanel(new GridBagLayout());
 
     public GettingStartedTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super(GETTING_STARTED_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png",
-                getScaledDimension(new Dimension(753, 453), TutorialCard.IMAGE_DIMENSION)));
+        super(GETTING_STARTED_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png", TutorialCard.IMAGE_DIMENSION));
         // remove bodyPanel since default layout is not being used
         this.remove(bodyPanel);
 
