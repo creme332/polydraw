@@ -10,8 +10,8 @@ import static com.github.creme332.utils.IconLoader.loadSVGIcon;
 public enum Mode {
     MOVE_CANVAS("Move", "Drag or select object", loadSVGIcon("/icons/cursor.svg")),
 
-    DRAW_LINE_DDA("Line: DDA", "Select two points or positions", loadSVGIcon("/icons/line.svg")),
-    DRAW_LINE_BRESENHAM("Line: Bresenham", "Select two points or positions", loadSVGIcon("/icons/line.svg")),
+    DRAW_LINE_DDA("Line: DDA", "Select two points or positions", loadSVGIcon("/icons/red-line.svg")),
+    DRAW_LINE_BRESENHAM("Line: Bresenham", "Select two points or positions", loadSVGIcon("/icons/blue-line.svg")),
 
     DRAW_CIRCLE_DYNAMIC("Circle with Center through Point", "Select center point, then point on circle",
             loadSVGIcon("/icons/circle.svg")),
