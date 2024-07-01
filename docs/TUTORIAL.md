@@ -60,7 +60,7 @@ To add/modify a preview image for a tutorial, place the preview image in the ass
   ``` 
 
 > [!IMPORTANT]
-> Ensure that your image has a dimension of **450x300** to prevent distortions. If your image dimension is incorrect, you will see a red background around your image.
+> It is best to load SVG images using `IconLoader.loadSVGIcon()`. Otherwise, ensure that your image has a dimension of **450x300** to prevent distortions.
 
 ## Add keywords
 
