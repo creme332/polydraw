@@ -17,7 +17,7 @@ import javax.swing.text.BadLocationException;
 import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
-import static com.github.creme332.utils.IconLoader.loadIcon;
+import static com.github.creme332.utils.IconLoader.loadSVGIcon;
 
 public class KeyboardTutorial extends TutorialPanel {
 
@@ -25,7 +25,7 @@ public class KeyboardTutorial extends TutorialPanel {
     private static final TutorialModel KEYBOARD_TUTORIAL_MODEL = new TutorialModel("Keyboard Shortcuts");
 
     public KeyboardTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super(KEYBOARD_TUTORIAL_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png", TutorialCard.IMAGE_DIMENSION));
+        super(KEYBOARD_TUTORIAL_MODEL, loadSVGIcon("/icons/keyboard.svg", TutorialCard.IMAGE_DIMENSION));
 
         try {
             // Insert text

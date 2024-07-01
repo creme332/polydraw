@@ -1,6 +1,7 @@
 package com.github.creme332.view.tutorial;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
+import static com.github.creme332.utils.IconLoader.loadSVGIcon;
 
 import java.awt.Dimension;
 
@@ -18,7 +19,7 @@ public class DrawLineTutorial extends TutorialPanel {
     private static final TutorialModel DRAW_LINE_MODEL = new TutorialModel("Draw Line");
 
     public DrawLineTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super(DRAW_LINE_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png", TutorialCard.IMAGE_DIMENSION));
+        super(DRAW_LINE_MODEL, loadSVGIcon("/icons/line.svg", TutorialCard.IMAGE_DIMENSION));
         model.addKeyword("bresenham");
         model.addKeyword("dda");
 

@@ -36,10 +36,10 @@ public class TutorialCard extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         // Create image container
-        JPanel imageContainer = new JPanel(new BorderLayout());
+        JPanel imageContainer = new JPanel(new GridBagLayout());
 
         // set background color to red so that invalid image dimensions become visible
-        imageContainer.setBackground(Color.red);
+        imageContainer.setBackground(Color.white);
         imageContainer.setPreferredSize(new Dimension(DIMENSION.width, DIMENSION.height - IMAGE_DIMENSION.height));
 
         // add image to image container

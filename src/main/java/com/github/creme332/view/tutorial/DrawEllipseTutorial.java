@@ -1,6 +1,7 @@
 package com.github.creme332.view.tutorial;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
+import static com.github.creme332.utils.IconLoader.loadSVGIcon;
 
 import java.awt.Dimension;
 
@@ -18,7 +19,7 @@ public class DrawEllipseTutorial extends TutorialPanel {
     private static final TutorialModel TUTORIAL_MODEL = new TutorialModel("Draw Ellipse");
 
     public DrawEllipseTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super(TUTORIAL_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png", TutorialCard.IMAGE_DIMENSION));
+        super(TUTORIAL_MODEL, loadSVGIcon("/icons/ellipse.svg", TutorialCard.IMAGE_DIMENSION));
         model.addKeyword("ellipse");
 
         try {

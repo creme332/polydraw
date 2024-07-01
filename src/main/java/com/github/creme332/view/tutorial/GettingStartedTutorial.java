@@ -12,6 +12,7 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.IconCellRenderer;
+import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
@@ -24,7 +25,9 @@ public class GettingStartedTutorial extends TutorialPanel {
     JPanel mainPanel = new JPanel(new GridBagLayout());
 
     public GettingStartedTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super(GETTING_STARTED_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png", TutorialCard.IMAGE_DIMENSION));
+        super(GETTING_STARTED_MODEL,
+                loadIcon("/icons/icosahedron.png",
+                        IconLoader.getScaledDimension(new Dimension(512, 512), TutorialCard.IMAGE_DIMENSION)));
         // remove bodyPanel since default layout is not being used
         this.remove(bodyPanel);
 
