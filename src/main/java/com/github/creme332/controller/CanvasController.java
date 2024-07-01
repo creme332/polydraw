@@ -195,7 +195,7 @@ public class CanvasController implements PropertyChangeListener {
          * List of property names that should result only in a canvas repaint.
          */
         final Set<String> repaintProperties = Set.of("clearCanvas", "standardView", "enableGuidelines",
-                "cellSize", "axesVisible");
+                "cellSize", "axesVisible", "labelFontSize");
 
         if (repaintProperties.contains(propertyName)) {
             canvas.repaint();

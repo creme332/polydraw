@@ -49,7 +49,10 @@ public class CanvasModel {
      */
     int cellSize = Math.max(MIN_CELL_SIZE, Math.min(DEFAULT_CELL_SIZE, MAX_CELL_SIZE));
 
-    private float labelFontSizeScaleFactor = 1.4F;
+    /**
+     * Font size of labels on canvas in pixels.
+     */
+    private int labelFontSize = 28;
 
     // define attributes for next shape to be drawn
     private LineType lineType = LineType.SOLID;
@@ -247,6 +250,7 @@ public class CanvasModel {
         support.addPropertyChangeListener("cellSize", listener);
         support.addPropertyChangeListener("clearCanvas", listener);
         support.addPropertyChangeListener("standardView", listener);
+        support.addPropertyChangeListener("labelFontSize", listener);
     }
 
     /**
@@ -283,8 +287,13 @@ public class CanvasModel {
         return cellSize;
     }
 
-    public float getLabelFontSizeSF() {
-        return labelFontSizeScaleFactor;
+    public void setLabelFontSize(int newFontSize) {
+        support.firePropertyChange("labelFontSize", this.labelFontSize, newFontSize);
+        labelFontSize = newFontSize;
+    }
+
+    public int getLabelFontSize() {
+        return labelFontSize;
     }
 
     public int getXZero() {

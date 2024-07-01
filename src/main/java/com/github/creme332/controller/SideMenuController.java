@@ -35,6 +35,7 @@ public class SideMenuController {
         // set default values in canvas settings
         sidebar.getGridLinesCheckBox().setSelected(app.getCanvasModel().isGuidelinesEnabled());
         sidebar.getAxesCheckBox().setSelected(app.getCanvasModel().isAxesVisible());
+        sidebar.getFontSizeSelector().setSelectedItem(String.format("%d", app.getCanvasModel().getLabelFontSize()));
 
         // Initialize button listeners
         initializeButtonListeners(app);
@@ -99,6 +100,13 @@ public class SideMenuController {
                 sidebar.getAxesCheckBox().setSelected(canvasModel.isAxesVisible());
             }
         });
+
+        sidebar.getFontSizeSelector().addActionListener(
+                e -> canvasModel
+                        .setLabelFontSize(
+                                Integer.valueOf(
+                                        (String) sidebar.getFontSizeSelector()
+                                                .getSelectedItem())));
 
         // Reset button
         sidebar.getResetButton().addActionListener(e -> {

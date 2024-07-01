@@ -186,7 +186,7 @@ public class Canvas extends JPanel {
         super.paintComponent(g);
 
         Font currentFont = g.getFont();
-        Font newFont = currentFont.deriveFont(currentFont.getSize() * model.getLabelFontSizeSF());
+        Font newFont = currentFont.deriveFont((float) model.getLabelFontSize());
         g.setFont(newFont);
 
         Graphics2D g2 = (Graphics2D) g;
