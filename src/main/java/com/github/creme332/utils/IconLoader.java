@@ -115,10 +115,10 @@ public class IconLoader {
      * @throws InvalidPathException
      */
     public static Icon loadSVGIcon(String path) {
-        return loadSVGIcon(path, 50, 50);
+        return loadSVGIcon(path, new Dimension(50, 50));
     }
 
-    public static Icon loadSVGIcon(String path, int height, int width) {
+    public static Icon loadSVGIcon(String path, Dimension dimension) {
         if (path.length() < 1 || path.charAt(0) != '/' || !path.endsWith(".svg")) {
             System.out.println("Invalid svg:" + path);
             System.exit(0);
@@ -126,6 +126,6 @@ public class IconLoader {
 
         SVGLoader loader = new SVGLoader();
         SVGDocument svgDocument = loader.load(IconLoader.class.getResource(path));
-        return new SVGIcon(svgDocument, height, width);
+        return new SVGIcon(svgDocument, dimension.width, dimension.height);
     }
 }
