@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -99,10 +100,13 @@ public class KeyboardTutorial extends TutorialPanel {
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setBackground(new Color(227, 227, 227));
 
-        // Add the table panel to the bodyPanel
-        bodyPanel.add(tableHeader, BorderLayout.NORTH);
-        bodyPanel.add(table, BorderLayout.CENTER);
+        // Add the table to a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(750, 200));
 
+        // Add the scroll pane to the bodyPanel
+        bodyPanel.add(tableHeader, BorderLayout.NORTH);
+        bodyPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
     // Custom renderer to handle multi-line cells

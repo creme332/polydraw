@@ -14,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.Toolkit;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -299,5 +300,18 @@ public class Canvas extends JPanel {
         return new Color((fa * a.getRed() + fb * b.getRed()) / (fa + fb) / 255f,
                 (fa * a.getGreen() + fb * b.getGreen()) / (fa + fb) / 255f,
                 (fa * a.getBlue() + fb * b.getBlue()) / (fa + fb) / 255f);
+    }
+
+    @Override
+    public void repaint() {
+        super.repaint();
+
+        /**
+         * sync toolkit to prevent frame rate issues on linux.
+         * 
+         * Reference:
+         * https://stackoverflow.com/questions/46626715/how-do-i-properly-render-at-a-high-frame-rate-in-pure-java
+         */
+        Toolkit.getDefaultToolkit().sync();
     }
 }
