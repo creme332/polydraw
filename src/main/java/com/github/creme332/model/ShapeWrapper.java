@@ -1,6 +1,7 @@
 package com.github.creme332.model;
 
 import java.awt.Color;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Shape;
@@ -9,46 +10,46 @@ import java.awt.geom.Point2D;
 public class ShapeWrapper {
     private Shape shape;
     private Color lineColor = Color.BLACK;
-    private Color fillColor = Color.BLACK;
     private LineType lineType = LineType.SOLID;
+    private int lineThickness = 1;
+
     /**
-     * Coordinates plotted by user.
+     * Coordinates plotted by user to create shape.
      */
     private List<Point2D> plottedPoints = new ArrayList<>();
-    private int lineThickness;
 
     public List<Point2D> getPlottedPoints() {
         return plottedPoints;
     }
 
-    public ShapeWrapper() {
-
-    }
-
-    public ShapeWrapper(Shape shape) {
-        this.shape = shape;
-    }
-
-    public ShapeWrapper(Color lineColor, Color fillColor, LineType lineType, int lineThickness) {
+    public ShapeWrapper(Color lineColor, LineType lineType, int lineThickness) {
         this.lineColor = lineColor;
-        this.fillColor = fillColor;
         this.lineType = lineType;
         this.lineThickness = lineThickness;
     }
 
-    public ShapeWrapper(Shape shape, Color lineColor, Color fillColor, LineType lineType) {
-        this.shape = shape;
-        this.lineColor = lineColor;
-        this.fillColor = fillColor;
-        this.lineType = lineType;
-    }
-
+    /**
+     * Copy constructor.
+     * 
+     * @param wrapper
+     */
     public ShapeWrapper(ShapeWrapper wrapper) {
-        shape = wrapper.shape;
+        // save primitive attributes
         lineColor = wrapper.lineColor;
-        fillColor = wrapper.fillColor;
         lineType = wrapper.lineType;
-        plottedPoints = wrapper.plottedPoints;
+        lineThickness = wrapper.lineThickness;
+
+        // create a new shape object
+        if (wrapper.shape != null) {
+            Polygon original = (Polygon) wrapper.shape;
+            Polygon copy = new Polygon(original.xpoints, original.ypoints, original.npoints);
+            shape = copy;
+        }
+
+        // create a new array for plotted points
+        for (Point2D point : wrapper.getPlottedPoints()) {
+            plottedPoints.add(new Point2D.Double(point.getX(), point.getY()));
+        }
     }
 
     public Shape getShape() {
@@ -67,8 +68,12 @@ public class ShapeWrapper {
         this.lineColor = lineColor;
     }
 
+    /**
+     * Fill color is a transparent version of the line color.
+     */
     public Color getFillColor() {
-        return fillColor;
+        Color a = lineColor;
+        return new Color(a.getRed() / 255f, a.getGreen() / 255f, a.getBlue() / 255f, .2f);
     }
 
     public void setLineThickness(int lineThickness) {
@@ -77,10 +82,6 @@ public class ShapeWrapper {
 
     public int getLineThickness() {
         return lineThickness;
-    }
-
-    public void setFillColor(Color fillColor) {
-        this.fillColor = fillColor;
     }
 
     public LineType getLineType() {

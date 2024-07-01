@@ -4,14 +4,14 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * Model for a JMenu.
+ * Model for a JMenu. Each menu will store some modes.
  */
 public class MenuModel {
-    MenuItemModel[] items;
-    MenuItemModel activeItem;
+    Mode[] items;
+    Mode activeItem;
     private PropertyChangeSupport support;
 
-    public MenuModel(MenuItemModel[] items) {
+    public MenuModel(Mode[] items) {
         this.items = items;
 
         activeItem = items[0];
@@ -19,22 +19,20 @@ public class MenuModel {
         support = new PropertyChangeSupport(this);
     }
 
-    public MenuItemModel[] getItems() {
+    public Mode[] getItems() {
         return items;
     }
 
-    public MenuItemModel getActiveItem() {
+    public Mode getActiveItem() {
         return activeItem;
     }
 
-    public void setActiveItem(int i) {
-        MenuItemModel newActiveItem = items[i];
-
+    public void setActiveItem(Mode newMode) {
         // Note: Keep OldValue = null to always fire property change when mode changes.
         // If OldValue = NewValue, no event is fired.
-        support.firePropertyChange("modeChange", null, newActiveItem.getMode());
+        support.firePropertyChange("modeChange", null, newMode);
 
-        activeItem = newActiveItem;
+        activeItem = newMode;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

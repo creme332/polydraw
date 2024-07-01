@@ -10,15 +10,14 @@ import static com.github.creme332.utils.IconLoader.loadIcon;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Screen;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
 /**
  * Frame of the GUI application.
  */
 public class Frame extends JFrame {
-    private static final int INITIAL_FRAME_WIDTH = 1600;
-    private static final int INITIAL_FRAME_HEIGHT = 1000;
+    public static final int INITIAL_FRAME_WIDTH = 1600;
+    public static final int INITIAL_FRAME_HEIGHT = 1000;
 
     /**
      * Layout used for screenContainer for swapping screens
@@ -72,11 +71,11 @@ public class Frame extends JFrame {
     }
 
     public Frame(AppState app)
-            throws InvalidPathException, InvalidIconSizeException {
+            throws InvalidPathException {
         initFrameProperties();
 
         menubar = new MenuBar(app.getMenuModels());
-        canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getSideBarVisibility(), app.getMode());
+        canvasConsole = new CanvasConsole(app.getCanvasModel(), app.getMode());
         canvas = new Canvas(app.getCanvasModel());
         tutorialCenter = new TutorialCenter();
 
@@ -85,16 +84,16 @@ public class Frame extends JFrame {
 
         // setup layered pane
         canvasScreen = new JLayeredPane();
-        canvasScreen.add(canvas, Integer.valueOf(1));
-        canvasScreen.add(canvasConsole, Integer.valueOf(2));
+        canvasScreen.add(canvas, JLayeredPane.DEFAULT_LAYER);
+        canvasScreen.add(canvasConsole, JLayeredPane.PALETTE_LAYER);
 
         canvas.setBounds(0, 0, 600, 600);
         canvasConsole.setBounds(0, 0, 600, 600);
 
         // setup screen container
-        screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.toString());
-        screenContainer.add(canvasScreen, Screen.MAIN_SCREEN.toString());
-        screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.toString());
+        screenContainer.add(splashScreen, Screen.SPLASH_SCREEN.name());
+        screenContainer.add(canvasScreen, Screen.MAIN_SCREEN.name());
+        screenContainer.add(tutorialCenter, Screen.TUTORIAL_SCREEN.name());
         this.add(screenContainer);
 
         // display frame
@@ -108,16 +107,16 @@ public class Frame extends JFrame {
     public void showScreen(Screen screen) {
         switch (screen) {
             case SPLASH_SCREEN:
-                cl.show(screenContainer, Screen.SPLASH_SCREEN.toString());
+                cl.show(screenContainer, Screen.SPLASH_SCREEN.name());
                 break;
             case MAIN_SCREEN:
                 requestFocus();
                 menubar.setVisible(true);
-                cl.show(screenContainer, Screen.MAIN_SCREEN.toString());
+                cl.show(screenContainer, Screen.MAIN_SCREEN.name());
                 break;
             case TUTORIAL_SCREEN:
                 menubar.setVisible(false);
-                cl.show(screenContainer, Screen.TUTORIAL_SCREEN.toString());
+                cl.show(screenContainer, Screen.TUTORIAL_SCREEN.name());
                 break;
             default:
                 break;

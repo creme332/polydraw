@@ -1,7 +1,6 @@
 package com.github.creme332.view.tutorial;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
@@ -41,13 +40,13 @@ public class TutorialPanel extends JPanel {
     protected transient Style italic;
     protected transient Style imageStyle;
 
-    protected transient Icon mainIcon;
+    protected transient Icon previewIcon;
 
     public TutorialPanel(TutorialModel model, Icon icon) {
         setLayout(new BorderLayout());
 
         this.model = model;
-        this.mainIcon = icon;
+        this.previewIcon = icon;
 
         this.title = model.getTitle();
 
@@ -65,13 +64,9 @@ public class TutorialPanel extends JPanel {
         this.add(bodyPanel, BorderLayout.CENTER);
     }
 
-    public JPanel createBodyPanel() {
-        JPanel bodyPanel = new JPanel(new BorderLayout());
+    private JPanel createBodyPanel() {
+        bodyPanel = new JPanel(new BorderLayout());
         bodyPanel.setBorder(new EmptyBorder(new Insets(0, 100, 0, 100)));
-
-        // make text pane scrollable
-        JPanel scrollPaneContainer = new JPanel();
-        scrollPaneContainer.setBackground(Color.red);
 
         JScrollPane scrollPane = new JScrollPane(textPane);
         bodyPanel.add(scrollPane, BorderLayout.CENTER);
@@ -79,23 +74,26 @@ public class TutorialPanel extends JPanel {
         return bodyPanel;
     }
 
-    public JPanel createHeaderPanel() {
+    private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
 
-        // add components to header
+        // add padding
         headerPanel.setBorder(new EmptyBorder(new Insets(10, 0, 0, 0)));
+
+        // add back button
         headerPanel.add(backButton, BorderLayout.WEST);
 
+        // add title
         JPanel titleContainer = new JPanel(new GridBagLayout());
         JLabel titleLabel = new JLabel(title);
-        titleLabel.putClientProperty("FlatLaf.styleClass", "h4");
+        titleLabel.putClientProperty("FlatLaf.style", "font: bold $h2.font");
         titleContainer.add(titleLabel);
 
         headerPanel.add(titleContainer);
         return headerPanel;
     }
 
-    public void initStyles() {
+    private void initStyles() {
         // Define and set the default style
         defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 
@@ -116,8 +114,8 @@ public class TutorialPanel extends JPanel {
         return model;
     }
 
-    public Icon getMainIcon() {
-        return mainIcon;
+    public Icon getPreviewIcon() {
+        return previewIcon;
     }
 
     /**

@@ -43,13 +43,13 @@ public class DrawEllipse extends DrawController {
             // center of ellipse has been selected
 
             // create a shape wrapper
-            preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
+            preview = new ShapeWrapper(canvasModel.getShapeColor(),
                     canvasModel.getLineType(),
                     canvasModel.getLineThickness());
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
             // save wrapper
-            canvasModel.getShapes().add(preview);
+            canvasModel.addShape(preview);
 
         } else {
             if (preview.getPlottedPoints().size() == 1) {
@@ -58,21 +58,6 @@ public class DrawEllipse extends DrawController {
             } else {
                 // third point has been selected
                 preview.getPlottedPoints().add(polySpaceMousePosition);
-
-                // create an ellipse
-                Point2D center = preview.getPlottedPoints().get(0);
-                int ry = (int) Math.abs(preview.getPlottedPoints().get(1).distance(center));
-                int rx = (int) Math.abs(preview.getPlottedPoints().get(2).distance(center));
-
-                if (rx == 0 || ry == 0) {
-                    return;
-                }
-
-                int[][] coordinates = ellipseCalculator.getOrderedPoints((int) center.getX(), (int) center.getY(),
-                        rx, ry);
-                Polygon ellipse = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
-
-                preview.setShape(ellipse);
 
                 preview = null;
             }

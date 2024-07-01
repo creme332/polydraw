@@ -23,7 +23,7 @@ public class ToolBarController {
         toolbar.getColorBox().addActionListener(e -> {
             Color color = JColorChooser.showDialog(toolbar, "Select a color", Color.black);
             if (color != null) {
-                canvasModel.setFillColor(color);
+                canvasModel.setShapeColor(color);
                 toolbar.getColorBox().setBackground(color);
 
                 // request focus again otherwise keyboard shortcuts will stop working after

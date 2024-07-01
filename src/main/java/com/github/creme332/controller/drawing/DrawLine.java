@@ -1,8 +1,9 @@
 package com.github.creme332.controller.drawing;
 
-import java.awt.geom.Line2D;
+import java.awt.Polygon;
 import java.awt.geom.Point2D;
 
+import com.github.creme332.algorithms.LineCalculator;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
@@ -16,24 +17,6 @@ public class DrawLine extends DrawController {
         this.canvasModel = app.getCanvasModel();
     }
 
-    private void initWrapper(Point2D firstPoint) {
-        // create a shape wrapper
-        preview = new ShapeWrapper(canvasModel.getFillColor(), canvasModel.getFillColor(),
-                canvasModel.getLineType(),
-                canvasModel.getLineThickness());
-
-        // save plotted point
-        preview.getPlottedPoints().add(firstPoint);
-    }
-
-    private void drawShapePreview(Point2D to) {
-        Point2D from = preview.getPlottedPoints().get(0);
-
-        Line2D line = new Line2D.Double(from, to);
-        preview.setShape(line);
-        canvas.repaint();
-    }
-
     @Override
     public boolean shouldDraw() {
         return getCanvasMode() == Mode.DRAW_LINE_BRESENHAM || getCanvasMode() == Mode.DRAW_LINE_DDA;
@@ -43,7 +26,23 @@ public class DrawLine extends DrawController {
     public void handleMouseMoved(Point2D polySpaceMousePosition) {
         if (preview != null && preview.getPlottedPoints().size() == 1) {
             // number of plotted points is 1
-            drawShapePreview(polySpaceMousePosition);
+            Point2D lineStart = preview.getPlottedPoints().get(0);
+            Polygon shape;
+            if (getCanvasMode() == Mode.DRAW_LINE_DDA) {
+                int[][] coordinates = LineCalculator.dda((int) lineStart.getX(), (int) lineStart.getY(),
+                        (int) polySpaceMousePosition.getX(),
+                        (int) polySpaceMousePosition.getY());
+
+                shape = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
+            } else {
+                int[][] coordinates = LineCalculator.bresenham((int) lineStart.getX(), (int) lineStart.getY(),
+                        (int) polySpaceMousePosition.getX(),
+                        (int) polySpaceMousePosition.getY());
+
+                shape = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
+            }
+            preview.setShape(shape);
+            canvas.repaint();
         }
     }
 
@@ -52,26 +51,23 @@ public class DrawLine extends DrawController {
         if (preview == null) {
             // first coordinate of line has just been selected
 
-            // initialize wrapper with plotted point
-            initWrapper(polySpaceMousePosition);
+            // create a shape wrapper
+            preview = new ShapeWrapper(canvasModel.getShapeColor(),
+                    canvasModel.getLineType(),
+                    canvasModel.getLineThickness());
+
+            // save plotted point
+            preview.getPlottedPoints().add(polySpaceMousePosition);
 
             // save wrapper to canvas model
-            canvasModel.getShapes().add(preview);
+            canvasModel.addShape(preview);
             return;
         }
 
         // second coordinate has now been selected
-        Point2D lineStart = preview.getPlottedPoints().get(0);
-
-        Line2D line = new Line2D.Double();
-        line.setLine(lineStart, polySpaceMousePosition);
-
         preview.getPlottedPoints().add(polySpaceMousePosition);
-        preview.setShape(line);
-
-        canvas.repaint();
 
         // reset wrapper
         preview = null;
-    } 
+    }
 }

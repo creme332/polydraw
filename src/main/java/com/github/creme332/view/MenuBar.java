@@ -1,5 +1,6 @@
 package com.github.creme332.view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
@@ -16,39 +17,36 @@ import javax.swing.border.EmptyBorder;
 
 import org.kordamp.ikonli.swing.FontIcon;
 
-import com.github.creme332.model.MenuItemModel;
 import com.github.creme332.model.MenuModel;
-import com.github.creme332.utils.IconLoader;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
-import com.github.creme332.utils.exception.InvalidPathException;
+import com.github.creme332.model.Mode;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
 public class MenuBar extends JMenuBar {
     private JButton sidebarButton;
-    private JButton guidelinesButton; // Button to toggle guidelines
-    private JButton toggleAxesButton; // Button to toggle axes visibility
     private JButton helpButton;
-    private JButton exportButton; // Button to export canvas as image
 
     private List<JMenu> jmenus = new ArrayList<>();
+    public static final int HEIGHT = 70;
 
-    public MenuBar(MenuModel[] menus) throws InvalidIconSizeException, InvalidPathException {
+    public MenuBar(MenuModel[] menus) {
 
-        setPreferredSize(new Dimension(getWidth(), 70));
+        setPreferredSize(new Dimension(getWidth(), HEIGHT));
         setBorder(new EmptyBorder(new Insets(7, 0, 7, 0)));
+        setBackground(new Color(248, 248, 248));
 
         // add menus to menubar
         for (MenuModel menuModel : menus) {
             JMenu menu = new RoundedMenu();
+            menu.setOpaque(false);
             jmenus.add(menu);
             menu.setIcon(menuModel.getActiveItem().getIcon());
-            menu.setToolTipText(menuModel.getActiveItem().getName());
+            menu.setToolTipText(menuModel.getActiveItem().getTitle());
 
-            for (MenuItemModel item : menuModel.getItems()) {
-                JMenuItem menuItem = new JMenuItem(item.getName(), item.getIcon());
+            for (Mode item : menuModel.getItems()) {
+                JMenuItem menuItem = new JMenuItem(item.getTitle(), item.getIcon());
                 menu.add(menuItem);
-                menuItem.addActionListener(e -> menu.setToolTipText(item.getName()));
+                menuItem.addActionListener(e -> menu.setToolTipText(item.getTitle()));
             }
             this.add(Box.createHorizontalStrut(10));
             this.add(menu);
@@ -71,33 +69,12 @@ public class MenuBar extends JMenuBar {
         leftPanel.add(btn);
         btn.setToolTipText("Redo");
 
-        // guidelines button
-        guidelinesButton = new JButton();
-        guidelinesButton.setIcon(FontIcon.of(BootstrapIcons.GRID_3X3, 37));
-        guidelinesButton.setBorderPainted(false);
-        leftPanel.add(guidelinesButton);
-        guidelinesButton.setToolTipText("Toggle guidelines");
-
-        // toggle axes button
-        toggleAxesButton = new JButton();
-        toggleAxesButton.setIcon(IconLoader.loadIcon("/icons/axes.png", 40));
-        toggleAxesButton.setBorderPainted(false);
-        toggleAxesButton.setToolTipText("Toggle axes");
-        leftPanel.add(toggleAxesButton);
-
         // help button
         helpButton = new JButton();
         helpButton.setIcon(FontIcon.of(BootstrapIcons.QUESTION_CIRCLE, 37));
         helpButton.setBorderPainted(false);
         helpButton.setToolTipText("Help");
         leftPanel.add(helpButton);
-
-        // export button
-        exportButton = new JButton();
-        exportButton.setIcon(FontIcon.of(BootstrapIcons.CAMERA, 37)); // Use an appropriate icon for export
-        exportButton.setBorderPainted(false);
-        exportButton.setToolTipText("Export canvas");
-        leftPanel.add(exportButton);
 
         // sidebar menu button
         sidebarButton = new JButton();
@@ -124,19 +101,7 @@ public class MenuBar extends JMenuBar {
         return sidebarButton;
     }
 
-    public JButton getGuidelinesButton() {
-        return guidelinesButton;
-    }
-
-    public JButton getToggleAxesButton() {
-        return toggleAxesButton;
-    }
-
     public JButton getHelpButton() {
         return helpButton;
-    }
-
-    public JButton getExportButton() {
-        return exportButton;
     }
 }

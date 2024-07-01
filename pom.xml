@@ -14,9 +14,12 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
   </properties>
 
   <dependencies>
+
     <!-- ! icon pack must appear first to avoid issue when compiling project to jar -->
     <!-- Reference: https://github.com/kordamp/ikonli/issues/11 -->
     <dependency>
@@ -29,6 +32,12 @@
       <groupId>org.kordamp.ikonli</groupId>
       <artifactId>ikonli-swing</artifactId>
       <version>12.3.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.weisj</groupId>
+      <artifactId>jsvg</artifactId>
+      <version>1.5.0</version>
     </dependency>
 
     <dependency>
@@ -46,7 +55,7 @@
   </dependencies>
 
   <build>
-    <pluginManagement>      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement>
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
@@ -88,7 +97,8 @@
           <version>3.0.0</version>
         </plugin>
 
-        <!-- Plugin below is required to solve missing manifest file issue when project is packaged to jar -->
+        <!-- Plugin below is required to solve missing manifest file issue when project is packaged
+        to jar -->
         <!-- Reference: https://stackoverflow.com/a/574650/17627866 -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

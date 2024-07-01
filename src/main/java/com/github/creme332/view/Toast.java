@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import com.github.creme332.model.Mode;
+import com.github.creme332.utils.DesktopApi;
+import com.github.creme332.utils.DesktopApi.EnumOS;
 
 import java.awt.*;
 
@@ -19,8 +21,15 @@ public class Toast extends JPanel {
     public Toast(Mode defaultMode) {
         setLayout(new BorderLayout());
         setBackground(new Color(47, 47, 51));
-        setPreferredSize(new Dimension(400, 100));
+
+        if (DesktopApi.getOs() == EnumOS.LINUX) {
+            setPreferredSize(new Dimension(400, 100));
+        } else {
+            setPreferredSize(new Dimension(400, 120));
+        }
+
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
+        putClientProperty("FlatLaf.style", "arc: 10");
 
         titleLabel = new JLabel(defaultMode.getTitle());
         titleLabel.putClientProperty("FlatLaf.style", "font: $h3.font");

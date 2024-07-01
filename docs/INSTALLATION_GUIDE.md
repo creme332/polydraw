@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - Maven
-- Java JDK (v17 preferred)
+- Java JDK 17
 
 ## Instructions
 

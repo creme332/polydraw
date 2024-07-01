@@ -10,8 +10,10 @@ import java.util.List;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.tutorial.DrawCircleTutorial;
+import com.github.creme332.view.tutorial.DrawEllipseTutorial;
 import com.github.creme332.view.tutorial.DrawLineTutorial;
 import com.github.creme332.view.tutorial.GettingStartedTutorial;
+import com.github.creme332.view.tutorial.KeyboardTutorial;
 import com.github.creme332.view.tutorial.TutorialCard;
 import com.github.creme332.view.tutorial.TutorialPanel;
 
@@ -62,6 +64,8 @@ public class TutorialCenter extends JPanel {
             tutorialScreens.add(new GettingStartedTutorial());
             tutorialScreens.add(new DrawLineTutorial());
             tutorialScreens.add(new DrawCircleTutorial());
+            tutorialScreens.add(new KeyboardTutorial());
+            tutorialScreens.add(new DrawEllipseTutorial());
         } catch (InvalidPathException | InvalidIconSizeException e) {
             e.printStackTrace();
             System.exit(ABORT);
@@ -71,7 +75,7 @@ public class TutorialCenter extends JPanel {
 
     private void initTutorialCards() {
         for (TutorialPanel screen : tutorialScreens) {
-            tutorialCards.add(new TutorialCard(screen.getTitle(), screen.getMainIcon()));
+            tutorialCards.add(new TutorialCard(screen.getTitle(), screen.getPreviewIcon()));
         }
     }
 
@@ -96,6 +100,7 @@ public class TutorialCenter extends JPanel {
 
         // Create the grid panel to hold GridItems
         gridPanel = new JPanel(new GridBagLayout());
+        gridPanel.setBackground(Color.white);
         gridPanel.setBorder(new EmptyBorder(new Insets(10, 10, 0, 0)));
 
         // add tutorial cards to grid
@@ -105,6 +110,7 @@ public class TutorialCenter extends JPanel {
         JScrollPane scrollPane = new JScrollPane(gridPanel);
         scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         tutorialGrid.add(scrollPane, BorderLayout.CENTER);
     }
 
