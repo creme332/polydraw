@@ -51,21 +51,16 @@ A preview image is an image that appears in a tutorial card on the tutorial cent
 
 ![Tutorial preview on tutorial center](assets/tutorial-preview.png)
 
-To add/modify a preview image for a tutorial, place the preview image in the assets folder belonging to the tutorial. The image can be named `background.png` and you should take note of its dimensions.
-
-You should always pass a resized version of your preview image to ensure that it does not appear distorted:
+To add/modify a preview image for a tutorial, place the preview image in the assets folder belonging to the tutorial. The image can be named `background.png`.
 
   ```java
       public DrawCircleTutorial() throws InvalidPathException, InvalidIconSizeException {
-
-        // good because the 1291 x 616 preview image passed is resized to match aspect ratio of tutorial card
-        super(DRAW_CIRCLE_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png",
-                getScaledDimension(new Dimension(1291, 616), TutorialCard.IMAGE_DIMENSION)));
-        
-        // ❌ : image has not been resized
-        super(DRAW_CIRCLE_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png"));
+        super(DRAW_CIRCLE_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png", TutorialCard.IMAGE_DIMENSION));
     }
   ``` 
+
+> [!IMPORTANT]
+> Ensure that your image has a dimension of **450x300** to prevent distortions. If your image dimension is incorrect, you will see a red background around your image.
 
 ## Add keywords
 
