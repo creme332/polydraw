@@ -17,10 +17,12 @@ public class TutorialCard extends JPanel {
      */
     public static final Dimension DIMENSION = new Dimension(450, 300);
 
+    public static final int HEADING_HEIGHT = 60;
+
     /**
      * Dimensions of image on tutorial card.
      */
-    public static final Dimension IMAGE_DIMENSION = new Dimension(DIMENSION.width, DIMENSION.height - 100);
+    public static final Dimension IMAGE_DIMENSION = new Dimension(DIMENSION.width, DIMENSION.height - HEADING_HEIGHT);
 
     public TutorialCard(String heading, Icon icon) {
         this.heading = heading;
@@ -35,6 +37,9 @@ public class TutorialCard extends JPanel {
 
         // Create image container
         JPanel imageContainer = new JPanel(new BorderLayout());
+
+        // set background color to red so that invalid image dimensions become visible
+        imageContainer.setBackground(Color.red);
         imageContainer.setPreferredSize(new Dimension(DIMENSION.width, DIMENSION.height - IMAGE_DIMENSION.height));
 
         // add image to image container
@@ -45,6 +50,8 @@ public class TutorialCard extends JPanel {
 
         // create a title container with only a top border
         JPanel titleContainer = new JPanel();
+        titleContainer.setBackground(Color.white);
+        titleContainer.setPreferredSize(new Dimension(DIMENSION.width, HEADING_HEIGHT));
         titleContainer.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
 
         // add title to title container
