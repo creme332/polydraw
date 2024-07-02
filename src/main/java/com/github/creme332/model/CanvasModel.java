@@ -6,8 +6,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -70,8 +68,6 @@ public class CanvasModel {
      */
     private int xZero;
 
-    private List<ShapeWrapper> shapes = new ArrayList<>();
-
     /**
      * Whether guidelines should be displayed on canvas
      */
@@ -86,6 +82,12 @@ public class CanvasModel {
      * Mouse position of user on canvas in polyspace coordinates.
      */
     Point2D userMousePosition;
+
+    ShapeManager shapeManager = new ShapeManager();
+
+    public ShapeManager getShapeManager() {
+        return shapeManager;
+    }
 
     /**
      * 
@@ -149,13 +151,6 @@ public class CanvasModel {
             System.exit(0);
         }
         return transform;
-    }
-
-    public void clearCanvas() {
-        int oldSize = shapes.size();
-        shapes.clear();
-        // notify listeners that number of shapes on canvas has changed
-        support.firePropertyChange("clearCanvas", oldSize, shapes.size());
     }
 
     /**
@@ -248,39 +243,8 @@ public class CanvasModel {
         support.addPropertyChangeListener("enableGuidelines", listener);
         support.addPropertyChangeListener("axesVisible", listener);
         support.addPropertyChangeListener("cellSize", listener);
-        support.addPropertyChangeListener("clearCanvas", listener);
         support.addPropertyChangeListener("standardView", listener);
         support.addPropertyChangeListener("labelFontSize", listener);
-    }
-
-    /**
-     * 
-     * @return A copy of the current shapes that should be displayed
-     */
-    public List<ShapeWrapper> getShapesCopy() {
-        ArrayList<ShapeWrapper> copy = new ArrayList<>();
-
-        for (ShapeWrapper wrapper : shapes) {
-            copy.add(new ShapeWrapper(wrapper));
-        }
-
-        return copy;
-    }
-
-    public void addShape(ShapeWrapper wrapper) {
-        shapes.add(wrapper);
-    }
-
-    public void removeShape(ShapeWrapper wrapper) {
-        shapes.remove(wrapper);
-    }
-
-    public void removeShape(int i) {
-        shapes.remove(i);
-    }
-
-    public void setShapes(List<ShapeWrapper> shapes) {
-        this.shapes = shapes;
     }
 
     public int getCellSize() {

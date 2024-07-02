@@ -36,6 +36,7 @@ import com.github.creme332.controller.drawing.DrawRegularPolygon;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
+import com.github.creme332.model.ShapeManager;
 import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.view.Canvas;
 
@@ -58,6 +59,7 @@ public class CanvasController implements PropertyChangeListener {
 
         // listen to model
         model.addPropertyChangeListener(this);
+        model.getShapeManager().addPropertyChangeListener(this);
         app.addPropertyChangeListener(this);
 
         // initialize drawing controllers
@@ -182,10 +184,12 @@ public class CanvasController implements PropertyChangeListener {
         Point2D polyspaceMousePosition = model.toPolySpace(e.getPoint());
 
         if (app.getMode() == Mode.DELETE) {
-            for (int i = 0; i < model.getShapesCopy().size(); i++) {
-                ShapeWrapper wrapper = model.getShapesCopy().get(i);
+            List<ShapeWrapper> shapes = model.getShapeManager().getShapes();
+            for (int i = 0; i < shapes.size(); i++) {
+                ShapeWrapper wrapper = shapes.get(i);
                 if (wrapper.getShape().contains(polyspaceMousePosition)) {
-                    model.removeShape(i);
+                    model.getShapeManager().deleteShape(i);
+                    break; // delete only one shape at a time
                 }
             }
         }
@@ -243,7 +247,8 @@ public class CanvasController implements PropertyChangeListener {
         /**
          * List of property names that should result only in a canvas repaint.
          */
-        final Set<String> repaintProperties = Set.of("clearCanvas", "standardView", "enableGuidelines",
+        final Set<String> repaintProperties = Set.of(ShapeManager.STATE_CHANGE_PROPERTY_NAME, "standardView",
+                "enableGuidelines",
                 "cellSize", "axesVisible", "labelFontSize");
 
         if (repaintProperties.contains(propertyName)) {
