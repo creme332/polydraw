@@ -65,7 +65,7 @@ public class MenuBarController implements PropertyChangeListener {
                     menubar.getMyMenu(activeMenuIndex).setBorder(defaultBorder);
 
                     activeMenuIndex = menuIndex;
-                    
+
                     // add border to clickedMenu
                     jMenu.setBorder(VISIBLE_BORDER);
 
@@ -83,6 +83,20 @@ public class MenuBarController implements PropertyChangeListener {
             public void mousePressed(MouseEvent e) {
                 // toggle sidebar visibility
                 app.setSideBarVisibility(!app.getSideBarVisibility());
+            }
+        });
+
+        menubar.getRedoButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                app.getCanvasModel().getShapeManager().redo();
+            }
+        });
+
+        menubar.getUndoButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                app.getCanvasModel().getShapeManager().undo();
             }
         });
 

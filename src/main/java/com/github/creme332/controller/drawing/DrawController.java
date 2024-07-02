@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
+import com.github.creme332.model.ShapeManager;
 import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.view.Canvas;
 
@@ -84,7 +85,21 @@ public abstract class DrawController {
      * invoked when mode changes while drawing was ongoing.
      */
     public void disposePreview() {
-        canvasModel.removeShape(preview);
+        if (preview == null)
+            return;
+
+        final ShapeManager manager = canvasModel.getShapeManager();
+
+        /**
+         * Preview shape is the last shape inserted to the shapes array.
+         */
+        final int previewIndex = manager.getShapes().size() - 1;
+
+        if (previewIndex < 0)
+            return;
+
+        // delete the preview
+        canvasModel.getShapeManager().deleteShape(previewIndex);
         preview = null;
     }
 }
