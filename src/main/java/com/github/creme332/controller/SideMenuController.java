@@ -59,7 +59,7 @@ public class SideMenuController {
         CanvasModel canvasModel = app.getCanvasModel();
 
         // New button
-        sidebar.getNewCanvasButton().addActionListener(e -> canvasModel.clearCanvas());
+        sidebar.getNewCanvasButton().addActionListener(e -> canvasModel.getShapeManager().reset());
 
         // Export Image button
         sidebar.getExportImageButton().addActionListener(e -> app.startPrintingProcess());
