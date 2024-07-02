@@ -12,6 +12,7 @@ import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.tutorial.DrawCircleTutorial;
 import com.github.creme332.view.tutorial.DrawEllipseTutorial;
 import com.github.creme332.view.tutorial.DrawLineTutorial;
+import com.github.creme332.view.tutorial.DrawPolygonTutorial;
 import com.github.creme332.view.tutorial.GettingStartedTutorial;
 import com.github.creme332.view.tutorial.KeyboardTutorial;
 import com.github.creme332.view.tutorial.TutorialCard;
@@ -66,6 +67,7 @@ public class TutorialCenter extends JPanel {
             tutorialScreens.add(new DrawCircleTutorial());
             tutorialScreens.add(new KeyboardTutorial());
             tutorialScreens.add(new DrawEllipseTutorial());
+            tutorialScreens.add(new DrawPolygonTutorial());
         } catch (InvalidPathException | InvalidIconSizeException e) {
             e.printStackTrace();
             System.exit(ABORT);
