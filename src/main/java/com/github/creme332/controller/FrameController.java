@@ -66,7 +66,9 @@ public class FrameController implements PropertyChangeListener {
         rootPane.getActionMap().put("selectCursorMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectMenuByIndex(0);
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(0);
+                }
             }
         });
 
@@ -75,7 +77,9 @@ public class FrameController implements PropertyChangeListener {
         rootPane.getActionMap().put("selectLineMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectMenuByIndex(1);
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(1);
+                }
             }
         });
 
@@ -84,7 +88,9 @@ public class FrameController implements PropertyChangeListener {
         rootPane.getActionMap().put("selectCircleMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectMenuByIndex(2);
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(2);
+                }
             }
         });
 
@@ -93,7 +99,9 @@ public class FrameController implements PropertyChangeListener {
         rootPane.getActionMap().put("selectEllipseMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectMenuByIndex(3);
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(3);
+                }
             }
         });
 
@@ -102,7 +110,9 @@ public class FrameController implements PropertyChangeListener {
         rootPane.getActionMap().put("selectPolygonMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectMenuByIndex(4);
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(4);
+                }
             }
         });
 
@@ -111,7 +121,9 @@ public class FrameController implements PropertyChangeListener {
         rootPane.getActionMap().put("selectTransformationsMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectMenuByIndex(5);
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(5);
+                }
             }
         });
 
@@ -120,7 +132,9 @@ public class FrameController implements PropertyChangeListener {
         rootPane.getActionMap().put("selectMoveMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectMenuByIndex(6);
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(6);
+                }
             }
         });
 
@@ -129,7 +143,9 @@ public class FrameController implements PropertyChangeListener {
         rootPane.getActionMap().put("selectDeleteMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectMenuByIndex(7);
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(7);
+                }
             }
         });
 
@@ -147,7 +163,9 @@ public class FrameController implements PropertyChangeListener {
         rootPane.getActionMap().put("toggleSidebar", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                app.setSideBarVisibility(!app.getSideBarVisibility());
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    app.setSideBarVisibility(!app.getSideBarVisibility());
+                }
             }
         });
     }
