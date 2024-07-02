@@ -60,7 +60,7 @@ public class DrawLine extends DrawController {
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
             // save wrapper to canvas model
-            canvasModel.addShape(preview);
+            canvasModel.getShapeManager().addShape(preview);
             return;
         }
 

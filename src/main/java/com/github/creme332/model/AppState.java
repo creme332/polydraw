@@ -17,6 +17,11 @@ public class AppState {
 
     Map<Mode, Integer> modeToMenuMapper;
 
+    /**
+     * Screen currently visible.
+     * The initial value of this variable is the screen shown AFTER the splash
+     * screen.
+     */
     Screen currentScreen = Screen.MAIN_SCREEN;
 
     public AppState() {

@@ -25,6 +25,8 @@ import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 public class MenuBar extends JMenuBar {
     private JButton sidebarButton;
     private JButton helpButton;
+    private JButton redoButton;
+    private JButton undoButton;
 
     private List<JMenu> jmenus = new ArrayList<>();
     public static final int HEIGHT = 70;
@@ -56,18 +58,18 @@ public class MenuBar extends JMenuBar {
         leftPanel.setOpaque(false);
 
         // undo button
-        JButton btn = new JButton();
-        btn.setIcon(FontIcon.of(BootstrapIcons.ARROW_COUNTERCLOCKWISE, 40));
-        btn.setBorderPainted(false);
-        leftPanel.add(btn);
-        btn.setToolTipText("Undo");
+        undoButton = new JButton();
+        undoButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_COUNTERCLOCKWISE, 40));
+        undoButton.setBorderPainted(false);
+        leftPanel.add(undoButton);
+        undoButton.setToolTipText("Undo");
 
         // redo button
-        btn = new JButton();
-        btn.setIcon(FontIcon.of(BootstrapIcons.ARROW_CLOCKWISE, 40));
-        btn.setBorderPainted(false);
-        leftPanel.add(btn);
-        btn.setToolTipText("Redo");
+        redoButton = new JButton();
+        redoButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_CLOCKWISE, 40));
+        redoButton.setBorderPainted(false);
+        leftPanel.add(redoButton);
+        redoButton.setToolTipText("Redo");
 
         // help button
         helpButton = new JButton();
@@ -103,5 +105,13 @@ public class MenuBar extends JMenuBar {
 
     public JButton getHelpButton() {
         return helpButton;
+    }
+
+    public JButton getRedoButton() {
+        return redoButton;
+    }
+
+    public JButton getUndoButton() {
+        return undoButton;
     }
 }
