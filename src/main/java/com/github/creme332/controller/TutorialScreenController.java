@@ -1,10 +1,15 @@
 package com.github.creme332.controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -70,6 +75,24 @@ public class TutorialScreenController {
 
         }
 
+        initializeKeyBindings(appState);
+    }
+
+    private void initializeKeyBindings(AppState appState) {
+        JComponent rootPane = (JComponent) view.getRootPane();
+
+        // Bind the "Esc" key to go back
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "goBack");
+        rootPane.getActionMap().put("goBack", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (view.isInTutorialScreen()) {
+                    view.showTutorial("tutorialCenter");
+                } else {
+                    appState.switchScreen(Screen.MAIN_SCREEN);
+                }
+            }
+        });
     }
 
     /**
