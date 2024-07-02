@@ -24,12 +24,11 @@ public class DrawLineTutorial extends TutorialPanel {
         model.addKeyword("dda");
 
         try {
-            // Insert text
             doc.insertString(doc.getLength(),
                     "In this tutorial you will learn how to draw a line using either the DDA algorithm or Bresenham line algorithm.\n\n",
                     regular);
 
-            ImageIcon icon = loadIcon(IMAGE_PATH_PREFIX + "draw-line.gif", new Dimension(1000, 593));
+            ImageIcon icon = loadIcon(IMAGE_PATH_PREFIX + "draw-line.gif");
             StyleConstants.setIcon(imageStyle, icon);
             doc.insertString(doc.getLength(), " ", imageStyle);
 

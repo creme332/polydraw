@@ -1,6 +1,7 @@
 package com.github.creme332.view.tutorial;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
@@ -37,7 +38,8 @@ public class TutorialPanel extends JPanel {
     protected transient Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
     protected transient Style regular;
     protected transient Style bold;
-    protected transient Style italic;
+    protected transient Style highlightRed;
+    protected transient Style boldLarge;
     protected transient Style imageStyle;
 
     protected transient Icon previewIcon;
@@ -51,9 +53,9 @@ public class TutorialPanel extends JPanel {
         this.title = model.getTitle();
 
         // use center alignment for text
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+        // SimpleAttributeSet center = new SimpleAttributeSet();
+        // StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        // doc.setParagraphAttributes(0, doc.getLength(), center, false);
 
         initStyles();
         textPane.setEditable(false); // Make it non-editable
@@ -106,8 +108,14 @@ public class TutorialPanel extends JPanel {
         bold = textPane.addStyle("bold", regular);
         StyleConstants.setBold(bold, true);
 
-        italic = textPane.addStyle("italic", regular);
-        StyleConstants.setItalic(italic, true);
+        boldLarge = textPane.addStyle("boldLarge", regular);
+        StyleConstants.setBold(boldLarge, true);
+        StyleConstants.setFontSize(boldLarge, 20);
+
+        highlightRed = textPane.addStyle("italic", regular);
+        StyleConstants.setItalic(highlightRed, true);
+        StyleConstants.setBackground(highlightRed, new Color(255, 211, 211));
+
     }
 
     public TutorialModel getModel() {
