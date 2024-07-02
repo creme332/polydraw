@@ -1,48 +1,32 @@
 package com.github.creme332.controller;
 
 import com.github.creme332.model.AppState;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
 
 /**
- * Controls all the logic in the application by linking views and model.
+ * Main controller for application responsible for creating application model
+ * and controllers of screens.
  */
 public class Controller {
-    AppState app = new AppState();
-
-    private Frame frame; // frame of app
-    private MenuBar menuBar;
-    private Canvas canvas;
-    private Toolbar toolbar;
-
-    private FrameController frameController;
 
     public Controller() {
+        AppState app = new AppState();
+        FrameController frameController;
         try {
-            toolbar = new Toolbar();
-            new ToolBarController(toolbar);
-
-            canvas = new Canvas(toolbar);
-            new CanvasController(canvas);
-
-            frame = new Frame(canvas);
+            Frame frame = new Frame(app);
             frameController = new FrameController(app, frame);
 
-            menuBar = frame.getMyMenuBar();
-            new MenuBarController(app, menuBar);
+            // create controllers for main screens
+            new CanvasController(app, frame.getMyCanvas());
+            new CanvasConsoleController(app, frame.getCanvasConsole());
+            new TutorialScreenController(app, frame.getTutorialCenter());
 
-            new SideMenuController(app, frame.getSideMenuPanel());
-        } catch (InvalidIconSizeException | InvalidPathException e) {
+            // play start animation
+            frameController.playStartAnimation();
+        } catch (InvalidPathException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(1);
-        }  catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
-            e.printStackTrace();
-            System.exit(1);
         }
-
-        frameController.playStartAnimation();
     }
-
 }

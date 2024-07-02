@@ -1,123 +1,35 @@
 package com.github.creme332.view;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.kordamp.ikonli.Ikon;
-import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
-import org.kordamp.ikonli.swing.FontIcon;
+import com.github.creme332.model.CanvasModel;
+import com.github.creme332.model.LineType;
+import com.github.creme332.model.ShapeWrapper;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.Toolkit;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 
+/**
+ * Drawing board for coordinate system.
+ */
 public class Canvas extends JPanel {
-    private final int TICK_PADDING_TOP = 20; // spacing between top of canvas and tick label when axis is out of sight
-    private final int TICK_PADDING_BOTTOM = 10; // spacing between bottom of canvas and tick label when axis is out of
-                                                // sight
-    private final int TICK_PADDING_LEFT = 12; // spacing between left border of canvas and tick label when axis is out
-                                              // of
-    // sight
-    private final int TICK_PADDING_RIGHT = 30; // spacing between right border of canvas and tick label when axis is out
-                                               // of
-    // sight
 
-    int cellSize = 100; // distance in pixels between each unit on axes
-    private float labelFontSizeScaleFactor = 1.4F;
+    private transient CanvasModel model;
 
-    private int yZero; // vertical distance between top border of canvas and my cartesian origin
-    private int xZero; // horizontal distance between left border of canvas and my cartesian origin
-
-    private JButton homeButton = new CircularButton();
-    private JButton zoomInButton = new CircularButton();
-    private JButton zoomOutButton = new CircularButton();
-    private Toolbar toolbar;
-    private Toast toast = new Toast();
-
-    /**
-     * Place zoom panel in bottom right corner of canvas.
-     */
-    public void positionZoomPanel() {
-        final int MARGIN_RIGHT = 20;
-        final int MARGIN_BOTTOM = 200;
-
-        final int canvasWidth = getWidth();
-        final int canvasHeight = getHeight();
-
-        Dimension buttonSize = homeButton.getPreferredSize();
-        int x = canvasWidth - buttonSize.width - MARGIN_RIGHT;
-        int y = canvasHeight - buttonSize.height - MARGIN_BOTTOM;
-
-        homeButton.setBounds(x, y, buttonSize.width, buttonSize.height);
-        zoomInButton.setBounds(x, y + 60, buttonSize.width, buttonSize.height);
-        zoomOutButton.setBounds(x, y + 120, buttonSize.width, buttonSize.height);
-    }
-
-    public void positionToast() {
-        // position toast
-        Dimension toastSize = toast.getPreferredSize();
-
-        Rectangle r = new Rectangle();
-        r.x = 30;
-        r.y = (int) (this.getHeight() - toastSize.getHeight() - 30);
-
-        r.width = (int) toastSize.getWidth();
-        r.height = (int) toastSize.getHeight();
-
-        toast.setBounds(r);
-    }
-
-    /**
-     * Place toolbar at middle top of canvas
-     */
-    public void positionToolbar() {
-        final int MARGIN_TOP = 25; // distance between toolbar and canvas top
-        final int canvasWidth = getWidth();
-
-        // position toolbar such that center of toolbar coincides with center of canvas
-        Dimension toolbarSize = toolbar.getPreferredSize();
-        Rectangle r = new Rectangle();
-        r.x = canvasWidth / 2 - (int) (toolbarSize.getWidth() / 2);
-        r.y = MARGIN_TOP;
-
-        r.width = (int) toolbarSize.getWidth();
-        r.height = (int) toolbarSize.getHeight();
-
-        toolbar.setBounds(r);
-    }
-
-    public JButton createZoomPanelButton(Ikon ikon) {
-        final int ICON_SIZE = 25;
-        final Color ICON_COLOR = new Color(116, 116, 116);
-
-        JButton btn = new CircularButton();
-        btn.setPreferredSize(new Dimension(50, 50));
-        FontIcon icon = FontIcon.of(ikon, ICON_SIZE);
-        icon.setIconColor(ICON_COLOR);
-        btn.setIcon(icon);
-        return btn;
-    }
-
-    public Canvas(Toolbar toolbar) {
+    public Canvas(CanvasModel model) {
         setLayout(null); // Use no layout manager
-
-        this.toolbar = toolbar;
-        add(toolbar);
-        add(toast);
-
-        // create buttons for zoom panel
-        homeButton = createZoomPanelButton(BootstrapIcons.HOUSE);
-        zoomInButton = createZoomPanelButton(BootstrapIcons.ZOOM_IN);
-        zoomOutButton = createZoomPanelButton(BootstrapIcons.ZOOM_OUT);
-        add(homeButton);
-        add(zoomInButton);
-        add(zoomOutButton);
+        setBackground(Color.white);
+        this.model = model;
     }
 
     public void setAntialiasing(Graphics2D g2) {
@@ -127,196 +39,245 @@ public class Canvas extends JPanel {
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     }
 
+    public BufferedImage toImage() {
+        BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+        paintComponent(g2d);
+        g2d.dispose();
+        return image;
+    }
+
     private void drawHorizontalAxis(Graphics2D g2) {
         final int canvasWidth = getWidth();
         final int canvasHeight = getHeight();
 
         // calculate y position of tick label
-        int labelYPos = Math.min(canvasHeight - TICK_PADDING_BOTTOM, Math.max(TICK_PADDING_TOP, yZero));
+        int labelYPos = Math.min(canvasHeight - CanvasModel.TICK_PADDING_BOTTOM,
+                Math.max(CanvasModel.TICK_PADDING_TOP, model.getYZero()));
 
         g2.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(2)); // Set line thickness
 
         // if axis is within canvas, draw horizontal line to represent horizontal
         // axis
-        if (yZero >= 0 && yZero <= canvasHeight)
-            g2.drawLine(0, yZero, canvasWidth, yZero);
+        if (model.getYZero() >= 0 && model.getYZero() <= canvasHeight)
+            g2.drawLine(0, model.getYZero(), canvasWidth, model.getYZero());
 
         // set tick label color
         g2.setColor(Color.GRAY);
 
         // label center of x axis
-        g2.drawString(Integer.valueOf(0).toString(), xZero, labelYPos);
+        g2.drawString(Integer.toString(0), model.getXZero(), labelYPos);
 
         // label ticks on positive horizontal axis
-        for (int i = 1; i <= (canvasWidth - xZero) / (cellSize); i++) {
-            int labelX = xZero + i * cellSize;
-            g2.drawString(Integer.valueOf(i).toString(), labelX, labelYPos);
+        int interval = getLabelInterval();
+        for (int i = interval; i <= (canvasWidth - model.getXZero()) / (model.getCellSize()); i += interval) {
+            int labelX = model.getXZero() + i * model.getCellSize();
+            g2.drawString(Integer.toString(i), labelX, labelYPos);
         }
 
         // label ticks on negative horizontal axis
-        for (int i = -1; i >= -xZero / (cellSize); i--) {
-            int labelX = xZero + i * cellSize;
-            g2.drawString(Integer.valueOf(i).toString(), labelX, labelYPos);
+        for (int i = -interval; i >= -model.getXZero() / (model.getCellSize()); i -= interval) {
+            int labelX = model.getXZero() + i * model.getCellSize();
+            g2.drawString(Integer.toString(i), labelX, labelYPos);
         }
     }
 
     private void drawGuidelines(Graphics2D g2) {
         final int canvasWidth = getWidth();
         final int canvasHeight = getHeight();
+        int interval = getLabelInterval();
 
         g2.setColor(Color.gray);
         g2.setStroke(new BasicStroke(1));
 
         // draw horizontal guidelines above x-axis
-        int lineCount = yZero / (cellSize);
-        for (int i = 1; i <= lineCount; i++) {
-            int y1 = yZero - i * cellSize;
+        int lineCount = model.getYZero() / (model.getCellSize());
+        for (int i = 0; i <= lineCount; i += interval) {
+            int y1 = model.getYZero() - i * model.getCellSize();
             g2.drawLine(0, y1, canvasWidth, y1); // draw guideline above x axis
         }
 
         // draw horizontal guidelines below x-axis
-        lineCount = (canvasHeight - yZero) / (cellSize);
-        for (int i = 1; i <= lineCount; i++) {
-            int y0 = yZero + i * cellSize;
+        lineCount = (canvasHeight - model.getYZero()) / (model.getCellSize());
+        for (int i = 0; i <= lineCount; i += interval) {
+            int y0 = model.getYZero() + i * model.getCellSize();
             g2.drawLine(0, y0, canvasWidth, y0); // draw guideline below x axis
         }
 
         // draw vertical guidelines before y-axis
-        lineCount = xZero / (cellSize);
-        for (int i = 1; i <= lineCount; i++) {
-            int x0 = xZero - i * cellSize;
+        lineCount = model.getXZero() / (model.getCellSize());
+        for (int i = 0; i <= lineCount; i += interval) {
+            int x0 = model.getXZero() - i * model.getCellSize();
             g2.drawLine(x0, 0, x0, canvasHeight); // line before y axis
         }
 
         // draw vertical guidelines after y-axis
-        lineCount = (canvasWidth - xZero) / (cellSize);
-        for (int i = 1; i <= lineCount; i++) {
-            int x1 = xZero + i * cellSize;
+        lineCount = (canvasWidth - model.getXZero()) / (model.getCellSize());
+        for (int i = 0; i <= lineCount; i += interval) {
+            int x1 = model.getXZero() + i * model.getCellSize();
             g2.drawLine(x1, 0, x1, canvasHeight); // line after y axis
         }
 
     }
 
+    private int getLabelInterval() {
+        int threshold = 40;
+        int cellSize = model.getCellSize();
+
+        if (cellSize >= threshold)
+            return 1;
+
+        if (cellSize >= 30)
+            return 2;
+
+        if (cellSize >= 20)
+            return 5;
+        if (cellSize >= 10)
+            return 10;
+        if (cellSize >= 6)
+            return 20;
+        if (cellSize >= 3)
+            return 60;
+        return 120;
+    }
+
     private void drawVerticalAxis(Graphics2D g2) {
+        // TODO: move calculation to model
         final int canvasWidth = getWidth();
         final int canvasHeight = getHeight();
 
         g2.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(2)); // Set line thickness
 
-        int labelYPos = Math.min(canvasWidth - TICK_PADDING_RIGHT, Math.max(TICK_PADDING_LEFT, xZero));
+        int labelYPos = Math.min(canvasWidth - CanvasModel.TICK_PADDING_RIGHT,
+                Math.max(CanvasModel.TICK_PADDING_LEFT, model.getXZero()));
 
-        if (xZero >= 0 || xZero <= canvasWidth)
-            g2.drawLine(xZero, 0, xZero, canvasHeight); // vertical axis
+        if (model.getXZero() >= 0 || model.getXZero() <= canvasWidth)
+            g2.drawLine(model.getXZero(), 0, model.getXZero(), canvasHeight); // vertical axis
 
         // set tick label color
         g2.setColor(Color.GRAY);
 
         // label center of vertical axis
-        g2.drawString(Integer.valueOf(0).toString(), labelYPos, yZero);
+        g2.drawString(Integer.toString(0), labelYPos, model.getYZero());
 
         // label ticks on positive vertical axis
-        for (int i = 1; i <= yZero / (cellSize); i++) {
-            int labelY = yZero - i * cellSize;
-            g2.drawString(Integer.valueOf(i).toString(), labelYPos,
+        int interval = getLabelInterval();
+        int labelCount = model.getYZero() / (model.getCellSize());
+        for (int i = interval; i <= labelCount; i += interval) {
+            int labelY = model.getYZero() - i * model.getCellSize();
+            g2.drawString(Integer.toString(i), labelYPos,
                     labelY);
         }
 
         // label ticks on negative vertical axis
-        for (int i = 1; i <= (canvasHeight - yZero) / (cellSize); i++) {
-            int labelY = yZero + i * cellSize;
-            String label = Integer.valueOf(-i).toString();
+        labelCount = (canvasHeight - model.getYZero()) / (model.getCellSize());
+        for (int i = interval; i <= labelCount; i += interval) {
+            int labelY = model.getYZero() + i * model.getCellSize();
+            String label = Integer.toString(-i);
 
             g2.drawString(label, labelYPos, labelY);
         }
     }
 
-    public int getCellSize() {
-        return cellSize;
-    }
-
-    public void setCellSize(int newCellSize) {
-        cellSize = newCellSize;
-    }
-
-    public int getXZero() {
-        return xZero;
-    }
-
-    public int getYZero() {
-        return yZero;
-    }
-
-    public void setXZero(int newXZero) {
-        xZero = newXZero;
-    }
-
-    public void setYZero(int newYZero) {
-        yZero = newYZero;
-    }
-
-    public void drawShapeExample(Graphics2D g2) {
-
-        double x[] = {
-                1, 1, 1, 1, -1, -1, -1, -1,
-                0, 0, 0, 0,
-                0.618, -0.618, 0.618, -0.618,
-                1.618, 1.618, -1.618, -1.618
-        };
-
-        // y coordinates of vertices
-        double y[] = {
-                1, 1, -1, -1, 1, 1, -1, -1,
-                1.618, 1.618, -1.618, -1.618,
-                0, 0, 0, 0,
-                0.618, -0.618, 0.618, -0.618
-        };
-
-        // number of vertices
-        int numberofpoints = x.length;
-
-        // Polygon originalPolygon = new Polygon(x, y, numberofpoints);
-
-        Polygon transformedPolygon = new Polygon();
-        for (int i = 0; i < numberofpoints; i++) {
-            transformedPolygon.addPoint((int) (xZero + x[i] * cellSize), (int) (yZero - y[i] * cellSize));
-        }
-        g2.drawPolygon(transformedPolygon);
-        g2.setColor(Color.red);
-        g2.fill(transformedPolygon);
-    }
-
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Font currentFont = g.getFont();
-        Font newFont = currentFont.deriveFont(currentFont.getSize() * labelFontSizeScaleFactor);
+        Font newFont = currentFont.deriveFont((float) model.getLabelFontSize());
         g.setFont(newFont);
 
         Graphics2D g2 = (Graphics2D) g;
         setAntialiasing(g2);
 
-        positionZoomPanel();
-        positionToolbar();
-        positionToast();
+        final Stroke defaultStroke = g2.getStroke();
 
-        drawGuidelines(g2);
-        drawHorizontalAxis(g2);
-        drawVerticalAxis(g2);
-        drawShapeExample(g2);
+        if (model.isGuidelinesEnabled()) {
+            drawGuidelines(g2);
+        }
 
+        if (model.isAxesVisible()) {
+            drawHorizontalAxis(g2);
+            drawVerticalAxis(g2);
+        }
+
+        for (ShapeWrapper wrapper : model.getShapeManager().getShapes()) {
+            g2.setColor(wrapper.getLineColor());
+            g2.setStroke(getStroke(wrapper.getLineType(), wrapper.getLineThickness()));
+
+            if (wrapper.getShape() != null) {
+                // draw shape outline
+                Shape s1 = model.toUserSpace(wrapper.getShape());
+                g2.draw(s1);
+
+                // fill shape
+                g2.setColor(wrapper.getFillColor());
+                g2.fill(s1);
+            }
+
+            // display points plotted by user
+            g2.setStroke(defaultStroke);
+            g2.setColor(wrapper.getLineColor());
+            for (Point2D p : wrapper.getPlottedPoints()) {
+                Shape point = createPointAsShape(model.toUserSpace(p));
+                g2.draw(point);
+                g2.fill(point);
+            }
+        }
+
+        // display current mouse position
+        if (model.getUserMousePosition() != null) {
+            Shape point = createPointAsShape(model.toUserSpace(model.getUserMousePosition()));
+            g2.setColor(Color.LIGHT_GRAY);
+            g2.draw(point);
+            g2.fill(point);
+        }
     }
 
-    public JButton getHomeButton() {
-        return homeButton;
+    private Stroke getStroke(LineType lineType, int thickness) {
+        switch (lineType) {
+            case SOLID:
+                // Set the stroke of the copy, not the original
+                return new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                        0, new float[] { 1 }, 0);
+            case DASHED:
+                return new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                        0, new float[] { 12 }, 0);
+            case DOTTED:
+                return new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                        0, new float[] { 4 }, 0);
+            default:
+                return new BasicStroke(thickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                        0, new float[] { 1 }, 0);
+        }
     }
 
-    public JButton getZoomInButton() {
-        return zoomInButton;
+    /**
+     * 
+     * @param mySpaceCoord
+     * @return A point with a fixed radius irrespective of zoom level
+     */
+    private Shape createPointAsShape(Point2D mySpaceCoord) {
+        double radius = 15;
+        return new Ellipse2D.Double(
+                mySpaceCoord.getX() - radius / 2,
+                mySpaceCoord.getY() - radius / 2,
+                radius,
+                radius);
     }
 
-    public JButton getZoomOutButton() {
-        return zoomOutButton;
+    @Override
+    public void repaint() {
+        super.repaint();
+
+        /**
+         * sync toolkit to prevent frame rate issues on linux.
+         * 
+         * Reference:
+         * https://stackoverflow.com/questions/46626715/how-do-i-properly-render-at-a-high-frame-rate-in-pure-java
+         */
+        Toolkit.getDefaultToolkit().sync();
     }
 }

@@ -1,97 +1,109 @@
 package com.github.creme332.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Insets;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToolBar;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
+import javax.swing.border.EmptyBorder;
 
-import com.github.creme332.utils.IconLoader;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
-import com.github.creme332.utils.exception.InvalidPathException;
+import com.github.creme332.model.LineType;
 
-public class Toolbar extends JToolBar implements ActionListener {
+public class Toolbar extends JToolBar {
 
-    static final int FPS_MIN = 1;
-    static final int FPS_MAX = 13;
-    static final int FPS_INIT = 1; // initial frames per second
-    JSlider framesPerSecond = new JSlider(JSlider.HORIZONTAL,
-            FPS_MIN, FPS_MAX, FPS_INIT);
+    private static final int THICKNESS_MIN = 1;
+    private static final int THICKNESS_MAX = 13;
+    private static final int ICON_SIZE = 50;
 
+    private JLabel thicknessLabel; // Line thickness label
+
+    /**
+     * A square that displays current fill color.
+     */
     private JButton colorBox;
 
-    public Toolbar() throws InvalidIconSizeException, InvalidPathException {
+    /**
+     * Menu that displays the different line types and line thickness.
+     */
+    private JMenu lineMenu;
 
-        framesPerSecond.setMajorTickSpacing(10);
-        framesPerSecond.setMinorTickSpacing(1);
-        // framesPerSecond.setPaintTicks(true);
-        // framesPerSecond.setPaintLabels(true);
+    /**
+     * A slider for line thickness.
+     */
+    JSlider thicknessSlider;
 
-        // add border
-        Border border = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-        this.setBorder(border);
+    public Toolbar(LineType defaultLineType, Color defaultColor, int defaultLineThickness) {
+        thicknessLabel = new JLabel(String.valueOf(defaultLineThickness));
 
-        IconLoader loader = new IconLoader();
+        thicknessSlider = new JSlider(javax.swing.SwingConstants.HORIZONTAL,
+                THICKNESS_MIN, THICKNESS_MAX, defaultLineThickness);
+        thicknessSlider.setMajorTickSpacing(10);
+        thicknessSlider.setMinorTickSpacing(1);
+        thicknessSlider.setPreferredSize(new Dimension(160, 10));
+
+        // Add thickness label to the right of the slider
+        JPanel thicknessPanel = new JPanel(new BorderLayout());
+        thicknessPanel.setBorder(new EmptyBorder(new Insets(0, 0, 0, 10)));
+        thicknessPanel.setOpaque(false);
+        thicknessPanel.add(thicknessSlider, BorderLayout.WEST);
+        thicknessPanel.add(thicknessLabel, BorderLayout.EAST);
+
         // add a menu
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu menu = new JMenu();
-        menu.setToolTipText("Set line style");
+        lineMenu = new JMenu();
+        lineMenu.setToolTipText("Set line style");
+        displayLineIcon(defaultLineType);
 
-        menu.setIcon(loader.loadIcon("/icons/solid-line.png", 50));
+        // add menu items for the different line types
+        for (LineType type : LineType.values()) {
+            JMenuItem menuItem = new JMenuItem(type.getDescription(), type.getIcon());
+            menuItem.setActionCommand(type.getDescription());
+            lineMenu.add(menuItem);
+        }
 
-        JMenuItem menuItem = new JMenuItem("Solid Line",
-                loader.loadIcon("/icons/solid-line.png", 50));
-        menu.add(menuItem);
+        lineMenu.add(thicknessPanel); // Add the panel with the slider and label
 
-        menuItem = new JMenuItem("Dashed Line",
-                loader.loadIcon("/icons/dashed-line.png", 50));
-        menu.add(menuItem);
-
-        menuItem = new JMenuItem("Dotted Line",
-                loader.loadIcon("/icons/dotted-line.png", 50));
-        menu.add(menuItem);
-
-        menu.add(framesPerSecond);
-
-        menuBar.add(menu);
+        menuBar.add(lineMenu);
 
         // color picker menu
-        JPanel aaa = new JPanel();
+        JPanel colorPanel = new JPanel();
         colorBox = new JButton();
         colorBox.setBorderPainted(false);
-        colorBox.setBackground(Color.black);
-        colorBox.setPreferredSize(new Dimension(50, 50));
+        colorBox.setBackground(defaultColor);
+        colorBox.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
         colorBox.setToolTipText("Set color");
-        aaa.add(colorBox);
-        menuBar.add(aaa);
-
-        colorBox.addActionListener(this);
+        colorPanel.add(colorBox);
+        menuBar.add(colorPanel);
 
         this.add(menuBar);
-
     }
 
-    public void actionPerformed(ActionEvent e) {
-        System.out.println("Choose color");
-
-        // color chooser Dialog Box
-        Color color = JColorChooser.showDialog(this,
-                "Select a color", Color.black);
-
-        // set Background color of the Container
-        colorBox.setBackground(color);
+    public JSlider getThicknessSlider() {
+        return thicknessSlider;
     }
 
+    public JButton getColorBox() {
+        return colorBox;
+    }
+
+    public JMenu getLineTypeMenu() {
+        return lineMenu;
+    }
+
+    public void updateThicknessLabel(int thickness) {
+        thicknessLabel.setText(String.valueOf(thickness));
+    }
+
+    public void displayLineIcon(LineType line) {
+        lineMenu.setIcon(line.getIcon());
+    }
 }
