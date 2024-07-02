@@ -11,7 +11,8 @@ import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.view.Canvas;
 
 /**
- * Class for drawing on canvas.
+ * Template class for drawing on canvas. All controller classes responsible for
+ * drawing should extend this class.
  */
 public abstract class DrawController {
 
@@ -84,7 +85,11 @@ public abstract class DrawController {
      * invoked when mode changes while drawing was ongoing.
      */
     public void disposePreview() {
-        canvasModel.removeShape(preview);
+        if (preview == null)
+            return;
+
+        // delete the preview
+        canvasModel.getShapeManager().eraseLatestShapePermanently();
         preview = null;
     }
 }

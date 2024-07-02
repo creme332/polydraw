@@ -47,7 +47,7 @@ public class DrawRegularPolygon extends DrawController {
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
             // add preview to model
-            canvasModel.addShape(preview);
+            canvasModel.getShapeManager().addShape(preview);
 
             // ask user to enter number of sides
             numSides = inputVertices();
