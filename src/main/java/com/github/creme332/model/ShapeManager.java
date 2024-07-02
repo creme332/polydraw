@@ -111,6 +111,25 @@ public class ShapeManager {
         }
     }
 
+    /**
+     * Performs deletion of the latest added shape without allowing undo of the
+     * deleted shape. undoStack is popped once when this function is called and
+     * redoStack is unchanged.
+     * 
+     * This function is meant to discard an incorrectly added shape. Example: A
+     * shape preview was wrongly added.
+     * 
+     * @param shapeIndex index of shape to be deleted in the shapes array.
+     */
+    public void eraseLatestShapePermanently() {
+        ShapeWrapper lastShape = shapes.get(shapes.size() - 1);
+
+        if (shapes.remove(lastShape)) {
+            undoStack.pop(); // prevents undo on the deleted shape
+            support.firePropertyChange(STATE_CHANGE_PROPERTY_NAME, false, true);
+        }
+    }
+
     public void undo() {
         if (undoStack.isEmpty())
             return;
@@ -173,11 +192,5 @@ public class ShapeManager {
         }
 
         return copy;
-    }
-
-    public void printShapes() {
-        for (ShapeWrapper shape : shapes) {
-            System.out.println(shape);
-        }
     }
 }

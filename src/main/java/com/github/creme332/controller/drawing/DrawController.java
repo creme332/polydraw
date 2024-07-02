@@ -7,12 +7,12 @@ import java.awt.geom.Point2D;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
-import com.github.creme332.model.ShapeManager;
 import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.view.Canvas;
 
 /**
- * Class for drawing on canvas.
+ * Template class for drawing on canvas. All controller classes responsible for
+ * drawing should extend this class.
  */
 public abstract class DrawController {
 
@@ -88,18 +88,8 @@ public abstract class DrawController {
         if (preview == null)
             return;
 
-        final ShapeManager manager = canvasModel.getShapeManager();
-
-        /**
-         * Preview shape is the last shape inserted to the shapes array.
-         */
-        final int previewIndex = manager.getShapes().size() - 1;
-
-        if (previewIndex < 0)
-            return;
-
         // delete the preview
-        canvasModel.getShapeManager().deleteShape(previewIndex);
+        canvasModel.getShapeManager().eraseLatestShapePermanently();
         preview = null;
     }
 }
