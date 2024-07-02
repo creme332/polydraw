@@ -25,6 +25,7 @@ import com.github.creme332.view.tutorial.TutorialPanel;
  */
 public class TutorialScreenController {
     private TutorialCenter view;
+    private String currentView = "tutorialCenter";
 
     public TutorialScreenController(AppState appState, TutorialCenter view) {
         this.view = view;
@@ -62,6 +63,7 @@ public class TutorialScreenController {
                 public void mousePressed(MouseEvent e) {
                     TutorialPanel tutorialPanel = tutorialScreens.get(index);
                     view.showTutorial(tutorialPanel.getTitle());
+                    currentView = tutorialPanel.getTitle();
                 }
             });
 
@@ -82,17 +84,29 @@ public class TutorialScreenController {
         JComponent rootPane = (JComponent) view.getRootPane();
 
         // Bind the "Esc" key to go back
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "goBack");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                "goBack");
         rootPane.getActionMap().put("goBack", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (view.isInTutorialScreen()) {
+                if (tutorialShown()) {
                     view.showTutorial("tutorialCenter");
+                    currentView = "tutorialCenter";
                 } else {
                     appState.switchScreen(Screen.MAIN_SCREEN);
                 }
             }
         });
+    }
+
+    /**
+     * 
+     * @return True if expanded tutorial is currently being shown. False otherwise
+     *         if tutorial grid
+     *         is shown.
+     */
+    public boolean tutorialShown() {
+        return !currentView.equals("tutorialCenter");
     }
 
     /**

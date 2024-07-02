@@ -36,8 +36,6 @@ public class TutorialCenter extends JPanel {
 
     JPanel tutorialGrid;
 
-    private String currentView = "tutorialCenter";
-
     public static final String SEARCH_PLACEHOLDER = "Search Polydraw Tutorials";
 
     public TutorialCenter() {
@@ -55,10 +53,6 @@ public class TutorialCenter extends JPanel {
         }
 
         add(screenContainer);
-    }
-
-    public boolean isInTutorialScreen() {
-        return !currentView.equals("tutorialCenter");
     }
 
     public void showTutorial(String tutorialName) {
