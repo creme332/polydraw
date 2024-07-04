@@ -19,6 +19,7 @@
   </properties>
 
   <dependencies>
+
     <!-- ! icon pack must appear first to avoid issue when compiling project to jar -->
     <!-- Reference: https://github.com/kordamp/ikonli/issues/11 -->
     <dependency>
@@ -31,6 +32,12 @@
       <groupId>org.kordamp.ikonli</groupId>
       <artifactId>ikonli-swing</artifactId>
       <version>12.3.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.weisj</groupId>
+      <artifactId>jsvg</artifactId>
+      <version>1.5.0</version>
     </dependency>
 
     <dependency>

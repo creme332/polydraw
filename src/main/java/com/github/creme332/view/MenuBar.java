@@ -17,14 +17,16 @@ import javax.swing.border.EmptyBorder;
 
 import org.kordamp.ikonli.swing.FontIcon;
 
-import com.github.creme332.model.MenuItemModel;
 import com.github.creme332.model.MenuModel;
+import com.github.creme332.model.Mode;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
 public class MenuBar extends JMenuBar {
     private JButton sidebarButton;
     private JButton helpButton;
+    private JButton redoButton;
+    private JButton undoButton;
 
     private List<JMenu> jmenus = new ArrayList<>();
     public static final int HEIGHT = 70;
@@ -41,12 +43,12 @@ public class MenuBar extends JMenuBar {
             menu.setOpaque(false);
             jmenus.add(menu);
             menu.setIcon(menuModel.getActiveItem().getIcon());
-            menu.setToolTipText(menuModel.getActiveItem().getName());
+            menu.setToolTipText(menuModel.getActiveItem().getTitle());
 
-            for (MenuItemModel item : menuModel.getItems()) {
-                JMenuItem menuItem = new JMenuItem(item.getName(), item.getIcon());
+            for (Mode item : menuModel.getItems()) {
+                JMenuItem menuItem = new JMenuItem(item.getTitle(), item.getIcon());
                 menu.add(menuItem);
-                menuItem.addActionListener(e -> menu.setToolTipText(item.getName()));
+                menuItem.addActionListener(e -> menu.setToolTipText(item.getTitle()));
             }
             this.add(Box.createHorizontalStrut(10));
             this.add(menu);
@@ -56,18 +58,18 @@ public class MenuBar extends JMenuBar {
         leftPanel.setOpaque(false);
 
         // undo button
-        JButton btn = new JButton();
-        btn.setIcon(FontIcon.of(BootstrapIcons.ARROW_COUNTERCLOCKWISE, 40));
-        btn.setBorderPainted(false);
-        leftPanel.add(btn);
-        btn.setToolTipText("Undo");
+        undoButton = new JButton();
+        undoButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_COUNTERCLOCKWISE, 40));
+        undoButton.setBorderPainted(false);
+        leftPanel.add(undoButton);
+        undoButton.setToolTipText("Undo");
 
         // redo button
-        btn = new JButton();
-        btn.setIcon(FontIcon.of(BootstrapIcons.ARROW_CLOCKWISE, 40));
-        btn.setBorderPainted(false);
-        leftPanel.add(btn);
-        btn.setToolTipText("Redo");
+        redoButton = new JButton();
+        redoButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_CLOCKWISE, 40));
+        redoButton.setBorderPainted(false);
+        leftPanel.add(redoButton);
+        redoButton.setToolTipText("Redo");
 
         // help button
         helpButton = new JButton();
@@ -103,5 +105,13 @@ public class MenuBar extends JMenuBar {
 
     public JButton getHelpButton() {
         return helpButton;
+    }
+
+    public JButton getRedoButton() {
+        return redoButton;
+    }
+
+    public JButton getUndoButton() {
+        return undoButton;
     }
 }

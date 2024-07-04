@@ -15,11 +15,7 @@ import javax.swing.JSlider;
 import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
 
-import static com.github.creme332.utils.IconLoader.loadIcon;
-
 import com.github.creme332.model.LineType;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
-import com.github.creme332.utils.exception.InvalidPathException;
 
 public class Toolbar extends JToolBar {
 
@@ -44,8 +40,7 @@ public class Toolbar extends JToolBar {
      */
     JSlider thicknessSlider;
 
-    public Toolbar(LineType defaultLineType, Color defaultColor, int defaultLineThickness)
-            throws InvalidIconSizeException, InvalidPathException {
+    public Toolbar(LineType defaultLineType, Color defaultColor, int defaultLineThickness) {
         thicknessLabel = new JLabel(String.valueOf(defaultLineThickness));
 
         thicknessSlider = new JSlider(javax.swing.SwingConstants.HORIZONTAL,
@@ -70,7 +65,7 @@ public class Toolbar extends JToolBar {
 
         // add menu items for the different line types
         for (LineType type : LineType.values()) {
-            JMenuItem menuItem = new JMenuItem(type.getDescription(), loadIcon(type.getIconPath(), ICON_SIZE));
+            JMenuItem menuItem = new JMenuItem(type.getDescription(), type.getIcon());
             menuItem.setActionCommand(type.getDescription());
             lineMenu.add(menuItem);
         }
@@ -109,11 +104,6 @@ public class Toolbar extends JToolBar {
     }
 
     public void displayLineIcon(LineType line) {
-        try {
-            lineMenu.setIcon(loadIcon(line.getIconPath(), ICON_SIZE));
-        } catch (InvalidIconSizeException | InvalidPathException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+        lineMenu.setIcon(line.getIcon());
     }
 }

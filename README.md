@@ -16,10 +16,12 @@ An application for drawing rasterized shapes, inspired by GeoGebra Classic.
 - Shape clipping using Cohen Sutherland line clipping algorithm.
 - Drag and drop to move shapes.
 - Testing with JUnit 4.
-- Responsive sidebar.
+- Sidebar with opening and closing animation.
 - In-app tutorials with searching functionality.
 - Cross-platform GUI.
 - Export canvas as image.
+- Keyboard shortcuts.
+- Supports undo, redo, and delete operations.
 
 ## Documentation
 

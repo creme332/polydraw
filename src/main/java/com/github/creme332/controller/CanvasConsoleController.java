@@ -20,6 +20,11 @@ public class CanvasConsoleController implements PropertyChangeListener {
     private CanvasConsole console;
     private CanvasModel model;
 
+    /**
+     * Whether sidebar animation is in progress.
+     */
+    private boolean sidebarAnimating = false;
+
     public CanvasConsoleController(AppState app, CanvasConsole console) {
         this.console = console;
         this.model = app.getCanvasModel();
@@ -31,7 +36,6 @@ public class CanvasConsoleController implements PropertyChangeListener {
         new ZoomPanelController(app, console.getZoomPanel());
 
         if (!app.getSideBarVisibility()) {
-            System.out.println(console.getPreferredSize());
             console.setPreferredSize(console.getPreferredSize());
         }
     }
@@ -62,6 +66,9 @@ public class CanvasConsoleController implements PropertyChangeListener {
      * that the sidebar which was initially out of frame becomes visible.
      */
     private void animateSidebarOpen() {
+        if (sidebarAnimating)
+            return;
+        sidebarAnimating = true;
         /**
          * Speed at which sidebar opens in pixels per nanosecond.
          */
@@ -90,6 +97,7 @@ public class CanvasConsoleController implements PropertyChangeListener {
                     console.revalidate();
                     console.repaint();
                 }
+                sidebarAnimating = false;
 
             }
         };
@@ -101,6 +109,9 @@ public class CanvasConsoleController implements PropertyChangeListener {
      * that the sidebar becomes hidden (since sidebar moves out of frame).
      */
     private void animateSidebarClose() {
+        if (sidebarAnimating)
+            return;
+        sidebarAnimating = true;
         /**
          * Speed at which sidebar closes in pixels per nanosecond.
          */
@@ -130,6 +141,7 @@ public class CanvasConsoleController implements PropertyChangeListener {
                     console.revalidate();
                     console.repaint();
                 }
+                sidebarAnimating = false;
             }
 
         };

@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -16,8 +17,7 @@ import javax.swing.text.BadLocationException;
 import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
-import static com.github.creme332.utils.IconLoader.getScaledDimension;
-import static com.github.creme332.utils.IconLoader.loadIcon;
+import static com.github.creme332.utils.IconLoader.loadSVGIcon;
 
 public class KeyboardTutorial extends TutorialPanel {
 
@@ -25,9 +25,9 @@ public class KeyboardTutorial extends TutorialPanel {
     private static final TutorialModel KEYBOARD_TUTORIAL_MODEL = new TutorialModel("Keyboard Shortcuts");
 
     public KeyboardTutorial() throws InvalidPathException, InvalidIconSizeException {
-        super(KEYBOARD_TUTORIAL_MODEL, loadIcon(IMAGE_PATH_PREFIX + "background.png",
-                getScaledDimension(new Dimension(753, 453), TutorialCard.IMAGE_DIMENSION)));
-
+        super(KEYBOARD_TUTORIAL_MODEL, loadSVGIcon("/icons/keyboard.svg", TutorialCard.IMAGE_DIMENSION));
+        model.addKeyword("key");
+        
         try {
             // Insert text
             doc.insertString(doc.getLength(),
@@ -99,10 +99,13 @@ public class KeyboardTutorial extends TutorialPanel {
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setBackground(new Color(227, 227, 227));
 
-        // Add the table panel to the bodyPanel
-        bodyPanel.add(tableHeader, BorderLayout.NORTH);
-        bodyPanel.add(table, BorderLayout.CENTER);
+        // Add the table to a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(750, 200));
 
+        // Add the scroll pane to the bodyPanel
+        bodyPanel.add(tableHeader, BorderLayout.NORTH);
+        bodyPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
     // Custom renderer to handle multi-line cells

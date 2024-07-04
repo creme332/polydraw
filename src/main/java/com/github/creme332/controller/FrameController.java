@@ -8,8 +8,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JLayeredPane;
 
@@ -55,7 +53,7 @@ public class FrameController implements PropertyChangeListener {
 
                 // if Esc is pressed, select mode in first menu
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    model.setMode(menuModels[0].getActiveItem().getMode());
+                    model.setMode(menuModels[0].getActiveItem());
                     return;
                 }
 
@@ -64,10 +62,11 @@ public class FrameController implements PropertyChangeListener {
                 for (int i = 0; i < menuModels.length; i++) {
                     if (e.getKeyCode() == (KeyEvent.VK_1 + i))
 
-                        model.setMode(menuModels[i].getActiveItem().getMode());
+                        model.setMode(menuModels[i].getActiveItem());
                 }
             }
         });
+
         // Set initial frame state
         if (model.isMaximizeFrame()) {
             frame.setExtendedState(frame.getExtendedState() |
@@ -131,44 +130,33 @@ public class FrameController implements PropertyChangeListener {
     }
 
     public void playStartAnimation() {
-        Timer timer = new Timer();
-        TimerTask showNextScreen;
         final long animationDuration = 800; // ms
 
-        frame.setMenuBarVisibility(false);
-        frame.showScreen(Screen.SPLASH_SCREEN);
-
-        // show next screen when timer has elapsed
-        showNextScreen = new TimerTask() {
+        Thread th = new Thread() {
             @Override
             public void run() {
-                if (app.getCurrentScreen().equals(Screen.MAIN_SCREEN)) {
-                    frame.showScreen(Screen.MAIN_SCREEN);
-                }
+                // Display the splash screen for 1 second
+                frame.setMenuBarVisibility(false);
+                frame.showScreen(Screen.SPLASH_SCREEN);
 
-                if (app.getCurrentScreen().equals(Screen.TUTORIAL_SCREEN)) {
-                    frame.showScreen(Screen.TUTORIAL_SCREEN);
+                try {
+                    Thread.sleep(animationDuration);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.exit(0);
                 }
-                resizeEverything();
-
-                timer.cancel();
-                timer.purge();
+                frame.showScreen(app.getCurrentScreen());
             }
         };
-        timer.schedule(showNextScreen, animationDuration);
+        th.start();
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         String property = e.getPropertyName();
         if ("screen".equals(property)) {
-            if (Screen.MAIN_SCREEN.equals(e.getNewValue()))
-                frame.showScreen(Screen.MAIN_SCREEN);
-
-            if (Screen.TUTORIAL_SCREEN.equals(e.getNewValue()))
-                frame.showScreen(Screen.TUTORIAL_SCREEN);
-
-            resizeEverything();
+            Screen newScreen = (Screen) e.getNewValue();
+            frame.showScreen(newScreen);
         }
 
         if ("maximizeFrame".equals(property)) {

@@ -9,8 +9,6 @@ import javax.swing.border.EmptyBorder;
 
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
-import com.github.creme332.utils.exception.InvalidIconSizeException;
-import com.github.creme332.utils.exception.InvalidPathException;
 
 /**
  * A panel that contains control buttons for Canvas. It should be placed on top
@@ -61,13 +59,8 @@ public class CanvasConsole extends JPanel {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setOpaque(false); // make panel transparent
 
-        try {
-            toolbar = new Toolbar(canvasModel.getLineType(), canvasModel.getShapeColor(),
-                    canvasModel.getLineThickness());
-        } catch (InvalidIconSizeException | InvalidPathException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+        toolbar = new Toolbar(canvasModel.getLineType(), canvasModel.getShapeColor(),
+                canvasModel.getLineThickness());
 
         JPanel topPanel = new JPanel();
         topPanel.setOpaque(false);
