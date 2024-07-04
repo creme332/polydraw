@@ -42,7 +42,8 @@ public class CanvasController implements PropertyChangeListener {
     private Canvas canvas;
 
     /**
-     * Used to store coordinate where mouse drag started
+     * Used to store coordinate where mouse drag started. This is used to calculate
+     * translation of canvas.
      */
     private Point mouseDragStart;
     private AppState app;
@@ -67,6 +68,7 @@ public class CanvasController implements PropertyChangeListener {
         drawControllers.add(new DrawRegularPolygon(app, canvas));
         drawControllers.add(new DrawIrregularPolygon(app, canvas));
 
+        // when canvas is resized, update dimension and reset zoom
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -85,6 +87,7 @@ public class CanvasController implements PropertyChangeListener {
         canvas.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
+                // display coordinates of pixel where cursor is
                 Point2D polySpaceMousePosition = model.toPolySpace(e.getPoint());
                 model.setUserMousePosition(polySpaceMousePosition);
                 canvas.repaint();
@@ -98,16 +101,25 @@ public class CanvasController implements PropertyChangeListener {
             }
         });
 
+        // control canvas zoom with mouse wheel
         canvas.addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                handleCanvasZoom(e);
+                model.updateCanvasZoom(e.getWheelRotation() != 1);
             }
         });
     }
 
-    private void handleCanvasZoom(MouseWheelEvent e) {
-        model.updateCanvasZoom(e.getWheelRotation() != 1);
+    private void dragCanvas(Point destination) {
+        // drag canvas
+        int deltaX = destination.x - mouseDragStart.x;
+        int deltaY = destination.y - mouseDragStart.y;
+
+        model.setYZero(model.getYZero() + deltaY);
+        model.setXZero(model.getXZero() + deltaX);
+
+        mouseDragStart = destination;
+
         canvas.repaint();
     }
 
@@ -118,24 +130,9 @@ public class CanvasController implements PropertyChangeListener {
         }
 
         if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW
-                || (app.getMode() == Mode.MOVE_CANVAS && model.getSelectedShape() == null)) {
-            // drag canvas
-            Point currentDrag = e.getPoint();
-            int deltaX = currentDrag.x - mouseDragStart.x;
-            int deltaY = currentDrag.y - mouseDragStart.y;
-
-            model.setYZero(model.getYZero() + deltaY);
-            model.setXZero(model.getXZero() + deltaX);
-
-            mouseDragStart = currentDrag;
-
-            canvas.repaint();
-        }
-
-        if (app.getMode() == Mode.MOVE_CANVAS && model.getSelectedShape() != null) {
-            // translate shape
-
-            System.out.println("translating shape");
+                || (app.getMode() == Mode.MOVE_CANVAS)) {
+            dragCanvas(e.getPoint());
+            return;
 
         }
     }
@@ -158,7 +155,7 @@ public class CanvasController implements PropertyChangeListener {
             }
 
             // save selected shape
-            model.setSelectedShape(selectedShape);
+            // model.setSelectedShape(selectedShape);
 
             return;
         }
@@ -214,10 +211,11 @@ public class CanvasController implements PropertyChangeListener {
         int returnValue = fileChooser.showOpenDialog(null);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            String imagePath = fileChooser.getSelectedFile() + "/canvas.png";
+            final String folderPath = fileChooser.getSelectedFile().toString();
+            final String imagePath = folderPath + "/canvas.png";
             try {
                 ImageIO.write(image, "png", new File(imagePath));
-                JOptionPane.showMessageDialog(canvas, "Image successfully saved at " + imagePath);
+                JOptionPane.showMessageDialog(canvas, "canvas.png was successfully saved at " + folderPath);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(0);
@@ -232,9 +230,13 @@ public class CanvasController implements PropertyChangeListener {
         /**
          * List of property names that should result only in a canvas repaint.
          */
-        final Set<String> repaintProperties = Set.of(ShapeManager.STATE_CHANGE_PROPERTY_NAME, "standardView",
+        final Set<String> repaintProperties = Set.of(
+                ShapeManager.STATE_CHANGE_PROPERTY_NAME,
+                "standardView",
                 "enableGuidelines",
-                "cellSize", "axesVisible", "labelFontSize");
+                "cellSize",
+                "axesVisible",
+                "labelFontSize");
 
         if (repaintProperties.contains(propertyName)) {
             canvas.repaint();
