@@ -14,7 +14,6 @@ public class DrawLine extends AbstractDrawer {
     public DrawLine(AppState app, Canvas canvas) {
         super(app, canvas);
         this.canvas = canvas;
-        this.canvasModel = app.getCanvasModel();
     }
 
     @Override
