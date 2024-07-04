@@ -11,12 +11,12 @@ import javax.swing.event.DocumentListener;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Screen;
 import com.github.creme332.utils.FuzzySearching;
-import com.github.creme332.view.TutorialCenter;
 import com.github.creme332.view.tutorial.TutorialCard;
+import com.github.creme332.view.tutorial.TutorialCenter;
 import com.github.creme332.view.tutorial.TutorialPanel;
 
 /**
- * Controller for TutorialScreen.
+ * Main controller for TutorialScreen.
  */
 public class TutorialScreenController {
     private TutorialCenter view;

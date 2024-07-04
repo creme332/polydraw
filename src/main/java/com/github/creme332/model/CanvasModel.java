@@ -85,8 +85,21 @@ public class CanvasModel {
 
     ShapeManager shapeManager = new ShapeManager();
 
+    /**
+     * Shape on which user clicked.
+     */
+    ShapeWrapper selectedShape = null;
+
     public ShapeManager getShapeManager() {
         return shapeManager;
+    }
+
+    public void setSelectedShape(ShapeWrapper shape) {
+        selectedShape = shape;
+    }
+
+    public ShapeWrapper getSelectedShape() {
+        return selectedShape;
     }
 
     /**

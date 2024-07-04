@@ -18,7 +18,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 import com.github.creme332.model.TutorialModel;
-import com.github.creme332.view.BackButton;
+import com.github.creme332.view.common.BackButton;
 
 public class TutorialPanel extends JPanel {
     /**

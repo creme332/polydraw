@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
-import com.github.creme332.view.SVGIcon;
+import com.github.creme332.view.common.SVGIcon;
 import com.github.weisj.jsvg.SVGDocument;
 import com.github.weisj.jsvg.parser.SVGLoader;
 
