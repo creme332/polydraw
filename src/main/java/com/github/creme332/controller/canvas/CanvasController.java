@@ -123,57 +123,69 @@ public class CanvasController implements PropertyChangeListener {
         canvas.repaint();
     }
 
+    private void dragShape(Point destination, int shapeIndex) {
+        int deltaX = destination.x - mouseDragStart.x;
+        int deltaY = destination.y - mouseDragStart.y;
+
+        mouseDragStart = destination;
+
+        System.out.println("dragging shape");
+
+        canvas.repaint();
+    }
+
     private void handleMouseDragged(MouseEvent e) {
         if (mouseDragStart == null) {
             mouseDragStart = e.getPoint();
             return;
         }
 
-        if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW
-                || (app.getMode() == Mode.MOVE_CANVAS)) {
+        if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW) {
             dragCanvas(e.getPoint());
             return;
+        }
 
+        if (app.getMode() == Mode.MOVE_CANVAS) {
+            if (model.getSelectedShape() > -1) {
+                dragShape(mouseDragStart, model.getSelectedShape());
+            } else {
+                dragCanvas(e.getPoint());
+            }
         }
     }
 
+    /**
+     * 
+     * @param polyspaceMousePosition Coordinate of point lying inside shape
+     * @return Index of first shape that contains polyspaceMousePosition. -1 if no
+     *         such shape found.
+     */
+    private int getSelectedShapeIndex(Point2D polyspaceMousePosition) {
+        List<ShapeWrapper> shapes = model.getShapeManager().getShapes();
+        for (int i = 0; i < shapes.size(); i++) {
+            ShapeWrapper wrapper = shapes.get(i);
+            if (wrapper.getShape().contains(polyspaceMousePosition)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private void handleMousePressed(MouseEvent e) {
+        if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW || app.getMode() == Mode.MOVE_CANVAS) {
+            mouseDragStart = e.getPoint();
+        }
+
         Point2D polyspaceMousePosition = model.toPolySpace(e.getPoint());
 
         if (app.getMode() == Mode.MOVE_CANVAS) {
-            mouseDragStart = e.getPoint();
-
-            // check if a shape was selected
-            ShapeWrapper selectedShape = null;
-            List<ShapeWrapper> shapes = model.getShapeManager().getShapes();
-            for (int i = 0; i < shapes.size(); i++) {
-                ShapeWrapper wrapper = shapes.get(i);
-                if (wrapper.getShape().contains(polyspaceMousePosition)) {
-                    selectedShape = wrapper;
-                    break;
-                }
-            }
-
             // save selected shape
-            // model.setSelectedShape(selectedShape);
-
-            return;
-        }
-
-        if (app.getMode() == Mode.MOVE_GRAPHICS_VIEW) {
-            mouseDragStart = e.getPoint();
-            return;
+            model.setSelectedShape(getSelectedShapeIndex(polyspaceMousePosition));
         }
 
         if (app.getMode() == Mode.DELETE) {
-            List<ShapeWrapper> shapes = model.getShapeManager().getShapes();
-            for (int i = 0; i < shapes.size(); i++) {
-                ShapeWrapper wrapper = shapes.get(i);
-                if (wrapper.getShape().contains(polyspaceMousePosition)) {
-                    model.getShapeManager().deleteShape(i);
-                    break; // delete only one shape at a time
-                }
-            }
+            int deleteShapeIndex = getSelectedShapeIndex(polyspaceMousePosition);
+            model.getShapeManager().deleteShape(deleteShapeIndex);
         }
 
         canvas.repaint();

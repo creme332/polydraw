@@ -86,20 +86,20 @@ public class CanvasModel {
     ShapeManager shapeManager = new ShapeManager();
 
     /**
-     * Shape on which user clicked.
+     * Index of shape on which user clicked when in Mode.MOVE_CANVAS.
      */
-    ShapeWrapper selectedShape = null;
+    int selectedShapeIndex = -1;
 
     public ShapeManager getShapeManager() {
         return shapeManager;
     }
 
-    public void setSelectedShape(ShapeWrapper shape) {
-        selectedShape = shape;
+    public void setSelectedShape(int shapeIndex) {
+        selectedShapeIndex = shapeIndex;
     }
 
-    public ShapeWrapper getSelectedShape() {
-        return selectedShape;
+    public int getSelectedShape() {
+        return selectedShapeIndex;
     }
 
     /**
