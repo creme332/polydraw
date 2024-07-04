@@ -3,6 +3,7 @@ package com.github.creme332.model;
 import java.awt.Color;
 import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
@@ -62,6 +63,11 @@ public class ShapeWrapper {
         return shape;
     }
 
+    public Polygon toPolygon() {
+        Polygon original = (Polygon) shape;
+        return new Polygon(original.xpoints, original.ypoints, original.npoints);
+    }
+
     public void setShape(Shape shape) {
         this.shape = shape;
     }
@@ -96,5 +102,26 @@ public class ShapeWrapper {
 
     public void setLineType(LineType lineType) {
         this.lineType = lineType;
+    }
+
+    @Override
+    public String toString() {
+        String plottedPointString = "[";
+        for (Point2D point2d : plottedPoints) {
+            plottedPointString += String.format("[%f, %f], ", point2d.getX(), point2d.getY());
+        }
+        plottedPointString += "]";
+
+        return String.format("""
+                ShapeWrapper{
+                    plottedPoints: %s
+                    xpoints: %s
+                    ypoints: %s
+                    lineColor: %s
+                    lineType: %s
+                    lineThickness: %d
+                }
+                """, plottedPointString, Arrays.toString(toPolygon().xpoints), Arrays.toString(toPolygon().ypoints),
+                lineColor, lineType, lineThickness);
     }
 }
