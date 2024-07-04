@@ -21,13 +21,11 @@ public class DrawIrregularPolygon extends DrawController {
 
     @Override
     public void handleMouseMoved(Point2D polySpaceMousePosition) {
-        if (preview != null && !preview.getPlottedPoints().isEmpty()) {
-            // Optionally update the preview with a line segment to the current mouse position
-            Point2D lastPoint = preview.getPlottedPoints().get(preview.getPlottedPoints().size() - 1);
-            preview.getPlottedPoints().set(preview.getPlottedPoints().size() - 1, polySpaceMousePosition);
-
+        // check if drawing is in progress
+        if (preview != null) {
+            // draw a new polygon using plotted points and current mouse position
+            preview.setShape(createPolygonPreview(polySpaceMousePosition));
             canvas.repaint();
-            preview.getPlottedPoints().set(preview.getPlottedPoints().size() - 1, lastPoint);
         }
     }
 
@@ -39,12 +37,17 @@ public class DrawIrregularPolygon extends DrawController {
             return;
         }
 
-        // Add point to the preview
-        preview.getPlottedPoints().add(polySpaceMousePosition);
+        // if the user clicked on the first vertex again
+        if (preview.getPlottedPoints().get(0).equals(polySpaceMousePosition)) {
+            // draw final closed polygon
+            preview.setShape(createPolygonFromPlottedPoints());
 
-        // Check if the user clicked on the first point again to close the polygon
-        if (isFirstPointClickedAgain(polySpaceMousePosition)) {
-            finishPolygon();
+            // reset preview
+            preview = null;
+        } else {
+            // Add new plotted vertex to the plotted points array
+            // Note: We want all plotted points to be unique.
+            preview.getPlottedPoints().add(polySpaceMousePosition);
         }
 
         canvas.repaint();
@@ -52,37 +55,56 @@ public class DrawIrregularPolygon extends DrawController {
 
     private void initWrapper(Point2D firstPoint) {
         // Create a shape wrapper
-        preview = new ShapeWrapper(canvasModel.getShapeColor(), canvasModel.getLineType(), canvasModel.getLineThickness());
+        preview = new ShapeWrapper(canvasModel.getShapeColor(), canvasModel.getLineType(),
+                canvasModel.getLineThickness());
 
         // Save the first plotted point
         preview.getPlottedPoints().add(firstPoint);
 
         // Save the wrapper to the canvas model
-        canvasModel.addShape(preview);
+        canvasModel.getShapeManager().addShape(preview);
     }
 
-    private boolean isFirstPointClickedAgain(Point2D currentPoint) {
-        Point2D firstPoint = preview.getPlottedPoints().get(0);
-        double distance = firstPoint.distance(currentPoint);
-        // Check if the distance between the current point and the first point is very small
-        return distance < 5.0; // You can adjust this threshold value
-    }
+    /**
+     * Creates a polygon using plotted points and last vertex.
+     * 
+     * @param lastVertex last vertex may or may not be a duplicate of a plotted
+     *                   point
+     */
+    private Polygon createPolygonPreview(Point2D lastVertex) {
+        int plottedPointsCount = preview.getPlottedPoints().size();
+        int[] xPoints = new int[plottedPointsCount + 1];
+        int[] yPoints = new int[plottedPointsCount + 1];
 
-    private void finishPolygon() {
-        int size = preview.getPlottedPoints().size();
-        int[] xPoints = new int[size];
-        int[] yPoints = new int[size];
-
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < plottedPointsCount; i++) {
             Point2D point = preview.getPlottedPoints().get(i);
             xPoints[i] = (int) point.getX();
             yPoints[i] = (int) point.getY();
         }
 
-        Polygon polygon = new Polygon(xPoints, yPoints, size);
-        preview.setShape(polygon);
+        // add last vertex
+        xPoints[plottedPointsCount] = (int) lastVertex.getX();
+        yPoints[plottedPointsCount] = (int) lastVertex.getY();
 
-        // Reset the preview
-        preview = null;
+        return new Polygon(xPoints, yPoints, plottedPointsCount + 1);
+    }
+
+    /**
+     * 
+     * @return A closed polygon generated only from plotted points. Plotted points
+     *         are guaranteed to not contain duplicates.
+     */
+    private Polygon createPolygonFromPlottedPoints() {
+        int plottedPointsCount = preview.getPlottedPoints().size();
+        int[] xPoints = new int[plottedPointsCount];
+        int[] yPoints = new int[plottedPointsCount];
+
+        for (int i = 0; i < plottedPointsCount; i++) {
+            Point2D point = preview.getPlottedPoints().get(i);
+            xPoints[i] = (int) point.getX();
+            yPoints[i] = (int) point.getY();
+        }
+
+        return new Polygon(xPoints, yPoints, plottedPointsCount);
     }
 }
