@@ -14,10 +14,16 @@ public class ShapeWrapper {
     private int lineThickness = 1;
 
     /**
-     * Coordinates plotted by user to create shape.
+     * Coordinates plotted by user to create shape. A plotted point is a one which
+     * user has clicked one. A point on which user is hovering on is NOT a plotted
+     * point.
      */
     private List<Point2D> plottedPoints = new ArrayList<>();
 
+    /**
+     * 
+     * @return Original list of plotted points.
+     */
     public List<Point2D> getPlottedPoints() {
         return plottedPoints;
     }
