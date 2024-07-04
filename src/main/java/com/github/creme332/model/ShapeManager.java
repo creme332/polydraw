@@ -43,6 +43,9 @@ public class ShapeManager {
 
     // Class to store edit actions for undo/redo
     private class ShapeAction {
+        /**
+         * Shape affected by action.
+         */
         ShapeWrapper shape;
 
         /**
@@ -52,9 +55,31 @@ public class ShapeManager {
          */
         Action action;
 
+        ShapeWrapper oldShape;
+        ShapeWrapper newShape;
+
+        /**
+         * Use this constructor when a shape was created or deleted.
+         * 
+         * @param shape
+         * @param action
+         */
         ShapeAction(ShapeWrapper shape, Action action) {
             this.shape = shape;
             this.action = action;
+        }
+
+        /**
+         * Use this constructor when the attributes of an existing shape was edited.
+         * 
+         * @param oldShape
+         * @param newShape
+         * @param action
+         */
+        ShapeAction(ShapeWrapper oldShape, ShapeWrapper newShape, Action action) {
+            this.action = action;
+            this.oldShape = oldShape;
+            this.newShape = newShape;
         }
     }
 
@@ -71,6 +96,11 @@ public class ShapeManager {
          * User deleted an existing shape.
          */
         DELETE,
+
+        /**
+         * User edited an existing shape.
+         */
+        EDIT,
     }
 
     /**
@@ -94,18 +124,27 @@ public class ShapeManager {
      * 
      * @param shapeIndex index of shape to be deleted in the shapes array.
      */
-    public void deleteShape(int shapeIndex) {
+    public void deleteShape(final int shapeIndex) {
         if (shapeIndex < 0 || shapeIndex >= shapes.size()) {
             System.out.println("Cannot delete shape at index " + shapeIndex);
             return;
         }
 
-        ShapeWrapper shape = shapes.get(shapeIndex);
+        final ShapeWrapper shape = shapes.get(shapeIndex);
 
         if (shapes.remove(shape)) {
             undoStack.push(new ShapeAction(shape, Action.DELETE));
             redoStack.clear(); // Clear redo stack after a new action
             support.firePropertyChange(STATE_CHANGE_PROPERTY_NAME, false, true);
+        }
+    }
+
+    public void editShape(final int oldShapeIndex, final ShapeWrapper newShape) {
+        final ShapeWrapper oldShape = shapes.get(oldShapeIndex);
+        if (oldShapeIndex != -1) {
+            shapes.set(oldShapeIndex, newShape);
+            undoStack.push(new ShapeAction(oldShape, newShape, Action.EDIT));
+            redoStack.clear();
         }
     }
 
@@ -136,16 +175,20 @@ public class ShapeManager {
         Action actionToUndo = shapeAction.action;
         ShapeWrapper shapeToUndo = shapeAction.shape;
 
-        switch (actionToUndo) {
-            case ADD:
-                shapes.remove(shapeToUndo);
-                redoStack.push(shapeAction);
-                break;
-            case DELETE:
-                shapes.add(shapeToUndo);
-                redoStack.push(shapeAction);
-                break;
+        if (actionToUndo == Action.ADD) {
+            shapes.remove(shapeToUndo);
         }
+
+        if (actionToUndo == Action.DELETE) {
+            shapes.add(shapeToUndo);
+        }
+
+        if (actionToUndo == Action.EDIT) {
+            shapes.remove(shapeAction.newShape);
+            shapes.add(shapeAction.oldShape);
+        }
+
+        redoStack.push(shapeAction);
         support.firePropertyChange(STATE_CHANGE_PROPERTY_NAME, false, true);
     }
 
@@ -161,20 +204,24 @@ public class ShapeManager {
         if (redoStack.isEmpty())
             return;
 
-        ShapeAction shapeAction = redoStack.pop();
-        Action actionToRedo = shapeAction.action;
+        final ShapeAction shapeAction = redoStack.pop();
+        final Action actionToRedo = shapeAction.action;
         ShapeWrapper shapeToRedo = shapeAction.shape;
 
-        switch (actionToRedo) {
-            case ADD:
-                shapes.add(shapeToRedo);
-                undoStack.push(shapeAction);
-                break;
-            case DELETE:
-                shapes.remove(shapeToRedo);
-                undoStack.push(shapeAction);
-                break;
+        if (actionToRedo == Action.ADD) {
+            shapes.add(shapeToRedo);
         }
+
+        if (actionToRedo == Action.DELETE) {
+            shapes.remove(shapeToRedo);
+        }
+
+        if (actionToRedo == Action.EDIT) {
+            shapes.remove(shapeAction.oldShape);
+            shapes.add(shapeAction.newShape);
+        }
+
+        undoStack.push(shapeAction);
         support.firePropertyChange(STATE_CHANGE_PROPERTY_NAME, false, true);
     }
 
