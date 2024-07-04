@@ -19,8 +19,8 @@ public class LineCalculator {
         int[][] pixelCoords = new int[steps + 1][2];
 
         for (int i = 0; i <= steps; i++) {
-            pixelCoords[i][0] = Math.round(x);
-            pixelCoords[i][1] = Math.round(y);
+            pixelCoords[i][0]= Math.round(x);
+            pixelCoords[i][1]= Math.round(y);
             x += xInc;
             y += yInc;
         }
@@ -32,17 +32,28 @@ public class LineCalculator {
         int dx = Math.abs(x1 - x0);
         int dy = Math.abs(y1 - y0);
 
-        int sx = x0 < x1 ? 1 : -1;
-        int sy = y0 < y1 ? 1 : -1;
+        int sx;
+        if (x0 < x1) {
+            sx = 1;
+        } else {
+            sx = -1;
+        }
+        
+        int sy;
+        if (y0 < y1) {
+            sy = 1;
+        } else {
+            sy = -1;
+        }
 
         int err = dx - dy;
 
-        int[][] pixelCoords = new int[dx + dy + 1][2];
+        int[][] pixelCoords = new int [dx + dy + 1][2];
         int index = 0;
 
         while (true) {
-            pixelCoords[index][0] = x0;
-            pixelCoords[index][1] = y0;
+            pixelCoords [index][0] = x0;
+            pixelCoords[index][1]= y0;
             index++;
 
             if (x0 == x1 && y0 == y1)
