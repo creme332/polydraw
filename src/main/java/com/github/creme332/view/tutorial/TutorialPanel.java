@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -51,11 +50,6 @@ public class TutorialPanel extends JPanel {
         this.previewIcon = icon;
 
         this.title = model.getTitle();
-
-        // use center alignment for text
-        // SimpleAttributeSet center = new SimpleAttributeSet();
-        // StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        // doc.setParagraphAttributes(0, doc.getLength(), center, false);
 
         initStyles();
         textPane.setEditable(false); // Make it non-editable

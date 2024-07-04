@@ -3,8 +3,6 @@ package com.github.creme332.view.tutorial;
 import static com.github.creme332.utils.IconLoader.loadIcon;
 import static com.github.creme332.utils.IconLoader.loadSVGIcon;
 
-import java.awt.Dimension;
-
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyleConstants;

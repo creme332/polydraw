@@ -30,8 +30,6 @@ public class ShapeManager {
 
     public static final String STATE_CHANGE_PROPERTY_NAME = "shapeManagerStateChanged";
 
-    private static final int MAX_STACK_SIZE = 10;
-
     public ShapeManager() {
         shapes = new ArrayList<>();
         undoStack = new Stack<>();
