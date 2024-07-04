@@ -13,7 +13,7 @@ import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
-public class DrawEllipseTutorial extends TutorialPanel {
+public class DrawEllipseTutorial extends AbstractTutorial {
 
     private static final String IMAGE_PATH_PREFIX = "/images/tutorials/draw-ellipse/";
     private static final TutorialModel TUTORIAL_MODEL = new TutorialModel("Draw Ellipse");

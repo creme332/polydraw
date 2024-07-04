@@ -20,7 +20,7 @@ import javax.swing.text.StyledDocument;
 import com.github.creme332.model.TutorialModel;
 import com.github.creme332.view.common.BackButton;
 
-public class TutorialPanel extends JPanel {
+public abstract class AbstractTutorial extends JPanel {
     /**
      * Tutorial title.
      */
@@ -43,7 +43,7 @@ public class TutorialPanel extends JPanel {
 
     protected transient Icon previewIcon;
 
-    public TutorialPanel(TutorialModel model, Icon icon) {
+    public AbstractTutorial(TutorialModel model, Icon icon) {
         setLayout(new BorderLayout());
 
         this.model = model;

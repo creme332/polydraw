@@ -11,7 +11,7 @@ import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
-public class DrawCircleTutorial extends TutorialPanel {
+public class DrawCircleTutorial extends AbstractTutorial {
 
     private static final String IMAGE_PATH_PREFIX = "/images/tutorials/draw-circle/";
     private static final TutorialModel DRAW_CIRCLE_MODEL = new TutorialModel("Draw Circle");

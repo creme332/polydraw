@@ -15,7 +15,7 @@ public class TutorialCenter extends JPanel {
     private JButton backButton;
     private JTextField searchField;
     private ArrayList<TutorialCard> tutorialCards = new ArrayList<>();
-    private ArrayList<TutorialPanel> tutorialScreens = new ArrayList<>();
+    private ArrayList<AbstractTutorial> tutorialScreens = new ArrayList<>();
     JPanel gridPanel;
     /**
      * Layout used for screenContainer for swapping between tutorial center and
@@ -42,7 +42,7 @@ public class TutorialCenter extends JPanel {
         screenContainer.add(tutorialGrid, "tutorialCenter");
 
         // add tutorials
-        for (TutorialPanel screen : tutorialScreens) {
+        for (AbstractTutorial screen : tutorialScreens) {
             screenContainer.add(screen, screen.getTitle());
         }
 
@@ -68,7 +68,7 @@ public class TutorialCenter extends JPanel {
     }
 
     private void initTutorialCards() {
-        for (TutorialPanel screen : tutorialScreens) {
+        for (AbstractTutorial screen : tutorialScreens) {
             tutorialCards.add(new TutorialCard(screen.getTitle(), screen.getPreviewIcon()));
         }
     }
@@ -173,7 +173,7 @@ public class TutorialCenter extends JPanel {
         return tutorialCards;
     }
 
-    public List<TutorialPanel> getTutorialScreens() {
+    public List<AbstractTutorial> getTutorialScreens() {
         return tutorialScreens;
     }
 }

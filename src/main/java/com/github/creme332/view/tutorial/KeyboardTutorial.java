@@ -19,7 +19,7 @@ import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import static com.github.creme332.utils.IconLoader.loadSVGIcon;
 
-public class KeyboardTutorial extends TutorialPanel {
+public class KeyboardTutorial extends AbstractTutorial {
 
     private static final String IMAGE_PATH_PREFIX = "/images/tutorials/getting-started/";
     private static final TutorialModel KEYBOARD_TUTORIAL_MODEL = new TutorialModel("Keyboard Shortcuts");

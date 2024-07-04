@@ -11,7 +11,7 @@ import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
-public class DrawLineTutorial extends TutorialPanel {
+public class DrawLineTutorial extends AbstractTutorial {
 
     private static final String IMAGE_PATH_PREFIX = "/images/tutorials/draw-line/";
     private static final TutorialModel DRAW_LINE_MODEL = new TutorialModel("Draw Line");
