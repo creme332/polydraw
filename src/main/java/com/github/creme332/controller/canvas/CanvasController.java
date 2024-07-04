@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -48,6 +49,8 @@ public class CanvasController implements PropertyChangeListener {
     private Point mouseDragStart;
     private AppState app;
     private CanvasModel model;
+
+    private boolean dragged = false;
 
     private List<AbstractDrawer> drawControllers = new ArrayList<>();
 
@@ -82,6 +85,11 @@ public class CanvasController implements PropertyChangeListener {
             public void mousePressed(MouseEvent e) {
                 handleMousePressed(e);
             }
+
+            @Override
+            public void mouseReleased(MouseEvent arg0) {
+                dragged = false;
+            }
         });
 
         canvas.addMouseMotionListener(new MouseAdapter() {
@@ -97,6 +105,7 @@ public class CanvasController implements PropertyChangeListener {
         canvas.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
+                dragged = true;
                 handleMouseDragged(e);
             }
         });
@@ -124,13 +133,37 @@ public class CanvasController implements PropertyChangeListener {
     }
 
     private void dragShape(Point destination, int shapeIndex) {
-        int deltaX = destination.x - mouseDragStart.x;
-        int deltaY = destination.y - mouseDragStart.y;
+        ShapeWrapper newShape = model.getShapeManager().getShapes().get(shapeIndex);
 
-        mouseDragStart = destination;
+        Point2D polyspaceMousePosition = model.toPolySpace(destination);
+        Point2D start = newShape.getPlottedPoints().get(0);
 
-        System.out.println("dragging shape");
+        int deltaX = (int) (polyspaceMousePosition.getX() - start.getX());
+        int deltaY = (int) (polyspaceMousePosition.getY() - start.getY());
 
+        System.out.format("Dragging shape %d by (%d, %d)\n", shapeIndex, deltaX, deltaY);
+
+        System.out.println(newShape);
+
+        Polygon oldPolygon = newShape.toPolygon();
+        Polygon newPolygon = new Polygon();
+
+        for (int i = 0; i < oldPolygon.npoints; i++) {
+            newPolygon.addPoint(deltaX + oldPolygon.xpoints[i], deltaY + oldPolygon.ypoints[i]);
+        }
+
+        // update plotted points
+        for (int i = 0; i < newShape.getPlottedPoints().size(); i++) {
+            Point2D currentPoint = newShape.getPlottedPoints().get(i);
+            Point2D translatedPoint = new Point2D.Double(currentPoint.getX() + deltaX, currentPoint.getY() + deltaY);
+
+            newShape.getPlottedPoints().set(i, translatedPoint);
+        }
+        newShape.setShape(newPolygon);
+
+        System.out.println(newShape);
+
+        model.getShapeManager().editShape(shapeIndex, newShape);
         canvas.repaint();
     }
 
@@ -147,7 +180,7 @@ public class CanvasController implements PropertyChangeListener {
 
         if (app.getMode() == Mode.MOVE_CANVAS) {
             if (model.getSelectedShape() > -1) {
-                dragShape(mouseDragStart, model.getSelectedShape());
+                dragShape(e.getPoint(), model.getSelectedShape());
             } else {
                 dragCanvas(e.getPoint());
             }
