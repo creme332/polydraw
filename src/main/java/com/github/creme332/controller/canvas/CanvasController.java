@@ -23,7 +23,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 
 import com.github.creme332.controller.canvas.drawing.DrawCircle;
-import com.github.creme332.controller.canvas.drawing.DrawController;
+import com.github.creme332.controller.canvas.drawing.AbstractDrawer;
 import com.github.creme332.controller.canvas.drawing.DrawEllipse;
 import com.github.creme332.controller.canvas.drawing.DrawIrregularPolygon;
 import com.github.creme332.controller.canvas.drawing.DrawLine;
@@ -48,7 +48,7 @@ public class CanvasController implements PropertyChangeListener {
     private AppState app;
     private CanvasModel model;
 
-    private List<DrawController> drawControllers = new ArrayList<>();
+    private List<AbstractDrawer> drawControllers = new ArrayList<>();
 
     public CanvasController(AppState app, Canvas canvas) {
         this.app = app;
@@ -243,7 +243,7 @@ public class CanvasController implements PropertyChangeListener {
 
         // if mode from AppState has changed
         if ("mode".equals(propertyName)) {
-            for (DrawController controller : drawControllers) {
+            for (AbstractDrawer controller : drawControllers) {
                 controller.disposePreview();
             }
             // update canvas to erase any possible incomplete shape

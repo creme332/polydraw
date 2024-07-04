@@ -13,7 +13,7 @@ import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.model.calculator.PolygonCalculator;
 import com.github.creme332.view.Canvas;
 
-public class DrawRegularPolygon extends DrawController {
+public class DrawRegularPolygon extends AbstractDrawer {
 
     PolygonCalculator calculator = new PolygonCalculator();
     private int numSides = 5; // default to 5 sides (pentagon)

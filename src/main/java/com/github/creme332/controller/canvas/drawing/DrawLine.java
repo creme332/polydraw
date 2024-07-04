@@ -9,7 +9,7 @@ import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.model.calculator.LineCalculator;
 import com.github.creme332.view.Canvas;
 
-public class DrawLine extends DrawController {
+public class DrawLine extends AbstractDrawer {
 
     public DrawLine(AppState app, Canvas canvas) {
         super(app, canvas);

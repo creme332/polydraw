@@ -8,7 +8,7 @@ import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.view.Canvas;
 
-public class DrawIrregularPolygon extends DrawController {
+public class DrawIrregularPolygon extends AbstractDrawer {
 
     public DrawIrregularPolygon(AppState app, Canvas canvas) {
         super(app, canvas);

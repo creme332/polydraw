@@ -9,7 +9,7 @@ import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.model.calculator.EllipseCalculator;
 import com.github.creme332.view.Canvas;
 
-public class DrawEllipse extends DrawController {
+public class DrawEllipse extends AbstractDrawer {
     private EllipseCalculator ellipseCalculator = new EllipseCalculator();
 
     public DrawEllipse(AppState app, Canvas canvas) {

@@ -14,7 +14,7 @@ import com.github.creme332.view.Canvas;
  * Template class for drawing on canvas. All controller classes responsible for
  * drawing should extend this class.
  */
-public abstract class DrawController {
+public abstract class AbstractDrawer {
 
     protected Canvas canvas;
     protected CanvasModel canvasModel;
@@ -25,7 +25,7 @@ public abstract class DrawController {
      */
     protected ShapeWrapper preview;
 
-    protected DrawController(AppState app, Canvas canvas) {
+    protected AbstractDrawer(AppState app, Canvas canvas) {
         this.app = app;
         this.canvas = canvas;
         this.canvasModel = app.getCanvasModel();

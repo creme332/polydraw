@@ -13,7 +13,10 @@ import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.model.calculator.CircleCalculator;
 import com.github.creme332.view.Canvas;
 
-public class DrawCircle extends DrawController {
+/**
+ * Controller responsible for drawing circle.
+ */
+public class DrawCircle extends AbstractDrawer {
     private CircleCalculator circleCalculator = new CircleCalculator();
 
     public DrawCircle(AppState app, Canvas canvas) {
