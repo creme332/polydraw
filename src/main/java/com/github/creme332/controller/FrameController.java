@@ -1,15 +1,15 @@
 package com.github.creme332.controller;
 
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.JLayeredPane;
+import javax.swing.*;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
@@ -46,31 +46,143 @@ public class FrameController implements PropertyChangeListener {
             }
         });
 
-        frame.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                MenuModel[] menuModels = model.getMenuModels();
-
-                // if Esc is pressed, select mode in first menu
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    model.setMode(menuModels[0].getActiveItem());
-                    return;
-                }
-
-                // if key number k is pressed, select mode in k-th menu where k = 1, 2, ...
-
-                for (int i = 0; i < menuModels.length; i++) {
-                    if (e.getKeyCode() == (KeyEvent.VK_1 + i))
-
-                        model.setMode(menuModels[i].getActiveItem());
-                }
-            }
-        });
+        initializeKeyBindings();
 
         // Set initial frame state
         if (model.isMaximizeFrame()) {
             frame.setExtendedState(frame.getExtendedState() |
                     java.awt.Frame.MAXIMIZED_BOTH);
+        }
+    }
+
+    private void initializeKeyBindings() {
+        JComponent rootPane = (JComponent) frame.getContentPane();
+
+        // Select cursor menu
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0),
+                "selectCursorMenu");
+        rootPane.getActionMap().put("selectCursorMenu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(0);
+                }
+            }
+        });
+
+        // Select line menu
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_2, 0),
+                "selectLineMenu");
+        rootPane.getActionMap().put("selectLineMenu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(1);
+                }
+            }
+        });
+
+        // Select circle menu
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_3, 0),
+                "selectCircleMenu");
+        rootPane.getActionMap().put("selectCircleMenu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(2);
+                }
+            }
+        });
+
+        // Select ellipse menu
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_4, 0),
+                "selectEllipseMenu");
+        rootPane.getActionMap().put("selectEllipseMenu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(3);
+                }
+            }
+        });
+
+        // Select polygon menu
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_5, 0),
+                "selectPolygonMenu");
+        rootPane.getActionMap().put("selectPolygonMenu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(4);
+                }
+            }
+        });
+
+        // Select transformations menu
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_6, 0),
+                "selectTransformationsMenu");
+        rootPane.getActionMap().put("selectTransformationsMenu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(5);
+                }
+            }
+        });
+
+        // Select move menu
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_7, 0),
+                "selectMoveMenu");
+        rootPane.getActionMap().put("selectMoveMenu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(6);
+                }
+            }
+        });
+
+        // Select delete menu
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_8, 0),
+                "selectDeleteMenu");
+        rootPane.getActionMap().put("selectDeleteMenu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    selectMenuByIndex(7);
+                }
+            }
+        });
+
+        // Open help center
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.ALT_DOWN_MASK), "openHelpCenter");
+        rootPane.getActionMap().put("openHelpCenter", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                app.switchScreen(Screen.TUTORIAL_SCREEN);
+            }
+        });
+
+        // Toggle sidebar visibility
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+                "toggleSidebar");
+        rootPane.getActionMap().put("toggleSidebar", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (app.getCurrentScreen() == Screen.MAIN_SCREEN) {
+                    app.setSideBarVisibility(!app.getSideBarVisibility());
+                }
+            }
+        });
+    }
+
+    private void selectMenuByIndex(int index) {
+        MenuModel[] menuModels = app.getMenuModels();
+        if (index >= 0 && index < menuModels.length) {
+            app.setMode(menuModels[index].getActiveItem());
+            app.activateToast();
         }
     }
 
