@@ -12,7 +12,8 @@ import java.util.Stack;
  */
 public class ShapeManager {
     /**
-     * List of shapes currently visible on canvas.
+     * List of shapes currently visible on canvas. No elements of this array are
+     * null.
      */
     private List<ShapeWrapper> shapes;
 
@@ -226,15 +227,15 @@ public class ShapeManager {
      *         canvas. A shape preview may also be included as the last element.
      */
     public List<ShapeWrapper> getShapes() {
-        ArrayList<ShapeWrapper> copy = new ArrayList<>();
-        for (int i = 0; i < shapes.size(); i++) {
-            copy.add(new ShapeWrapper(shapes.get(i)));
+        ArrayList<ShapeWrapper> shapesCopy = new ArrayList<>();
+        for (ShapeWrapper shape : shapes) {
+            shapesCopy.add(new ShapeWrapper(shape));
         }
 
         if (shapePreview != null) {
-            copy.add(shapePreview);
+            shapesCopy.add(shapePreview);
         }
 
-        return copy;
+        return shapesCopy;
     }
 }
