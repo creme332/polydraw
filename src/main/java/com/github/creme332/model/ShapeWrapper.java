@@ -41,6 +41,10 @@ public class ShapeWrapper {
      * @param wrapper
      */
     public ShapeWrapper(ShapeWrapper wrapper) {
+        if (wrapper == null) {
+            throw new NullPointerException("wrapper should not be null when passed to copy constructor.");
+        }
+
         // save primitive attributes
         lineColor = wrapper.lineColor;
         lineType = wrapper.lineType;
