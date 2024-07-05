@@ -25,6 +25,7 @@ import java.awt.image.BufferedImage;
 import com.github.creme332.controller.drawing.DrawCircle;
 import com.github.creme332.controller.drawing.DrawController;
 import com.github.creme332.controller.drawing.DrawEllipse;
+import com.github.creme332.controller.drawing.DrawIrregularPolygon;
 import com.github.creme332.controller.drawing.DrawLine;
 import com.github.creme332.controller.drawing.DrawRegularPolygon;
 import com.github.creme332.model.AppState;
@@ -61,6 +62,7 @@ public class CanvasController implements PropertyChangeListener {
         drawControllers.add(new DrawCircle(app, canvas));
         drawControllers.add(new DrawEllipse(app, canvas));
         drawControllers.add(new DrawRegularPolygon(app, canvas));
+        drawControllers.add(new DrawIrregularPolygon(app, canvas));
 
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
