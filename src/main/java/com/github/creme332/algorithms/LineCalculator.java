@@ -1,10 +1,24 @@
 package com.github.creme332.algorithms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LineCalculator {
     private LineCalculator() {
 
     }
 
+    /**
+     * Calculates pixels between any 2 points (x0, y0) and (x1, y1) using the DDA
+     * line algorithm.
+     * 
+     * @param x0 x-coordinate of start point
+     * @param y0 y-coordinate of tart point
+     * @param x1 x-coordinate of end point
+     * @param y1 y-coordinate of end point
+     * @return A 2D array with 2 elements. The first element is the array of
+     *         x-coordinates and the second element is the array of y-coordinates.
+     */
     public static int[][] dda(int x0, int y0, int x1, int y1) {
         int dx = x1 - x0;
         int dy = y1 - y0;
@@ -16,45 +30,35 @@ public class LineCalculator {
         float x = x0;
         float y = y0;
 
-        int[][] pixelCoords = new int[steps + 1][2];
+        int[] xpoints = new int[steps + 1];
+        int[] ypoints = new int[steps + 1];
 
         for (int i = 0; i <= steps; i++) {
-            pixelCoords[i][0]= Math.round(x);
-            pixelCoords[i][1]= Math.round(y);
+            xpoints[i] = Math.round(x);
+            ypoints[i] = Math.round(y);
+
             x += xInc;
             y += yInc;
         }
 
-        return pixelCoords;
+        return new int[][] { xpoints, ypoints };
     }
 
     public static int[][] bresenham(int x0, int y0, int x1, int y1) {
         int dx = Math.abs(x1 - x0);
         int dy = Math.abs(y1 - y0);
 
-        int sx;
-        if (x0 < x1) {
-            sx = 1;
-        } else {
-            sx = -1;
-        }
-        
-        int sy;
-        if (y0 < y1) {
-            sy = 1;
-        } else {
-            sy = -1;
-        }
+        int sx = x0 < x1 ? 1 : -1;
+        int sy = y0 < y1 ? 1 : -1;
 
         int err = dx - dy;
 
-        int[][] pixelCoords = new int [dx + dy + 1][2];
-        int index = 0;
+        List<Integer> xpoints = new ArrayList<>();
+        List<Integer> ypoints = new ArrayList<>();
 
         while (true) {
-            pixelCoords [index][0] = x0;
-            pixelCoords[index][1]= y0;
-            index++;
+            xpoints.add(x0);
+            ypoints.add(y0);
 
             if (x0 == x1 && y0 == y1)
                 break;
@@ -70,6 +74,6 @@ public class LineCalculator {
             }
         }
 
-        return pixelCoords;
+        return new int[][] { xpoints.stream().mapToInt(i -> i).toArray(), ypoints.stream().mapToInt(i -> i).toArray() };
     }
 }
