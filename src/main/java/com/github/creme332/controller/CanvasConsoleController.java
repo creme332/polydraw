@@ -45,9 +45,7 @@ public class CanvasConsoleController implements PropertyChangeListener {
         String propertyName = e.getPropertyName();
         if ("activateToast".equals(propertyName)) {
             Mode currentMode = (Mode) e.getNewValue();
-
-            toast.setTitleText(currentMode.getTitle());
-            toast.setInstructionText(currentMode.getInstructions());
+            toast.updateInfo(currentMode);
             showTemporaryToast();
         }
 
