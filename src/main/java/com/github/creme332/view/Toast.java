@@ -17,6 +17,7 @@ public class Toast extends JPanel {
      * Maximum number of characters on a line before line wrapping occurs.
      */
     private static final int MAX_LINE_SIZE = 30;
+    private static final int MAX_TITLE_LINE_SIZE = 26;
 
     public Toast(Mode defaultMode) {
         setLayout(new BorderLayout());
@@ -31,17 +32,21 @@ public class Toast extends JPanel {
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
         putClientProperty("FlatLaf.style", "arc: 10");
 
-        titleLabel = new JLabel(defaultMode.getTitle());
+        titleLabel = new JLabel();
         titleLabel.putClientProperty("FlatLaf.style", "font: $h3.font");
         titleLabel.setForeground(Color.WHITE);
 
         instructionLabel = new JLabel();
         instructionLabel.setForeground(Color.WHITE);
         instructionLabel.setBorder(new EmptyBorder(10, 0, 0, 0));
+
+        setTitleText(defaultMode.getTitle());
         setInstructionText(defaultMode.getInstructions());
 
         add(titleLabel, BorderLayout.NORTH);
         add(instructionLabel, BorderLayout.CENTER);
+        
+        adjustSize();
     }
 
     public String getTitleText() {
@@ -49,7 +54,12 @@ public class Toast extends JPanel {
     }
 
     public void setTitleText(String text) {
-        titleLabel.setText(text);
+        if (text.length() > MAX_TITLE_LINE_SIZE) {
+            titleLabel.setText("<html>" + formatHtmlText(text, MAX_TITLE_LINE_SIZE) + "</html>");
+        } else {
+            titleLabel.setText(text);
+        }
+        adjustSize();
     }
 
     public String getInstructionText() {
@@ -58,22 +68,36 @@ public class Toast extends JPanel {
 
     public void setInstructionText(String text) {
         if (text.length() > MAX_LINE_SIZE) {
-            instructionLabel.setText("<html>" + formatHtmlText(text) + "</html>");
+            instructionLabel.setText("<html>" + formatHtmlText(text, MAX_LINE_SIZE) + "</html>");
         } else {
             instructionLabel.setText(text);
         }
+        adjustSize();
     }
 
-    private String formatHtmlText(String text) {
+    private String formatHtmlText(String text, int lineSize) {
         StringBuilder htmlText = new StringBuilder();
         int index = 0;
         while (index < text.length()) {
-            htmlText.append(text.substring(index, Math.min(index + MAX_LINE_SIZE, text.length())));
-            if (index + MAX_LINE_SIZE < text.length()) {
+            htmlText.append(text, index, Math.min(index + lineSize, text.length()));
+            if (index + lineSize < text.length()) {
                 htmlText.append("<br>");
             }
-            index += MAX_LINE_SIZE;
+            index += lineSize;
         }
         return htmlText.toString();
+    }
+
+    private void adjustSize() {
+        int titleLines = (titleLabel.getText().length() / MAX_TITLE_LINE_SIZE) + 1;
+        int instructionLines = (instructionLabel.getText().length() / MAX_LINE_SIZE) + 1;
+
+        int newHeight = 100 + (titleLines - 1) * 20 + (instructionLines - 1) * 20;
+
+        if (newHeight > getPreferredSize().height) {
+            setPreferredSize(new Dimension(400, newHeight));
+            revalidate();
+            repaint();
+        }
     }
 }
