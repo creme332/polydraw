@@ -2,6 +2,7 @@ package com.github.creme332.view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.BadLocationException;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.tutorial.DrawCircleTutorial;
 import com.github.creme332.view.tutorial.DrawEllipseTutorial;
 import com.github.creme332.view.tutorial.DrawLineTutorial;
+import com.github.creme332.view.tutorial.DrawPolygonTutorial;
 import com.github.creme332.view.tutorial.GettingStartedTutorial;
 import com.github.creme332.view.tutorial.KeyboardTutorial;
 import com.github.creme332.view.tutorial.TutorialCard;
@@ -66,11 +68,11 @@ public class TutorialCenter extends JPanel {
             tutorialScreens.add(new DrawCircleTutorial());
             tutorialScreens.add(new KeyboardTutorial());
             tutorialScreens.add(new DrawEllipseTutorial());
-        } catch (InvalidPathException | InvalidIconSizeException e) {
+            tutorialScreens.add(new DrawPolygonTutorial());
+        } catch (InvalidPathException | InvalidIconSizeException | BadLocationException e) {
             e.printStackTrace();
             System.exit(ABORT);
         }
-
     }
 
     private void initTutorialCards() {
