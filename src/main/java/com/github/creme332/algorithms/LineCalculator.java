@@ -24,18 +24,18 @@ public class LineCalculator {
         int dy = y1 - y0;
         int steps = Math.max(Math.abs(dx), Math.abs(dy));
 
-        float xInc = (float) dx / steps;
-        float yInc = (float) dy / steps;
+        double xInc = (double) dx / steps;
+        double yInc = (double) dy / steps;
 
-        float x = x0;
-        float y = y0;
+        double x = x0;
+        double y = y0;
 
         int[] xpoints = new int[steps + 1];
         int[] ypoints = new int[steps + 1];
 
         for (int i = 0; i <= steps; i++) {
-            xpoints[i] = Math.round(x);
-            ypoints[i] = Math.round(y);
+            xpoints[i] = (int) Math.round(x);
+            ypoints[i] = (int) Math.round(y);
 
             x += xInc;
             y += yInc;
