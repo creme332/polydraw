@@ -9,6 +9,35 @@ public class LineCalculator {
     }
 
     /**
+     * Rounds the given value to the nearest integer, mimicking the behavior of the
+     * C round function.
+     * This method rounds ties away from zero unlike Math.round().
+     *
+     * <p>
+     * Examples:
+     * 
+     * <pre>
+     * round(-5.5); // returns -6
+     * round(-2.5); // returns -3
+     * round(-1.4); // returns -1
+     * round(0.5); // returns 1
+     * round(1.5); // returns 2
+     * round(2.4); // returns 2
+     * round(3.5); // returns 4
+     * </pre>
+     *
+     * @param value the value to be rounded
+     * @return the value rounded to the nearest integer
+     */
+    public static int round(double value) {
+        if (value >= 0) {
+            return (int) Math.floor(value + 0.5);
+        } else {
+            return (int) Math.ceil(value - 0.5);
+        }
+    }
+
+    /**
      * Calculates pixels between any 2 points (x0, y0) and (x1, y1) using the DDA
      * line algorithm.
      * 
@@ -34,8 +63,8 @@ public class LineCalculator {
         int[] ypoints = new int[steps + 1];
 
         for (int i = 0; i <= steps; i++) {
-            xpoints[i] = (int) Math.round(x);
-            ypoints[i] = (int) Math.round(y);
+            xpoints[i] = round(x);
+            ypoints[i] = round(y);
 
             x += xInc;
             y += yInc;
