@@ -69,57 +69,57 @@ public class SideMenuPanel extends JPanel {
         formPanel.setOpaque(false);
         settingsPanel.add(formPanel, BorderLayout.CENTER);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(10, 0, 10, 10);
+        GridBagConstraints formPanelGBC = new GridBagConstraints();
+        formPanelGBC.fill = GridBagConstraints.BOTH;
+        formPanelGBC.insets = new Insets(10, 0, 10, 10);
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        formPanelGBC.gridx = 0;
+        formPanelGBC.gridy = 0;
         JLabel gridColorLabel = new JLabel("Guidelines", SwingConstants.LEFT);
-        formPanel.add(gridColorLabel, gbc);
+        formPanel.add(gridColorLabel, formPanelGBC);
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
+        formPanelGBC.gridx = 1;
+        formPanelGBC.gridy = 0;
         gridLinesCheckBox = new JCheckBox();
-        formPanel.add(gridLinesCheckBox, gbc);
+        formPanel.add(gridLinesCheckBox, formPanelGBC);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        formPanelGBC.gridx = 0;
+        formPanelGBC.gridy = 1;
         JLabel gridLinesLabel = new JLabel("Axes", SwingConstants.LEFT);
-        formPanel.add(gridLinesLabel, gbc);
+        formPanel.add(gridLinesLabel, formPanelGBC);
 
-        gbc.gridx = 1;
-        gbc.gridy = 1;
+        formPanelGBC.gridx = 1;
+        formPanelGBC.gridy = 1;
         axesCheckbox = new JCheckBox();
-        formPanel.add(axesCheckbox, gbc);
+        formPanel.add(axesCheckbox, formPanelGBC);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
+        formPanelGBC.gridx = 0;
+        formPanelGBC.gridy = 2;
         JLabel fontSizeLabel = new JLabel("Font size", SwingConstants.LEFT);
-        formPanel.add(fontSizeLabel, gbc);
+        formPanel.add(fontSizeLabel, formPanelGBC);
 
-        gbc.gridx = 1;
-        gbc.gridy = 2;
+        formPanelGBC.gridx = 1;
+        formPanelGBC.gridy = 2;
         fontSizeSelector = new JComboBox<>(
                 new String[] { "12", "16", "18", "20", "24", "28" });
-        formPanel.add(fontSizeSelector, gbc);
+        formPanel.add(fontSizeSelector, formPanelGBC);
+
+        JPanel resetButtonContainer = new JPanel(new BorderLayout());
+        resetButtonContainer.setBorder(new EmptyBorder(0, 0, 0, 10));
 
         resetButton = new JButton("Reset");
         resetButton.putClientProperty("FlatLaf.style", "background: #FFB8B8");
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(10, 0, 10, 10);
-        JPanel resetButtonPanel = new JPanel(new BorderLayout());
-        resetButtonPanel.add(resetButton, BorderLayout.CENTER);
-        resetButtonPanel.setBorder(new EmptyBorder(0, 0, 0, 20));
-        settingsPanel.add(resetButtonPanel, BorderLayout.SOUTH);
+        resetButtonContainer.add(resetButton);
+        settingsPanel.add(resetButtonContainer, BorderLayout.SOUTH);
 
         return settingsPanel;
     }
 
     private JPanel createButtonsPanel() {
+        /**
+         * A vertical panel with buttons.
+         */
         JPanel buttonsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -128,22 +128,22 @@ public class SideMenuPanel extends JPanel {
         gbc.gridy = 0;
         buttonsPanel.add(newCanvasButton, gbc);
 
-        gbc.gridy = 1;
+        gbc.gridy++;
         buttonsPanel.add(saveToComputerButton, gbc);
 
-        gbc.gridy = 2;
+        gbc.gridy++;
         buttonsPanel.add(openButton, gbc);
 
-        gbc.gridy = 3;
+        gbc.gridy++;
         buttonsPanel.add(exportImageButton, gbc);
 
-        gbc.gridy = 4;
+        gbc.gridy++;
         buttonsPanel.add(tutorialsButton, gbc);
 
-        gbc.gridy = 5;
+        gbc.gridy++;
         buttonsPanel.add(reportProblemButton, gbc);
 
-        gbc.gridy = 6;
+        gbc.gridy++;
         buttonsPanel.add(aboutButton, gbc);
         return buttonsPanel;
     }
