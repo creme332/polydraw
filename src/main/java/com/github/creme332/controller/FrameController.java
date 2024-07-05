@@ -9,9 +9,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
 import javax.swing.*;
 
 import com.github.creme332.model.AppState;
@@ -50,7 +47,7 @@ public class FrameController implements PropertyChangeListener {
         });
 
         initializeKeyBindings();
-        
+
         // Set initial frame state
         if (model.isMaximizeFrame()) {
             frame.setExtendedState(frame.getExtendedState() |
@@ -62,7 +59,8 @@ public class FrameController implements PropertyChangeListener {
         JComponent rootPane = (JComponent) frame.getContentPane();
 
         // Select cursor menu
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0), "selectCursorMenu");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0),
+                "selectCursorMenu");
         rootPane.getActionMap().put("selectCursorMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -73,7 +71,8 @@ public class FrameController implements PropertyChangeListener {
         });
 
         // Select line menu
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_2, 0), "selectLineMenu");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_2, 0),
+                "selectLineMenu");
         rootPane.getActionMap().put("selectLineMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -84,7 +83,8 @@ public class FrameController implements PropertyChangeListener {
         });
 
         // Select circle menu
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_3, 0), "selectCircleMenu");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_3, 0),
+                "selectCircleMenu");
         rootPane.getActionMap().put("selectCircleMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,7 +95,8 @@ public class FrameController implements PropertyChangeListener {
         });
 
         // Select ellipse menu
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_4, 0), "selectEllipseMenu");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_4, 0),
+                "selectEllipseMenu");
         rootPane.getActionMap().put("selectEllipseMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,7 +107,8 @@ public class FrameController implements PropertyChangeListener {
         });
 
         // Select polygon menu
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_5, 0), "selectPolygonMenu");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_5, 0),
+                "selectPolygonMenu");
         rootPane.getActionMap().put("selectPolygonMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -117,7 +119,8 @@ public class FrameController implements PropertyChangeListener {
         });
 
         // Select transformations menu
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_6, 0), "selectTransformationsMenu");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_6, 0),
+                "selectTransformationsMenu");
         rootPane.getActionMap().put("selectTransformationsMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -128,7 +131,8 @@ public class FrameController implements PropertyChangeListener {
         });
 
         // Select move menu
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_7, 0), "selectMoveMenu");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_7, 0),
+                "selectMoveMenu");
         rootPane.getActionMap().put("selectMoveMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -139,7 +143,8 @@ public class FrameController implements PropertyChangeListener {
         });
 
         // Select delete menu
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_8, 0), "selectDeleteMenu");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_8, 0),
+                "selectDeleteMenu");
         rootPane.getActionMap().put("selectDeleteMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -150,7 +155,8 @@ public class FrameController implements PropertyChangeListener {
         });
 
         // Open help center
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.ALT_DOWN_MASK), "openHelpCenter");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.ALT_DOWN_MASK), "openHelpCenter");
         rootPane.getActionMap().put("openHelpCenter", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -159,7 +165,9 @@ public class FrameController implements PropertyChangeListener {
         });
 
         // Toggle sidebar visibility
-        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), "toggleSidebar");
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+                "toggleSidebar");
         rootPane.getActionMap().put("toggleSidebar", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -174,6 +182,7 @@ public class FrameController implements PropertyChangeListener {
         MenuModel[] menuModels = app.getMenuModels();
         if (index >= 0 && index < menuModels.length) {
             app.setMode(menuModels[index].getActiveItem());
+            app.activateToast();
         }
     }
 
