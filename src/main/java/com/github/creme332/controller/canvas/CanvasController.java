@@ -50,8 +50,6 @@ public class CanvasController implements PropertyChangeListener {
     private AppState app;
     private CanvasModel model;
 
-    private boolean dragged = false;
-
     private List<AbstractDrawer> drawControllers = new ArrayList<>();
 
     public CanvasController(AppState app, Canvas canvas) {
@@ -71,7 +69,7 @@ public class CanvasController implements PropertyChangeListener {
         drawControllers.add(new DrawRegularPolygon(app, canvas));
         drawControllers.add(new DrawIrregularPolygon(app, canvas));
 
-        // when canvas is resized, update dimension and reset zoom
+        // when canvas is resized, update dimensions and reset zoom
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -88,7 +86,19 @@ public class CanvasController implements PropertyChangeListener {
 
             @Override
             public void mouseReleased(MouseEvent arg0) {
-                dragged = false;
+                ShapeManager manager = model.getShapeManager();
+
+                // check if a shape was being dragged previously
+                if (app.getMode() == Mode.MOVE_CANVAS && model.getSelectedShape() > -1) {
+                    // edit previous shape with shape preview
+
+                    if (manager.getShapePreview() != null) {
+                        manager.editShape(model.getSelectedShape(), manager.getShapePreview());
+                        manager.setShapePreview(null);
+                        model.setSelectedShape(-1);
+                        canvas.repaint();
+                    }
+                }
             }
         });
 
@@ -100,12 +110,9 @@ public class CanvasController implements PropertyChangeListener {
                 model.setUserMousePosition(polySpaceMousePosition);
                 canvas.repaint();
             }
-        });
 
-        canvas.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                dragged = true;
                 handleMouseDragged(e);
             }
         });
@@ -119,20 +126,36 @@ public class CanvasController implements PropertyChangeListener {
         });
     }
 
+    /**
+     * Drags canvas based on translation from start of drag and current mouse
+     * position
+     * 
+     * @param destination current mouse position in user space
+     */
     private void dragCanvas(Point destination) {
-        // drag canvas
+        // calculate translation
         int deltaX = destination.x - mouseDragStart.x;
         int deltaY = destination.y - mouseDragStart.y;
 
-        model.setYZero(model.getYZero() + deltaY);
-        model.setXZero(model.getXZero() + deltaX);
-
+        // save end position of drag
         mouseDragStart = destination;
 
+        // translate canvas origin
+        model.setYZero(model.getYZero() + deltaY);
+        model.setXZero(model.getXZero() + deltaX);
         canvas.repaint();
     }
 
-    private void dragShape(Point destination, int shapeIndex) {
+    /**
+     * Applies a translation on a shape.
+     * 
+     * @param destination Current mouse position
+     * @param shapeIndex  Index of shape in as given in shapes array from
+     *                    ShapeManager
+     */
+    private void dragShape(final Point destination) {
+        final int shapeIndex = model.getSelectedShape();
+
         ShapeWrapper newShape = model.getShapeManager().getShapes().get(shapeIndex);
 
         Point2D polyspaceMousePosition = model.toPolySpace(destination);
@@ -163,7 +186,8 @@ public class CanvasController implements PropertyChangeListener {
 
         System.out.println(newShape);
 
-        model.getShapeManager().editShape(shapeIndex, newShape);
+        // update shape preview on screen
+        model.getShapeManager().setShapePreview(newShape);
         canvas.repaint();
     }
 
@@ -180,7 +204,7 @@ public class CanvasController implements PropertyChangeListener {
 
         if (app.getMode() == Mode.MOVE_CANVAS) {
             if (model.getSelectedShape() > -1) {
-                dragShape(e.getPoint(), model.getSelectedShape());
+                dragShape(e.getPoint());
             } else {
                 dragCanvas(e.getPoint());
             }
