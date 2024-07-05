@@ -85,11 +85,8 @@ public abstract class AbstractDrawer {
      * invoked when mode changes while drawing was ongoing.
      */
     public void disposePreview() {
-        if (preview == null)
-            return;
-
-        // delete the preview
-        canvasModel.getShapeManager().eraseLatestShapePermanently();
+        // delete any preview shape
         preview = null;
+        canvasModel.getShapeManager().setShapePreview(preview);
     }
 }

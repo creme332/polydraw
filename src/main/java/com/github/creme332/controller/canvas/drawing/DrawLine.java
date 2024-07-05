@@ -58,15 +58,18 @@ public class DrawLine extends AbstractDrawer {
             // save plotted point
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
-            // save wrapper to canvas model
-            canvasModel.getShapeManager().addShape(preview);
+            // save preview
+            canvasModel.getShapeManager().setShapePreview(preview);
+
             return;
         }
 
         // second coordinate has now been selected
         preview.getPlottedPoints().add(polySpaceMousePosition);
 
-        // reset wrapper
-        preview = null;
+        // save preview as an actual shape
+        canvasModel.getShapeManager().addShape(preview);
+
+        disposePreview();
     }
 }

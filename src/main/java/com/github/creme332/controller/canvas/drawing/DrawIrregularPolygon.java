@@ -46,8 +46,9 @@ public class DrawIrregularPolygon extends AbstractDrawer {
             // Save the first plotted point
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
-            // Save the wrapper to the canvas model
-            canvasModel.getShapeManager().addShape(preview);
+            // Save preview
+            canvasModel.getShapeManager().setShapePreview(preview);
+
             return;
         }
 
@@ -59,8 +60,10 @@ public class DrawIrregularPolygon extends AbstractDrawer {
             // NOTE: Do not add the current mouse position as vertex again as it is a
             // duplicate of the first vertex
 
-            // reset preview
-            preview = null;
+            // save preview as an actual shape
+            canvasModel.getShapeManager().addShape(preview);
+
+            disposePreview();
         } else {
             // Add new plotted vertex to the plotted points array
             // Note: We want all plotted points to be unique.

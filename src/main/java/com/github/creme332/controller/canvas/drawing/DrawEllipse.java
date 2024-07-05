@@ -48,19 +48,23 @@ public class DrawEllipse extends AbstractDrawer {
                     canvasModel.getLineThickness());
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
-            // save wrapper
+            // save preview
+            canvasModel.getShapeManager().setShapePreview(preview);
+
+            return;
+        }
+
+        if (preview.getPlottedPoints().size() == 1) {
+            // second point has now been selected
+            preview.getPlottedPoints().add(polySpaceMousePosition);
+        } else {
+            // third point has been selected
+            preview.getPlottedPoints().add(polySpaceMousePosition);
+
+            // save preview as an actual shape
             canvasModel.getShapeManager().addShape(preview);
 
-        } else {
-            if (preview.getPlottedPoints().size() == 1) {
-                // second point has now been selected
-                preview.getPlottedPoints().add(polySpaceMousePosition);
-            } else {
-                // third point has been selected
-                preview.getPlottedPoints().add(polySpaceMousePosition);
-
-                preview = null;
-            }
+            disposePreview();
         }
 
     }

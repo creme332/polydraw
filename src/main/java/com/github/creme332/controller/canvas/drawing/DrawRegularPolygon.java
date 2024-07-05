@@ -27,9 +27,9 @@ public class DrawRegularPolygon extends AbstractDrawer {
         if (preview != null) {
             // calculate side length of polygon
             Point2D center = preview.getPlottedPoints().get(0);
-            int side = (int) Math.abs(center.distance(polySpaceMousePosition));
+            int sideLength = (int) Math.abs(center.distance(polySpaceMousePosition));
 
-            int[][] res = calculator.getOrderedPoints(numSides, side, (int) center.getX(), (int) center.getY());
+            int[][] res = calculator.getOrderedPoints(numSides, sideLength, (int) center.getX(), (int) center.getY());
             Polygon p = new Polygon(res[0], res[1], res[0].length);
             preview.setShape(p);
             canvas.repaint();
@@ -47,8 +47,8 @@ public class DrawRegularPolygon extends AbstractDrawer {
                     canvasModel.getLineThickness());
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
-            // add preview to model
-            canvasModel.getShapeManager().addShape(preview);
+            // save preview
+            canvasModel.getShapeManager().setShapePreview(preview);
 
             // ask user to enter number of sides
             numSides = inputVertices();
@@ -62,7 +62,11 @@ public class DrawRegularPolygon extends AbstractDrawer {
 
         // second time clicked
         preview.getPlottedPoints().add(polySpaceMousePosition);
-        preview = null;
+
+        // add preview as actual shape
+        canvasModel.getShapeManager().addShape(preview);
+
+        disposePreview();
     }
 
     @Override

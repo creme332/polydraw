@@ -67,10 +67,10 @@ public class DrawCircle extends AbstractDrawer {
             preview.setShape(
                     getCircle((int) polySpaceMousePosition.getX(), (int) polySpaceMousePosition.getY(), radius));
 
-            // save wrapper
+            // save preview as an actual shape
             canvasModel.getShapeManager().addShape(preview);
 
-            preview = null;
+            disposePreview();
             return;
         }
 
@@ -78,20 +78,23 @@ public class DrawCircle extends AbstractDrawer {
             if (preview == null) {
                 // center has been selected
 
-                // create a shape wrapper
+                // create a shape preview
                 preview = new ShapeWrapper(canvasModel.getShapeColor(),
                         canvasModel.getLineType(),
                         canvasModel.getLineThickness());
                 preview.getPlottedPoints().add(polySpaceMousePosition);
 
-                // save wrapper
-                canvasModel.getShapeManager().addShape(preview);
+                // save preview
+                canvasModel.getShapeManager().setShapePreview(preview);
 
             } else {
                 // second point has now been selected
                 preview.getPlottedPoints().add(polySpaceMousePosition);
 
-                preview = null;
+                // save preview as an actual shape
+                canvasModel.getShapeManager().addShape(preview);
+
+                disposePreview();
             }
         }
     }

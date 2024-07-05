@@ -17,6 +17,12 @@ public class ShapeManager {
     private List<ShapeWrapper> shapes;
 
     /**
+     * A preview of a shape to be displayed on the canvas. It is not part of shapes
+     * array and is not null while shape is getting constructed.
+     */
+    private ShapeWrapper shapePreview;
+
+    /**
      * Stack containing the actions for undo functionality.
      */
     private Stack<ShapeAction> undoStack;
@@ -39,6 +45,14 @@ public class ShapeManager {
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(STATE_CHANGE_PROPERTY_NAME, listener);
+    }
+
+    public void setShapePreview(ShapeWrapper newPreview) {
+        shapePreview = newPreview;
+    }
+
+    public ShapeWrapper getShapePreview() {
+        return shapePreview;
     }
 
     // Class to store edit actions for undo/redo
@@ -148,25 +162,6 @@ public class ShapeManager {
         }
     }
 
-    /**
-     * Performs deletion of the latest added shape without allowing undo of the
-     * deleted shape. undoStack is popped once when this function is called and
-     * redoStack is unchanged.
-     * 
-     * This function is meant to discard an incorrectly added shape. Example: A
-     * shape preview was wrongly added.
-     * 
-     * @param shapeIndex index of shape to be deleted in the shapes array.
-     */
-    public void eraseLatestShapePermanently() {
-        ShapeWrapper lastShape = shapes.get(shapes.size() - 1);
-
-        if (shapes.remove(lastShape)) {
-            undoStack.pop(); // prevents undo on the deleted shape
-            support.firePropertyChange(STATE_CHANGE_PROPERTY_NAME, false, true);
-        }
-    }
-
     public void undo() {
         if (undoStack.isEmpty())
             return;
@@ -228,12 +223,16 @@ public class ShapeManager {
     /**
      * 
      * @return A copy of the the shapes array that should be displayed on the
-     *         canvas.
+     *         canvas. A shape preview may also be included as the last element.
      */
     public List<ShapeWrapper> getShapes() {
         ArrayList<ShapeWrapper> copy = new ArrayList<>();
         for (int i = 0; i < shapes.size(); i++) {
             copy.add(new ShapeWrapper(shapes.get(i)));
+        }
+
+        if (shapePreview != null) {
+            copy.add(shapePreview);
         }
 
         return copy;
