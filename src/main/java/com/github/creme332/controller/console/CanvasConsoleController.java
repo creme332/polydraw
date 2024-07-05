@@ -102,6 +102,8 @@ public class CanvasConsoleController implements PropertyChangeListener {
                 }
                 sidebarAnimating = false;
 
+                // request focus again otherwise keyboard shortcuts will stop working after
+                console.getTopLevelAncestor().requestFocus();
             }
         };
         th.start();
@@ -145,6 +147,9 @@ public class CanvasConsoleController implements PropertyChangeListener {
                     console.repaint();
                 }
                 sidebarAnimating = false;
+
+                // request focus again otherwise keyboard shortcuts will stop working after
+                console.getTopLevelAncestor().requestFocus();
             }
 
         };
