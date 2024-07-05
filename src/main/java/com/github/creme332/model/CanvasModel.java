@@ -55,7 +55,7 @@ public class CanvasModel {
     // define attributes for next shape to be drawn
     private LineType lineType = LineType.SOLID;
     private int lineThickness = 3;
-    private Color shapeColor = Color.BLACK;
+    private Color shapeColor = Color.RED;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     /**
