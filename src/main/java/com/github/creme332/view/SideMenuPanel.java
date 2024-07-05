@@ -62,7 +62,7 @@ public class SideMenuPanel extends JPanel {
         JPanel settingsPanel = new JPanel(new BorderLayout());
         settingsPanel.setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
         JLabel heading = new JLabel("Canvas Settings", SwingConstants.HORIZONTAL);
-        heading.putClientProperty("FlatLaf.style", "font: $h3.font");
+        heading.putClientProperty("FlatLaf.style", "font: $h4.font");
         settingsPanel.add(heading, BorderLayout.NORTH);
 
         JPanel formPanel = new JPanel(new GridBagLayout());
@@ -106,7 +106,15 @@ public class SideMenuPanel extends JPanel {
 
         resetButton = new JButton("Reset");
         resetButton.putClientProperty("FlatLaf.style", "background: #FFB8B8");
-        settingsPanel.add(resetButton, BorderLayout.SOUTH);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(10, 0, 10, 10);
+        JPanel resetButtonPanel = new JPanel(new BorderLayout());
+        resetButtonPanel.add(resetButton, BorderLayout.CENTER);
+        resetButtonPanel.setBorder(new EmptyBorder(0, 0, 0, 20));
+        settingsPanel.add(resetButtonPanel, BorderLayout.SOUTH);
 
         return settingsPanel;
     }
