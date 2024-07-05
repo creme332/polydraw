@@ -1,258 +1,87 @@
 package com.github.creme332.tests.algorithms;
+
+import static org.junit.Assert.assertArrayEquals;
+
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.github.creme332.algorithms.LineCalculator;
-import com.github.creme332.tests.utils.TestHelper;
 
+@RunWith(Parameterized.class)
 public class LineCalculatorTest {
+    private String description;
+    private int x0;
+    private int y0;
+    private int x1;
+    private int y1;
+    private int[][] expected;
+
+    public LineCalculatorTest(String description, int x0, int y0, int x1, int y1, int[][] expected) {
+        this.description = description;
+        this.x0 = x0;
+        this.y0 = y0;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.expected = expected;
+    }
+
+    @Parameters(name = "{index}: {0}")
+    public static Collection<Object[]> dataBasedOnGradient() {
+        return Arrays.asList(new Object[][] {
+                // line with gradient 1
+                { "0 < m < 1", 1, 1, 5, 5, new int[][] {
+                        { 1, 2, 3, 4, 5 },
+                        { 1, 2, 3, 4, 5 },
+                } },
+
+                // line with gradient between 0 and 1
+                { "0 < m < 1", 2, 1, 8, 5, new int[][] {
+                        { 2, 3, 4, 5, 6, 7, 8 },
+                        { 1, 2, 2, 3, 4, 4, 5 }
+                } },
+
+                // line with gradient > 1
+                { "m > 1", 3, 2, 7, 8, new int[][] {
+                        { 3, 4, 4, 5, 6, 6, 7 },
+                        { 2, 3, 4, 5, 6, 7, 8 }
+                } },
+
+                // line with gradient < -1
+                { "m < -1", 2, 8, 5, 3, new int[][] {
+                        { 2, 3, 3, 4, 4, 5 },
+                        { 8, 7, 6, 5, 4, 3 }
+                } },
+
+                // horizontal line
+                { "m = 0", 1, 1, 5, 1, new int[][] {
+                        { 1, 2, 3, 4, 5 },
+                        { 1, 1, 1, 1, 1 }
+                } },
+
+                // vertical line starting at origin
+                { "m = INF", 0, 0, 0, 4, new int[][] {
+                        { 0, 0, 0, 0, 0 },
+                        { 0, 1, 2, 3, 4 }
+                } },
+        });
+    }
 
     @Test
-    public void testDrawDDA() {
-        int x0 = 2, y0 = 3, x1 = 10, y1 = 8;
-        int[][] expected = {
-            {2, 3},
-            {3, 3},
-            {4, 4},
-            {5, 4},
-            {6, 5},
-            {7, 5},
-            {8, 6},
-            {9, 7},
-            {10, 8}
-        };
-
+    public void testDDA() {
+        System.out.println("DDA: " + description);
         int[][] result = LineCalculator.dda(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
+        assertArrayEquals(expected, result);
     }
 
     @Test
-    public void testDrawBresenham() {
-        int x0 = 2, y0 = 3, x1 = 10, y1 = 8;
-        int[][] expected = {
-            {2, 3},
-            {3, 3},
-            {4, 4},
-            {5, 4},
-            {6, 5},
-            {7, 5},
-            {8, 6},
-            {9, 7},
-            {10, 8}
-        };
+    public void testBresenham() {
+        System.out.println("Bresenham: " + description);
         int[][] result = LineCalculator.bresenham(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawDDAHorizontal() {
-        int x0 = 1, y0 = 1, x1 = 5, y1 = 1;
-        int[][] expected = {
-            {1, 1},
-            {2, 1},
-            {3, 1},
-            {4, 1},
-            {5, 1}
-    };
-
-        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawBresenhamHorizontal() {
-        int x0 = 1, y0 = 1, x1 = 5, y1 = 1;
-        int[][] expected = {
-            {1, 1},
-            {2, 1},
-            {3, 1},
-            {4, 1},
-            {5, 1}
-    };
-
-        int[][] result = LineCalculator.bresenham(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawDDAVertical() {
-        int x0 = 1, y0 = 1, x1 = 1, y1 = 5;
-        int[][] expected = {
-            {1, 1},
-            {1, 2},
-            {1, 3},
-            {1, 4},
-            {1, 5}
-    };
-
-        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawBresenhamVertical() {
-        int x0 = 1, y0 = 1, x1 = 1, y1 = 5;
-        int[][] expected = {
-            {1, 1},
-            {1, 2},
-            {1, 3},
-            {1, 4},
-            {1, 5}
-    };
-
-        int[][] result = LineCalculator.bresenham(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-    
-    @Test
-    public void testDrawDDANegativeGradient() {
-        int x0 = 10, y0 = 10, x1 = 2, y1 = 3;
-        int[][] expected = {
-            {10, 10},
-            {9, 9},
-            {8, 8},
-            {7, 7},
-            {6, 6},
-            {5, 5},
-            {4, 4},
-            {3, 3},
-            {2, 3}
-        };
-
-        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawBresenhamNegativeGradient() {
-        int x0 = 10, y0 = 10, x1 = 2, y1 = 3;
-        int[][] expected = {
-            {10, 10},
-            {9, 9},
-            {8, 8},
-            {7, 7},
-            {6, 6},
-            {5, 5},
-            {4, 4},
-            {3, 3},
-            {2, 3}
-        };
-
-        int[][] result = LineCalculator.bresenham(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawDDASecondQuadrant() {
-        int x0 = -2, y0 = 3, x1 = -10, y1 = 8;
-        int[][] expected = {
-            {-2, 3},
-            {-3, 3},
-            {-4, 4},
-            {-5, 4},
-            {-6, 5},
-            {-7, 5},
-            {-8, 6},
-            {-9, 7},
-            {-10, 8}
-        };
-
-        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawBresenhamSecondQuadrant() {
-        int x0 = -2, y0 = 3, x1 = -10, y1 = 8;
-        int[][] expected = {
-            {-2, 3},
-            {-3, 3},
-            {-4, 4},
-            {-5, 4},
-            {-6, 5},
-            {-7, 5},
-            {-8, 6},
-            {-9, 7},
-            {-10, 8}
-        };
-
-        int[][] result = LineCalculator.bresenham(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawDDAThirdQuadrant() {
-        int x0 = -2, y0 = -3, x1 = -10, y1 = -8;
-        int[][] expected = {
-            {-2, -3},
-            {-3, -3},
-            {-4, -4},
-            {-5, -4},
-            {-6, -5},
-            {-7, -5},
-            {-8, -6},
-            {-9, -7},
-            {-10, -8}
-        };
-
-        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawBresenhamThirdQuadrant() {
-        int x0 = -2, y0 = -3, x1 = -10, y1 = -8;
-        int[][] expected = {
-            {-2, -3},
-            {-3, -3},
-            {-4, -4},
-            {-5, -4},
-            {-6, -5},
-            {-7, -5},
-            {-8, -6},
-            {-9, -7},
-            {-10, -8}
-        };
-
-        int[][] result = LineCalculator.bresenham(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawDDAFourthQuadrant() {
-        int x0 = 2, y0 = -3, x1 = 10, y1 = -8;
-        int[][] expected = {
-            {2, -3},
-            {3, -4},
-            {4, -4},
-            {5, -5},
-            {6, -5},
-            {7, -6},
-            {8, -6},
-            {9, -7},
-            {10, -8}
-        };
-
-        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
-    }
-
-    @Test
-    public void testDrawBresenhamFourthQuadrant() {
-        int x0 = 2, y0 = -3, x1 = 10, y1 = -8;
-        int[][] expected = {
-            {2, -3},
-            {3, -4},
-            {4, -4},
-            {5, -5},
-            {6, -5},
-            {7, -6},
-            {8, -6},
-            {9, -7},
-            {10, -8}
-        };
-
-        int[][] result = LineCalculator.bresenham(x0, y0, x1, y1);
-        TestHelper.assert2DArrayEquals(expected, result);
+        assertArrayEquals(expected, result);
     }
 }
-
