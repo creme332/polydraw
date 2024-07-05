@@ -106,11 +106,13 @@ public class ShapeWrapper {
 
     @Override
     public String toString() {
-        String plottedPointString = "[";
+        // create a list of plotted point coordinates
+        StringBuilder plottedPointString = new StringBuilder();
+        plottedPointString.append("[");
         for (Point2D point2d : plottedPoints) {
-            plottedPointString += String.format("[%f, %f], ", point2d.getX(), point2d.getY());
+            plottedPointString.append(String.format("[%f, %f], ", point2d.getX(), point2d.getY()));
         }
-        plottedPointString += "]";
+        plottedPointString.append("]");
 
         return String.format("""
                 ShapeWrapper{
