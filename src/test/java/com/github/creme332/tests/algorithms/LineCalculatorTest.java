@@ -2,92 +2,114 @@ package com.github.creme332.tests.algorithms;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 import com.github.creme332.algorithms.LineCalculator;
 
-@RunWith(Parameterized.class)
 public class LineCalculatorTest {
-    private String description;
-    private int x0;
-    private int y0;
-    private int x1;
-    private int y1;
-    private int[][] expected;
+    // Helper class to hold test cases
+    private static class TestCase {
+        private String description;
+        private int x0;
+        private int y0;
+        private int x1;
+        private int y1;
+        private int[][] expected;
 
-    public LineCalculatorTest(String description, int x0, int y0, int x1, int y1, int[][] expected) {
-        this.description = description;
-        this.x0 = x0;
-        this.y0 = y0;
-        this.x1 = x1;
-        this.y1 = y1;
-        this.expected = expected;
+        TestCase(String description, int x0, int y0, int x1, int y1, int[][] expected) {
+            this.description = description;
+            this.x0 = x0;
+            this.y0 = y0;
+            this.x1 = x1;
+            this.y1 = y1;
+            this.expected = expected;
+        }
     }
 
-    @Parameters(name = "{index}: {0}")
-    public static Collection<Object[]> dataBasedOnGradient() {
-        return Arrays.asList(new Object[][] {
-                // line with gradient 1
-                { "m = 1", 1, 1, 5, 5, new int[][] {
-                        { 1, 2, 3, 4, 5 },
-                        { 1, 2, 3, 4, 5 },
-                } },
+    public static Collection<TestCase> fixedTestCases() {
+        List<TestCase> testCases = new ArrayList<>();
 
-                // line with gradient -1
-                { "m = -1", -5, 5, -1, 1, new int[][] {
-                        { -5, -4, -3, -2, -1 },
-                        { 5, 4, 3, 2, 1 },
-                } },
+        testCases.add(new TestCase("m = 1", 1, 1, 5, 5, new int[][] {
+                { 1, 2, 3, 4, 5 },
+                { 1, 2, 3, 4, 5 }
+        }));
 
-                // line with gradient between 0 and 1
-                { "0 < m < 1", 2, 1, 8, 5, new int[][] {
-                        { 2, 3, 4, 5, 6, 7, 8 },
-                        { 1, 2, 2, 3, 4, 4, 5 }
-                } },
+        testCases.add(new TestCase("m = -1", -5, 5, -1, 1, new int[][] {
+                { -5, -4, -3, -2, -1 },
+                { 5, 4, 3, 2, 1 }
+        }));
 
-                // line with gradient > 1
-                { "m > 1", 3, 2, 7, 8, new int[][] {
-                        { 3, 4, 4, 5, 6, 6, 7 },
-                        { 2, 3, 4, 5, 6, 7, 8 }
-                } },
+        testCases.add(new TestCase("0 < m < 1", 2, 1, 8, 5, new int[][] {
+                { 2, 3, 4, 5, 6, 7, 8 },
+                { 1, 2, 2, 3, 4, 4, 5 }
+        }));
 
-                // line with gradient < -1
-                { "m < -1", 2, 8, 5, 3, new int[][] {
-                        { 2, 3, 3, 4, 4, 5 },
-                        { 8, 7, 6, 5, 4, 3 }
-                } },
+        testCases.add(new TestCase("-1 < m < 0", -6, 5, -1, 1, new int[][] {
+                { -6, -5, -4, -3, -2, -1 },
+                { 5, 4, 3, 3, 2, 1 }
+        }));
 
-                // horizontal line
-                { "m = 0", 1, 1, 5, 1, new int[][] {
-                        { 1, 2, 3, 4, 5 },
-                        { 1, 1, 1, 1, 1 }
-                } },
+        testCases.add(new TestCase("m > 1", 3, 2, 7, 8, new int[][] {
+                { 3, 4, 4, 5, 6, 6, 7 },
+                { 2, 3, 4, 5, 6, 7, 8 }
+        }));
 
-                // vertical line
-                { "m = INF", 0, 0, 0, 4, new int[][] {
-                        { 0, 0, 0, 0, 0 },
-                        { 0, 1, 2, 3, 4 }
-                } },
-        });
+        testCases.add(new TestCase("m < -1", 2, 8, 5, 3, new int[][] {
+                { 2, 3, 3, 4, 4, 5 },
+                { 8, 7, 6, 5, 4, 3 }
+        }));
+
+        testCases.add(new TestCase("m < 0 in 1st quadrant", 8, 4, 6, 8, new int[][] {
+                { 8, 8, 7, 7, 6 },
+                { 4, 5, 6, 7, 8 }
+        }));
+
+        testCases.add(new TestCase("m = 0", 1, 1, 5, 1, new int[][] {
+                { 1, 2, 3, 4, 5 },
+                { 1, 1, 1, 1, 1 }
+        }));
+
+        testCases.add(new TestCase("m = INF", 0, 0, 0, 4, new int[][] {
+                { 0, 0, 0, 0, 0 },
+                { 0, 1, 2, 3, 4 }
+        }));
+
+        return testCases;
     }
 
     @Test
     public void testDDA() {
-        int[][] result = LineCalculator.dda(x0, y0, x1, y1);
-        assertArrayEquals(expected, result);
+        for (TestCase test : fixedTestCases()) {
+            int[][] result = LineCalculator.dda(test.x0, test.y0, test.x1, test.y1);
+
+            try {
+                assertArrayEquals(test.expected, result);
+            } catch (AssertionError e) {
+                System.out.println(test.description);
+                throw e;
+            }
+
+        }
     }
 
     @Test
     public void testBresenham() {
-        int[][] result = LineCalculator.bresenham(x0, y0, x1, y1);
-        assertArrayEquals(expected, result);
+        for (TestCase test : fixedTestCases()) {
+            int[][] result = LineCalculator.bresenham(test.x0, test.y0, test.x1, test.y1);
+
+            try {
+                assertArrayEquals(test.expected, result);
+            } catch (AssertionError e) {
+                System.out.println(test.description);
+                throw e;
+            }
+        }
     }
 
     public static int[] generateRandomCoordinate() {
@@ -100,7 +122,7 @@ public class LineCalculatorTest {
 
     @Test
     public void testRandom() {
-        final int NUM_TESTS = 10;
+        final int NUM_TESTS = 100;
 
         for (int i = 0; i < NUM_TESTS; i++) {
             int[] start = generateRandomCoordinate();
@@ -113,7 +135,8 @@ public class LineCalculatorTest {
                 assertArrayEquals(bresenhamResult, ddaResult);
             } catch (AssertionError e) {
                 System.out.println(
-                        "Random test failed for coordinates: " + Arrays.toString(start) + " " + Arrays.toString(end));
+                        "Random test failed for coordinates: " + Arrays.toString(start) + " "
+                                + Arrays.toString(end));
                 System.out.println("DDA: " + Arrays.deepToString(ddaResult));
                 System.out.println("Bresenham: " + Arrays.deepToString(bresenhamResult));
                 System.out.println();
