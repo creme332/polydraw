@@ -5,7 +5,6 @@ import java.util.List;
 
 public class LineCalculator {
     private LineCalculator() {
-
     }
 
     /**
@@ -73,6 +72,17 @@ public class LineCalculator {
         return new int[][] { xpoints, ypoints };
     }
 
+    /**
+     * Calculates pixels between any 2 points (x0, y0) and (x1, y1) using the
+     * Bresenham line algorithm.
+     * 
+     * @param x0 x-coordinate of start point
+     * @param y0 y-coordinate of tart point
+     * @param x1 x-coordinate of end point
+     * @param y1 y-coordinate of end point
+     * @return A 2D array with 2 elements. The first element is the array of
+     *         x-coordinates and the second element is the array of y-coordinates.
+     */
     public static int[][] bresenham(int x0, int y0, int x1, int y1) {
         int dx = Math.abs(x1 - x0);
         int dy = Math.abs(y1 - y0);
