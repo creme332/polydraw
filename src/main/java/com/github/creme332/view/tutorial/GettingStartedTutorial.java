@@ -18,7 +18,6 @@ import com.github.creme332.utils.exception.InvalidPathException;
 
 public class GettingStartedTutorial extends AbstractTutorial {
 
-    private static final String IMAGE_PATH_PREFIX = "/images/tutorials/getting-started/";
     private static final TutorialModel GETTING_STARTED_MODEL = new TutorialModel("Getting Started");
 
     GridBagConstraints gbc = new GridBagConstraints();
@@ -63,7 +62,7 @@ public class GettingStartedTutorial extends AbstractTutorial {
         gbc.gridy++;
 
         // add image
-        JLabel zoomPanelImage = new JLabel(loadIcon(IMAGE_PATH_PREFIX + "zoom-panel.png"));
+        JLabel zoomPanelImage = new JLabel(loadIcon(getImagePathPrefix() + "zoom-panel.png"));
         mainPanel.add(zoomPanelImage, gbc);
         gbc.gridy++;
 
@@ -89,7 +88,7 @@ public class GettingStartedTutorial extends AbstractTutorial {
         gbc.gridy++;
 
         // add image
-        mainPanel.add(new JLabel(loadIcon(IMAGE_PATH_PREFIX + "toast.png")), gbc);
+        mainPanel.add(new JLabel(loadIcon(getImagePathPrefix() + "toast.png")), gbc);
         gbc.gridy++;
 
         // add description
@@ -105,7 +104,7 @@ public class GettingStartedTutorial extends AbstractTutorial {
         gbc.gridy++;
 
         // menubar image
-        mainPanel.add(new JLabel(loadIcon(IMAGE_PATH_PREFIX + "menubar.png")), gbc);
+        mainPanel.add(new JLabel(loadIcon(getImagePathPrefix() + "menubar.png")), gbc);
         gbc.gridy++;
 
         JTextArea buttonExplanation = createParagraph(
