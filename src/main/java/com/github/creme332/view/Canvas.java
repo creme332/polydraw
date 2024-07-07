@@ -209,8 +209,10 @@ public class Canvas extends JPanel {
                 g2.draw(s1);
 
                 // fill shape
-                g2.setColor(wrapper.getFillColor());
-                g2.fill(s1);
+                if (wrapper.isFillable()) {
+                    g2.setColor(wrapper.getFillColor());
+                    g2.fill(s1);
+                }
             }
 
             // display points plotted on shape by user
