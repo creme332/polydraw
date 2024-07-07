@@ -44,19 +44,18 @@ public class DrawLine extends AbstractDrawer {
             // number of plotted points is 1
             Point2D lineStart = preview.getPlottedPoints().get(0);
             Shape shape;
+            int[][] coordinates;
+            
             if (getCanvasMode() == Mode.DRAW_LINE_DDA) {
-                int[][] coordinates = LineCalculator.dda((int) lineStart.getX(), (int) lineStart.getY(),
+                coordinates = LineCalculator.dda((int) lineStart.getX(), (int) lineStart.getY(),
                         (int) polySpaceMousePosition.getX(),
                         (int) polySpaceMousePosition.getY());
-
-                shape = createPolyline(coordinates[0], coordinates[1], coordinates[0].length);
             } else {
-                int[][] coordinates = LineCalculator.bresenham((int) lineStart.getX(), (int) lineStart.getY(),
+                coordinates = LineCalculator.bresenham((int) lineStart.getX(), (int) lineStart.getY(),
                         (int) polySpaceMousePosition.getX(),
                         (int) polySpaceMousePosition.getY());
-
-                shape = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
             }
+            shape = createPolyline(coordinates[0], coordinates[1], coordinates[0].length);
             preview.setShape(shape);
             canvas.repaint();
         }
