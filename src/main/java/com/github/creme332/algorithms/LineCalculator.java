@@ -23,6 +23,9 @@ public class LineCalculator {
      *         x-coordinates and the second element is the array of y-coordinates.
      */
     public static int[][] dda(int x0, int y0, int x1, int y1) {
+        if (x0 == x1 && y0 == y1)
+            return new int[][] { { x0 }, { y0 } };
+
         final int dx = x1 - x0;
         final int dy = y1 - y0;
         final int steps = Math.max(Math.abs(dx), Math.abs(dy));
@@ -59,6 +62,9 @@ public class LineCalculator {
      *         x-coordinates and the second element is the array of y-coordinates.
      */
     public static int[][] bresenham(int x0, int y0, int x1, int y1) {
+        if (x0 == x1 && y0 == y1)
+            return new int[][] { { x0 }, { y0 } };
+            
         int dx = Math.abs(x1 - x0);
         int dy = Math.abs(y1 - y0);
 
@@ -102,6 +108,9 @@ public class LineCalculator {
      * @return
      */
     public static int[][] bresenham2(int x0, int y0, int x1, int y1) {
+        if (x0 == x1 && y0 == y1)
+            return new int[][] { { x0 }, { y0 } };
+
         List<Integer> xpoints = new ArrayList<>();
         List<Integer> ypoints = new ArrayList<>();
 
