@@ -1,5 +1,8 @@
 package com.github.creme332.algorithms;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,65 +11,37 @@ public class LineCalculator {
     }
 
     /**
-     * Rounds the given value to the nearest integer, mimicking the behavior of the
-     * C round function.
-     * This method rounds ties away from zero unlike Math.round().
-     *
-     * <p>
-     * Examples:
-     * 
-     * <pre>
-     * round(-5.5); // returns -6
-     * round(-2.5); // returns -3
-     * round(-1.4); // returns -1
-     * round(0.5); // returns 1
-     * round(1.5); // returns 2
-     * round(2.4); // returns 2
-     * round(3.5); // returns 4
-     * </pre>
-     *
-     * @param value the value to be rounded
-     * @return the value rounded to the nearest integer
-     */
-    public static int round(double value) {
-        if (value >= 0) {
-            return (int) Math.floor(value + 0.5);
-        } else {
-            return (int) Math.ceil(value - 0.5);
-        }
-    }
-
-    /**
      * Calculates pixels between any 2 points (x0, y0) and (x1, y1) using the DDA
-     * line algorithm.
+     * line algorithm. High precision calculations are used to reduce floating point
+     * errors.
      * 
      * @param x0 x-coordinate of start point
-     * @param y0 y-coordinate of tart point
+     * @param y0 y-coordinate of start point
      * @param x1 x-coordinate of end point
      * @param y1 y-coordinate of end point
      * @return A 2D array with 2 elements. The first element is the array of
      *         x-coordinates and the second element is the array of y-coordinates.
      */
     public static int[][] dda(int x0, int y0, int x1, int y1) {
-        int dx = x1 - x0;
-        int dy = y1 - y0;
-        int steps = Math.max(Math.abs(dx), Math.abs(dy));
+        final int dx = x1 - x0;
+        final int dy = y1 - y0;
+        final int steps = Math.max(Math.abs(dx), Math.abs(dy));
 
-        double xInc = (double) dx / steps;
-        double yInc = (double) dy / steps;
+        final BigDecimal xInc = BigDecimal.valueOf(dx).divide(BigDecimal.valueOf(steps), MathContext.DECIMAL128);
+        final BigDecimal yInc = BigDecimal.valueOf(dy).divide(BigDecimal.valueOf(steps), MathContext.DECIMAL128);
 
-        double x = x0;
-        double y = y0;
+        BigDecimal x = BigDecimal.valueOf(x0);
+        BigDecimal y = BigDecimal.valueOf(y0);
 
         int[] xpoints = new int[steps + 1];
         int[] ypoints = new int[steps + 1];
 
         for (int i = 0; i <= steps; i++) {
-            xpoints[i] = round(x);
-            ypoints[i] = round(y);
+            xpoints[i] = x.setScale(0, RoundingMode.HALF_UP).intValue();
+            ypoints[i] = y.setScale(0, RoundingMode.HALF_UP).intValue();
 
-            x += xInc;
-            y += yInc;
+            x = x.add(xInc);
+            y = y.add(yInc);
         }
 
         return new int[][] { xpoints, ypoints };
