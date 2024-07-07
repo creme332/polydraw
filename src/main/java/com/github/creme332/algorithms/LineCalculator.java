@@ -90,4 +90,50 @@ public class LineCalculator {
 
         return new int[][] { xpoints.stream().mapToInt(i -> i).toArray(), ypoints.stream().mapToInt(i -> i).toArray() };
     }
+
+    /**
+     * Another version of the bresenham line algorithm.
+     * Adapted from: https://github.com/madbence/node-bresenham
+     * 
+     * @param x0
+     * @param y0
+     * @param x1
+     * @param y1
+     * @return
+     */
+    public static int[][] bresenham2(int x0, int y0, int x1, int y1) {
+        List<Integer> xpoints = new ArrayList<>();
+        List<Integer> ypoints = new ArrayList<>();
+
+        int dx = x1 - x0;
+        int dy = y1 - y0;
+        int adx = Math.abs(dx);
+        int ady = Math.abs(dy);
+        int sx = dx > 0 ? 1 : -1;
+        int sy = dy > 0 ? 1 : -1;
+        int eps = 0;
+        if (adx > ady) {
+            for (int x = x0, y = y0; sx < 0 ? x >= x1 : x <= x1; x += sx) {
+                xpoints.add(x);
+                ypoints.add(y);
+
+                eps += ady;
+                if (eps << 1 >= adx) {
+                    y += sy;
+                    eps -= adx;
+                }
+            }
+        } else {
+            for (int x = x0, y = y0; sy < 0 ? y >= y1 : y <= y1; y += sy) {
+                xpoints.add(x);
+                ypoints.add(y);
+                eps += adx;
+                if (eps << 1 >= ady) {
+                    x += sx;
+                    eps -= ady;
+                }
+            }
+        }
+        return new int[][] { xpoints.stream().mapToInt(i -> i).toArray(), ypoints.stream().mapToInt(i -> i).toArray() };
+    }
 }
