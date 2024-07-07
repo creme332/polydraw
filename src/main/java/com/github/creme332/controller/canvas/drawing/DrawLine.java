@@ -1,6 +1,5 @@
 package com.github.creme332.controller.canvas.drawing;
 
-import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
@@ -45,7 +44,7 @@ public class DrawLine extends AbstractDrawer {
             Point2D lineStart = preview.getPlottedPoints().get(0);
             Shape shape;
             int[][] coordinates;
-            
+
             if (getCanvasMode() == Mode.DRAW_LINE_DDA) {
                 coordinates = LineCalculator.dda((int) lineStart.getX(), (int) lineStart.getY(),
                         (int) polySpaceMousePosition.getX(),

@@ -136,7 +136,8 @@ public class CanvasController implements PropertyChangeListener {
 
     private void initializeKeyBindings() {
         // Export canvas
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK), "exportCanvas");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK), "exportCanvas");
         canvas.getActionMap().put("exportCanvas", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -145,8 +146,10 @@ public class CanvasController implements PropertyChangeListener {
         });
 
         // Zoom in
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK), "zoomIn");
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.CTRL_DOWN_MASK), "zoomIn");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, java.awt.event.InputEvent.CTRL_DOWN_MASK), "zoomIn");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_DOWN_MASK), "zoomIn");
         canvas.getActionMap().put("zoomIn", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -156,7 +159,8 @@ public class CanvasController implements PropertyChangeListener {
         });
 
         // Zoom out
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK), "zoomOut");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, java.awt.event.InputEvent.CTRL_DOWN_MASK), "zoomOut");
         canvas.getActionMap().put("zoomOut", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -166,7 +170,8 @@ public class CanvasController implements PropertyChangeListener {
         });
 
         // Zoom 100%
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK), "zoomReset");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_0, java.awt.event.InputEvent.CTRL_DOWN_MASK), "zoomReset");
         canvas.getActionMap().put("zoomReset", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
