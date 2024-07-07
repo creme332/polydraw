@@ -1,5 +1,11 @@
 package com.github.creme332.controller.canvas;
 
+import java.awt.event.KeyEvent;
+import javax.swing.KeyStroke;
+import javax.swing.JComponent;
+import javax.swing.AbstractAction;
+import java.awt.event.ActionEvent;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
@@ -122,6 +128,50 @@ public class CanvasController implements PropertyChangeListener {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 model.updateCanvasZoom(e.getWheelRotation() != 1);
+            }
+        });
+
+        initializeKeyBindings();
+    }
+
+    private void initializeKeyBindings() {
+        // Export canvas
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK), "exportCanvas");
+        canvas.getActionMap().put("exportCanvas", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleCanvasExport();
+            }
+        });
+
+        // Zoom in
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK), "zoomIn");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.CTRL_DOWN_MASK), "zoomIn");
+        canvas.getActionMap().put("zoomIn", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.updateCanvasZoom(true);
+                canvas.repaint();
+            }
+        });
+
+        // Zoom out
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK), "zoomOut");
+        canvas.getActionMap().put("zoomOut", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.updateCanvasZoom(false);
+                canvas.repaint();
+            }
+        });
+
+        // Zoom 100%
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_DOWN_MASK), "zoomReset");
+        canvas.getActionMap().put("zoomReset", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.toStandardView();
+                canvas.repaint();
             }
         });
     }

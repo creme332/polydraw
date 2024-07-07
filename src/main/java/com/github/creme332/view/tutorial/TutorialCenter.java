@@ -2,6 +2,7 @@ package com.github.creme332.view.tutorial;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.BadLocationException;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -60,11 +61,11 @@ public class TutorialCenter extends JPanel {
             tutorialScreens.add(new DrawCircleTutorial());
             tutorialScreens.add(new KeyboardTutorial());
             tutorialScreens.add(new DrawEllipseTutorial());
-        } catch (InvalidPathException | InvalidIconSizeException e) {
+            tutorialScreens.add(new DrawPolygonTutorial());
+        } catch (InvalidPathException | InvalidIconSizeException | BadLocationException e) {
             e.printStackTrace();
             System.exit(ABORT);
         }
-
     }
 
     private void initTutorialCards() {
