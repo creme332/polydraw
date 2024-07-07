@@ -19,15 +19,14 @@ import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import static com.github.creme332.utils.IconLoader.loadSVGIcon;
 
-public class KeyboardTutorial extends TutorialPanel {
+public class KeyboardTutorial extends AbstractTutorial {
 
-    private static final String IMAGE_PATH_PREFIX = "/images/tutorials/getting-started/";
     private static final TutorialModel KEYBOARD_TUTORIAL_MODEL = new TutorialModel("Keyboard Shortcuts");
 
     public KeyboardTutorial() throws InvalidPathException, InvalidIconSizeException {
         super(KEYBOARD_TUTORIAL_MODEL, loadSVGIcon("/icons/keyboard.svg", TutorialCard.IMAGE_DIMENSION));
         model.addKeyword("key");
-        
+
         try {
             // Insert text
             doc.insertString(doc.getLength(),
@@ -128,5 +127,10 @@ public class KeyboardTutorial extends TutorialPanel {
 
             return label;
         }
+    }
+
+    @Override
+    public String getImagePathPrefix() {
+        return "/images/tutorials/keyboard-tutorial/";
     }
 }

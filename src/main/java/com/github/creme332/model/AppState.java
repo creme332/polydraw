@@ -30,12 +30,6 @@ public class AppState {
     }
 
     private MenuModel[] createMenuModels() {
-        MenuModel graphicsMenuModel = new MenuModel(new Mode[] {
-                Mode.MOVE_GRAPHICS_VIEW,
-                Mode.ZOOM_IN,
-                Mode.ZOOM_OUT
-        });
-
         MenuModel transformationsMenuModel = new MenuModel(new Mode[] {
                 Mode.REFLECT_ABOUT_LINE,
                 Mode.REFLECT_ABOUT_POINT,
@@ -66,7 +60,8 @@ public class AppState {
         });
 
         MenuModel cursorMenuModel = new MenuModel(new Mode[] {
-                Mode.MOVE_CANVAS
+                Mode.MOVE_CANVAS,
+                Mode.MOVE_GRAPHICS_VIEW,
         });
 
         MenuModel deletionModel = new MenuModel(new Mode[] {
@@ -80,7 +75,6 @@ public class AppState {
                 ellipseMenuModel,
                 polygonMenuModel,
                 transformationsMenuModel,
-                graphicsMenuModel,
                 deletionModel
         };
     }

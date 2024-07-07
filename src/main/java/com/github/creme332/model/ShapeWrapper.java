@@ -3,8 +3,10 @@ package com.github.creme332.model;
 import java.awt.Color;
 import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.awt.Shape;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 
 public class ShapeWrapper {
@@ -12,12 +14,19 @@ public class ShapeWrapper {
     private Color lineColor = Color.BLACK;
     private LineType lineType = LineType.SOLID;
     private int lineThickness = 1;
+    private boolean fillable = true;
 
     /**
-     * Coordinates plotted by user to create shape.
+     * Coordinates plotted by user to create shape. A plotted point is a one which
+     * user has clicked one. A point on which user is hovering on is NOT a plotted
+     * point.
      */
     private List<Point2D> plottedPoints = new ArrayList<>();
 
+    /**
+     * 
+     * @return Original list of plotted points.
+     */
     public List<Point2D> getPlottedPoints() {
         return plottedPoints;
     }
@@ -34,16 +43,27 @@ public class ShapeWrapper {
      * @param wrapper
      */
     public ShapeWrapper(ShapeWrapper wrapper) {
+        if (wrapper == null) {
+            throw new NullPointerException("wrapper should not be null when passed to copy constructor.");
+        }
+
         // save primitive attributes
         lineColor = wrapper.lineColor;
         lineType = wrapper.lineType;
         lineThickness = wrapper.lineThickness;
+        fillable = wrapper.fillable;
 
         // create a new shape object
         if (wrapper.shape != null) {
-            Polygon original = (Polygon) wrapper.shape;
-            Polygon copy = new Polygon(original.xpoints, original.ypoints, original.npoints);
-            shape = copy;
+            if (wrapper.shape instanceof Polygon) {
+                Polygon original = (Polygon) wrapper.shape;
+                Polygon copy = new Polygon(original.xpoints, original.ypoints, original.npoints);
+                shape = copy;
+            }
+            if (wrapper.shape instanceof Path2D.Double) {
+                Path2D.Double original = (Path2D.Double) wrapper.shape;
+                shape = (Path2D.Double) original.clone();
+            }
         }
 
         // create a new array for plotted points
@@ -54,6 +74,11 @@ public class ShapeWrapper {
 
     public Shape getShape() {
         return shape;
+    }
+
+    public Polygon toPolygon() {
+        Polygon original = (Polygon) shape;
+        return new Polygon(original.xpoints, original.ypoints, original.npoints);
     }
 
     public void setShape(Shape shape) {
@@ -68,10 +93,21 @@ public class ShapeWrapper {
         this.lineColor = lineColor;
     }
 
+    public boolean isFillable() {
+        return fillable;
+    }
+
+    public void setFillable(boolean fillable) {
+        this.fillable = fillable;
+    }
+
     /**
-     * Fill color is a transparent version of the line color.
+     * Returns a fill color for a shape if it is fillable. The fill color of a
+     * fillable shape is a transparent version of the line color.
      */
     public Color getFillColor() {
+        if (!fillable)
+            return null;
         Color a = lineColor;
         return new Color(a.getRed() / 255f, a.getGreen() / 255f, a.getBlue() / 255f, .2f);
     }
@@ -90,5 +126,28 @@ public class ShapeWrapper {
 
     public void setLineType(LineType lineType) {
         this.lineType = lineType;
+    }
+
+    @Override
+    public String toString() {
+        // create a list of plotted point coordinates
+        StringBuilder plottedPointString = new StringBuilder();
+        plottedPointString.append("[");
+        for (Point2D point2d : plottedPoints) {
+            plottedPointString.append(String.format("[%f, %f], ", point2d.getX(), point2d.getY()));
+        }
+        plottedPointString.append("]");
+
+        return String.format("""
+                ShapeWrapper{
+                    plottedPoints: %s
+                    xpoints: %s
+                    ypoints: %s
+                    lineColor: %s
+                    lineType: %s
+                    lineThickness: %d
+                }
+                """, plottedPointString, Arrays.toString(toPolygon().xpoints), Arrays.toString(toPolygon().ypoints),
+                lineColor, lineType, lineThickness);
     }
 }

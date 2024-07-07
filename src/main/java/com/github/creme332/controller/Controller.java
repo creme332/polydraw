@@ -1,5 +1,7 @@
 package com.github.creme332.controller;
 
+import com.github.creme332.controller.canvas.CanvasController;
+import com.github.creme332.controller.console.CanvasConsoleController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;

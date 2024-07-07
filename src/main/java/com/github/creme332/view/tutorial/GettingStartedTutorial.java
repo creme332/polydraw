@@ -16,7 +16,7 @@ import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
-public class GettingStartedTutorial extends TutorialPanel {
+public class GettingStartedTutorial extends AbstractTutorial {
 
     private static final String IMAGE_PATH_PREFIX = "/images/tutorials/getting-started/";
     private static final TutorialModel GETTING_STARTED_MODEL = new TutorialModel("Getting Started");
@@ -230,5 +230,10 @@ public class GettingStartedTutorial extends TutorialPanel {
         tablePanel.add(table.getTableHeader(), BorderLayout.PAGE_START);
         tablePanel.add(table, BorderLayout.CENTER);
         return tablePanel;
+    }
+
+    @Override
+    public String getImagePathPrefix() {
+        return "/images/tutorials/getting-started/";
     }
 }

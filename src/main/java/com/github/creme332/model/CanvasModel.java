@@ -55,7 +55,7 @@ public class CanvasModel {
     // define attributes for next shape to be drawn
     private LineType lineType = LineType.SOLID;
     private int lineThickness = 3;
-    private Color shapeColor = Color.BLACK;
+    private Color shapeColor = Color.RED;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     /**
@@ -85,8 +85,21 @@ public class CanvasModel {
 
     ShapeManager shapeManager = new ShapeManager();
 
+    /**
+     * Index of shape on which user clicked when in Mode.MOVE_CANVAS.
+     */
+    int selectedShapeIndex = -1;
+
     public ShapeManager getShapeManager() {
         return shapeManager;
+    }
+
+    public void setSelectedShape(int shapeIndex) {
+        selectedShapeIndex = shapeIndex;
+    }
+
+    public int getSelectedShape() {
+        return selectedShapeIndex;
     }
 
     /**

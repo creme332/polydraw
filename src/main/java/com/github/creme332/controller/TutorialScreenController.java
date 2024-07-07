@@ -16,12 +16,12 @@ import javax.swing.event.DocumentListener;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Screen;
 import com.github.creme332.utils.FuzzySearching;
-import com.github.creme332.view.TutorialCenter;
 import com.github.creme332.view.tutorial.TutorialCard;
-import com.github.creme332.view.tutorial.TutorialPanel;
+import com.github.creme332.view.tutorial.TutorialCenter;
+import com.github.creme332.view.tutorial.AbstractTutorial;
 
 /**
- * Controller for TutorialScreen.
+ * Main controller for TutorialScreen.
  */
 public class TutorialScreenController {
     private TutorialCenter view;
@@ -52,7 +52,7 @@ public class TutorialScreenController {
         });
 
         List<TutorialCard> tutorialCards = view.getTutorialCards();
-        List<TutorialPanel> tutorialScreens = view.getTutorialScreens();
+        List<AbstractTutorial> tutorialScreens = view.getTutorialScreens();
 
         for (int i = 0; i < tutorialCards.size(); i++) {
             TutorialCard tutorialCard = tutorialCards.get(i);
@@ -61,13 +61,13 @@ public class TutorialScreenController {
             tutorialCard.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    TutorialPanel tutorialPanel = tutorialScreens.get(index);
+                    AbstractTutorial tutorialPanel = tutorialScreens.get(index);
                     view.showTutorial(tutorialPanel.getTitle());
                     currentView = tutorialPanel.getTitle();
                 }
             });
 
-            TutorialPanel tutorialPanel = tutorialScreens.get(index);
+            AbstractTutorial tutorialPanel = tutorialScreens.get(index);
             tutorialPanel.getBackButton().addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -128,7 +128,7 @@ public class TutorialScreenController {
         final ArrayList<TutorialCard> visibleTutorialCards = new ArrayList<>();
 
         for (int i = 0; i < view.getTutorialScreens().size(); i++) {
-            TutorialPanel tutorial = view.getTutorialScreens().get(i);
+            AbstractTutorial tutorial = view.getTutorialScreens().get(i);
 
             if (FuzzySearching.match(searchQuery, tutorial.getModel().getKeywords())) {
                 visibleTutorialCards.add(view.getTutorialCards().get(i));

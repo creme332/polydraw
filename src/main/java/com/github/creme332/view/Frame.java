@@ -11,6 +11,8 @@ import static com.github.creme332.utils.IconLoader.loadIcon;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Screen;
 import com.github.creme332.utils.exception.InvalidPathException;
+import com.github.creme332.view.console.CanvasConsole;
+import com.github.creme332.view.tutorial.TutorialCenter;
 
 /**
  * Frame of the GUI application.

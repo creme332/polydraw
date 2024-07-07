@@ -11,16 +11,17 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 
+import com.github.creme332.controller.canvas.MenuBarController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Screen;
 import com.github.creme332.utils.DesktopApi;
 import com.github.creme332.utils.DesktopApi.EnumOS;
 import com.github.creme332.view.Canvas;
-import com.github.creme332.view.CanvasConsole;
 import com.github.creme332.view.Frame;
 import com.github.creme332.view.MenuBar;
-import com.github.creme332.view.SideMenuPanel;
+import com.github.creme332.view.console.CanvasConsole;
+import com.github.creme332.view.console.SideMenuPanel;
 
 /**
  * Controller responsible for switching screens and resizing components as

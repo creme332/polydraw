@@ -18,6 +18,7 @@ import java.awt.Toolkit;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 /**
  * Drawing board for coordinate system.
@@ -32,7 +33,7 @@ public class Canvas extends JPanel {
         this.model = model;
     }
 
-    public void setAntialiasing(Graphics2D g2) {
+    public void setAntiAliasing(Graphics2D g2) {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -181,6 +182,66 @@ public class Canvas extends JPanel {
         }
     }
 
+    private void drawShapes(Graphics2D g2) {
+        /**
+         * Default stroke which is used to draw plotted points
+         */
+        final Stroke defaultStroke = g2.getStroke();
+
+        List<ShapeWrapper> shapesToDraw = model.getShapeManager().getShapes();
+        for (int i = 0; i < shapesToDraw.size(); i++) {
+            ShapeWrapper wrapper = shapesToDraw.get(i);
+
+            if (wrapper.getShape() != null) {
+                // draw shape outline
+                g2.setColor(wrapper.getLineColor());
+
+                // increase thickness of shape if user selected the shape
+                if (i == model.getSelectedShape()) {
+                    g2.setStroke(getStroke(wrapper.getLineType(), wrapper.getLineThickness() + 3));
+
+                } else {
+                    g2.setStroke(getStroke(wrapper.getLineType(), wrapper.getLineThickness()));
+                }
+
+                // convert shape to user space then draw it
+                Shape s1 = model.toUserSpace(wrapper.getShape());
+                g2.draw(s1);
+
+                // fill shape
+                if (wrapper.isFillable()) {
+                    g2.setColor(wrapper.getFillColor());
+                    g2.fill(s1);
+                }
+            }
+
+            // display points plotted on shape by user
+            g2.setStroke(defaultStroke);
+            g2.setColor(wrapper.getLineColor());
+            for (Point2D p : wrapper.getPlottedPoints()) {
+                Shape point = createPointAsShape(model.toUserSpace(p));
+                g2.draw(point);
+                g2.fill(point);
+            }
+        }
+
+    }
+
+    /**
+     * Display current mouse position as a pixel
+     * 
+     * @param g2
+     */
+    private void drawCursorPosition(Graphics2D g2) {
+        //
+        if (model.getUserMousePosition() != null) {
+            Shape point = createPointAsShape(model.toUserSpace(model.getUserMousePosition()));
+            g2.setColor(Color.LIGHT_GRAY);
+            g2.draw(point);
+            g2.fill(point);
+        }
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -190,9 +251,7 @@ public class Canvas extends JPanel {
         g.setFont(newFont);
 
         Graphics2D g2 = (Graphics2D) g;
-        setAntialiasing(g2);
-
-        final Stroke defaultStroke = g2.getStroke();
+        setAntiAliasing(g2);
 
         if (model.isGuidelinesEnabled()) {
             drawGuidelines(g2);
@@ -203,37 +262,8 @@ public class Canvas extends JPanel {
             drawVerticalAxis(g2);
         }
 
-        for (ShapeWrapper wrapper : model.getShapeManager().getShapes()) {
-            g2.setColor(wrapper.getLineColor());
-            g2.setStroke(getStroke(wrapper.getLineType(), wrapper.getLineThickness()));
-
-            if (wrapper.getShape() != null) {
-                // draw shape outline
-                Shape s1 = model.toUserSpace(wrapper.getShape());
-                g2.draw(s1);
-
-                // fill shape
-                g2.setColor(wrapper.getFillColor());
-                g2.fill(s1);
-            }
-
-            // display points plotted by user
-            g2.setStroke(defaultStroke);
-            g2.setColor(wrapper.getLineColor());
-            for (Point2D p : wrapper.getPlottedPoints()) {
-                Shape point = createPointAsShape(model.toUserSpace(p));
-                g2.draw(point);
-                g2.fill(point);
-            }
-        }
-
-        // display current mouse position
-        if (model.getUserMousePosition() != null) {
-            Shape point = createPointAsShape(model.toUserSpace(model.getUserMousePosition()));
-            g2.setColor(Color.LIGHT_GRAY);
-            g2.draw(point);
-            g2.fill(point);
-        }
+        drawShapes(g2);
+        drawCursorPosition(g2);
     }
 
     private Stroke getStroke(LineType lineType, int thickness) {
