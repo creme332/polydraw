@@ -128,4 +128,9 @@ public class KeyboardTutorial extends AbstractTutorial {
             return label;
         }
     }
+
+    @Override
+    public String getImagePathPrefix() {
+        return "/images/tutorials/keyboard-tutorial/";
+    }
 }

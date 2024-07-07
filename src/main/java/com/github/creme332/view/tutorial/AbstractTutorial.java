@@ -6,18 +6,23 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import static com.github.creme332.utils.IconLoader.loadIcon;
+
 import com.github.creme332.model.TutorialModel;
+import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.common.BackButton;
 
 public abstract class AbstractTutorial extends JPanel {
@@ -43,7 +48,7 @@ public abstract class AbstractTutorial extends JPanel {
 
     protected transient Icon previewIcon;
 
-    public AbstractTutorial(TutorialModel model, Icon icon) {
+    protected AbstractTutorial(TutorialModel model, Icon icon) {
         setLayout(new BorderLayout());
 
         this.model = model;
@@ -131,4 +136,19 @@ public abstract class AbstractTutorial extends JPanel {
     public JButton getBackButton() {
         return backButton;
     }
+
+    /**
+     * Inserts an image to the document.
+     * 
+     * @param filename Filename relative to path defined in getImagePathPrefix().
+     * @throws InvalidPathException
+     * @throws BadLocationException
+     */
+    public void insertImage(String filename) throws InvalidPathException, BadLocationException {
+        ImageIcon icon = loadIcon(getImagePathPrefix() + filename);
+        StyleConstants.setIcon(imageStyle, icon);
+        doc.insertString(doc.getLength(), " ", imageStyle);
+    }
+
+    public abstract String getImagePathPrefix();
 }

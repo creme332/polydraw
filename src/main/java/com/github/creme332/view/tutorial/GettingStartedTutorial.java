@@ -231,4 +231,9 @@ public class GettingStartedTutorial extends AbstractTutorial {
         tablePanel.add(table, BorderLayout.CENTER);
         return tablePanel;
     }
+
+    @Override
+    public String getImagePathPrefix() {
+        return "/images/tutorials/getting-started/";
+    }
 }
