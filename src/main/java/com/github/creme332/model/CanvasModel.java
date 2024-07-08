@@ -34,7 +34,7 @@ public class CanvasModel {
      * Spacing (in pixels) between right border of canvas and tick label when axis
      * is out of sight.
      */
-    public static final int TICK_PADDING_RIGHT = 30;
+    public static final int TICK_PADDING_RIGHT = 35;
 
     public static final int MAX_CELL_SIZE = 500;
     public static final int MIN_CELL_SIZE = 1;
