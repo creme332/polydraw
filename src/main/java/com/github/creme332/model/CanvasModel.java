@@ -50,7 +50,7 @@ public class CanvasModel {
     /**
      * Font size of labels on canvas in pixels.
      */
-    private int labelFontSize = 28;
+    private int labelFontSize = 20;
 
     // define attributes for next shape to be drawn
     private LineType lineType = LineType.SOLID;
