@@ -19,13 +19,14 @@ public class Controller {
             Frame frame = new Frame(app);
             frameController = new FrameController(app, frame);
 
+            // play start animation
+            frameController.playStartAnimation();
+            
             // create controllers for main screens
             new CanvasController(app, frame.getMyCanvas());
             new CanvasConsoleController(app, frame.getCanvasConsole());
             new TutorialScreenController(app, frame.getTutorialCenter());
 
-            // play start animation
-            frameController.playStartAnimation();
         } catch (InvalidPathException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(1);
