@@ -19,25 +19,29 @@ public class DrawLineTutorial extends AbstractTutorial {
 
         try {
             doc.insertString(doc.getLength(),
-                    "In this tutorial you will learn how to draw a line using either the DDA algorithm or Bresenham line algorithm.\n\n",
+                    "In this tutorial you will learn how to draw a line using either the DDA line algorithm or the Bresenham line algorithm.\n\n",
                     regular);
 
             insertImage("draw-line.gif");
 
             doc.insertString(doc.getLength(),
-                    "\n\n1. Click on the line icon (second icon from the left) in the menu bar.\n",
-                    regular);
-            doc.insertString(doc.getLength(),
-                    "\n\n2. Choose the algorithm that you want to use from the expanded menu.\n\n",
+                    "\n\n1. Click on the line icon (second icon from the left) in the menu bar. You should see a dropdown menu appear.\n",
                     regular);
 
             insertImage("step-1.png");
 
             doc.insertString(doc.getLength(),
+                    "\n\n2. Choose the algorithm that you want to use from the dropdown menu.\n",
+                    regular);
+
+            doc.insertString(doc.getLength(),
                     "\n\n3. Move your mouse cursor to the canvas and click on a point where you want your line to start.\n",
                     regular);
+
+            insertImage("step-2.png");
+
             doc.insertString(doc.getLength(),
-                    "\n\n4. Click on another point where you want your line to end.\n\n",
+                    "\n\n4. As you move your mouse across the canvas, you should see a line preview. To complete your line, click on another point where you want your line to end.\n\n",
                     regular);
 
             insertImage("step-3.png");
