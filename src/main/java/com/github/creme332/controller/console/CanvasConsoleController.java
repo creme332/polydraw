@@ -41,6 +41,8 @@ public class CanvasConsoleController implements PropertyChangeListener {
         if (!app.getSideBarVisibility()) {
             console.setPreferredSize(console.getPreferredSize());
         }
+
+        showTemporaryToast();
     }
 
     @Override
