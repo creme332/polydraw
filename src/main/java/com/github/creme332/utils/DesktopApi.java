@@ -252,4 +252,12 @@ public class DesktopApi {
             return EnumOS.UNKNOWN;
         }
     }
+
+    /**
+     * 
+     * @return True if application is running on Windows OS.
+     */
+    public static boolean isWindows() {
+        return getOs() == EnumOS.WINDOWS;
+    }
 }
