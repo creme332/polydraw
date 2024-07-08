@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
+import com.github.creme332.utils.DesktopApi;
 
 /**
  * A panel that contains control buttons for Canvas. It should be placed on top
@@ -67,6 +68,15 @@ public class CanvasConsole extends JPanel {
         topPanel.add(toolbar);
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
+        // add top padding so that floating tick label on canvas is visible when in
+        // third quadrant
+        topPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
+
+        // add more top padding on windows platform
+        if (DesktopApi.isWindows()) {
+            topPanel.setBorder(new EmptyBorder(25, 0, 0, 0));
+        }
+
         // create toast container to be placed south
         toastContainer.setOpaque(false);
 
@@ -85,7 +95,6 @@ public class CanvasConsole extends JPanel {
         mainPanel.add(toastContainer, BorderLayout.SOUTH);
 
         JPanel eastPanel = new JPanel(new BorderLayout());
-        eastPanel.setBorder(new EmptyBorder(new Insets(0, 0, 0, 20)));
         eastPanel.setOpaque(false);
 
         eastPanel.add(zoomPanel, BorderLayout.SOUTH);
