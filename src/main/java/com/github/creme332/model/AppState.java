@@ -33,7 +33,7 @@ public class AppState {
         MenuModel transformationsMenuModel = new MenuModel(new Mode[] {
                 Mode.REFLECT_ABOUT_LINE,
                 Mode.REFLECT_ABOUT_POINT,
-                Mode.ROTATE_AROUND_POINT,
+                Mode.ROTATE_ABOUT_POINT,
                 Mode.TRANSLATION,
                 Mode.SCALING,
                 Mode.SHEAR
@@ -65,7 +65,7 @@ public class AppState {
         });
 
         MenuModel deletionModel = new MenuModel(new Mode[] {
-                Mode.DELETE, Mode.CLIPPING
+                Mode.DELETE, Mode.CLIP
         });
 
         return new MenuModel[] {
