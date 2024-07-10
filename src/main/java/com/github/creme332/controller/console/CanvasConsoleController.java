@@ -1,6 +1,7 @@
 package com.github.creme332.controller.console;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Timer;
@@ -99,6 +100,14 @@ public class CanvasConsoleController implements PropertyChangeListener {
                     console.setSize(new Dimension(newWidth, console.getHeight()));
                     console.revalidate();
                     console.repaint();
+
+                    /**
+                     * sync toolkit to prevent frame rate issues on linux.
+                     * 
+                     * Reference:
+                     * https://stackoverflow.com/questions/46626715/how-do-i-properly-render-at-a-high-frame-rate-in-pure-java
+                     */
+                    Toolkit.getDefaultToolkit().sync();
                 }
                 sidebarAnimating = false;
 
@@ -145,6 +154,14 @@ public class CanvasConsoleController implements PropertyChangeListener {
                     console.setSize(new Dimension(newWidth, console.getHeight()));
                     console.revalidate();
                     console.repaint();
+
+                    /**
+                     * sync toolkit to prevent frame rate issues on linux.
+                     * 
+                     * Reference:
+                     * https://stackoverflow.com/questions/46626715/how-do-i-properly-render-at-a-high-frame-rate-in-pure-java
+                     */
+                    Toolkit.getDefaultToolkit().sync();
                 }
                 sidebarAnimating = false;
 

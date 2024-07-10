@@ -135,6 +135,14 @@ public class TutorialCenter extends JPanel {
         }
         gridPanel.revalidate();
         gridPanel.repaint();
+
+        /**
+         * sync toolkit to prevent frame rate issues on linux.
+         * 
+         * Reference:
+         * https://stackoverflow.com/questions/46626715/how-do-i-properly-render-at-a-high-frame-rate-in-pure-java
+         */
+        Toolkit.getDefaultToolkit().sync();
     }
 
     private JTextField createSearchField() {
