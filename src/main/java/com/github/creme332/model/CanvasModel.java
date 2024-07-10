@@ -52,6 +52,8 @@ public class CanvasModel {
      */
     private int labelFontSize = 20;
 
+    public static final Color labelForegroundColor = new Color(82, 82, 82);
+
     // define attributes for next shape to be drawn
     private LineType lineType = LineType.SOLID;
     private int lineThickness = 3;

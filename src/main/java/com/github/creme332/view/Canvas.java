@@ -65,7 +65,7 @@ public class Canvas extends JPanel {
             g2.drawLine(0, model.getYZero(), canvasWidth, model.getYZero());
 
         // set tick label color
-        g2.setColor(Color.GRAY);
+        g2.setColor(CanvasModel.labelForegroundColor);
 
         // label center of x axis
         g2.drawString(Integer.toString(0), model.getXZero(), labelYPos);
@@ -158,7 +158,7 @@ public class Canvas extends JPanel {
             g2.drawLine(model.getXZero(), 0, model.getXZero(), canvasHeight); // vertical axis
 
         // set tick label color
-        g2.setColor(Color.GRAY);
+        g2.setColor(CanvasModel.labelForegroundColor);
 
         // label center of vertical axis
         g2.drawString(Integer.toString(0), labelYPos, model.getYZero());
