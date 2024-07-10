@@ -59,7 +59,16 @@ public class SideMenuController {
         CanvasModel canvasModel = app.getCanvasModel();
 
         // New button
-        sidebar.getNewCanvasButton().addActionListener(e -> canvasModel.getShapeManager().reset());
+        sidebar.getNewCanvasButton().addActionListener(e -> {
+            int confirmation = JOptionPane.showConfirmDialog(null,
+                    "Do you want to clear the current canvas? This action is irreversible.",
+                    "Clear canvas",
+                    JOptionPane.OK_CANCEL_OPTION);
+
+            if (confirmation == JOptionPane.YES_OPTION) {
+                canvasModel.getShapeManager().reset();
+            }
+        });
 
         // Export Image button
         sidebar.getExportImageButton().addActionListener(e -> app.startPrintingProcess());
