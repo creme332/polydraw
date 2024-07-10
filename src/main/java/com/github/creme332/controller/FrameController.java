@@ -3,6 +3,7 @@ package com.github.creme332.controller;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ActionEvent;
@@ -240,6 +241,14 @@ public class FrameController implements PropertyChangeListener {
 
         frame.repaint();
         frame.revalidate();
+        
+        /**
+         * sync toolkit to prevent frame rate issues on linux.
+         * 
+         * Reference:
+         * https://stackoverflow.com/questions/46626715/how-do-i-properly-render-at-a-high-frame-rate-in-pure-java
+         */
+        Toolkit.getDefaultToolkit().sync();
     }
 
     public void playStartAnimation() {
