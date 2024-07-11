@@ -63,7 +63,7 @@ public class SideMenuController {
             int confirmation = JOptionPane.showConfirmDialog(null,
                     "Do you want to clear the current canvas? This action is irreversible.",
                     "Clear canvas",
-                    JOptionPane.OK_CANCEL_OPTION);
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
             if (confirmation == JOptionPane.YES_OPTION) {
                 canvasModel.getShapeManager().reset();
@@ -119,16 +119,23 @@ public class SideMenuController {
 
         // Reset button
         sidebar.getResetButton().addActionListener(e -> {
-            // Reset guidelines checkbox and model
-            if (sidebar.getGridLinesCheckBox().isSelected()) {
-                sidebar.getGridLinesCheckBox().setSelected(false);
-                canvasModel.setGuidelinesEnabled(true);
-            }
+            int confirmation = JOptionPane.showConfirmDialog(null,
+                    "Do you want to reset the canvas settings to its default values? This action is irreversible.",
+                    "Reset canvas settings",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
-            // Reset axes checkbox and model
-            if (sidebar.getAxesCheckBox().isSelected()) {
-                sidebar.getAxesCheckBox().setSelected(false);
-                canvasModel.setAxesVisible(true);
+            if (confirmation == JOptionPane.YES_OPTION) {
+                // Reset guidelines checkbox and model
+                if (sidebar.getGridLinesCheckBox().isSelected()) {
+                    sidebar.getGridLinesCheckBox().setSelected(false);
+                    canvasModel.setGuidelinesEnabled(true);
+                }
+
+                // Reset axes checkbox and model
+                if (sidebar.getAxesCheckBox().isSelected()) {
+                    sidebar.getAxesCheckBox().setSelected(false);
+                    canvasModel.setAxesVisible(true);
+                }
             }
         });
     }
