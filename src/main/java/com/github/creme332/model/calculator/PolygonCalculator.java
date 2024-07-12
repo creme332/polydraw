@@ -8,29 +8,48 @@ import java.util.Map;
 
 public class PolygonCalculator {
 
+    /**
+     * Caches coordinates regular polygons previously calculated.
+     */
     private final Map<Map.Entry<Integer, Integer>, Shape> polygonCache = new HashMap<>();
 
-    public Point2D.Double rotateVector(Point2D.Double point, double radAngle) {
+    /**
+     * Rotates a point in the xy plane counterclockwise through an angle radAngle
+     * about the origin.
+     * 
+     * @param point    A point in the x-y plane.
+     * @param radAngle Rotation angle in radians.
+     * @return
+     */
+    public Point2D.Double rotatePoint(Point2D.Double point, double radAngle) {
         return new Point2D.Double(
                 point.x * Math.cos(radAngle) - point.y * Math.sin(radAngle),
                 point.x * Math.sin(radAngle) + point.y * Math.cos(radAngle));
     }
 
+    /**
+     * Calculates coordinates of a regular polygon centered at origin.
+     * 
+     * @param sidesCount Number of sides in polygon
+     * @param length     Side length of polygon
+     * @return
+     */
     private Shape getRegularPolygon(int sidesCount, int length) {
         if (polygonCache.containsKey(Map.entry(sidesCount, length))) {
             return polygonCache.get(Map.entry(sidesCount, length));
         }
 
-        double rotationAngle = Math.toRadians(360.0 / sidesCount);
+        final double rotationAngleInRad = Math.toRadians(360.0 / sidesCount);
         Point2D.Double[] points = new Point2D.Double[sidesCount];
 
         points[0] = new Point2D.Double(
-                length * Math.sin(rotationAngle / 2),
-                length * Math.cos(rotationAngle / 2));
+                length * Math.sin(rotationAngleInRad / 2),
+                length * Math.cos(rotationAngleInRad / 2));
 
         for (int i = 1; i < sidesCount; i++) {
+            // rotate the previous point by the required angle
             Point2D.Double vector = new Point2D.Double(points[i - 1].x, points[i - 1].y);
-            Point2D.Double rotatedVector = rotateVector(vector, rotationAngle);
+            Point2D.Double rotatedVector = rotatePoint(vector, rotationAngleInRad);
             points[i] = new Point2D.Double(rotatedVector.x, rotatedVector.y);
         }
 
@@ -46,6 +65,15 @@ public class PolygonCalculator {
         return polygon;
     }
 
+    /**
+     * Calculates integer coordinates of a regular polygon.
+     * 
+     * @param sidesCount number of sides
+     * @param length     side length of polygon
+     * @param centerX    x-coordinate of center of polygon
+     * @param centerY    y-coordinate of center of polygon
+     * @return
+     */
     public int[][] getOrderedPoints(int sidesCount, int length, int centerX, int centerY) {
         Shape polygon = getRegularPolygon(sidesCount, length);
         Polygon poly = (Polygon) polygon;
