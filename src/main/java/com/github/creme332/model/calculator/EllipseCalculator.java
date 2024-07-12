@@ -308,7 +308,23 @@ public class EllipseCalculator {
     if ((int) rx == 0 || (int) ry == 0)
       return new int[][] {};
 
-    return getOrderedPoints((int) center.getX(), (int) center.getY(),
+    int[][] points = getOrderedPoints((int) center.getX(), (int) center.getY(),
         (int) rx, (int) ry);
+
+    /**
+     * Angle which the semi-major axis makes with the horizontal.
+     */
+    final double inclinationAngle = (Math.atan2(secondFocus.getY() - firstFocus.getY(),
+        secondFocus.getX() - firstFocus.getX()));
+
+    // rotate calculated points based on inclination
+    for (int i = 0; i < points[0].length; i++) {
+      Point2D vector = new Point2D.Double(points[0][i] - center.getX(), points[1][i] - center.getY());
+      vector = PolygonCalculator.rotateVector(vector, inclinationAngle);
+      points[0][i] = (int) (vector.getX() + center.getX());
+      points[1][i] = (int) (vector.getY() + center.getY());
+    }
+
+    return points;
   }
 }
