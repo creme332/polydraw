@@ -14,17 +14,17 @@ public class PolygonCalculator {
     private final Map<Map.Entry<Integer, Integer>, Shape> polygonCache = new HashMap<>();
 
     /**
-     * Rotates a point in the xy plane counterclockwise through an angle radAngle
+     * Rotates a vector in the xy plane counterclockwise through an angle radAngle
      * about the origin.
      * 
-     * @param point    A point in the x-y plane.
+     * @param vector   A point in the x-y plane.
      * @param radAngle Rotation angle in radians.
      * @return
      */
-    public Point2D.Double rotatePoint(Point2D.Double point, double radAngle) {
+    public static Point2D rotateVector(Point2D vector, double radAngle) {
         return new Point2D.Double(
-                point.x * Math.cos(radAngle) - point.y * Math.sin(radAngle),
-                point.x * Math.sin(radAngle) + point.y * Math.cos(radAngle));
+                vector.getX() * Math.cos(radAngle) - vector.getY() * Math.sin(radAngle),
+                vector.getX() * Math.sin(radAngle) + vector.getY() * Math.cos(radAngle));
     }
 
     /**
@@ -49,8 +49,8 @@ public class PolygonCalculator {
         for (int i = 1; i < sidesCount; i++) {
             // rotate the previous point by the required angle
             Point2D.Double vector = new Point2D.Double(points[i - 1].x, points[i - 1].y);
-            Point2D.Double rotatedVector = rotatePoint(vector, rotationAngleInRad);
-            points[i] = new Point2D.Double(rotatedVector.x, rotatedVector.y);
+            Point2D rotatedVector = rotateVector(vector, rotationAngleInRad);
+            points[i] = new Point2D.Double(rotatedVector.getX(), rotatedVector.getY());
         }
 
         int[] x = new int[sidesCount];
