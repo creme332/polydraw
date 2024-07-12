@@ -18,7 +18,8 @@ public enum Mode {
     DRAW_CIRCLE_FIXED("Circle: Center & Radius", "Select center point, then enter radius",
             loadSVGIcon("/icons/circle-radius.svg")),
 
-    DRAW_ELLIPSE("Ellipse", "Select two foci, then point on ellipse", loadSVGIcon("/icons/ellipse.svg")),
+    DRAW_ELLIPSE("Ellipse with Foci through Point", "Select two foci, then point on ellipse", loadSVGIcon("/icons/ellipse.svg")),
+    DRAW_ELLIPSE_FIXED("Ellipse: Foci & Radius", "Select two foci, then enter radii", loadSVGIcon("/icons/ellipse-foci.svg")),
 
     DRAW_POLYGON_DYNAMIC("Polygon", "Select all vertices, then first vertex again",
             loadSVGIcon("/icons/triangle.svg")),

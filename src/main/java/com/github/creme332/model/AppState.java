@@ -46,7 +46,8 @@ public class AppState {
         });
 
         MenuModel ellipseMenuModel = new MenuModel(new Mode[] {
-                Mode.DRAW_ELLIPSE });
+                Mode.DRAW_ELLIPSE,
+                Mode.DRAW_ELLIPSE_FIXED });
 
         MenuModel circleMenuModel = new MenuModel(new Mode[] {
                 Mode.DRAW_CIRCLE_DYNAMIC,
