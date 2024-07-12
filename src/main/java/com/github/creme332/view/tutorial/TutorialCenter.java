@@ -5,6 +5,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +31,22 @@ public class TutorialCenter extends JPanel {
      */
     private JPanel screenContainer = new JPanel(cl);
 
-    JPanel tutorialGrid;
+    /**
+     * Container for tutorial cards and search bar.
+     */
+    JPanel mainTutorialScreen;
 
     public static final String SEARCH_PLACEHOLDER = "Search Polydraw Tutorials";
+
+    /**
+     * Number of columns in tutorial card grid.
+     */
+    int gridColCount = 2;
+
+    /**
+     * Gap between tutorial cards
+     */
+    static final int TUTORIAL_CARD_GAP = 50;
 
     public TutorialCenter() {
         setLayout(new BorderLayout());
@@ -40,7 +55,7 @@ public class TutorialCenter extends JPanel {
         initTutorialCards();
         createTutorialListGrid();
 
-        screenContainer.add(tutorialGrid, "tutorialCenter");
+        screenContainer.add(mainTutorialScreen, "tutorialCenter");
 
         // add tutorials
         for (AbstractTutorial screen : tutorialScreens) {
@@ -48,6 +63,16 @@ public class TutorialCenter extends JPanel {
         }
 
         add(screenContainer);
+
+        mainTutorialScreen.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                gridColCount = (int) Math
+                        .floor(mainTutorialScreen.getWidth() / (TutorialCard.DIMENSION.getWidth() + TUTORIAL_CARD_GAP));
+                gridColCount = Math.max(gridColCount, 1);
+                refreshGrid(getTutorialCards());
+            }
+        });
     }
 
     public void showTutorial(String tutorialName) {
@@ -78,12 +103,12 @@ public class TutorialCenter extends JPanel {
      * Must be called after initTutorialCards.
      */
     private void createTutorialListGrid() {
-        tutorialGrid = new JPanel();
-        tutorialGrid.setLayout(new BorderLayout());
+        mainTutorialScreen = new JPanel();
+        mainTutorialScreen.setLayout(new BorderLayout());
 
         // Create the top panel with back button and search field
         JPanel topPanel = new JPanel(new BorderLayout());
-        tutorialGrid.add(topPanel, BorderLayout.NORTH);
+        mainTutorialScreen.add(topPanel, BorderLayout.NORTH);
         topPanel.setBorder(new EmptyBorder(new Insets(10, 0, 0, 0)));
 
         // create top panel components
@@ -103,19 +128,15 @@ public class TutorialCenter extends JPanel {
 
         // Wrap gridPanel in a JScrollPane to make it scrollable
         JScrollPane scrollPane = new JScrollPane(gridPanel);
-        scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        tutorialGrid.add(scrollPane, BorderLayout.CENTER);
+        mainTutorialScreen.add(scrollPane, BorderLayout.CENTER);
     }
 
     public void refreshGrid(List<TutorialCard> visibleTutorialCards) {
-        final int COL_COUNT = 2;
-
         gridPanel.removeAll();
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0, 50, 50, 0);
+        gbc.insets = new Insets(0, TUTORIAL_CARD_GAP, TUTORIAL_CARD_GAP, 0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         int row = 0;
@@ -128,7 +149,7 @@ public class TutorialCenter extends JPanel {
             gridPanel.add(card, gbc);
 
             col++;
-            if (col == COL_COUNT) {
+            if (col == gridColCount) {
                 col = 0;
                 row++;
             }
