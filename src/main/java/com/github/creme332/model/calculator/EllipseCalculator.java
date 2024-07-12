@@ -1,5 +1,6 @@
 package com.github.creme332.model.calculator;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,8 +51,8 @@ public class EllipseCalculator {
    * @param centerX x-coordinate of circle center
    * @param centerY y-coordinate of circle center
    * @param radius  radius of circle
-   * @return 2 arrays. The first array is the list of x-coordinates and the second
-   *         array is a list of y-coordinates.
+   * @return A list of 2 arrays where tThe first array is the list of
+   *         x-coordinates and the second array is a list of y-coordinates.
    */
   public int[][] getOrderedPoints(int centerX, int centerY, int rx, int ry) {
     /**
@@ -94,8 +95,8 @@ public class EllipseCalculator {
    * @param centerX x-coordinate of circle center
    * @param centerY y-coordinate of circle center
    * @param radius  radius of circle
-   * @return 2 arrays. The first array is the list of x-coordinates and the second
-   *         array is a list of y-coordinates.
+   * @return A list of 2 arrays where tThe first array is the list of
+   *         x-coordinates and the second array is a list of y-coordinates.
    */
   public List<List<Integer>> getFirstQuadrantPoints(int rx, int ry) {
     if (rx <= 0 || ry <= 0) {
@@ -254,5 +255,60 @@ public class EllipseCalculator {
 
   private static void addPixel(List<int[]> pixels, int x, int y) {
     pixels.add(new int[] { x, y });
+  }
+
+  /**
+   * Calculates integer pixel coordinates of an ellipse given its foci and a third
+   * point on the ellipse.
+   * 
+   * @param firstFocus  Coordinates of first focus of ellipse
+   * @param secondFocus Coordinates of second focus of ellipse
+   * @param thirdPoint  Coordinates of a point on the ellipse
+   * @return A list of 2 arrays where tThe first array is the list of
+   *         x-coordinates and the second array is a list of y-coordinates.
+   */
+  public int[][] getOrderedPoints(Point2D firstFocus, Point2D secondFocus, Point2D thirdPoint) {
+    /**
+     * Coordinates of center of ellipse.
+     */
+    final Point2D center = new Point2D.Double((firstFocus.getX() + secondFocus.getX()) / 2,
+        (firstFocus.getY() + secondFocus.getY()) / 2);
+
+    /**
+     * Distance between first focus and current mouse position
+     */
+    final double d1 = Math.abs(firstFocus.distance(thirdPoint));
+
+    /**
+     * Distance between second focus and current mouse position
+     */
+    final double d2 = Math.abs(secondFocus.distance(thirdPoint));
+
+    /**
+     * Length of semi-major axis obtained from definition of ellipse as locus of
+     * points: |P F2| + |P F1| = 2 rx.
+     * 
+     * Reference:
+     * https://en.wikipedia.org/wiki/Ellipse#Definition_as_locus_of_points
+     */
+    final double rx = (d1 + d2) / 2;
+
+    /**
+     * Distance between the 2 foci.
+     */
+    final double linearEccentricity = (firstFocus.distance(secondFocus)) / 2;
+
+    /**
+     * Length of semi-minor axis calculated using eccentricity formula.
+     * 
+     * Reference: https://en.wikipedia.org/wiki/Ellipse#Eccentricity
+     */
+    final double ry = Math.sqrt(Math.pow(rx, 2) - Math.pow(linearEccentricity, 2));
+
+    if ((int) rx == 0 || (int) ry == 0)
+      return new int[][] {};
+
+    return getOrderedPoints((int) center.getX(), (int) center.getY(),
+        (int) rx, (int) ry);
   }
 }

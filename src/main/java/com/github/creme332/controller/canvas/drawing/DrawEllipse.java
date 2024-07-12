@@ -20,20 +20,16 @@ public class DrawEllipse extends AbstractDrawer {
     public void handleMouseMoved(Point2D polySpaceMousePosition) {
         if (getCanvasMode() == Mode.DRAW_ELLIPSE && preview != null
                 && preview.getPlottedPoints().size() == 2) {
-            // create an ellipse
-            Point2D center = preview.getPlottedPoints().get(0);
-            int ry = (int) Math.abs(preview.getPlottedPoints().get(1).distance(center));
-            int rx = (int) Math.abs(polySpaceMousePosition.distance(center));
 
-            if (rx == 0 || ry == 0) {
-                return;
+            final Point2D firstFocus = preview.getPlottedPoints().get(0);
+            final Point2D secondFocus = preview.getPlottedPoints().get(1);
+
+            int[][] coordinates = ellipseCalculator.getOrderedPoints(firstFocus, secondFocus, polySpaceMousePosition);
+            if (coordinates.length == 2) {
+                Polygon ellipse = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
+                preview.setShape(ellipse);
+                canvas.repaint();
             }
-
-            int[][] coordinates = ellipseCalculator.getOrderedPoints((int) center.getX(), (int) center.getY(),
-                    rx, ry);
-            Polygon ellipse = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
-            preview.setShape(ellipse);
-            canvas.repaint();
         }
     }
 
