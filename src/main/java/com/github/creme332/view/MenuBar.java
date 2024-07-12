@@ -19,6 +19,7 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Mode;
+import com.github.creme332.view.common.RoundedMenu;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
