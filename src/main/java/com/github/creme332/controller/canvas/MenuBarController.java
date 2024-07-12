@@ -89,23 +89,12 @@ public class MenuBarController implements PropertyChangeListener {
             }
         });
 
-        menubar.getRedoButton().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                app.getCanvasModel().getShapeManager().redo();
-            }
-        });
-
-        menubar.getUndoButton().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                app.getCanvasModel().getShapeManager().undo();
-            }
-        });
+        menubar.handleRedo(e -> app.getCanvasModel().getShapeManager().redo());
+        menubar.handleUndo(e -> app.getCanvasModel().getShapeManager().undo());
 
         menubar.getHelpButton().addActionListener(e -> app.switchScreen(Screen.TUTORIAL_SCREEN));
-        menubar.getRedoButton().setEnabled(app.getCanvasModel().getShapeManager().isRedoPossible());
-        menubar.getUndoButton().setEnabled(app.getCanvasModel().getShapeManager().isUndoPossible());
+        menubar.setRedoEnabled(app.getCanvasModel().getShapeManager().isRedoPossible());
+        menubar.setUndoEnabled(app.getCanvasModel().getShapeManager().isUndoPossible());
     }
 
     @Override
@@ -145,8 +134,8 @@ public class MenuBarController implements PropertyChangeListener {
 
         if (ShapeManager.STATE_CHANGE_PROPERTY_NAME.equals(propertyName)) {
             // shapes on canvas were modified => disable/enable undo and redo buttons
-            menubar.getRedoButton().setEnabled(app.getCanvasModel().getShapeManager().isRedoPossible());
-            menubar.getUndoButton().setEnabled(app.getCanvasModel().getShapeManager().isUndoPossible());
+            menubar.setRedoEnabled(app.getCanvasModel().getShapeManager().isRedoPossible());
+            menubar.setUndoEnabled(app.getCanvasModel().getShapeManager().isUndoPossible());
         }
     }
 }
