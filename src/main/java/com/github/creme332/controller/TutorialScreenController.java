@@ -116,8 +116,7 @@ public class TutorialScreenController {
     private void handleSearch() {
         final String searchQuery = view.getSearchField().getText().trim();
 
-        final boolean showAllCards = searchQuery.length() < 3 ||
-                searchQuery.equals(TutorialCenter.SEARCH_PLACEHOLDER)
+        final boolean showAllCards = searchQuery.length() < 3
                 || searchQuery.isEmpty();
 
         if (showAllCards) {

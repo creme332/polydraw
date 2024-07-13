@@ -10,6 +10,8 @@ import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.common.BackButton;
@@ -35,8 +37,6 @@ public class TutorialCenter extends JPanel {
      * Container for tutorial cards and search bar.
      */
     JPanel mainTutorialScreen;
-
-    public static final String SEARCH_PLACEHOLDER = "Search Polydraw Tutorials";
 
     /**
      * Number of columns in tutorial card grid.
@@ -115,7 +115,11 @@ public class TutorialCenter extends JPanel {
         backButton = new BackButton();
         topPanel.add(backButton, BorderLayout.WEST);
 
-        searchField = createSearchField();
+        // create search field
+        searchField = new JTextField();
+        searchField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSearchIcon());
+        searchField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search tutorial");
         topPanel.add(searchField, BorderLayout.CENTER);
 
         // Create the grid panel to hold GridItems
@@ -164,31 +168,6 @@ public class TutorialCenter extends JPanel {
          * https://stackoverflow.com/questions/46626715/how-do-i-properly-render-at-a-high-frame-rate-in-pure-java
          */
         Toolkit.getDefaultToolkit().sync();
-    }
-
-    private JTextField createSearchField() {
-        JTextField field = new JTextField(SEARCH_PLACEHOLDER, 100);
-        field.setForeground(Color.GRAY);
-
-        field.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (field.getText().equals(SEARCH_PLACEHOLDER)) {
-                    field.setText("");
-                    field.setForeground(Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (field.getText().isEmpty()) {
-                    field.setForeground(Color.GRAY);
-                    field.setText(SEARCH_PLACEHOLDER);
-                }
-            }
-        });
-
-        return field;
     }
 
     public JButton getBackButton() {
