@@ -38,7 +38,7 @@ public class CanvasModel {
 
     public static final int MAX_CELL_SIZE = 500;
     public static final int MIN_CELL_SIZE = 1;
-    public static final int DEFAULT_CELL_SIZE = 100;
+    public static final int DEFAULT_CELL_SIZE = 10;
     public static final int ZOOM_INCREMENT = 1;
 
     /**
