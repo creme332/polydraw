@@ -329,52 +329,36 @@ public class EllipseCalculator {
   }
 
   /**
-   * Calculates integer pixel coordinates of an ellipse given its foci and a fixed
-   * radius.
+   * Calculates integer pixel coordinates of an ellipse given its foci and fixed
+   * radii.
    *
    * @param firstFocus  Coordinates of the first focus of the ellipse
    * @param secondFocus Coordinates of the second focus of the ellipse
-   * @param radius      The fixed radius of the ellipse
-   * @return A list of 2 arrays where the first array is the list of
-   *         x-coordinates and the second array is a list of y-coordinates.
+   * @param rx          Radius along the x-axis (horizontal radius)
+   * @param ry          Radius along the y-axis (vertical radius)
+   * @return A list of 2 arrays where the first array is the list of x-coordinates
+   *         and the second array is a list of y-coordinates.
    */
-  public int[][] getOrderedPointsWithRadius(Point2D firstFocus, Point2D secondFocus, int radius) {
+  public int[][] getOrderedPointsWithRadius(Point2D firstFocus, Point2D secondFocus, int rx, int ry) {
     /**
      * Coordinates of the center of the ellipse.
      */
     final Point2D center = new Point2D.Double((firstFocus.getX() + secondFocus.getX()) / 2,
         (firstFocus.getY() + secondFocus.getY()) / 2);
 
-    /**
-     * Distance between the two foci.
-     */
-    final double linearEccentricity = (firstFocus.distance(secondFocus)) / 2;
+    if (rx <= 0 || ry <= 0) {
+      throw new IllegalArgumentException("Radii must be positive values.");
+    }
 
-    /**
-     * Length of the semi-major axis is the fixed radius provided by the user.
-     */
-    final double rx = radius;
-
-    /**
-     * Length of the semi-minor axis calculated using the eccentricity formula.
-     *
-     * Reference: https://en.wikipedia.org/wiki/Ellipse#Eccentricity
-     */
-    final double ry = Math.sqrt(Math.pow(rx, 2) - Math.pow(linearEccentricity, 2));
-
-    if ((int) rx == 0 || (int) ry == 0)
-      return new int[][] {};
-
-    int[][] points = getOrderedPoints((int) center.getX(), (int) center.getY(),
-        (int) rx, (int) ry);
+    int[][] points = getOrderedPoints((int) center.getX(), (int) center.getY(), rx, ry);
 
     /**
      * Angle which the semi-major axis makes with the horizontal.
      */
-    final double inclinationAngle = (Math.atan2(secondFocus.getY() - firstFocus.getY(),
-        secondFocus.getX() - firstFocus.getX()));
+    final double inclinationAngle = Math.atan2(secondFocus.getY() - firstFocus.getY(),
+        secondFocus.getX() - firstFocus.getX());
 
-    // rotate calculated points based on inclination
+    // Rotate calculated points based on inclination
     for (int i = 0; i < points[0].length; i++) {
       Point2D vector = new Point2D.Double(points[0][i] - center.getX(), points[1][i] - center.getY());
       vector = PolygonCalculator.rotateVector(vector, inclinationAngle);

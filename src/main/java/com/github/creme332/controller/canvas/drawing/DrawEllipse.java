@@ -85,17 +85,17 @@ public class DrawEllipse extends AbstractDrawer {
                 // Second focus has been selected
                 preview.getPlottedPoints().add(polySpaceMousePosition);
 
-                // Ask user for the radius
-                int radius = inputRadius();
+                // Ask user for the radii
+                int[] radii = inputRadii();
 
-                if (radius <= 0) {
+                if (radii == null || radii[0] <= 0 || radii[1] <= 0) {
                     disposePreview();
                     return;
                 }
 
                 final Point2D firstFocus = preview.getPlottedPoints().get(0);
                 final Point2D secondFocus = preview.getPlottedPoints().get(1);
-                int[][] coordinates = ellipseCalculator.getOrderedPointsWithRadius(firstFocus, secondFocus, radius);
+                int[][] coordinates = ellipseCalculator.getOrderedPointsWithRadius(firstFocus, secondFocus, radii[0], radii[1]);
 
                 if (coordinates.length == 2) {
                     Polygon ellipse = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
@@ -116,16 +116,19 @@ public class DrawEllipse extends AbstractDrawer {
     }
 
     /**
-     * Asks user to enter the radius for the ellipse. If input value is invalid
-     * or if the operation is cancelled, -1 is returned.
+     * Asks user to enter the radii for the ellipse. If input values are invalid
+     * or if the operation is cancelled, null is returned.
      * 
-     * @return radius
+     * @return array with radii [rx, ry]
      */
-    private int inputRadius() {
-        JTextField radiusField = new JTextField(5);
+    private int[] inputRadii() {
+        JTextField rxField = new JTextField(5);
+        JTextField ryField = new JTextField(5);
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Radius:"));
-        panel.add(radiusField);
+        panel.add(new JLabel("Radius X:"));
+        panel.add(rxField);
+        panel.add(new JLabel("Radius Y:"));
+        panel.add(ryField);
 
         int result = JOptionPane.showConfirmDialog(null, panel, "Ellipse: Foci & Radius", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
@@ -135,11 +138,13 @@ public class DrawEllipse extends AbstractDrawer {
 
         if (result == JOptionPane.OK_OPTION) {
             try {
-                return Integer.parseInt(radiusField.getText());
+                int rx = Integer.parseInt(rxField.getText());
+                int ry = Integer.parseInt(ryField.getText());
+                return new int[]{rx, ry};
             } catch (NumberFormatException e) {
-                return -1;
+                return null;
             }
         }
-        return -1;
+        return null;
     }
 }
