@@ -7,6 +7,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
@@ -25,9 +26,10 @@ public class CanvasConsoleController implements PropertyChangeListener {
     private CanvasModel model;
 
     /**
-     * Whether sidebar animation is in progress.
+     * A lock that ensures that the animations for opening and closing the sidebar
+     * do not occur simultaneously if sidebar button is spammed.
      */
-    private boolean sidebarAnimating = false;
+    private ReentrantLock sidebarAnimating = new ReentrantLock();
 
     public CanvasConsoleController(AppState app, CanvasConsole console) {
         this.console = console;
@@ -70,9 +72,6 @@ public class CanvasConsoleController implements PropertyChangeListener {
      * that the sidebar which was initially out of frame becomes visible.
      */
     private void animateSidebarOpen() {
-        if (sidebarAnimating)
-            return;
-        sidebarAnimating = true;
         /**
          * Speed at which sidebar opens in pixels per nanosecond.
          */
@@ -90,6 +89,7 @@ public class CanvasConsoleController implements PropertyChangeListener {
         Thread th = new Thread() {
             @Override
             public void run() {
+                sidebarAnimating.lock();
                 for (int i = initialWidth; i >= finalWidth; i -= openingSpeed) {
                     try {
                         TimeUnit.NANOSECONDS.sleep(1);
@@ -109,7 +109,7 @@ public class CanvasConsoleController implements PropertyChangeListener {
                      */
                     Toolkit.getDefaultToolkit().sync();
                 }
-                sidebarAnimating = false;
+                sidebarAnimating.unlock();
 
                 // request focus again otherwise keyboard shortcuts will stop working after
                 console.getTopLevelAncestor().requestFocus();
@@ -123,9 +123,6 @@ public class CanvasConsoleController implements PropertyChangeListener {
      * that the sidebar becomes hidden (since sidebar moves out of frame).
      */
     private void animateSidebarClose() {
-        if (sidebarAnimating)
-            return;
-        sidebarAnimating = true;
         /**
          * Speed at which sidebar closes in pixels per nanosecond.
          */
@@ -144,6 +141,7 @@ public class CanvasConsoleController implements PropertyChangeListener {
         Thread th = new Thread() {
             @Override
             public void run() {
+                sidebarAnimating.lock();
                 for (int i = initialWidth; i <= finalWidth; i += closingSpeed) {
                     try {
                         TimeUnit.NANOSECONDS.sleep(1);
@@ -163,7 +161,7 @@ public class CanvasConsoleController implements PropertyChangeListener {
                      */
                     Toolkit.getDefaultToolkit().sync();
                 }
-                sidebarAnimating = false;
+                sidebarAnimating.unlock();
 
                 // request focus again otherwise keyboard shortcuts will stop working after
                 console.getTopLevelAncestor().requestFocus();
