@@ -97,7 +97,6 @@ public class SideMenuController {
             @Override
             public void mousePressed(MouseEvent e) {
                 canvasModel.setGuidelinesEnabled(!canvasModel.isGuidelinesEnabled());
-                sidebar.getGridLinesCheckBox().setSelected(canvasModel.isGuidelinesEnabled());
             }
         });
 
@@ -106,7 +105,6 @@ public class SideMenuController {
             @Override
             public void mousePressed(MouseEvent e) {
                 canvasModel.setAxesVisible(!canvasModel.isAxesVisible());
-                sidebar.getAxesCheckBox().setSelected(canvasModel.isAxesVisible());
             }
         });
 
