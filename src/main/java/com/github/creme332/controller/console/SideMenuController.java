@@ -28,14 +28,13 @@ public class SideMenuController {
             """;
 
     private SideMenuPanel sidebar;
+    private AppState app;
 
     public SideMenuController(AppState app, SideMenuPanel sidebar) {
+        this.app = app;
         this.sidebar = sidebar;
 
-        // set default values in canvas settings
-        sidebar.getGridLinesCheckBox().setSelected(app.getCanvasModel().isGuidelinesEnabled());
-        sidebar.getAxesCheckBox().setSelected(app.getCanvasModel().isAxesVisible());
-        sidebar.getFontSizeSelector().setSelectedItem(String.format("%d", app.getCanvasModel().getLabelFontSize()));
+        refreshCanvasSettingsUI();
 
         // Initialize button listeners
         initializeButtonListeners(app);
@@ -53,6 +52,16 @@ public class SideMenuController {
                 e.consume();
             }
         });
+    }
+
+    /**
+     * Updates default values in canvas settings to match values from canvas model
+     */
+    public void refreshCanvasSettingsUI() {
+        // set default values in canvas settings
+        sidebar.getGridLinesCheckBox().setSelected(app.getCanvasModel().isGuidelinesEnabled());
+        sidebar.getAxesCheckBox().setSelected(app.getCanvasModel().isAxesVisible());
+        sidebar.getFontSizeSelector().setSelectedItem(String.format("%d", app.getCanvasModel().getLabelFontSize()));
     }
 
     private void initializeButtonListeners(AppState app) {
@@ -123,17 +132,27 @@ public class SideMenuController {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
             if (confirmation == JOptionPane.YES_OPTION) {
+                boolean settingsChanged = false;
                 // Reset guidelines checkbox and model
-                if (sidebar.getGridLinesCheckBox().isSelected()) {
-                    sidebar.getGridLinesCheckBox().setSelected(false);
+                if (!canvasModel.isGuidelinesEnabled()) {
+                    settingsChanged = true;
                     canvasModel.setGuidelinesEnabled(true);
                 }
 
                 // Reset axes checkbox and model
-                if (sidebar.getAxesCheckBox().isSelected()) {
-                    sidebar.getAxesCheckBox().setSelected(false);
+                if (!canvasModel.isAxesVisible()) {
+                    settingsChanged = true;
                     canvasModel.setAxesVisible(true);
                 }
+
+                // Reset font size
+                if (canvasModel.getLabelFontSize() != CanvasModel.DEFAULT_LABEL_FONT_SIZE) {
+                    settingsChanged = true;
+                    canvasModel.setLabelFontSize(CanvasModel.DEFAULT_LABEL_FONT_SIZE);
+                }
+
+                if (settingsChanged)
+                    refreshCanvasSettingsUI();
             }
         });
     }

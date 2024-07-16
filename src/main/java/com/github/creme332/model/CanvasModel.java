@@ -47,10 +47,12 @@ public class CanvasModel {
      */
     int cellSize = Math.max(MIN_CELL_SIZE, Math.min(DEFAULT_CELL_SIZE, MAX_CELL_SIZE));
 
+    public static final int DEFAULT_LABEL_FONT_SIZE = 20;
+
     /**
      * Font size of labels on canvas in pixels.
      */
-    private int labelFontSize = 20;
+    private int labelFontSize = DEFAULT_LABEL_FONT_SIZE;
 
     public static final Color labelForegroundColor = new Color(82, 82, 82);
 
