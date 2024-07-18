@@ -50,8 +50,9 @@ public class EllipseCalculator {
    * 
    * @param centerX x-coordinate of circle center
    * @param centerY y-coordinate of circle center
-   * @param radius  radius of circle
-   * @return A list of 2 arrays where tThe first array is the list of
+   * @param rx      radius along the x-axis
+   * @param ry      radius along the y-axis
+   * @return A list of 2 arrays where the first array is the list of
    *         x-coordinates and the second array is a list of y-coordinates.
    */
   public int[][] getOrderedPoints(int centerX, int centerY, int rx, int ry) {
@@ -92,10 +93,9 @@ public class EllipseCalculator {
    * Calculates coordinates of circle starting from top and moving clockwise.
    * Points are ordered clockwise. Duplicate points may occur at x==0 and x==y.
    * 
-   * @param centerX x-coordinate of circle center
-   * @param centerY y-coordinate of circle center
-   * @param radius  radius of circle
-   * @return A list of 2 arrays where tThe first array is the list of
+   * @param rx radius along the x-axis
+   * @param ry radius along the y-axis
+   * @return A list of 2 arrays where the first array is the list of
    *         x-coordinates and the second array is a list of y-coordinates.
    */
   public List<List<Integer>> getFirstQuadrantPoints(int rx, int ry) {
@@ -327,4 +327,46 @@ public class EllipseCalculator {
 
     return points;
   }
+
+  /**
+   * Calculates integer pixel coordinates of an ellipse given its foci and fixed
+   * radii.
+   *
+   * @param firstFocus  Coordinates of the first focus of the ellipse
+   * @param secondFocus Coordinates of the second focus of the ellipse
+   * @param rx          Radius along the x-axis (horizontal radius)
+   * @param ry          Radius along the y-axis (vertical radius)
+   * @return A list of 2 arrays where the first array is the list of x-coordinates
+   *         and the second array is a list of y-coordinates.
+   */
+  public int[][] getOrderedPointsWithRadius(Point2D firstFocus, Point2D secondFocus, int rx, int ry) {
+    /**
+     * Coordinates of the center of the ellipse.
+     */
+    final Point2D center = new Point2D.Double((firstFocus.getX() + secondFocus.getX()) / 2,
+        (firstFocus.getY() + secondFocus.getY()) / 2);
+
+    if (rx <= 0 || ry <= 0) {
+      throw new IllegalArgumentException("Radii must be positive values.");
+    }
+
+    int[][] points = getOrderedPoints((int) center.getX(), (int) center.getY(), rx, ry);
+
+    /**
+     * Angle which the semi-major axis makes with the horizontal.
+     */
+    final double inclinationAngle = Math.atan2(secondFocus.getY() - firstFocus.getY(),
+        secondFocus.getX() - firstFocus.getX());
+
+    // Rotate calculated points based on inclination
+    for (int i = 0; i < points[0].length; i++) {
+      Point2D vector = new Point2D.Double(points[0][i] - center.getX(), points[1][i] - center.getY());
+      vector = PolygonCalculator.rotateVector(vector, inclinationAngle);
+      points[0][i] = (int) (vector.getX() + center.getX());
+      points[1][i] = (int) (vector.getY() + center.getY());
+    }
+
+    return points;
+  }
+
 }
