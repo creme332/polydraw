@@ -11,6 +11,9 @@ import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
 import com.github.creme332.view.Canvas;
 
+/**
+ * A template class for performing transformations on shapes.
+ */
 public abstract class AbstractTransformer {
     protected Canvas canvas;
     protected CanvasModel canvasModel;
@@ -33,6 +36,25 @@ public abstract class AbstractTransformer {
                 handleShapeSelection(selectedShapeIndex);
             }
         });
+
+        canvas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (!shouldDraw())
+                    return;
+                handleMousePressed(canvasModel.toPolySpace(e.getPoint()));
+            }
+        });
+    }
+
+    /**
+     * Called when user clicks on a coordinate on the canvas. You should override
+     * this class if you want to handle mouse clicks.
+     * 
+     * @param polySpaceMousePosition Coordinate of mouse click in polyspace.
+     */
+    protected void handleMousePressed(Point2D polySpaceMousePosition) {
+        // do nothing by default
     }
 
     /**
