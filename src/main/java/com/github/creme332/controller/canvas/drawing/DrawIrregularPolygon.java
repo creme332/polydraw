@@ -15,12 +15,12 @@ public class DrawIrregularPolygon extends AbstractDrawer {
     }
 
     @Override
-    public boolean shouldDraw() {
+    protected boolean shouldDraw() {
         return getCanvasMode() == Mode.DRAW_POLYGON_DYNAMIC;
     }
 
     @Override
-    public void handleMouseMoved(Point2D polySpaceMousePosition) {
+    protected void handleMouseMoved(Point2D polySpaceMousePosition) {
         // check if drawing is in progress
         if (preview != null) {
             // create a new polygon using plotted points
@@ -36,7 +36,7 @@ public class DrawIrregularPolygon extends AbstractDrawer {
     }
 
     @Override
-    public void handleMousePressed(Point2D polySpaceMousePosition) {
+    protected void handleMousePressed(Point2D polySpaceMousePosition) {
         if (preview == null) {
             // First point selected, initialize the wrapper
             // Create a shape wrapper

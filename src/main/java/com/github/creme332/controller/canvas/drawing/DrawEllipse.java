@@ -21,7 +21,7 @@ public class DrawEllipse extends AbstractDrawer {
     }
 
     @Override
-    public void handleMouseMoved(Point2D polySpaceMousePosition) {
+    protected void handleMouseMoved(Point2D polySpaceMousePosition) {
         if (getCanvasMode() == Mode.DRAW_ELLIPSE && preview != null
                 && preview.getPlottedPoints().size() == 2) {
 
@@ -38,7 +38,7 @@ public class DrawEllipse extends AbstractDrawer {
     }
 
     @Override
-    public void handleMousePressed(Point2D polySpaceMousePosition) {
+    protected void handleMousePressed(Point2D polySpaceMousePosition) {
         if (getCanvasMode() == Mode.DRAW_ELLIPSE) {
             if (preview == null) {
                 // First focus has been selected
@@ -111,7 +111,7 @@ public class DrawEllipse extends AbstractDrawer {
     }
 
     @Override
-    public boolean shouldDraw() {
+    protected boolean shouldDraw() {
         return getCanvasMode() == Mode.DRAW_ELLIPSE || getCanvasMode() == Mode.DRAW_ELLIPSE_FIXED;
     }
 

@@ -53,7 +53,7 @@ public abstract class AbstractDrawer {
      * 
      * @return Current canvas mode
      */
-    public Mode getCanvasMode() {
+    protected Mode getCanvasMode() {
         return app.getMode();
     }
 
@@ -63,7 +63,7 @@ public abstract class AbstractDrawer {
      * 
      * @param polySpaceMousePosition
      */
-    public abstract void handleMouseMoved(Point2D polySpaceMousePosition);
+    protected abstract void handleMouseMoved(Point2D polySpaceMousePosition);
 
     /**
      * This method only gets called when shouldDraw() returns true and mouse
@@ -71,14 +71,14 @@ public abstract class AbstractDrawer {
      * 
      * @param polySpaceMousePosition
      */
-    public abstract void handleMousePressed(Point2D polySpaceMousePosition);
+    protected abstract void handleMousePressed(Point2D polySpaceMousePosition);
 
     /**
      * Determines whether current controller should be allowed to draw or not.
      * 
      * @return
      */
-    public abstract boolean shouldDraw();
+    protected abstract boolean shouldDraw();
 
     /**
      * Reset controller to its initial state. For example, this method will be

@@ -24,7 +24,7 @@ public class DrawCircle extends AbstractDrawer {
     }
 
     @Override
-    public void handleMouseMoved(Point2D polySpaceMousePosition) {
+    protected void handleMouseMoved(Point2D polySpaceMousePosition) {
         if (getCanvasMode() == Mode.DRAW_CIRCLE_DYNAMIC && preview != null
                 && preview.getPlottedPoints().size() == 1) {
 
@@ -46,7 +46,7 @@ public class DrawCircle extends AbstractDrawer {
     }
 
     @Override
-    public void handleMousePressed(Point2D polySpaceMousePosition) {
+    protected void handleMousePressed(Point2D polySpaceMousePosition) {
         if (getCanvasMode() == Mode.DRAW_CIRCLE_FIXED) {
             // center has been selected
 
@@ -100,7 +100,7 @@ public class DrawCircle extends AbstractDrawer {
     }
 
     @Override
-    public boolean shouldDraw() {
+    protected boolean shouldDraw() {
         return getCanvasMode() == Mode.DRAW_CIRCLE_DYNAMIC || getCanvasMode() == Mode.DRAW_CIRCLE_FIXED;
     }
 

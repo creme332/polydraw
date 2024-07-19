@@ -18,7 +18,7 @@ public class DrawLine extends AbstractDrawer {
     }
 
     @Override
-    public boolean shouldDraw() {
+    protected boolean shouldDraw() {
         return getCanvasMode() == Mode.DRAW_LINE_BRESENHAM || getCanvasMode() == Mode.DRAW_LINE_DDA;
     }
 
@@ -38,7 +38,7 @@ public class DrawLine extends AbstractDrawer {
     }
 
     @Override
-    public void handleMouseMoved(Point2D polySpaceMousePosition) {
+    protected void handleMouseMoved(Point2D polySpaceMousePosition) {
         if (preview != null && preview.getPlottedPoints().size() == 1) {
             // number of plotted points is 1
             Point2D lineStart = preview.getPlottedPoints().get(0);
@@ -61,7 +61,7 @@ public class DrawLine extends AbstractDrawer {
     }
 
     @Override
-    public void handleMousePressed(Point2D polySpaceMousePosition) {
+    protected void handleMousePressed(Point2D polySpaceMousePosition) {
         if (preview == null) {
             // first coordinate of line has just been selected
 

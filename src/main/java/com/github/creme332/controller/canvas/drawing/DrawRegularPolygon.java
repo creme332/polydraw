@@ -23,7 +23,7 @@ public class DrawRegularPolygon extends AbstractDrawer {
     }
 
     @Override
-    public void handleMouseMoved(Point2D polySpaceMousePosition) {
+    protected void handleMouseMoved(Point2D polySpaceMousePosition) {
         if (preview != null) {
             // calculate side length of polygon
             Point2D center = preview.getPlottedPoints().get(0);
@@ -37,7 +37,7 @@ public class DrawRegularPolygon extends AbstractDrawer {
     }
 
     @Override
-    public void handleMousePressed(Point2D polySpaceMousePosition) {
+    protected void handleMousePressed(Point2D polySpaceMousePosition) {
         if (preview == null) {
             // center of polygon has been input
 
@@ -70,7 +70,7 @@ public class DrawRegularPolygon extends AbstractDrawer {
     }
 
     @Override
-    public boolean shouldDraw() {
+    protected boolean shouldDraw() {
         return getCanvasMode() == Mode.DRAW_REGULAR_POLYGON;
     }
 
