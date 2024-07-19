@@ -223,9 +223,6 @@ public class CanvasController implements PropertyChangeListener {
         int deltaX = (int) (polyspaceMousePosition.getX() - start.getX());
         int deltaY = (int) (polyspaceMousePosition.getY() - start.getY());
 
-        System.out.format("Dragging shape %d by (%d, %d)\n", shapeIndex, deltaX, deltaY);
-
-        System.out.println(newShape);
 
         Polygon oldPolygon = newShape.toPolygon();
         Polygon newPolygon = new Polygon();
@@ -242,8 +239,6 @@ public class CanvasController implements PropertyChangeListener {
             newShape.getPlottedPoints().set(i, translatedPoint);
         }
         newShape.setShape(newPolygon);
-
-        System.out.println(newShape);
 
         // update shape preview on screen
         model.getShapeManager().setShapePreview(newShape);
