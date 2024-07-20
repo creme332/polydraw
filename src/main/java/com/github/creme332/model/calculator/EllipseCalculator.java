@@ -319,10 +319,10 @@ public class EllipseCalculator {
 
     // rotate calculated points based on inclination
     for (int i = 0; i < points[0].length; i++) {
-      Point2D vector = new Point2D.Double(points[0][i] - center.getX(), points[1][i] - center.getY());
-      vector = PolygonCalculator.rotateVector(vector, inclinationAngle);
-      points[0][i] = (int) (vector.getX() + center.getX());
-      points[1][i] = (int) (vector.getY() + center.getY());
+      Point2D point = new Point2D.Double(points[0][i], points[1][i]);
+      point = PolygonCalculator.rotatePointAboutPivot(point, center, inclinationAngle);
+      points[0][i] = (int) (point.getX());
+      points[1][i] = (int) (point.getY());
     }
 
     return points;

@@ -25,6 +25,27 @@ public class PolygonCalculator {
         return new Point2D.Double(
                 vector.getX() * Math.cos(radAngle) - vector.getY() * Math.sin(radAngle),
                 vector.getX() * Math.sin(radAngle) + vector.getY() * Math.cos(radAngle));
+
+    }
+
+    /**
+     * Rotates a vector in the xy plane counterclockwise through an angle radAngle
+     * about a pivot.
+     * 
+     * @param point    Point to be rotated.
+     * @param pivot    Point about which rotation takes place.
+     * @param radAngle Rotation angle in radians.
+     * @return
+     */
+    public static Point2D rotatePointAboutPivot(Point2D point, Point2D pivot, double radAngle) {
+        // calculate translation vector from pivot to point
+        Point2D translationVector = new Point2D.Double(point.getX() - pivot.getX(), point.getY() - pivot.getY());
+
+        // rotate translation vector
+        translationVector = rotateVector(translationVector, radAngle);
+
+        // return new position of point
+        return new Point2D.Double(translationVector.getX() + pivot.getX(), translationVector.getY() + pivot.getY());
     }
 
     /**
