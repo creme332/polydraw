@@ -34,6 +34,7 @@ import com.github.creme332.controller.canvas.drawing.DrawEllipse;
 import com.github.creme332.controller.canvas.drawing.DrawIrregularPolygon;
 import com.github.creme332.controller.canvas.drawing.DrawLine;
 import com.github.creme332.controller.canvas.drawing.DrawRegularPolygon;
+import com.github.creme332.controller.canvas.transform.Rotator;
 import com.github.creme332.controller.canvas.transform.Translator;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
@@ -77,6 +78,7 @@ public class CanvasController implements PropertyChangeListener {
 
         // initialize other canvas sub-controllers
         new Translator(app, canvas);
+        new Rotator(app, canvas);
 
         // when canvas is resized, update dimensions and reset zoom
         canvas.addComponentListener(new ComponentAdapter() {

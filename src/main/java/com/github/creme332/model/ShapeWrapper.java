@@ -130,6 +130,47 @@ public class ShapeWrapper {
         }
     }
 
+    /**
+     * Rotates shape and plotted points clockwise about a specified point.
+     * 
+     * @param radAngle the angle of rotation in radians
+     * @param pivot    the x-y coordinates of the rotation point
+     */
+    public void rotate(double radAngle, Point2D pivot) {
+        AffineTransform transform = new AffineTransform();
+
+        // Step 1: Translate the shape to the origin (negative of the rotation point)
+        transform.translate(pivot.getX(), pivot.getY());
+
+        // Step 2: Rotate the shape
+        transform.rotate(radAngle);
+
+        // Step 3: Translate the shape back to its original position
+        transform.translate(-pivot.getX(), -pivot.getY());
+
+        final Shape oldShape = shape;
+        Shape transformedShape;
+
+        if (oldShape instanceof Polygon) {
+            // if selected shape is of type polygon, ensure that the transformed shape is of
+            // type Polygon as well
+            transformedShape = PolygonCalculator.transformPolygon((Polygon) oldShape,
+                    transform);
+        } else {
+            transformedShape = transform.createTransformedShape(oldShape);
+        }
+
+        // replace old shape with transformed shape
+        setShape(transformedShape);
+
+        // rotate plotted points
+        for (int i = 0; i < plottedPoints.size(); i++) {
+            Point2D oldPoint = plottedPoints.get(i);
+            Point2D rotatedPoint = PolygonCalculator.rotatePointAboutPivot(oldPoint, pivot, radAngle);
+            plottedPoints.set(i, rotatedPoint);
+        }
+    }
+
     public Shape getShape() {
         return shape;
     }
