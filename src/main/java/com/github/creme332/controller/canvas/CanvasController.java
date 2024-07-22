@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -24,8 +23,6 @@ import javax.swing.JOptionPane;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Shape;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -101,11 +98,11 @@ public class CanvasController implements PropertyChangeListener {
                 ShapeManager manager = model.getShapeManager();
 
                 // check if a shape was being dragged previously
-                if (app.getMode() == Mode.MOVE_CANVAS && model.getSelectedShape() > -1) {
+                if (app.getMode() == Mode.MOVE_CANVAS && model.getSelectedShapeIndex() > -1) {
                     // edit previous shape with shape preview
 
                     if (manager.getShapePreview() != null) {
-                        manager.editShape(model.getSelectedShape(), manager.getShapePreview());
+                        manager.editShape(model.getSelectedShapeIndex(), manager.getShapePreview());
                         manager.setShapePreview(null);
                         model.setSelectedShape(-1);
                         canvas.repaint();
@@ -214,35 +211,22 @@ public class CanvasController implements PropertyChangeListener {
      * @param shapeIndex  Index of shape in as given in shapes array from
      *                    ShapeManager
      */
-    private void dragShape(final Point destination) {
-        final int shapeIndex = model.getSelectedShape();
+    private void dragShapeTo(final Point destination) {
+        final int shapeIndex = model.getSelectedShapeIndex();
 
-        ShapeWrapper newShape = model.getShapeManager().getShapes().get(shapeIndex);
+        final ShapeWrapper shapeWrapperCopy = model.getShapeManager().getShapes().get(shapeIndex);
 
+        // calculate translation vector from shape center to current mouse position
         Point2D polyspaceMousePosition = model.toPolySpace(destination);
-        Point2D start = newShape.getPlottedPoints().get(0);
+        Point2D start = shapeWrapperCopy.findShapeCenter();
+        final int deltaX = (int) (polyspaceMousePosition.getX() - start.getX());
+        final int deltaY = (int) (polyspaceMousePosition.getY() - start.getY());
+        final Point2D translationVector = new Point2D.Double(deltaX, deltaY);
 
-        int deltaX = (int) (polyspaceMousePosition.getX() - start.getX());
-        int deltaY = (int) (polyspaceMousePosition.getY() - start.getY());
-
-        Polygon oldPolygon = newShape.toPolygon();
-        Polygon newPolygon = new Polygon();
-
-        for (int i = 0; i < oldPolygon.npoints; i++) {
-            newPolygon.addPoint(deltaX + oldPolygon.xpoints[i], deltaY + oldPolygon.ypoints[i]);
-        }
-
-        // update plotted points
-        for (int i = 0; i < newShape.getPlottedPoints().size(); i++) {
-            Point2D currentPoint = newShape.getPlottedPoints().get(i);
-            Point2D translatedPoint = new Point2D.Double(currentPoint.getX() + deltaX, currentPoint.getY() + deltaY);
-
-            newShape.getPlottedPoints().set(i, translatedPoint);
-        }
-        newShape.setShape(newPolygon);
+        shapeWrapperCopy.translate(translationVector);
 
         // update shape preview on screen
-        model.getShapeManager().setShapePreview(newShape);
+        model.getShapeManager().setShapePreview(shapeWrapperCopy);
         canvas.repaint();
     }
 
@@ -258,54 +242,12 @@ public class CanvasController implements PropertyChangeListener {
         }
 
         if (app.getMode() == Mode.MOVE_CANVAS) {
-            if (model.getSelectedShape() > -1) {
-                dragShape(e.getPoint());
+            if (model.getSelectedShapeIndex() > -1) {
+                dragShapeTo(e.getPoint());
             } else {
                 dragCanvas(e.getPoint());
             }
         }
-    }
-
-    /**
-     * 
-     * @param polyspaceMousePosition Coordinate of point lying inside shape
-     * @return Index of first shape that contains polyspaceMousePosition. -1 if no
-     *         such shape found.
-     */
-    private int getSelectedShapeIndex(Point2D polyspaceMousePosition) {
-        List<ShapeWrapper> shapes = model.getShapeManager().getShapes();
-        for (int i = 0; i < shapes.size(); i++) {
-            ShapeWrapper wrapper = shapes.get(i);
-            Shape shape = wrapper.getShape();
-            if (shape.contains(polyspaceMousePosition) || isPointOnShapeBorder(shape, polyspaceMousePosition)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Checks if a point is on the border of a given shape, within a specified
-     * tolerance.
-     * 
-     * @param shape     the shape to check
-     * @param point     the point to check
-     * @param tolerance the tolerance within which to consider the point on the
-     *                  border
-     * @return true if the point is on the shape's border, false otherwise
-     */
-    private boolean isPointOnShapeBorder(Shape shape, Point2D point) {
-        final double TOLERANCE = 3.0;
-
-        if (shape == null) {
-            return false;
-        }
-        // Create a small rectangle around the clicked point
-        Rectangle2D.Double clickArea = new Rectangle2D.Double(
-                point.getX() - TOLERANCE, point.getY() - TOLERANCE,
-                2 * TOLERANCE, 2 * TOLERANCE);
-        // Check if the clickArea intersects with the shape's outline
-        return shape.intersects(clickArea);
     }
 
     private void handleMousePressed(MouseEvent e) {
@@ -313,16 +255,16 @@ public class CanvasController implements PropertyChangeListener {
             mouseDragStart = e.getPoint();
         }
 
-        Point2D polyspaceMousePosition = model.toPolySpace(e.getPoint());
+        final Point2D polyspaceMousePosition = model.toPolySpace(e.getPoint());
+        final int selectedShapeIndex = model.getShapeManager().getSelectedShapeIndex(polyspaceMousePosition);
 
         if (app.getMode() == Mode.MOVE_CANVAS) {
             // save selected shape
-            model.setSelectedShape(getSelectedShapeIndex(polyspaceMousePosition));
+            model.setSelectedShape(selectedShapeIndex);
         }
 
         if (app.getMode() == Mode.DELETE) {
-            int deleteShapeIndex = getSelectedShapeIndex(polyspaceMousePosition);
-            model.getShapeManager().deleteShape(deleteShapeIndex);
+            model.getShapeManager().deleteShape(selectedShapeIndex);
         }
 
         canvas.repaint();

@@ -5,9 +5,14 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.github.creme332.model.calculator.PolygonCalculator;
+
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 public class ShapeWrapper {
     private Shape shape;
@@ -69,6 +74,59 @@ public class ShapeWrapper {
         // create a new array for plotted points
         for (Point2D point : wrapper.getPlottedPoints()) {
             plottedPoints.add(new Point2D.Double(point.getX(), point.getY()));
+        }
+    }
+
+    /**
+     * Finds the center of a given shape.
+     * 
+     * @param shape the shape to find the center of
+     * @return a Point2D representing the center of the shape
+     */
+    public Point2D findShapeCenter() {
+        if (shape == null) {
+            return null;
+        }
+
+        Rectangle2D bounds = shape.getBounds2D();
+        double centerX = bounds.getCenterX();
+        double centerY = bounds.getCenterY();
+
+        return new Point2D.Double(centerX, centerY);
+    }
+
+    /**
+     * Translates shape and plotted points by a given translation vector.
+     * 
+     * @param translationVector translation vector
+     * @return
+     */
+    public void translate(final Point2D translationVector) {
+        // create transformation for shape
+        final AffineTransform transform = new AffineTransform();
+        transform.translate(translationVector.getX(), translationVector.getY());
+
+        final Shape oldShape = shape;
+        Shape transformedShape;
+
+        if (oldShape instanceof Polygon) {
+            // if selected shape is of type polygon, ensure that the transformed shape is of
+            // type Polygon as well
+            transformedShape = PolygonCalculator.transformPolygon((Polygon) oldShape,
+                    transform);
+        } else {
+            transformedShape = transform.createTransformedShape(oldShape);
+        }
+
+        // replace old shape with transformed shape
+        setShape(transformedShape);
+
+        // translate plotted points
+        for (int i = 0; i < plottedPoints.size(); i++) {
+            Point2D oldPoint = plottedPoints.get(i);
+            plottedPoints.set(i,
+                    new Point2D.Double(oldPoint.getX() + translationVector.getX(),
+                            oldPoint.getY() + translationVector.getY()));
         }
     }
 

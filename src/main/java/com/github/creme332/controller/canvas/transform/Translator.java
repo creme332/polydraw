@@ -1,10 +1,6 @@
 package com.github.creme332.controller.canvas.transform;
 
-import java.awt.Shape;
-import java.awt.Polygon;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -14,7 +10,6 @@ import javax.swing.JTextField;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
-import com.github.creme332.model.calculator.PolygonCalculator;
 import com.github.creme332.view.Canvas;
 
 /**
@@ -36,24 +31,11 @@ public class Translator extends AbstractTransformer {
         // request user for translation vector
         final Point2D translationVector = requestTranslationVector();
 
-        // apply transformation on shape
-        final AffineTransform transform = new AffineTransform();
-        transform.translate(translationVector.getX(), translationVector.getY());
-        final Shape transformedShape = PolygonCalculator.transformPolygon((Polygon) selectedWrapperCopy.getShape(),
-                transform);
+        // translate wrapper
+        selectedWrapperCopy.translate(translationVector);
 
-        // save transformed shape
-        selectedWrapperCopy.setShape(transformedShape);
+        // replace old shape with new one
         canvasModel.getShapeManager().editShape(shapeIndex, selectedWrapperCopy);
-
-        // translate plotted points
-        final List<Point2D> originalPlottedPoints = selectedWrapperCopy.getPlottedPoints();
-        for (int i = 0; i < originalPlottedPoints.size(); i++) {
-            Point2D oldPoint = originalPlottedPoints.get(i);
-            originalPlottedPoints.set(i,
-                    new Point2D.Double(oldPoint.getX() + translationVector.getX(),
-                            oldPoint.getY() + translationVector.getY()));
-        }
 
         // repaint canvas
         canvas.repaint();
