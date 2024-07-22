@@ -59,6 +59,8 @@ public class CanvasController implements PropertyChangeListener {
 
     private List<AbstractDrawer> drawControllers = new ArrayList<>();
 
+    int copiedShapeIndex = -1;
+
     public CanvasController(AppState app, Canvas canvas) {
         this.app = app;
         this.canvas = canvas;
@@ -140,7 +142,7 @@ public class CanvasController implements PropertyChangeListener {
     }
 
     private void initializeKeyBindings() {
-        // Export canvas
+        // Export canvas: ctrl + p
         canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK), "exportCanvas");
         canvas.getActionMap().put("exportCanvas", new AbstractAction() {
@@ -150,11 +152,9 @@ public class CanvasController implements PropertyChangeListener {
             }
         });
 
-        // Zoom in
+        // Zoom in: ctrl + +
         canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, java.awt.event.InputEvent.CTRL_DOWN_MASK), "zoomIn");
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-                .put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_DOWN_MASK), "zoomIn");
         canvas.getActionMap().put("zoomIn", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -163,7 +163,7 @@ public class CanvasController implements PropertyChangeListener {
             }
         });
 
-        // Zoom out
+        // Zoom out: ctrl + -
         canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, java.awt.event.InputEvent.CTRL_DOWN_MASK), "zoomOut");
         canvas.getActionMap().put("zoomOut", new AbstractAction() {
@@ -174,7 +174,7 @@ public class CanvasController implements PropertyChangeListener {
             }
         });
 
-        // Zoom 100%
+        // Zoom 100%: ctrl + 0
         canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_0, java.awt.event.InputEvent.CTRL_DOWN_MASK), "zoomReset");
         canvas.getActionMap().put("zoomReset", new AbstractAction() {
@@ -184,6 +184,57 @@ public class CanvasController implements PropertyChangeListener {
                 canvas.repaint();
             }
         });
+
+        // Undo: ctrl+ z
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_DOWN_MASK), "undo");
+        canvas.getActionMap().put("undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.getShapeManager().undo();
+                canvas.repaint();
+            }
+        });
+
+        // Redo: ctrl + shift + z
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
+                        java.awt.event.InputEvent.CTRL_DOWN_MASK | java.awt.event.InputEvent.SHIFT_DOWN_MASK), "redo");
+        canvas.getActionMap().put("redo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.getShapeManager().redo();
+                canvas.repaint();
+            }
+        });
+
+        // Copy shape: ctrl + c
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_C,
+                        java.awt.event.InputEvent.CTRL_DOWN_MASK),
+                        "copyShape");
+        canvas.getActionMap().put("copyShape", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copiedShapeIndex = model.getSelectedShapeIndex();
+            }
+        });
+
+        // Past shape: ctrl + v
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_V,
+                        java.awt.event.InputEvent.CTRL_DOWN_MASK),
+                        "pasteShape");
+        canvas.getActionMap().put("pasteShape", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (copiedShapeIndex < 0)
+                    return;
+                ShapeManager manager = model.getShapeManager();
+                manager.addShape(manager.getShapes().get(copiedShapeIndex));
+            }
+        });
+
     }
 
     /**
