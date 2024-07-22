@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -24,6 +25,7 @@ import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Shape;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -223,7 +225,6 @@ public class CanvasController implements PropertyChangeListener {
         int deltaX = (int) (polyspaceMousePosition.getX() - start.getX());
         int deltaY = (int) (polyspaceMousePosition.getY() - start.getY());
 
-
         Polygon oldPolygon = newShape.toPolygon();
         Polygon newPolygon = new Polygon();
 
@@ -275,11 +276,36 @@ public class CanvasController implements PropertyChangeListener {
         List<ShapeWrapper> shapes = model.getShapeManager().getShapes();
         for (int i = 0; i < shapes.size(); i++) {
             ShapeWrapper wrapper = shapes.get(i);
-            if (wrapper.getShape().contains(polyspaceMousePosition)) {
+            Shape shape = wrapper.getShape();
+            if (shape.contains(polyspaceMousePosition) || isPointOnShapeBorder(shape, polyspaceMousePosition)) {
                 return i;
             }
         }
         return -1;
+    }
+
+    /**
+     * Checks if a point is on the border of a given shape, within a specified
+     * tolerance.
+     * 
+     * @param shape     the shape to check
+     * @param point     the point to check
+     * @param tolerance the tolerance within which to consider the point on the
+     *                  border
+     * @return true if the point is on the shape's border, false otherwise
+     */
+    private boolean isPointOnShapeBorder(Shape shape, Point2D point) {
+        final double TOLERANCE = 3.0;
+
+        if (shape == null) {
+            return false;
+        }
+        // Create a small rectangle around the clicked point
+        Rectangle2D.Double clickArea = new Rectangle2D.Double(
+                point.getX() - TOLERANCE, point.getY() - TOLERANCE,
+                2 * TOLERANCE, 2 * TOLERANCE);
+        // Check if the clickArea intersects with the shape's outline
+        return shape.intersects(clickArea);
     }
 
     private void handleMousePressed(MouseEvent e) {
