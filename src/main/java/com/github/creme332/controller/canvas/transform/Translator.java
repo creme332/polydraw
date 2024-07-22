@@ -1,6 +1,7 @@
 package com.github.creme332.controller.canvas.transform;
 
 import java.awt.Shape;
+import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -13,8 +14,12 @@ import javax.swing.JTextField;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
+import com.github.creme332.model.calculator.PolygonCalculator;
 import com.github.creme332.view.Canvas;
 
+/**
+ * Controller responsible for translation mode.
+ */
 public class Translator extends AbstractTransformer {
 
     public Translator(AppState app, Canvas canvas) {
@@ -34,7 +39,8 @@ public class Translator extends AbstractTransformer {
         // apply transformation on shape
         final AffineTransform transform = new AffineTransform();
         transform.translate(translationVector.getX(), translationVector.getY());
-        final Shape transformedShape = transform.createTransformedShape(selectedWrapperCopy.getShape());
+        final Shape transformedShape = PolygonCalculator.transformPolygon((Polygon) selectedWrapperCopy.getShape(),
+                transform);
 
         // save transformed shape
         selectedWrapperCopy.setShape(transformedShape);

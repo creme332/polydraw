@@ -2,7 +2,10 @@ package com.github.creme332.model.calculator;
 
 import java.awt.Polygon;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,5 +114,35 @@ public class PolygonCalculator {
         }
 
         return new int[][] { xOrdered, yOrdered };
+    }
+
+    /**
+     * Transforms a given Polygon using the specified AffineTransform.
+     * 
+     * @param polygon   the Polygon to be transformed
+     * @param transform the AffineTransform to be applied
+     * @return a new Polygon representing the transformed shape
+     */
+    public static Polygon transformPolygon(Polygon polygon, AffineTransform transform) {
+        Shape transformedShape = transform.createTransformedShape(polygon);
+        PathIterator pathIterator = transformedShape.getPathIterator(null);
+
+        ArrayList<Integer> xPointsList = new ArrayList<>();
+        ArrayList<Integer> yPointsList = new ArrayList<>();
+        double[] coordinates = new double[6];
+
+        while (!pathIterator.isDone()) {
+            int segmentType = pathIterator.currentSegment(coordinates);
+            if (segmentType == PathIterator.SEG_MOVETO || segmentType == PathIterator.SEG_LINETO) {
+                xPointsList.add((int) coordinates[0]);
+                yPointsList.add((int) coordinates[1]);
+            }
+            pathIterator.next();
+        }
+
+        int[] xPoints = xPointsList.stream().mapToInt(i -> i).toArray();
+        int[] yPoints = yPointsList.stream().mapToInt(i -> i).toArray();
+
+        return new Polygon(xPoints, yPoints, xPoints.length);
     }
 }
