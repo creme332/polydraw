@@ -148,7 +148,6 @@ public class AppState {
     }
 
     public void setMode(Mode newMode) {
-        System.out.println("Mode: " + mode + " -> " + newMode);
         support.firePropertyChange("mode", mode, newMode);
         mode = newMode;
     }
