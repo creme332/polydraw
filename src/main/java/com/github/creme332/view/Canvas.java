@@ -197,7 +197,7 @@ public class Canvas extends JPanel {
                 g2.setColor(wrapper.getLineColor());
 
                 // increase thickness of shape if user selected the shape
-                if (i == model.getSelectedShape()) {
+                if (i == model.getSelectedShapeIndex()) {
                     g2.setStroke(getStroke(wrapper.getLineType(), wrapper.getLineThickness() + 3));
 
                 } else {

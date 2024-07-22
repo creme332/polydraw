@@ -102,7 +102,7 @@ public class CanvasModel {
         selectedShapeIndex = shapeIndex;
     }
 
-    public int getSelectedShape() {
+    public int getSelectedShapeIndex() {
         return selectedShapeIndex;
     }
 
