@@ -17,6 +17,8 @@ public class DrawRegularPolygon extends AbstractDrawer {
 
     PolygonCalculator calculator = new PolygonCalculator();
     private int numSides = 5; // default to 5 sides (pentagon)
+    private Point2D firstVertex = null;
+    private Point2D secondVertex = null;
 
     public DrawRegularPolygon(AppState app, Canvas canvas) {
         super(app, canvas);
@@ -24,47 +26,50 @@ public class DrawRegularPolygon extends AbstractDrawer {
 
     @Override
     protected void handleMouseMoved(Point2D polySpaceMousePosition) {
-        if (preview != null) {
-            // calculate side length of polygon
-            Point2D center = preview.getPlottedPoints().get(0);
-            int sideLength = (int) Math.abs(center.distance(polySpaceMousePosition));
-
-            int[][] res = calculator.getOrderedPoints(numSides, sideLength, (int) center.getX(), (int) center.getY());
-            Polygon p = new Polygon(res[0], res[1], res[0].length);
-            preview.setShape(p);
+        if (preview != null && firstVertex != null && secondVertex != null) {
+            Polygon polygon = calculator.getPolygonFromTwoPoints(firstVertex, secondVertex, numSides);
+            preview.setShape(polygon);
             canvas.repaint();
         }
     }
 
     @Override
     protected void handleMousePressed(Point2D polySpaceMousePosition) {
-        if (preview == null) {
-            // center of polygon has been input
-
-            // initialize shape preview
-            preview = new ShapeWrapper(canvasModel.getShapeColor(),
-                    canvasModel.getLineType(),
-                    canvasModel.getLineThickness());
-            preview.getPlottedPoints().add(polySpaceMousePosition);
-
-            // save preview
-            canvasModel.getShapeManager().setShapePreview(preview);
+        if (firstVertex == null) {
+            firstVertex = polySpaceMousePosition;
+            return;
+        }
+        if (secondVertex == null) {
+            secondVertex = polySpaceMousePosition;
 
             // ask user to enter number of sides
             numSides = inputVertices();
 
             if (numSides < 3) {
-                // invalid input => cancel operation
+                // invalid input => reset state and cancel operation
+                firstVertex = null;
+                secondVertex = null;
                 disposePreview();
+                return;
             }
-            return;
+
+            // initialize shape preview after getting valid input
+            preview = new ShapeWrapper(canvasModel.getShapeColor(),
+                    canvasModel.getLineType(),
+                    canvasModel.getLineThickness());
+            preview.getPlottedPoints().add(firstVertex);
+            preview.getPlottedPoints().add(secondVertex);
+
+            // save preview
+            canvasModel.getShapeManager().setShapePreview(preview);
+
+            Polygon polygon = calculator.getPolygonFromTwoPoints(firstVertex, secondVertex, numSides);
+            preview.setShape(polygon);
+            canvas.repaint();
+        } else {
+            canvasModel.getShapeManager().addShape(preview);
+            disposePreview();
         }
-        // second time clicked
-
-        // add preview as actual shape
-        canvasModel.getShapeManager().addShape(preview);
-
-        disposePreview();
     }
 
     @Override
@@ -76,7 +81,7 @@ public class DrawRegularPolygon extends AbstractDrawer {
      * Asks user to enter number of vertices for polygon. If input value is invalid
      * or if operation is cancelled, -1 is returned.
      * 
-     * @return
+     * @return The number of vertices entered by the user or -1 if invalid or cancelled.
      */
     private int inputVertices() {
         JTextField numSidesField = new JTextField(5);
