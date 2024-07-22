@@ -59,9 +59,7 @@ public class DrawRegularPolygon extends AbstractDrawer {
             }
             return;
         }
-
         // second time clicked
-        preview.getPlottedPoints().add(polySpaceMousePosition);
 
         // add preview as actual shape
         canvasModel.getShapeManager().addShape(preview);
