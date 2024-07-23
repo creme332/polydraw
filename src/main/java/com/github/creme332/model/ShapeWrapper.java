@@ -78,7 +78,7 @@ public class ShapeWrapper {
     }
 
     /**
-     * Finds the center of a given shape.
+     * Finds the center of the shape.
      * 
      * @param shape the shape to find the center of
      * @return a Point2D representing the center of the shape

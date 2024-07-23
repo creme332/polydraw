@@ -102,15 +102,14 @@ public class CanvasController implements PropertyChangeListener {
                 ShapeManager manager = model.getShapeManager();
 
                 // check if a shape was being dragged previously
-                if (app.getMode() == Mode.MOVE_CANVAS && model.getSelectedShapeIndex() > -1) {
+                if (app.getMode() == Mode.MOVE_CANVAS &&
+                        model.getSelectedShapeIndex() > -1 &&
+                        manager.getShapePreview() != null) {
                     // edit previous shape with shape preview
-
-                    if (manager.getShapePreview() != null) {
-                        manager.editShape(model.getSelectedShapeIndex(), manager.getShapePreview());
-                        manager.setShapePreview(null);
-                        model.setSelectedShape(-1);
-                        canvas.repaint();
-                    }
+                    manager.editShape(model.getSelectedShapeIndex(), manager.getShapePreview());
+                    manager.setShapePreview(null);
+                    model.setSelectedShape(-1);
+                    canvas.repaint();
                 }
             }
         });
