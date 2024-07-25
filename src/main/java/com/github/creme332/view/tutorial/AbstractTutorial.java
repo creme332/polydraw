@@ -50,6 +50,7 @@ public abstract class AbstractTutorial extends JPanel {
 
     protected AbstractTutorial(TutorialModel model, Icon icon) {
         setLayout(new BorderLayout());
+        setBackground(Color.white);
 
         this.model = model;
         this.previewIcon = icon;
@@ -58,6 +59,7 @@ public abstract class AbstractTutorial extends JPanel {
 
         initStyles();
         textPane.setEditable(false); // Make it non-editable
+        textPane.setBackground(Color.white);
 
         JPanel headerPanel = createHeaderPanel();
         bodyPanel = createBodyPanel();
@@ -67,9 +69,12 @@ public abstract class AbstractTutorial extends JPanel {
 
     private JPanel createBodyPanel() {
         bodyPanel = new JPanel(new BorderLayout());
-        bodyPanel.setBorder(new EmptyBorder(new Insets(0, 100, 0, 100)));
+        bodyPanel.setBackground(Color.white);
+        bodyPanel.setBorder(new EmptyBorder(new Insets(20, 100, 0, 100)));
 
         JScrollPane scrollPane = new JScrollPane(textPane);
+        scrollPane.setBorder(null);
+
         bodyPanel.add(scrollPane, BorderLayout.CENTER);
 
         return bodyPanel;
