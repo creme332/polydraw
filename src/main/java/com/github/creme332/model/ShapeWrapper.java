@@ -96,6 +96,42 @@ public class ShapeWrapper {
     }
 
     /**
+     * Shears the shape by the given shear factors.
+     *
+     * @param shearFactors the shear factors [shx, shy]
+     */
+    public void shear(Point2D shearFactors) {
+        if (shape == null || shearFactors == null) {
+            return;
+        }
+
+        // Create an affine transform for shearing
+        AffineTransform transform = new AffineTransform();
+        transform.shear(shearFactors.getX(), shearFactors.getY());
+
+        // Transform the shape
+        Shape transformedShape;
+
+        if (shape instanceof Polygon) {
+            // Ensure that the transformed shape is of type Polygon if the original was
+            // Polygon
+            transformedShape = PolygonCalculator.transformPolygon((Polygon) shape, transform);
+        } else {
+            transformedShape = transform.createTransformedShape(shape);
+        }
+
+        // Set the new transformed shape
+        setShape(transformedShape);
+
+        // Shear the plotted points
+        for (int i = 0; i < plottedPoints.size(); i++) {
+            Point2D oldPoint = plottedPoints.get(i);
+            Point2D newPoint = transform.transform(oldPoint, null);
+            plottedPoints.set(i, newPoint);
+        }
+    }
+
+    /**
      * Translates shape and plotted points by a given translation vector.
      * 
      * @param translationVector translation vector
