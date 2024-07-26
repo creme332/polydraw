@@ -17,7 +17,7 @@ public class DrawPolygonTutorial extends AbstractTutorial {
                 model.addKeyword("irregular");
 
                 doc.insertString(doc.getLength(),
-                                "In this tutorial you will learn how to draw an irregular polygon and a regular polygon.\n\n",
+                                "In this tutorial you will learn how to draw regular and irregular polygons.\n\n",
                                 regular);
 
                 writeIrregularPolygonSection();
