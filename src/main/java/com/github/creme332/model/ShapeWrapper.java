@@ -78,7 +78,7 @@ public class ShapeWrapper {
     }
 
     /**
-     * Finds the center of a given shape.
+     * Finds the center of the shape.
      * 
      * @param shape the shape to find the center of
      * @return a Point2D representing the center of the shape
@@ -169,6 +169,39 @@ public class ShapeWrapper {
             Point2D rotatedPoint = PolygonCalculator.rotatePointAboutPivot(oldPoint, pivot, radAngle);
             plottedPoints.set(i, rotatedPoint);
         }
+    }
+
+    /**
+     * 
+     * @param point
+     * @return True if point is inside shape or on its border
+     */
+    public boolean isPointOnShape(Point2D point) {
+        return shape.contains(point) || isPointOnShapeBorder(shape, point);
+    }
+
+    /**
+     * Checks if a point is on the border of the shape, within a specified
+     * tolerance.
+     * 
+     * @param shape     the shape to check
+     * @param point     the point to check
+     * @param tolerance the tolerance within which to consider the point on the
+     *                  border
+     * @return true if the point is on the shape's border, false otherwise
+     */
+    public static boolean isPointOnShapeBorder(Shape shape, Point2D point) {
+        final double TOLERANCE = 3.0;
+
+        if (shape == null) {
+            return false;
+        }
+        // Create a small rectangle around the clicked point
+        Rectangle2D.Double clickArea = new Rectangle2D.Double(
+                point.getX() - TOLERANCE, point.getY() - TOLERANCE,
+                2 * TOLERANCE, 2 * TOLERANCE);
+        // Check if the clickArea intersects with the shape's outline
+        return shape.intersects(clickArea);
     }
 
     public Shape getShape() {
