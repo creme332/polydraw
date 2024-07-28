@@ -97,7 +97,7 @@ public class ClipperCalculator {
         if (accept) {
             return new double[][]{{x0, y0}, {x1, y1}};
         } else {
-            return null; // Line is completely outside
+            return new double[0][0]; // Line is completely outside
         }
     }
 }
