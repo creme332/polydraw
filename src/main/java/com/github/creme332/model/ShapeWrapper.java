@@ -282,4 +282,45 @@ public class ShapeWrapper {
                 """, plottedPointString, Arrays.toString(toPolygon().xpoints), Arrays.toString(toPolygon().ypoints),
                 lineColor, lineType, lineThickness);
     }
+
+    /**
+     * Scales the shape and plotted points with respect to a given point.
+     * 
+     * @param scalingPoint The point to scale with respect to.
+     * @param sx The scaling factor along the x-axis.
+     * @param sy The scaling factor along the y-axis.
+     */
+    public void scale(Point2D scalingPoint, double sx, double sy) {
+        AffineTransform transform = new AffineTransform();
+
+        // Translate shape to origin
+        transform.translate(scalingPoint.getX(), scalingPoint.getY());
+
+        // Apply scaling
+        transform.scale(sx, sy);
+
+        // Translate shape back to original position
+        transform.translate(-scalingPoint.getX(), -scalingPoint.getY());
+
+        final Shape oldShape = shape;
+        Shape transformedShape;
+
+        if (oldShape instanceof Polygon) {
+            // If the shape is a polygon, ensure the transformed shape is also a polygon
+            transformedShape = PolygonCalculator.transformPolygon((Polygon) oldShape, transform);
+        } else {
+            transformedShape = transform.createTransformedShape(oldShape);
+        }
+
+        // Replace old shape with transformed shape
+        setShape(transformedShape);
+
+        // Scale plotted points
+        for (int i = 0; i < plottedPoints.size(); i++) {
+            Point2D oldPoint = plottedPoints.get(i);
+            double newX = scalingPoint.getX() + (oldPoint.getX() - scalingPoint.getX()) * sx;
+            double newY = scalingPoint.getY() + (oldPoint.getY() - scalingPoint.getY()) * sy;
+            plottedPoints.set(i, new Point2D.Double(newX, newY));
+        }
+    }
 }
