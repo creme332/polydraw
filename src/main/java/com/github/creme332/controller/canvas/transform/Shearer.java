@@ -1,6 +1,5 @@
 package com.github.creme332.controller.canvas.transform;
 
-import java.awt.geom.Point2D;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -14,9 +13,9 @@ import com.github.creme332.view.Canvas;
 /**
  * Controller responsible for shear mode.
  */
-public class Shear extends AbstractTransformer {
+public class Shearer extends AbstractTransformer {
 
-    public Shear(AppState app, Canvas canvas) {
+    public Shearer(AppState app, Canvas canvas) {
         super(app, canvas);
     }
 
@@ -26,7 +25,7 @@ public class Shear extends AbstractTransformer {
         final ShapeWrapper selectedWrapperCopy = canvasModel.getShapeManager().getShapes().get(shapeIndex);
 
         // request user for shear factors
-        final Point2D shearFactors = requestShearFactors();
+        final double[] shearFactors = requestShearFactors();
 
         // shear wrapper
         selectedWrapperCopy.shear(shearFactors);
@@ -49,16 +48,16 @@ public class Shear extends AbstractTransformer {
      * 
      * @return array with shear factors [shx, shy]
      */
-    private Point2D requestShearFactors() {
-        final Point2D zeroFactors = new Point2D.Double(0, 0);
+    private double[] requestShearFactors() {
+        final double[] shearFactors = { 0, 0 };
 
-        JTextField shxField = new JTextField(5);
-        JTextField shyField = new JTextField(5);
+        JTextField sxField = new JTextField(5);
+        JTextField syField = new JTextField(5);
         JPanel panel = new JPanel();
         panel.add(new JLabel("Shear X:"));
-        panel.add(shxField);
+        panel.add(sxField);
         panel.add(new JLabel("Shear Y:"));
-        panel.add(shyField);
+        panel.add(syField);
 
         int result = JOptionPane.showConfirmDialog(null, panel, "Enter shear factors",
                 JOptionPane.OK_CANCEL_OPTION,
@@ -69,11 +68,16 @@ public class Shear extends AbstractTransformer {
 
         if (result == JOptionPane.OK_OPTION) {
             try {
-                return new Point2D.Double(Double.parseDouble(shxField.getText()), Double.parseDouble(shyField.getText()));
+                double sx = Double.parseDouble(sxField.getText());
+                double sy = Double.parseDouble(syField.getText());
+                shearFactors[0] = sx;
+                shearFactors[1] = sy;
+
+                return shearFactors;
             } catch (NumberFormatException e) {
-                return zeroFactors;
+                return shearFactors;
             }
         }
-        return zeroFactors;
+        return shearFactors;
     }
 }

@@ -100,14 +100,14 @@ public class ShapeWrapper {
      *
      * @param shearFactors the shear factors [shx, shy]
      */
-    public void shear(Point2D shearFactors) {
+    public void shear(double[] shearFactors) {
         if (shape == null || shearFactors == null) {
             return;
         }
 
         // Create an affine transform for shearing
         AffineTransform transform = new AffineTransform();
-        transform.shear(shearFactors.getX(), shearFactors.getY());
+        transform.shear(shearFactors[0], shearFactors[1]);
 
         // Transform the shape
         Shape transformedShape;
@@ -323,8 +323,8 @@ public class ShapeWrapper {
      * Scales the shape and plotted points with respect to a given point.
      * 
      * @param scalingPoint The point to scale with respect to.
-     * @param sx The scaling factor along the x-axis.
-     * @param sy The scaling factor along the y-axis.
+     * @param sx           The scaling factor along the x-axis.
+     * @param sy           The scaling factor along the y-axis.
      */
     public void scale(Point2D scalingPoint, double sx, double sy) {
         AffineTransform transform = new AffineTransform();
