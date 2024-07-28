@@ -96,6 +96,42 @@ public class ShapeWrapper {
     }
 
     /**
+     * Shears the shape by the given shear factors.
+     *
+     * @param shearFactors the shear factors [shx, shy]
+     */
+    public void shear(double[] shearFactors) {
+        if (shape == null || shearFactors == null) {
+            return;
+        }
+
+        // Create an affine transform for shearing
+        AffineTransform transform = new AffineTransform();
+        transform.shear(shearFactors[0], shearFactors[1]);
+
+        // Transform the shape
+        Shape transformedShape;
+
+        if (shape instanceof Polygon) {
+            // Ensure that the transformed shape is of type Polygon if the original was
+            // Polygon
+            transformedShape = PolygonCalculator.transformPolygon((Polygon) shape, transform);
+        } else {
+            transformedShape = transform.createTransformedShape(shape);
+        }
+
+        // Set the new transformed shape
+        setShape(transformedShape);
+
+        // Shear the plotted points
+        for (int i = 0; i < plottedPoints.size(); i++) {
+            Point2D oldPoint = plottedPoints.get(i);
+            Point2D newPoint = transform.transform(oldPoint, null);
+            plottedPoints.set(i, newPoint);
+        }
+    }
+
+    /**
      * Translates shape and plotted points by a given translation vector.
      * 
      * @param translationVector translation vector
@@ -287,8 +323,8 @@ public class ShapeWrapper {
      * Scales the shape and plotted points with respect to a given point.
      * 
      * @param scalingPoint The point to scale with respect to.
-     * @param sx The scaling factor along the x-axis.
-     * @param sy The scaling factor along the y-axis.
+     * @param sx           The scaling factor along the x-axis.
+     * @param sy           The scaling factor along the y-axis.
      */
     public void scale(Point2D scalingPoint, double sx, double sy) {
         AffineTransform transform = new AffineTransform();
