@@ -355,7 +355,7 @@ public class CanvasController implements PropertyChangeListener {
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setAcceptAllFileFilterUsed(false); // disable the "All files" option.
 
-        int returnValue = fileChooser.showOpenDialog(null);
+        int returnValue = fileChooser.showDialog(canvas, "Save");
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             final String folderPath = fileChooser.getSelectedFile().toString();
