@@ -238,6 +238,11 @@ public class ShapeManager {
         return -1;
     }
 
+    /**
+     * 
+     * @param i Index of shape in shape array
+     * @return A copy of the shape
+     */
     public ShapeWrapper getShapeByIndex(int i) {
         return new ShapeWrapper(shapes.get(i));
     }
