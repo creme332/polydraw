@@ -1,8 +1,6 @@
 package com.github.creme332.model;
 
-import java.awt.Shape;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -226,43 +224,18 @@ public class ShapeManager {
 
     /**
      * 
-     * @param polyspaceMousePosition Coordinate of point lying inside or on shape
-     * @return Index of first shape that touches polyspaceMousePosition. -1 if no
+     * @param polyspacePoint Coordinate of some point in polyspace.
+     * @return Index of first shape that contains the given point. -1 if no
      *         such shape found.
      */
-    public int getSelectedShapeIndex(Point2D polyspaceMousePosition) {
+    public int getSelectedShapeIndex(Point2D polyspacePoint) {
         for (int i = 0; i < shapes.size(); i++) {
             ShapeWrapper wrapper = shapes.get(i);
-            Shape shape = wrapper.getShape();
-            if (shape.contains(polyspaceMousePosition) || isPointOnShapeBorder(shape, polyspaceMousePosition)) {
+            if (wrapper.isPointOnShape(polyspacePoint)) {
                 return i;
             }
         }
         return -1;
-    }
-
-    /**
-     * Checks if a point is on the border of a given shape, within a specified
-     * tolerance.
-     * 
-     * @param shape     the shape to check
-     * @param point     the point to check
-     * @param tolerance the tolerance within which to consider the point on the
-     *                  border
-     * @return true if the point is on the shape's border, false otherwise
-     */
-    public static boolean isPointOnShapeBorder(Shape shape, Point2D point) {
-        final double TOLERANCE = 3.0;
-
-        if (shape == null) {
-            return false;
-        }
-        // Create a small rectangle around the clicked point
-        Rectangle2D.Double clickArea = new Rectangle2D.Double(
-                point.getX() - TOLERANCE, point.getY() - TOLERANCE,
-                2 * TOLERANCE, 2 * TOLERANCE);
-        // Check if the clickArea intersects with the shape's outline
-        return shape.intersects(clickArea);
     }
 
     /**

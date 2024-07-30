@@ -41,7 +41,7 @@ public class DrawEllipseTutorial extends AbstractTutorial {
                     "\n\n2. Move your mouse cursor on the canvas and click on a point where you want your first ellipse focus to be.\n",
                     regular);
             doc.insertString(doc.getLength(),
-                    "\n\n3. Click on another point where you want your second ellipse focus to be.\n\n",
+                    "\n\n3. Click on another point where you want your second ellipse focus to be.\n",
                     regular);
 
             doc.insertString(doc.getLength(),

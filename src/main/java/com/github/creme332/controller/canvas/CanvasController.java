@@ -35,6 +35,8 @@ import com.github.creme332.controller.canvas.drawing.DrawIrregularPolygon;
 import com.github.creme332.controller.canvas.drawing.DrawLine;
 import com.github.creme332.controller.canvas.drawing.DrawRegularPolygon;
 import com.github.creme332.controller.canvas.transform.Rotator;
+import com.github.creme332.controller.canvas.transform.Scaler;
+import com.github.creme332.controller.canvas.transform.Shearer;
 import com.github.creme332.controller.canvas.transform.Translator;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
@@ -81,6 +83,8 @@ public class CanvasController implements PropertyChangeListener {
         // initialize other canvas sub-controllers
         new Translator(app, canvas);
         new Rotator(app, canvas);
+        new Scaler(app, canvas);
+        new Shearer(app, canvas);
 
         // when canvas is resized, update dimensions and reset zoom
         canvas.addComponentListener(new ComponentAdapter() {
@@ -102,15 +106,14 @@ public class CanvasController implements PropertyChangeListener {
                 ShapeManager manager = model.getShapeManager();
 
                 // check if a shape was being dragged previously
-                if (app.getMode() == Mode.MOVE_CANVAS && model.getSelectedShapeIndex() > -1) {
+                if (app.getMode() == Mode.MOVE_CANVAS &&
+                        model.getSelectedShapeIndex() > -1 &&
+                        manager.getShapePreview() != null) {
                     // edit previous shape with shape preview
-
-                    if (manager.getShapePreview() != null) {
-                        manager.editShape(model.getSelectedShapeIndex(), manager.getShapePreview());
-                        manager.setShapePreview(null);
-                        model.setSelectedShape(-1);
-                        canvas.repaint();
-                    }
+                    manager.editShape(model.getSelectedShapeIndex(), manager.getShapePreview());
+                    manager.setShapePreview(null);
+                    model.setSelectedShape(-1);
+                    canvas.repaint();
                 }
             }
         });
@@ -352,7 +355,7 @@ public class CanvasController implements PropertyChangeListener {
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setAcceptAllFileFilterUsed(false); // disable the "All files" option.
 
-        int returnValue = fileChooser.showOpenDialog(null);
+        int returnValue = fileChooser.showDialog(canvas, "Save");
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             final String folderPath = fileChooser.getSelectedFile().toString();

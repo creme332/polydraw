@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -158,7 +159,7 @@ public class FrameController implements PropertyChangeListener {
 
         // Open help center
         rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-                .put(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.ALT_DOWN_MASK), "openHelpCenter");
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_H, java.awt.event.InputEvent.ALT_DOWN_MASK), "openHelpCenter");
         rootPane.getActionMap().put("openHelpCenter", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -168,7 +169,8 @@ public class FrameController implements PropertyChangeListener {
 
         // Toggle sidebar visibility
         rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-                KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+                KeyStroke.getKeyStroke(KeyEvent.VK_S,
+                        java.awt.event.InputEvent.CTRL_DOWN_MASK | java.awt.event.InputEvent.SHIFT_DOWN_MASK),
                 "toggleSidebar");
         rootPane.getActionMap().put("toggleSidebar", new AbstractAction() {
             @Override
@@ -241,7 +243,7 @@ public class FrameController implements PropertyChangeListener {
 
         frame.repaint();
         frame.revalidate();
-        
+
         /**
          * sync toolkit to prevent frame rate issues on linux.
          * 
@@ -251,26 +253,34 @@ public class FrameController implements PropertyChangeListener {
         Toolkit.getDefaultToolkit().sync();
     }
 
+    private class Task extends SwingWorker<Void, Integer> {
+        static final long ANIMATION_DURATION = 800; // ms
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            // Display the splash screen for some time
+            frame.setMenuBarVisibility(false);
+            frame.showScreen(Screen.SPLASH_SCREEN);
+            Thread.sleep(ANIMATION_DURATION);
+            return null;
+        }
+
+        @Override
+        protected void process(List<Integer> chunks) {
+            // do nothing
+        }
+
+        @Override
+        protected void done() {
+            // Close splash screen and proceed to main application
+            frame.showScreen(app.getCurrentScreen());
+        }
+    }
+
     public void playStartAnimation() {
-        final long animationDuration = 800; // ms
-
-        Thread th = new Thread() {
-            @Override
-            public void run() {
-                // Display the splash screen for 1 second
-                frame.setMenuBarVisibility(false);
-                frame.showScreen(Screen.SPLASH_SCREEN);
-
-                try {
-                    Thread.sleep(animationDuration);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    System.exit(0);
-                }
-                frame.showScreen(app.getCurrentScreen());
-            }
-        };
-        th.start();
+        // Perform background loading task
+        Task task = new Task();
+        task.execute();
     }
 
     @Override

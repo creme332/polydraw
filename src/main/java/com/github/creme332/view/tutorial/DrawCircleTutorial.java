@@ -30,7 +30,7 @@ public class DrawCircleTutorial extends AbstractTutorial {
                     regular);
 
             doc.insertString(doc.getLength(),
-                    "\n\n1. Click on the circle icon (third icon from the left) in the menu bar and select the first option in the dropdown menu.\n",
+                    "\n\n1. Click on the circle icon (third icon from the left) in the menu bar and select the first option in the dropdown menu.\n\n",
                     regular);
 
             insertImage("step-1.png");
@@ -57,13 +57,13 @@ public class DrawCircleTutorial extends AbstractTutorial {
                     "\n\n2. After selecting the circle center with your cursor, you will be prompted to enter the circle radius. ",
                     regular);
             doc.insertString(doc.getLength(),
-                    "The radius must be an integer greater than 0. \n",
+                    "The radius must be an integer greater than 0. \n\n",
                     highlightRed);
 
             insertImage("step-3.png");
 
             doc.insertString(doc.getLength(),
-                    "\n\n6. After entering a valid radius, you should see a newly drawn circle:\n",
+                    "\n\n6. After entering a valid radius, you should see a newly drawn circle:\n\n",
                     regular);
 
             insertImage("step-4.png");
