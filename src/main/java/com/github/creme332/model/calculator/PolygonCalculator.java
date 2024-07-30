@@ -6,8 +6,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.awt.Point;
+import java.util.Iterator;
 
 public class PolygonCalculator {
 
@@ -145,4 +150,110 @@ public class PolygonCalculator {
 
         return new Polygon(xPoints, yPoints, xPoints.length);
     }
+
+     /**
+     * Fills the polygon using the scan-line fill algorithm.
+     * 
+     * @param polygon The polygon to be filled.
+     * @return A list of points representing the filled pixels.
+     */
+    public List<Point> scanFill(Polygon polygon) {
+        List<Edge> edgeTable = createEdgeTable(polygon);
+        List<Point> filledPixels = new ArrayList<>();
+        
+        int minY = Arrays.stream(polygon.ypoints).min().orElseThrow();
+        int maxY = Arrays.stream(polygon.ypoints).max().orElseThrow();
+        
+        List<Edge> activeEdgeTable = new ArrayList<>();
+        
+        for (int y = minY; y <= maxY; y++) {
+            // Move edges from edge table to active edge table where y == minY
+            Iterator<Edge> edgeIterator = edgeTable.iterator();
+            while (edgeIterator.hasNext()) {
+                Edge edge = edgeIterator.next();
+                if (edge.yMin == y) {
+                    activeEdgeTable.add(edge);
+                    edgeIterator.remove();
+                }
+            }
+            
+            // Remove edges from active edge table where y == maxY
+            edgeIterator = activeEdgeTable.iterator();
+            while (edgeIterator.hasNext()) {
+                Edge edge = edgeIterator.next();
+                if (edge.yMax == y) {
+                    edgeIterator.remove();
+                }
+            }
+            
+            // Sort active edge table by xMin
+            activeEdgeTable.sort(Comparator.comparingDouble(e -> e.xMin));
+            
+            // Fill pixels between pairs of intersections
+            for (int i = 0; i < activeEdgeTable.size(); i += 2) {
+                Edge edge1 = activeEdgeTable.get(i);
+                Edge edge2 = activeEdgeTable.get(i + 1);
+                
+                for (int x = (int) Math.ceil(edge1.xMin); x <= edge2.xMin; x++) {
+                    filledPixels.add(new Point(x, y));
+                }
+            }
+            
+            // Update xMin for each edge in active edge table
+            for (Edge edge : activeEdgeTable) {
+                edge.xMin += edge.inverseSlope;
+            }
+        }
+        
+        return filledPixels;
+    }
+    
+    /**
+     * Creates the edge table from the given polygon.
+     * 
+     * @param polygon The polygon to create the edge table from.
+     * @return A list of edges representing the edge table.
+     */
+    private List<Edge> createEdgeTable(Polygon polygon) {
+        List<Edge> edgeTable = new ArrayList<>();
+        
+        int n = polygon.npoints;
+        for (int i = 0; i < n; i++) {
+            int x1 = polygon.xpoints[i];
+            int y1 = polygon.ypoints[i];
+            int x2 = polygon.xpoints[(i + 1) % n];
+            int y2 = polygon.ypoints[(i + 1) % n];
+            
+            if (y1 == y2) continue; // Skip horizontal edges
+            
+            Edge edge = new Edge();
+            if (y1 < y2) {
+                edge.yMin = y1;
+                edge.yMax = y2;
+                edge.xMin = x1;
+                edge.inverseSlope = (double) (x2 - x1) / (y2 - y1);
+            } else {
+                edge.yMin = y2;
+                edge.yMax = y1;
+                edge.xMin = x2;
+                edge.inverseSlope = (double) (x1 - x2) / (y1 - y2);
+            }
+            
+            edgeTable.add(edge);
+        }
+        
+        edgeTable.sort(Comparator.comparingInt(e -> e.yMin));
+        return edgeTable;
+    }
+    
+    /**
+     * Private inner class representing an edge for the scan-line fill algorithm.
+     */
+    private class Edge {
+        int yMin;
+        int yMax;
+        double xMin;
+        double inverseSlope;
+    }
 }
+
