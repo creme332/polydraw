@@ -22,7 +22,7 @@ public class Rotator extends AbstractTransformer {
     @Override
     public void handleShapeSelection(int shapeIndex) {
         // Get copy of selected shape
-        ShapeWrapper selectedWrapperCopy = canvasModel.getShapeManager().getShapes().get(shapeIndex);
+        ShapeWrapper selectedWrapperCopy = canvasModel.getShapeManager().getShapeByIndex(shapeIndex);
 
         // Request rotation details from the user
         RotationDetails rotationDetails = requestRotationDetails();
