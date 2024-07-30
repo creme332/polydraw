@@ -99,6 +99,7 @@ public class CanvasModel {
     }
 
     public void setSelectedShape(int shapeIndex) {
+        support.firePropertyChange("selectedShapeIndex", this.selectedShapeIndex, shapeIndex);
         selectedShapeIndex = shapeIndex;
     }
 
@@ -262,6 +263,7 @@ public class CanvasModel {
         support.addPropertyChangeListener("cellSize", listener);
         support.addPropertyChangeListener("standardView", listener);
         support.addPropertyChangeListener("labelFontSize", listener);
+        support.addPropertyChangeListener("selectedShapeIndex", listener);
     }
 
     public int getCellSize() {

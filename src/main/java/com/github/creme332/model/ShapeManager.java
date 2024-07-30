@@ -238,6 +238,10 @@ public class ShapeManager {
         return -1;
     }
 
+    public ShapeWrapper getShapeByIndex(int i) {
+        return new ShapeWrapper(shapes.get(i));
+    }
+
     /**
      * 
      * @return A copy of the the shapes array that should be displayed on the
