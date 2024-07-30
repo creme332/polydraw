@@ -85,6 +85,12 @@ public class Toolbar extends JToolBar {
         menuBar.add(colorPanel);
 
         this.add(menuBar);
+
+        // make thickness label match value given by thickness slider
+        thicknessSlider.addChangeListener(e -> {
+            int thickness = thicknessSlider.getValue();
+            thicknessLabel.setText(String.valueOf(thickness));
+        });
     }
 
     public JSlider getThicknessSlider() {
@@ -99,7 +105,8 @@ public class Toolbar extends JToolBar {
         return lineMenu;
     }
 
-    public void updateThicknessLabel(int thickness) {
+    public void setThickness(int thickness) {
+        thicknessSlider.setValue(thickness);
         thicknessLabel.setText(String.valueOf(thickness));
     }
 
