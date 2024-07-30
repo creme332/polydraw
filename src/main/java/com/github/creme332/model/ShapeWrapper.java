@@ -78,7 +78,7 @@ public class ShapeWrapper {
     }
 
     /**
-     * Finds the center of a given shape.
+     * Finds the center of the shape.
      * 
      * @param shape the shape to find the center of
      * @return a Point2D representing the center of the shape
@@ -93,6 +93,42 @@ public class ShapeWrapper {
         double centerY = bounds.getCenterY();
 
         return new Point2D.Double(centerX, centerY);
+    }
+
+    /**
+     * Shears the shape by the given shear factors.
+     *
+     * @param shearFactors the shear factors [shx, shy]
+     */
+    public void shear(double[] shearFactors) {
+        if (shape == null || shearFactors == null) {
+            return;
+        }
+
+        // Create an affine transform for shearing
+        AffineTransform transform = new AffineTransform();
+        transform.shear(shearFactors[0], shearFactors[1]);
+
+        // Transform the shape
+        Shape transformedShape;
+
+        if (shape instanceof Polygon) {
+            // Ensure that the transformed shape is of type Polygon if the original was
+            // Polygon
+            transformedShape = PolygonCalculator.transformPolygon((Polygon) shape, transform);
+        } else {
+            transformedShape = transform.createTransformedShape(shape);
+        }
+
+        // Set the new transformed shape
+        setShape(transformedShape);
+
+        // Shear the plotted points
+        for (int i = 0; i < plottedPoints.size(); i++) {
+            Point2D oldPoint = plottedPoints.get(i);
+            Point2D newPoint = transform.transform(oldPoint, null);
+            plottedPoints.set(i, newPoint);
+        }
     }
 
     /**
@@ -169,6 +205,39 @@ public class ShapeWrapper {
             Point2D rotatedPoint = PolygonCalculator.rotatePointAboutPivot(oldPoint, pivot, radAngle);
             plottedPoints.set(i, rotatedPoint);
         }
+    }
+
+    /**
+     * 
+     * @param point
+     * @return True if point is inside shape or on its border
+     */
+    public boolean isPointOnShape(Point2D point) {
+        return shape.contains(point) || isPointOnShapeBorder(shape, point);
+    }
+
+    /**
+     * Checks if a point is on the border of the shape, within a specified
+     * tolerance.
+     * 
+     * @param shape     the shape to check
+     * @param point     the point to check
+     * @param tolerance the tolerance within which to consider the point on the
+     *                  border
+     * @return true if the point is on the shape's border, false otherwise
+     */
+    public static boolean isPointOnShapeBorder(Shape shape, Point2D point) {
+        final double TOLERANCE = 3.0;
+
+        if (shape == null) {
+            return false;
+        }
+        // Create a small rectangle around the clicked point
+        Rectangle2D.Double clickArea = new Rectangle2D.Double(
+                point.getX() - TOLERANCE, point.getY() - TOLERANCE,
+                2 * TOLERANCE, 2 * TOLERANCE);
+        // Check if the clickArea intersects with the shape's outline
+        return shape.intersects(clickArea);
     }
 
     public Shape getShape() {
@@ -248,5 +317,46 @@ public class ShapeWrapper {
                 }
                 """, plottedPointString, Arrays.toString(toPolygon().xpoints), Arrays.toString(toPolygon().ypoints),
                 lineColor, lineType, lineThickness);
+    }
+
+    /**
+     * Scales the shape and plotted points with respect to a given point.
+     * 
+     * @param scalingPoint The point to scale with respect to.
+     * @param sx           The scaling factor along the x-axis.
+     * @param sy           The scaling factor along the y-axis.
+     */
+    public void scale(Point2D scalingPoint, double sx, double sy) {
+        AffineTransform transform = new AffineTransform();
+
+        // Translate shape to origin
+        transform.translate(scalingPoint.getX(), scalingPoint.getY());
+
+        // Apply scaling
+        transform.scale(sx, sy);
+
+        // Translate shape back to original position
+        transform.translate(-scalingPoint.getX(), -scalingPoint.getY());
+
+        final Shape oldShape = shape;
+        Shape transformedShape;
+
+        if (oldShape instanceof Polygon) {
+            // If the shape is a polygon, ensure the transformed shape is also a polygon
+            transformedShape = PolygonCalculator.transformPolygon((Polygon) oldShape, transform);
+        } else {
+            transformedShape = transform.createTransformedShape(oldShape);
+        }
+
+        // Replace old shape with transformed shape
+        setShape(transformedShape);
+
+        // Scale plotted points
+        for (int i = 0; i < plottedPoints.size(); i++) {
+            Point2D oldPoint = plottedPoints.get(i);
+            double newX = scalingPoint.getX() + (oldPoint.getX() - scalingPoint.getX()) * sx;
+            double newY = scalingPoint.getY() + (oldPoint.getY() - scalingPoint.getY()) * sy;
+            plottedPoints.set(i, new Point2D.Double(newX, newY));
+        }
     }
 }
