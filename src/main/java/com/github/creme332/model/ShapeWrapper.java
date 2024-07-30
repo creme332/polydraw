@@ -203,7 +203,8 @@ public class ShapeWrapper {
         for (int i = 0; i < plottedPoints.size(); i++) {
             Point2D oldPoint = plottedPoints.get(i);
             Point2D rotatedPoint = PolygonCalculator.rotatePointAboutPivot(oldPoint, pivot, radAngle);
-            plottedPoints.set(i, rotatedPoint);
+            Point2D roundedPoint = new Point2D.Double((int) rotatedPoint.getX(), (int) rotatedPoint.getY());
+            plottedPoints.set(i, roundedPoint);
         }
     }
 
@@ -356,7 +357,7 @@ public class ShapeWrapper {
             Point2D oldPoint = plottedPoints.get(i);
             double newX = scalingPoint.getX() + (oldPoint.getX() - scalingPoint.getX()) * sx;
             double newY = scalingPoint.getY() + (oldPoint.getY() - scalingPoint.getY()) * sy;
-            plottedPoints.set(i, new Point2D.Double(newX, newY));
+            plottedPoints.set(i, new Point2D.Double((int) newX, (int) newY));
         }
     }
 }
