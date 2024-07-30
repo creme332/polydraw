@@ -28,7 +28,8 @@ public class Rotator extends AbstractTransformer {
         RotationDetails rotationDetails = requestRotationDetails();
 
         // Perform rotation
-        selectedWrapperCopy.rotate(rotationDetails.angle * (rotationDetails.isClockwise ? -1 : 1), rotationDetails.pivot);
+        double radAngle = Math.toRadians(rotationDetails.angle * (rotationDetails.isClockwise ? -1 : 1));
+        selectedWrapperCopy.rotate(radAngle, rotationDetails.pivot);
 
         // Replace old shape with new one
         canvasModel.getShapeManager().editShape(shapeIndex, selectedWrapperCopy);
@@ -56,11 +57,11 @@ public class Rotator extends AbstractTransformer {
         directionGroup.add(counterClockwiseButton);
 
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Angle:"));
+        panel.add(new JLabel("Angle"));
         panel.add(angleField);
-        panel.add(new JLabel("Pivot X:"));
+        panel.add(new JLabel("Pivot X"));
         panel.add(pivotXField);
-        panel.add(new JLabel("Pivot Y:"));
+        panel.add(new JLabel("Pivot Y"));
         panel.add(pivotYField);
         panel.add(counterClockwiseButton);
         panel.add(clockwiseButton);
