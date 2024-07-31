@@ -214,6 +214,9 @@ public class ShapeWrapper {
      * @return True if point is inside shape or on its border
      */
     public boolean isPointOnShape(Point2D point) {
+        if (shape == null) {
+            return false;
+        }
         return shape.contains(point) || isPointOnShapeBorder(shape, point);
     }
 
