@@ -36,7 +36,7 @@ public class PolygonCalculator {
      * 
      * @param point    Point to be rotated.
      * @param pivot    Point about which rotation takes place.
-     * @param radAngle Rotation angle in radians.
+     * @param radAngle Anti-clockwise rotation angle in radians.
      * @return The rotated point as a Point2D.
      */
     public static Point2D rotatePointAboutPivot(Point2D point, Point2D pivot, double radAngle) {
@@ -89,27 +89,38 @@ public class PolygonCalculator {
     }
 
     /**
-     * Calculates a regular polygon given two adjacent vertices and the number of sides.
+     * Calculates a regular polygon given two adjacent vertices and the number of
+     * sides.
      * 
-     * @param pointA    First vertex.
-     * @param pointB    Second vertex (adjacent to the first).
+     * @param pointA     First vertex.
+     * @param pointB     Second vertex (adjacent to the first).
      * @param sidesCount Number of sides in polygon.
      * @return The Polygon object representing the regular polygon.
      */
-    private Polygon getRegularPolygon(Point2D pointA, Point2D pointB, int sidesCount) {
-        double length = pointA.distance(pointB);
-        double angle = Math.atan2(pointB.getY() - pointA.getY(), pointB.getX() - pointA.getX());
-
-        Point2D.Double[] points = new Point2D.Double[sidesCount];
+    public Polygon getRegularPolygon(Point2D pointA, Point2D pointB, int sidesCount) {
+        final Point2D.Double[] points = new Point2D.Double[sidesCount];
         points[0] = new Point2D.Double(pointA.getX(), pointA.getY());
         points[1] = new Point2D.Double(pointB.getX(), pointB.getY());
 
-        final double rotationAngleInRad = Math.toRadians(360.0 / sidesCount);
+        /**
+         * Size of 1 interior angle of polygon.
+         */
+        final double interiorAngle = (180 * (sidesCount - 2)) / (double) sidesCount;
+
+        /**
+         * Anticlockwise rotation angle mapping one edge to another.
+         */
+        final double rotationAngleInRad = Math.toRadians(360 - interiorAngle);
 
         for (int i = 2; i < sidesCount; i++) {
-            points[i] = (Point2D.Double) rotatePointAboutPivot(points[i - 1], points[i - 2], rotationAngleInRad);
+            Point2D pivot = points[i - 1];
+            Point2D vectorStart = points[i - 2];
+
+            // rotate vector about pivot
+            points[i] = (Point2D.Double) rotatePointAboutPivot(vectorStart, pivot, rotationAngleInRad);
         }
 
+        /// round off pixel coordinates to the nearest integer
         int[] x = new int[sidesCount];
         int[] y = new int[sidesCount];
         for (int i = 0; i < sidesCount; i++) {
@@ -145,18 +156,6 @@ public class PolygonCalculator {
         }
 
         return new int[][] { xOrdered, yOrdered };
-    }
-
-    /**
-     * Calculates a regular polygon given two adjacent vertices and the number of sides.
-     * 
-     * @param pointA    First vertex.
-     * @param pointB    Second vertex (adjacent to the first).
-     * @param sidesCount Number of sides in polygon.
-     * @return The Polygon object representing the regular polygon.
-     */
-    public Polygon getPolygonFromTwoPoints(Point2D pointA, Point2D pointB, int sidesCount) {
-        return getRegularPolygon(pointA, pointB, sidesCount);
     }
 
     /**
