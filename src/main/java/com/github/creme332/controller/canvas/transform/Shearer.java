@@ -22,7 +22,7 @@ public class Shearer extends AbstractTransformer {
     @Override
     public void handleShapeSelection(int shapeIndex) {
         // A copy of the shape selected
-        final ShapeWrapper selectedWrapperCopy = canvasModel.getShapeManager().getShapes().get(shapeIndex);
+        final ShapeWrapper selectedWrapperCopy = canvasModel.getShapeManager().getShapeByIndex(shapeIndex);
 
         // request user for shear factors
         final double[] shearFactors = requestShearFactors();

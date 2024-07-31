@@ -81,8 +81,9 @@ public class AppState {
     }
 
     public void switchScreen(Screen newScreen) {
-        support.firePropertyChange("screen", currentScreen, newScreen);
+        final Screen oldScreen = currentScreen;
         currentScreen = newScreen;
+        support.firePropertyChange("screen", oldScreen, newScreen);
     }
 
     public Screen getCurrentScreen() {
@@ -139,8 +140,10 @@ public class AppState {
     }
 
     public void setSideBarVisibility(boolean newValue) {
-        support.firePropertyChange("sidebarVisibility", visibleSidebar, newValue);
+        final boolean oldValue = visibleSidebar;
         visibleSidebar = newValue;
+        support.firePropertyChange("sidebarVisibility", oldValue, newValue);
+
     }
 
     public Mode getMode() {
@@ -148,8 +151,9 @@ public class AppState {
     }
 
     public void setMode(Mode newMode) {
-        support.firePropertyChange("mode", mode, newMode);
-        mode = newMode;
+        final Mode oldMode = this.mode;
+        this.mode = newMode;
+        support.firePropertyChange("mode", oldMode, newMode);
     }
 
     public boolean isMaximizeFrame() {
@@ -157,9 +161,9 @@ public class AppState {
     }
 
     public void setMaximizeFrame(boolean maximizeFrame) {
-        support.firePropertyChange("maximizeFrame", this.maximizeFrame,
-                maximizeFrame);
+        final boolean oldValue = this.maximizeFrame;
         this.maximizeFrame = maximizeFrame;
+        support.firePropertyChange("maximizeFrame", oldValue, this.maximizeFrame);
     }
 
     public void startPrintingProcess() {
