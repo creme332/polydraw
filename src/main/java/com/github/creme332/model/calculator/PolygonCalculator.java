@@ -151,7 +151,7 @@ public class PolygonCalculator {
         return new Polygon(xPoints, yPoints, xPoints.length);
     }
 
-     /**
+    /**
      * Fills the polygon using the scan-line fill algorithm.
      * 
      * @param polygon The polygon to be filled.
@@ -191,6 +191,7 @@ public class PolygonCalculator {
             
             // Fill pixels between pairs of intersections
             for (int i = 0; i < activeEdgeTable.size(); i += 2) {
+                if (i + 1 >= activeEdgeTable.size()) break;
                 Edge edge1 = activeEdgeTable.get(i);
                 Edge edge2 = activeEdgeTable.get(i + 1);
                 
@@ -249,7 +250,7 @@ public class PolygonCalculator {
     /**
      * Private inner class representing an edge for the scan-line fill algorithm.
      */
-    private class Edge {
+    private static class Edge {
         int yMin;
         int yMax;
         double xMin;

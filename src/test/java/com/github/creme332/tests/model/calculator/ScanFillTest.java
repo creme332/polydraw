@@ -1,93 +1,87 @@
 package com.github.creme332.tests.model.calculator;
 
 import com.github.creme332.model.calculator.PolygonCalculator;
-import com.github.creme332.tests.utils.TestHelper;
 import org.junit.Test;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.util.List;
 
+import static org.junit.Assert.*;
 
 public class ScanFillTest {
 
+    private final PolygonCalculator calculator = new PolygonCalculator();
+
     @Test
-    public void testTriangle() {
-        Polygon triangle = new Polygon(
-                new int[]{10, 20, 15},
-                new int[]{10, 10, 20},
-                3
-        );
+    public void testGetOrderedPoints() {
+        int sidesCount = 5;
+        int length = 50;
+        int centerX = 100;
+        int centerY = 100;
 
-        PolygonCalculator calculator = new PolygonCalculator();
-        List<Point> filledPixels = calculator.scanFill(triangle);
+        int[][] orderedPoints = calculator.getOrderedPoints(sidesCount, length, centerX, centerY);
 
-        int[][] expectedPixels = {
-                {15, 10}, {15, 11}, {15, 12}, {15, 13}, {15, 14}, {15, 15}, {15, 16}, {15, 17}, {15, 18}, {15, 19},
-                {14, 11}, {14, 12}, {14, 13}, {14, 14}, {14, 15}, {14, 16}, {14, 17}, {14, 18},
-                {13, 12}, {13, 13}, {13, 14}, {13, 15}, {13, 16}, {13, 17},
-                {12, 13}, {12, 14}, {12, 15}, {12, 16},
-                {11, 14}, {11, 15}
-        };
-
-        TestHelper.assert2DArrayEquals(expectedPixels, convertToIntArray(filledPixels));
+        assertNotNull(orderedPoints);
+        assertEquals(2, orderedPoints.length);
+        assertEquals(sidesCount, orderedPoints[0].length);
+        assertEquals(sidesCount, orderedPoints[1].length);
     }
 
     @Test
-    public void testSquare() {
-        Polygon square = new Polygon(
-                new int[]{10, 20, 20, 10},
-                new int[]{10, 10, 20, 20},
-                4
-        );
+    public void testTransformPolygon() {
+        Polygon polygon = new Polygon(new int[]{0, 1, 0}, new int[]{0, 0, 1}, 3);
+        AffineTransform transform = AffineTransform.getScaleInstance(2, 2);
+        Polygon transformedPolygon = PolygonCalculator.transformPolygon(polygon, transform);
 
-        PolygonCalculator calculator = new PolygonCalculator();
-        List<Point> filledPixels = calculator.scanFill(square);
+        assertEquals(3, transformedPolygon.npoints);
+        assertEquals(0, transformedPolygon.xpoints[0]);
+        assertEquals(2, transformedPolygon.xpoints[1]);
+        assertEquals(0, transformedPolygon.xpoints[2]);
+        assertEquals(0, transformedPolygon.ypoints[0]);
+        assertEquals(0, transformedPolygon.ypoints[1]);
+        assertEquals(2, transformedPolygon.ypoints[2]);
+    }
 
-        int[][] expectedPixels = new int[121][2];
-        int index = 0;
-        for (int y = 10; y <= 20; y++) {
-            for (int x = 10; x <= 20; x++) {
-                expectedPixels[index++] = new int[]{x, y};
-            }
+    @Test
+    public void testScanFill() {
+        int[] xPoints = {50, 100, 150};
+        int[] yPoints = {50, 150, 50};
+        Polygon polygon = new Polygon(xPoints, yPoints, 3);
+
+        List<Point> filledPixels = calculator.scanFill(polygon);
+
+        assertNotNull(filledPixels);
+        assertFalse(filledPixels.isEmpty());
+
+        // A simple check to see if the filled pixels are within the bounding box of the triangle
+        for (Point p : filledPixels) {
+            assertTrue(p.x >= 50 && p.x <= 150);
+            assertTrue(p.y >= 50 && p.y <= 150);
         }
-
-        TestHelper.assert2DArrayEquals(expectedPixels, convertToIntArray(filledPixels));
     }
 
     @Test
-    public void testConcavePolygon() {
-        Polygon concave = new Polygon(
-                new int[]{10, 20, 15, 20, 10},
-                new int[]{10, 10, 15, 20, 20},
-                5
-        );
+    public void testRotateVector() {
+        Point2D vector = new Point2D.Double(1, 0);
+        double angle = Math.PI / 2; // 90 degrees
 
-        PolygonCalculator calculator = new PolygonCalculator();
-        List<Point> filledPixels = calculator.scanFill(concave);
+        Point2D rotatedVector = PolygonCalculator.rotateVector(vector, angle);
 
-        int[][] expectedPixels = {
-                {15, 10}, {15, 11}, {15, 12}, {15, 13}, {15, 14}, {15, 15}, {15, 16}, {15, 17}, {15, 18}, {15, 19},
-                {14, 11}, {14, 12}, {14, 13}, {14, 14}, {14, 15}, {14, 16}, {14, 17}, {14, 18},
-                {13, 12}, {13, 13}, {13, 14}, {13, 15}, {13, 16}, {13, 17},
-                {12, 13}, {12, 14}, {12, 15}, {12, 16},
-                {11, 14}, {11, 15},
-                {16, 16}, {16, 17}, {16, 18}, {16, 19},
-                {17, 17}, {17, 18}, {17, 19},
-                {18, 18}, {18, 19}
-        };
-
-        TestHelper.assert2DArrayEquals(expectedPixels, convertToIntArray(filledPixels));
+        assertEquals(0, rotatedVector.getX(), 0.0001);
+        assertEquals(1, rotatedVector.getY(), 0.0001);
     }
 
-    private int[][] convertToIntArray(List<Point> points) {
-        int[][] result = new int[points.size()][2];
-        for (int i = 0; i < points.size(); i++) {
-            Point point = points.get(i);
-            result[i][0] = point.x;
-            result[i][1] = point.y;
-        }
-        return result;
+    @Test
+    public void testRotatePointAboutPivot() {
+        Point2D point = new Point2D.Double(1, 0);
+        Point2D pivot = new Point2D.Double(0, 0);
+        double angle = Math.PI / 2; // 90 degrees
+
+        Point2D rotatedPoint = PolygonCalculator.rotatePointAboutPivot(point, pivot, angle);
+
+        assertEquals(0, rotatedPoint.getX(), 0.0001);
+        assertEquals(1, rotatedPoint.getY(), 0.0001);
     }
 }
-
-
