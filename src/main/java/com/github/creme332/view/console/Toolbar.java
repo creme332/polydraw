@@ -68,6 +68,9 @@ public class Toolbar extends JToolBar {
             JMenuItem menuItem = new JMenuItem(type.getDescription(), type.getIcon());
             menuItem.setActionCommand(type.getDescription());
             lineMenu.add(menuItem);
+
+            // update menu icon when a particular line is clicked
+            menuItem.addActionListener(e -> displayLineIcon(type));
         }
 
         lineMenu.add(thicknessPanel); // Add the panel with the slider and label
@@ -85,6 +88,12 @@ public class Toolbar extends JToolBar {
         menuBar.add(colorPanel);
 
         this.add(menuBar);
+
+        // make thickness label match value given by thickness slider
+        thicknessSlider.addChangeListener(e -> {
+            int thickness = thicknessSlider.getValue();
+            thicknessLabel.setText(String.valueOf(thickness));
+        });
     }
 
     public JSlider getThicknessSlider() {
@@ -99,7 +108,8 @@ public class Toolbar extends JToolBar {
         return lineMenu;
     }
 
-    public void updateThicknessLabel(int thickness) {
+    public void setThickness(int thickness) {
+        thicknessSlider.setValue(thickness);
         thicknessLabel.setText(String.valueOf(thickness));
     }
 

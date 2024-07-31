@@ -26,7 +26,7 @@ public class Translator extends AbstractTransformer {
         /**
          * A copy of the shape selected
          */
-        final ShapeWrapper selectedWrapperCopy = canvasModel.getShapeManager().getShapes().get(shapeIndex);
+        final ShapeWrapper selectedWrapperCopy = canvasModel.getShapeManager().getShapeByIndex(shapeIndex);
 
         // request user for translation vector
         final Point2D translationVector = requestTranslationVector();

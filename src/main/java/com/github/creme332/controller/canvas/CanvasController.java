@@ -234,7 +234,7 @@ public class CanvasController implements PropertyChangeListener {
                 if (copiedShapeIndex < 0)
                     return;
                 ShapeManager manager = model.getShapeManager();
-                manager.addShape(manager.getShapes().get(copiedShapeIndex));
+                manager.addShape(manager.getShapeByIndex(copiedShapeIndex));
             }
         });
 
@@ -270,7 +270,7 @@ public class CanvasController implements PropertyChangeListener {
     private void dragShapeTo(final Point destination) {
         final int shapeIndex = model.getSelectedShapeIndex();
 
-        final ShapeWrapper shapeWrapperCopy = model.getShapeManager().getShapes().get(shapeIndex);
+        final ShapeWrapper shapeWrapperCopy = model.getShapeManager().getShapeByIndex(shapeIndex);
 
         // calculate translation vector from shape center to current mouse position
         Point2D polyspaceMousePosition = model.toPolySpace(destination);
