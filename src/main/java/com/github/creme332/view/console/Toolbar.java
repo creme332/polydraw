@@ -68,6 +68,9 @@ public class Toolbar extends JToolBar {
             JMenuItem menuItem = new JMenuItem(type.getDescription(), type.getIcon());
             menuItem.setActionCommand(type.getDescription());
             lineMenu.add(menuItem);
+
+            // update menu icon when a particular line is clicked
+            menuItem.addActionListener(e -> displayLineIcon(type));
         }
 
         lineMenu.add(thicknessPanel); // Add the panel with the slider and label

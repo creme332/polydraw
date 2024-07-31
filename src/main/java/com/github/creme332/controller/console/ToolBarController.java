@@ -1,8 +1,6 @@
 package com.github.creme332.controller.console;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -30,23 +28,7 @@ public class ToolBarController implements PropertyChangeListener {
 
         canvasModel.addPropertyChangeListener(this);
 
-        toolbar.getThicknessSlider().addChangeListener(e -> {
-            int thickness = toolbar.getThicknessSlider().getValue();
-            int selectedShapeIndex = canvasModel.getSelectedShapeIndex();
-
-            // if a shape is currently selected, edit the shape
-            if (selectedShapeIndex >= 0) {
-                ShapeManager manager = canvasModel.getShapeManager();
-                ShapeWrapper wrapper = manager.getShapeByIndex(selectedShapeIndex);
-                wrapper.setLineThickness(thickness);
-                System.out.println(
-                        "new thickness = " + thickness);
-                manager.editShape(selectedShapeIndex, wrapper);
-            } else {
-                // edit global canvas attributes
-                canvasModel.setLineThickness(thickness);
-            }
-        });
+        toolbar.getThicknessSlider().addChangeListener(e -> handleLineThicknessChange());
 
         toolbar.getColorBox().addActionListener(e -> {
             JColorChooser cc = new JColorChooser();
@@ -59,31 +41,29 @@ public class ToolBarController implements PropertyChangeListener {
                 }
             }
 
-            JDialog dialog = JColorChooser.createDialog(toolbar, "Select a Color", true, cc, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Color selectedColor = cc.getColor();
-                    if (selectedColor != null) {
+            JDialog dialog = JColorChooser.createDialog(toolbar, "Select a Color", true, cc, eee -> {
+                Color selectedColor = cc.getColor();
+                if (selectedColor != null) {
 
-                        int selectedShapeIndex = canvasModel.getSelectedShapeIndex();
+                    int selectedShapeIndex = canvasModel.getSelectedShapeIndex();
 
-                        // if a shape is currently selected, edit the shape
-                        if (selectedShapeIndex >= 0) {
-                            ShapeManager manager = canvasModel.getShapeManager();
-                            ShapeWrapper wrapper = manager.getShapeByIndex(selectedShapeIndex);
-                            wrapper.setLineColor(selectedColor);
-                            manager.editShape(selectedShapeIndex, wrapper);
-                        } else {
-                            // else edit global canvas attributes
-                            canvasModel.setShapeColor(selectedColor);
-                        }
-                        toolbar.getColorBox().setBackground(selectedColor);
-
-                        // request focus again otherwise keyboard shortcuts will stop working after
-                        // opening color dialog
-                        toolbar.getTopLevelAncestor().requestFocus();
+                    // if a shape is currently selected, edit the shape
+                    if (selectedShapeIndex >= 0) {
+                        ShapeManager manager = canvasModel.getShapeManager();
+                        ShapeWrapper wrapper = manager.getShapeByIndex(selectedShapeIndex);
+                        wrapper.setLineColor(selectedColor);
+                        manager.editShape(selectedShapeIndex, wrapper);
+                    } else {
+                        // else edit global canvas attributes
+                        canvasModel.setShapeColor(selectedColor);
                     }
+                    toolbar.getColorBox().setBackground(selectedColor);
+
+                    // request focus again otherwise keyboard shortcuts will stop working after
+                    // opening color dialog
+                    toolbar.getTopLevelAncestor().requestFocus();
                 }
+
             }, null);
 
             dialog.setVisible(true);
@@ -91,25 +71,49 @@ public class ToolBarController implements PropertyChangeListener {
 
         // add action listener to each line type menu item to handle click
         for (int i = 0; i < LineType.values().length; i++) {
-            JMenuItem item = toolbar.getLineTypeMenu().getItem(i);
+            JMenuItem lineMenuItem = toolbar.getLineTypeMenu().getItem(i);
 
             final LineType currentLine = LineType.values()[i];
-            item.addActionListener(e -> {
-                ShapeManager manager = canvasModel.getShapeManager();
-                int selectedShapeIndex = canvasModel.getSelectedShapeIndex();
+            lineMenuItem.addActionListener(e -> handleLineTypeClick(currentLine));
+        }
+    }
 
-                // if a shape is currently selected, edit the shape
-                if (selectedShapeIndex >= 0) {
-                    ShapeWrapper wrapper = manager.getShapeByIndex(selectedShapeIndex);
-                    wrapper.setLineType(currentLine);
-                    manager.editShape(selectedShapeIndex, wrapper);
-                } else {
-                    // else edit global canvas attributes
-                    canvasModel.setLineType(currentLine);
-                }
+    /**
+     * Updates either currently selected shape or canvas attributes when line
+     * type changes.
+     */
+    public void handleLineTypeClick(LineType clickedLine) {
+        ShapeManager manager = canvasModel.getShapeManager();
+        int selectedShapeIndex = canvasModel.getSelectedShapeIndex();
 
-                toolbar.displayLineIcon(currentLine);
-            });
+        // if a shape is currently selected, edit the shape
+        if (selectedShapeIndex >= 0) {
+            ShapeWrapper wrapper = manager.getShapeByIndex(selectedShapeIndex);
+            wrapper.setLineType(clickedLine);
+            manager.editShape(selectedShapeIndex, wrapper);
+        } else {
+            // else edit global canvas attributes
+            canvasModel.setLineType(clickedLine);
+        }
+    }
+
+    /**
+     * Updates either currently selected shape or canvas attributes when line
+     * thickness in slider changes.
+     */
+    public void handleLineThicknessChange() {
+        int thickness = toolbar.getThicknessSlider().getValue();
+        int selectedShapeIndex = canvasModel.getSelectedShapeIndex();
+
+        // if a shape is currently selected, edit the shape
+        if (selectedShapeIndex >= 0) {
+            ShapeManager manager = canvasModel.getShapeManager();
+            ShapeWrapper wrapper = manager.getShapeByIndex(selectedShapeIndex);
+            wrapper.setLineThickness(thickness);
+            manager.editShape(selectedShapeIndex, wrapper);
+        } else {
+            // edit global canvas attributes
+            canvasModel.setLineThickness(thickness);
         }
     }
 
