@@ -17,7 +17,7 @@ import java.util.Iterator;
 public class PolygonCalculator {
 
     /**
-     * Caches coordinates regular polygons previously calculated.
+     * Caches coordinates of regular polygons previously calculated.
      */
     private final Map<Map.Entry<Integer, Integer>, Shape> polygonCache = new HashMap<>();
 
@@ -27,13 +27,12 @@ public class PolygonCalculator {
      * 
      * @param vector   A point in the x-y plane.
      * @param radAngle Rotation angle in radians.
-     * @return
+     * @return The rotated vector as a Point2D.
      */
     public static Point2D rotateVector(Point2D vector, double radAngle) {
         return new Point2D.Double(
                 vector.getX() * Math.cos(radAngle) - vector.getY() * Math.sin(radAngle),
                 vector.getX() * Math.sin(radAngle) + vector.getY() * Math.cos(radAngle));
-
     }
 
     /**
@@ -42,26 +41,26 @@ public class PolygonCalculator {
      * 
      * @param point    Point to be rotated.
      * @param pivot    Point about which rotation takes place.
-     * @param radAngle Rotation angle in radians.
-     * @return
+     * @param radAngle Anti-clockwise rotation angle in radians.
+     * @return The rotated point as a Point2D.
      */
     public static Point2D rotatePointAboutPivot(Point2D point, Point2D pivot, double radAngle) {
-        // calculate translation vector from pivot to point
+        // Calculate translation vector from pivot to point
         Point2D translationVector = new Point2D.Double(point.getX() - pivot.getX(), point.getY() - pivot.getY());
 
-        // rotate translation vector
+        // Rotate translation vector
         translationVector = rotateVector(translationVector, radAngle);
 
-        // return new position of point
+        // Return new position of point
         return new Point2D.Double(translationVector.getX() + pivot.getX(), translationVector.getY() + pivot.getY());
     }
 
     /**
-     * Calculates coordinates of a regular polygon centered at origin.
+     * Calculates coordinates of a regular polygon centered at the origin.
      * 
-     * @param sidesCount Number of sides in polygon
-     * @param length     Side length of polygon
-     * @return
+     * @param sidesCount Number of sides in polygon.
+     * @param length     Side length of polygon.
+     * @return The shape representing the polygon.
      */
     private Shape getRegularPolygon(int sidesCount, int length) {
         if (polygonCache.containsKey(Map.entry(sidesCount, length))) {
@@ -76,7 +75,7 @@ public class PolygonCalculator {
                 length * Math.cos(rotationAngleInRad / 2));
 
         for (int i = 1; i < sidesCount; i++) {
-            // rotate the previous point by the required angle
+            // Rotate the previous point by the required angle
             Point2D.Double vector = new Point2D.Double(points[i - 1].x, points[i - 1].y);
             Point2D rotatedVector = rotateVector(vector, rotationAngleInRad);
             points[i] = new Point2D.Double(rotatedVector.getX(), rotatedVector.getY());
@@ -95,13 +94,56 @@ public class PolygonCalculator {
     }
 
     /**
-     * Calculates integer coordinates of a regular polygon.
+     * Calculates a regular polygon given two adjacent vertices and the number of
+     * sides.
      * 
-     * @param sidesCount number of sides
-     * @param length     side length of polygon
-     * @param centerX    x-coordinate of center of polygon
-     * @param centerY    y-coordinate of center of polygon
-     * @return
+     * @param pointA     First vertex.
+     * @param pointB     Second vertex (adjacent to the first).
+     * @param sidesCount Number of sides in polygon.
+     * @return The Polygon object representing the regular polygon.
+     */
+    public Polygon getRegularPolygon(Point2D pointA, Point2D pointB, int sidesCount) {
+        final Point2D.Double[] points = new Point2D.Double[sidesCount];
+        points[0] = new Point2D.Double(pointA.getX(), pointA.getY());
+        points[1] = new Point2D.Double(pointB.getX(), pointB.getY());
+
+        /**
+         * Size of 1 interior angle of polygon.
+         */
+        final double interiorAngle = (180 * (sidesCount - 2)) / (double) sidesCount;
+
+        /**
+         * Anticlockwise rotation angle mapping one edge to another.
+         */
+        final double rotationAngleInRad = Math.toRadians(360 - interiorAngle);
+
+        for (int i = 2; i < sidesCount; i++) {
+            Point2D pivot = points[i - 1];
+            Point2D vectorStart = points[i - 2];
+
+            // rotate vector about pivot
+            points[i] = (Point2D.Double) rotatePointAboutPivot(vectorStart, pivot, rotationAngleInRad);
+        }
+
+        /// round off pixel coordinates to the nearest integer
+        int[] x = new int[sidesCount];
+        int[] y = new int[sidesCount];
+        for (int i = 0; i < sidesCount; i++) {
+            x[i] = (int) Math.round(points[i].x);
+            y[i] = (int) Math.round(points[i].y);
+        }
+
+        return new Polygon(x, y, sidesCount);
+    }
+
+    /**
+     * Retrieves the ordered points of a regular polygon with specified parameters.
+     * 
+     * @param sidesCount Number of sides.
+     * @param length     Side length.
+     * @param centerX    X-coordinate of the polygon center.
+     * @param centerY    Y-coordinate of the polygon center.
+     * @return A 2D array containing ordered x and y points.
      */
     public int[][] getOrderedPoints(int sidesCount, int length, int centerX, int centerY) {
         Shape polygon = getRegularPolygon(sidesCount, length);
@@ -122,11 +164,11 @@ public class PolygonCalculator {
     }
 
     /**
-     * Transforms a given Polygon using the specified AffineTransform.
+     * Transforms a polygon using the given affine transformation.
      * 
-     * @param polygon   the Polygon to be transformed
-     * @param transform the AffineTransform to be applied
-     * @return a new Polygon representing the transformed shape
+     * @param polygon   The polygon to be transformed.
+     * @param transform The affine transformation to apply.
+     * @return The transformed polygon.
      */
     public static Polygon transformPolygon(Polygon polygon, AffineTransform transform) {
         Shape transformedShape = transform.createTransformedShape(polygon);
