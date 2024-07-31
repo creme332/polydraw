@@ -57,7 +57,7 @@ public class DrawPolygonTutorial extends AbstractTutorial {
                 insertImage("regular-polygon-icon.png");
 
                 doc.insertString(doc.getLength(),
-                                "\n\n2. On your canvas, click on a pixel to select the center of the polygon.",
+                                "\n\n2. On your canvas, click on a pixel then click on another pixel to select the length of the sides.",
                                 regular);
 
                 doc.insertString(doc.getLength(),
@@ -70,11 +70,7 @@ public class DrawPolygonTutorial extends AbstractTutorial {
                 insertImage("step-3.png");
 
                 doc.insertString(doc.getLength(),
-                                "\n\n4. You should now see a newly drawn polygon appear. You can control the side length of the polygon by moving your cursor towards or away from the polygon center.",
-                                regular);
-
-                doc.insertString(doc.getLength(),
-                                "\n\n5. To fix the side length, perform one last click on the canvas.\n",
+                                "\n\n4. You should now see a newly drawn polygon appear. Zoom in or out if the polygon is too small or large. \n",
                                 regular);
 
                 insertImage("step-4.png");
