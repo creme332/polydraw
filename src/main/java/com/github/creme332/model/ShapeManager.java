@@ -240,6 +240,15 @@ public class ShapeManager {
 
     /**
      * 
+     * @param i Index of shape in shape array
+     * @return A copy of the shape
+     */
+    public ShapeWrapper getShapeByIndex(int i) {
+        return new ShapeWrapper(shapes.get(i));
+    }
+
+    /**
+     * 
      * @return A copy of the the shapes array that should be displayed on the
      *         canvas. A shape preview may also be included as the last element.
      */

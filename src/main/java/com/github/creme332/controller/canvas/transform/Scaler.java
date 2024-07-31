@@ -23,7 +23,7 @@ public class Scaler extends AbstractTransformer {
     @Override
     public void handleShapeSelection(int shapeIndex) {
         // Get the selected shape
-        ShapeWrapper selectedShape = canvasModel.getShapeManager().getShapes().get(shapeIndex);
+        ShapeWrapper selectedShape = canvasModel.getShapeManager().getShapeByIndex(shapeIndex);
 
         // Request user for the scaling point and scaling factors
         Point2D scalingPoint = requestScalingPoint();
