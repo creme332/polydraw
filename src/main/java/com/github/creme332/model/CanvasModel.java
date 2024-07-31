@@ -98,9 +98,10 @@ public class CanvasModel {
         return shapeManager;
     }
 
-    public void setSelectedShape(int shapeIndex) {
-        support.firePropertyChange("selectedShapeIndex", this.selectedShapeIndex, shapeIndex);
-        selectedShapeIndex = shapeIndex;
+    public void setSelectedShape(int newShapeIndex) {
+        final int oldShapeIndex = this.selectedShapeIndex;
+        selectedShapeIndex = newShapeIndex;
+        support.firePropertyChange("selectedShapeIndex", oldShapeIndex, newShapeIndex);
     }
 
     public int getSelectedShapeIndex() {
@@ -219,14 +220,15 @@ public class CanvasModel {
      * @param zoomIn Zoom in if true, zoom out otherwise
      */
     public void updateCanvasZoom(boolean zoomIn) {
+        final int oldCellSize = cellSize;
         int newCellSize;
         if (zoomIn) {
             newCellSize = (Math.min(CanvasModel.MAX_CELL_SIZE, getCellSize() + CanvasModel.ZOOM_INCREMENT));
         } else {
             newCellSize = (Math.max(CanvasModel.MIN_CELL_SIZE, getCellSize() - CanvasModel.ZOOM_INCREMENT));
         }
-        support.firePropertyChange("cellSize", cellSize, newCellSize);
         cellSize = newCellSize;
+        support.firePropertyChange("cellSize", oldCellSize, newCellSize);
     }
 
     /**
@@ -271,8 +273,9 @@ public class CanvasModel {
     }
 
     public void setLabelFontSize(int newFontSize) {
-        support.firePropertyChange("labelFontSize", this.labelFontSize, newFontSize);
+        final int oldFontSize = labelFontSize;
         labelFontSize = newFontSize;
+        support.firePropertyChange("labelFontSize", oldFontSize, newFontSize);
     }
 
     public int getLabelFontSize() {
@@ -300,8 +303,9 @@ public class CanvasModel {
     }
 
     public void setGuidelinesEnabled(boolean enableGuidelines) {
-        support.firePropertyChange("enableGuidelines", this.enableGuidelines, enableGuidelines);
+        final boolean oldValue = this.enableGuidelines;
         this.enableGuidelines = enableGuidelines;
+        support.firePropertyChange("enableGuidelines", oldValue, enableGuidelines);
     }
 
     public LineType getLineType() {
@@ -333,7 +337,8 @@ public class CanvasModel {
     }
 
     public void setAxesVisible(boolean axesVisible) {
-        support.firePropertyChange("axesVisible", this.axesVisible, axesVisible);
+        final boolean oldValue = this.axesVisible;
         this.axesVisible = axesVisible;
+        support.firePropertyChange("axesVisible", oldValue, axesVisible);
     }
 }
