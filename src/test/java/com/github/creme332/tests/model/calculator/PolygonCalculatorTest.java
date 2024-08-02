@@ -17,68 +17,66 @@ public class PolygonCalculatorTest {
 
     @Test
     public void testGetOrderedPoints() {
-        int sidesCount = 5;
-        int length = 50;
-        int centerX = 100;
-        int centerY = 100;
-
+        int sidesCount = 4;
+        int length = 10;
+        int centerX = 5;
+        int centerY = 5;
+        int[][] expected = {
+                { 12, -2, -2, 12 },
+                { 12, 12, -2, -2 }
+        };
         int[][] orderedPoints = calculator.getOrderedPoints(sidesCount, length, centerX, centerY);
 
-        assertNotNull(orderedPoints);
-        assertEquals(2, orderedPoints.length);
-        assertEquals(sidesCount, orderedPoints[0].length);
-        assertEquals(sidesCount, orderedPoints[1].length);
-    }
-
-    @Test
-    public void testTransformPolygon() {
-        Polygon polygon = new Polygon(new int[] { 0, 1, 0 }, new int[] { 0, 0, 1 }, 3);
-        AffineTransform transform = AffineTransform.getScaleInstance(2, 2);
-        Polygon transformedPolygon = PolygonCalculator.transformPolygon(polygon, transform);
-
-        assertEquals(3, transformedPolygon.npoints);
-        assertEquals(0, transformedPolygon.xpoints[0]);
-        assertEquals(2, transformedPolygon.xpoints[1]);
-        assertEquals(0, transformedPolygon.xpoints[2]);
-        assertEquals(0, transformedPolygon.ypoints[0]);
-        assertEquals(0, transformedPolygon.ypoints[1]);
-        assertEquals(2, transformedPolygon.ypoints[2]);
-    }
-
-    @Test
-    public void testScanFillForRectangle() {
-        int[] xPoints = { 0, 3, 3, 0 };
-        int[] yPoints = { 0, 0, 3, 3 };
-        List<Point> expectedPixels = Arrays.asList(
-                new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(3, 0),
-                new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1),
-                new Point(0, 2), new Point(1, 2), new Point(2, 2), new Point(3, 2),
-                new Point(0, 3), new Point(1, 3), new Point(2, 3), new Point(3, 3));
-
-        List<Point> filledPixels = PolygonCalculator.scanFill(new Polygon(xPoints, yPoints, xPoints.length));
-        assertEquals(expectedPixels, filledPixels);
+        assertArrayEquals(expected[0], orderedPoints[0]);
+        assertArrayEquals(expected[1], orderedPoints[1]);
     }
 
     @Test
     public void testRotateVector() {
         Point2D vector = new Point2D.Double(1, 0);
-        double angle = Math.PI / 2; // 90 degrees
+        double radAngle = Math.toRadians(90);
+        Point2D expected = new Point2D.Double(0, 1);
+        Point2D result = PolygonCalculator.rotateVector(vector, radAngle);
 
-        Point2D rotatedVector = PolygonCalculator.rotateVector(vector, angle);
-
-        assertEquals(0, rotatedVector.getX(), 0.0001);
-        assertEquals(1, rotatedVector.getY(), 0.0001);
+        assertEquals(expected.getX(), result.getX(), 0.001);
+        assertEquals(expected.getY(), result.getY(), 0.001);
     }
 
     @Test
     public void testRotatePointAboutPivot() {
         Point2D point = new Point2D.Double(1, 0);
         Point2D pivot = new Point2D.Double(0, 0);
-        double angle = Math.PI / 2; // 90 degrees
+        double radAngle = Math.toRadians(90);
+        Point2D expected = new Point2D.Double(0, 1);
+        Point2D result = PolygonCalculator.rotatePointAboutPivot(point, pivot, radAngle);
 
-        Point2D rotatedPoint = PolygonCalculator.rotatePointAboutPivot(point, pivot, angle);
+        assertEquals(expected.getX(), result.getX(), 0.001);
+        assertEquals(expected.getY(), result.getY(), 0.001);
+    }
 
-        assertEquals(0, rotatedPoint.getX(), 0.0001);
-        assertEquals(1, rotatedPoint.getY(), 0.0001);
+    @Test
+    public void testTransformPolygon() {
+        Polygon polygon = new Polygon(new int[] { 0, 1, 1, 0 }, new int[] { 0, 0, 1, 1 }, 4);
+        AffineTransform transform = AffineTransform.getTranslateInstance(1, 1);
+        Polygon expected = new Polygon(new int[] { 1, 2, 2, 1 }, new int[] { 1, 1, 2, 2 }, 4);
+        Polygon result = PolygonCalculator.transformPolygon(polygon, transform);
+
+        assertArrayEquals(expected.xpoints, result.xpoints);
+        assertArrayEquals(expected.ypoints, result.ypoints);
+    }
+
+    @Test
+    public void testScanFill() {
+        Polygon polygon = new Polygon(new int[] { 0, 4, 4, 0 }, new int[] { 0, 0, 4, 4 }, 4);
+        List<Point> expected = Arrays.asList(
+                new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(3, 0), new Point(4, 0),
+                new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1), new Point(4, 1),
+                new Point(0, 2), new Point(1, 2), new Point(2, 2), new Point(3, 2), new Point(4, 2),
+                new Point(0, 3), new Point(1, 3), new Point(2, 3), new Point(3, 3), new Point(4, 3),
+                new Point(0, 4), new Point(1, 4), new Point(2, 4), new Point(3, 4), new Point(4, 4));
+        List<Point> result = PolygonCalculator.scanFill(polygon);
+
+        assertEquals(expected.size(), result.size());
+        assertTrue(result.containsAll(expected));
     }
 }
