@@ -6,11 +6,12 @@ import org.junit.Test;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class ScanFillTest {
+public class PolygonCalculatorTest {
 
     private final PolygonCalculator calculator = new PolygonCalculator();
 
@@ -31,7 +32,7 @@ public class ScanFillTest {
 
     @Test
     public void testTransformPolygon() {
-        Polygon polygon = new Polygon(new int[]{0, 1, 0}, new int[]{0, 0, 1}, 3);
+        Polygon polygon = new Polygon(new int[] { 0, 1, 0 }, new int[] { 0, 0, 1 }, 3);
         AffineTransform transform = AffineTransform.getScaleInstance(2, 2);
         Polygon transformedPolygon = PolygonCalculator.transformPolygon(polygon, transform);
 
@@ -45,21 +46,17 @@ public class ScanFillTest {
     }
 
     @Test
-    public void testScanFill() {
-        int[] xPoints = {50, 100, 150};
-        int[] yPoints = {50, 150, 50};
-        Polygon polygon = new Polygon(xPoints, yPoints, 3);
+    public void testScanFillForRectangle() {
+        int[] xPoints = { 0, 3, 3, 0 };
+        int[] yPoints = { 0, 0, 3, 3 };
+        List<Point> expectedPixels = Arrays.asList(
+                new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(3, 0),
+                new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1),
+                new Point(0, 2), new Point(1, 2), new Point(2, 2), new Point(3, 2),
+                new Point(0, 3), new Point(1, 3), new Point(2, 3), new Point(3, 3));
 
-        List<Point> filledPixels = calculator.scanFill(polygon);
-
-        assertNotNull(filledPixels);
-        assertFalse(filledPixels.isEmpty());
-
-        // A simple check to see if the filled pixels are within the bounding box of the triangle
-        for (Point p : filledPixels) {
-            assertTrue(p.x >= 50 && p.x <= 150);
-            assertTrue(p.y >= 50 && p.y <= 150);
-        }
+        List<Point> filledPixels = PolygonCalculator.scanFill(new Polygon(xPoints, yPoints, xPoints.length));
+        assertEquals(expectedPixels, filledPixels);
     }
 
     @Test
