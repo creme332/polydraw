@@ -51,26 +51,26 @@ public class DrawPolygonTutorial extends AbstractTutorial {
                                 boldLarge);
 
                 doc.insertString(doc.getLength(),
-                                "\n\n1. Click on the polygon icon (fifth icon from the left) in the menu bar and select the second option in the dropdown menu.\n",
+                                "\n\n1. Click on the polygon icon (fifth icon from the left) in the menu bar and select the second option in the dropdown menu.\n\n",
                                 regular);
 
                 insertImage("regular-polygon-icon.png");
 
                 doc.insertString(doc.getLength(),
-                                "\n\n2. On your canvas, click on a pixel then click on another pixel to select the length of the sides.",
+                                "\n\n2. Click on the canvas at 2 different points to draw the bottom edge of your polygon. The inclination of your polygon is determined by the angle that your edge makes with the horizontal.",
                                 regular);
 
                 doc.insertString(doc.getLength(),
                                 "\n\n3. You will be prompted to enter the number of vertices for your polygon. ",
                                 regular);
                 doc.insertString(doc.getLength(),
-                                "Your input value must be an integer greater than 2. \n",
+                                "Your input value must be an integer greater than 2. \n\n",
                                 highlightRed);
 
                 insertImage("step-3.png");
 
                 doc.insertString(doc.getLength(),
-                                "\n\n4. You should now see a newly drawn polygon appear. Zoom in or out if the polygon is too small or large. \n",
+                                "\n\n4. You should now see your new polygon. You may need to adjust the zoom level of the canvas to see your shape  in its entirety. \n\n",
                                 regular);
 
                 insertImage("step-4.png");
