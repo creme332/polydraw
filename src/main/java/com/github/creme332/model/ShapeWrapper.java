@@ -211,7 +211,8 @@ public class ShapeWrapper {
     /**
      * 
      * @param point
-     * @return True if point is inside shape or on its border
+     * @return True if point is inside shape or on its border within a specified
+     *         tolerance.
      */
     public boolean isPointOnShape(Point2D point) {
         if (shape == null) {
@@ -231,7 +232,7 @@ public class ShapeWrapper {
      * @return true if the point is on the shape's border, false otherwise
      */
     public static boolean isPointOnShapeBorder(Shape shape, Point2D point) {
-        final double TOLERANCE = 3.0;
+        final double TOLERANCE = 1.0;
 
         if (shape == null) {
             return false;
