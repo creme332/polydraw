@@ -108,8 +108,11 @@ public class ShapeWrapperTest {
         // Inside the shape
         assertTrue(shapeWrapper.isPointOnShape(new Point2D.Double(0.5, 0.5)));
 
-        // Outside the shape
-        assertFalse(shapeWrapper.isPointOnShape(new Point2D.Double(1.5, 1.5)));
+        // Outside the shape but within tolerance region
+        assertTrue(shapeWrapper.isPointOnShape(new Point2D.Double(1.5, 1.5)));
+
+        // Outside the shape but not within tolerance region
+        assertFalse(shapeWrapper.isPointOnShape(new Point2D.Double(3, 3)));
 
         // On the border of the shape
         assertTrue(shapeWrapper.isPointOnShape(new Point2D.Double(1, 0)));
