@@ -25,7 +25,7 @@ public enum Mode {
 
     DRAW_POLYGON_DYNAMIC("Polygon", "Select all vertices, then first vertex again",
             loadSVGIcon("/icons/triangle.svg")),
-    DRAW_REGULAR_POLYGON("Regular Polygon", "Select center, then enter number of vertices",
+    DRAW_REGULAR_POLYGON("Regular Polygon", "Select two points, then enter number of vertices",
             loadSVGIcon("/icons/regular-polygon.svg")),
 
     REFLECT_ABOUT_LINE("Reflect about Line", "Select object to reflect, then line of reflection",
