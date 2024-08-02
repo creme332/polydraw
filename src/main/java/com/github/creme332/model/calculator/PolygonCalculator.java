@@ -199,15 +199,15 @@ public class PolygonCalculator {
      * @param polygon The polygon to be filled.
      * @return A list of points representing the filled pixels.
      */
-    public List<Point> scanFill(Polygon polygon) {
+    public static List<Point> scanFill(Polygon polygon) {
         List<Edge> edgeTable = createEdgeTable(polygon);
         List<Point> filledPixels = new ArrayList<>();
-        
+
         int minY = Arrays.stream(polygon.ypoints).min().orElseThrow();
         int maxY = Arrays.stream(polygon.ypoints).max().orElseThrow();
-        
+
         List<Edge> activeEdgeTable = new ArrayList<>();
-        
+
         for (int y = minY; y <= maxY; y++) {
             // Move edges from edge table to active edge table where y == minY
             Iterator<Edge> edgeIterator = edgeTable.iterator();
@@ -218,7 +218,7 @@ public class PolygonCalculator {
                     edgeIterator.remove();
                 }
             }
-            
+
             // Remove edges from active edge table where y == maxY
             edgeIterator = activeEdgeTable.iterator();
             while (edgeIterator.hasNext()) {
@@ -227,48 +227,50 @@ public class PolygonCalculator {
                     edgeIterator.remove();
                 }
             }
-            
+
             // Sort active edge table by xMin
             activeEdgeTable.sort(Comparator.comparingDouble(e -> e.xMin));
-            
+
             // Fill pixels between pairs of intersections
             for (int i = 0; i < activeEdgeTable.size(); i += 2) {
-                if (i + 1 >= activeEdgeTable.size()) break;
+                if (i + 1 >= activeEdgeTable.size())
+                    break;
                 Edge edge1 = activeEdgeTable.get(i);
                 Edge edge2 = activeEdgeTable.get(i + 1);
-                
+
                 for (int x = (int) Math.ceil(edge1.xMin); x <= edge2.xMin; x++) {
                     filledPixels.add(new Point(x, y));
                 }
             }
-            
+
             // Update xMin for each edge in active edge table
             for (Edge edge : activeEdgeTable) {
                 edge.xMin += edge.inverseSlope;
             }
         }
-        
+
         return filledPixels;
     }
-    
+
     /**
      * Creates the edge table from the given polygon.
      * 
      * @param polygon The polygon to create the edge table from.
      * @return A list of edges representing the edge table.
      */
-    private List<Edge> createEdgeTable(Polygon polygon) {
+    private static List<Edge> createEdgeTable(Polygon polygon) {
         List<Edge> edgeTable = new ArrayList<>();
-        
+
         int n = polygon.npoints;
         for (int i = 0; i < n; i++) {
             int x1 = polygon.xpoints[i];
             int y1 = polygon.ypoints[i];
             int x2 = polygon.xpoints[(i + 1) % n];
             int y2 = polygon.ypoints[(i + 1) % n];
-            
-            if (y1 == y2) continue; // Skip horizontal edges
-            
+
+            if (y1 == y2)
+                continue; // Skip horizontal edges
+
             Edge edge = new Edge();
             if (y1 < y2) {
                 edge.yMin = y1;
@@ -281,14 +283,14 @@ public class PolygonCalculator {
                 edge.xMin = x2;
                 edge.inverseSlope = (double) (x1 - x2) / (y1 - y2);
             }
-            
+
             edgeTable.add(edge);
         }
-        
+
         edgeTable.sort(Comparator.comparingInt(e -> e.yMin));
         return edgeTable;
     }
-    
+
     /**
      * Private inner class representing an edge for the scan-line fill algorithm.
      */
@@ -299,4 +301,3 @@ public class PolygonCalculator {
         double inverseSlope;
     }
 }
-
