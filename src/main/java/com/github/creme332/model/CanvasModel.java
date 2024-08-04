@@ -8,10 +8,13 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.prefs.Preferences;
+
 
 public class CanvasModel {
     private Dimension canvasDimension;
-
+    
+     
     /**
      * Spacing (in pixels) between top of canvas and tick label when axis is out of
      * sight.
@@ -93,6 +96,15 @@ public class CanvasModel {
      * Index of shape on which user clicked when in Mode.MOVE_CANVAS.
      */
     int selectedShapeIndex = -1;
+    private Preferences prefs;
+
+    public CanvasModel() {
+        prefs = Preferences.userNodeForPackage(CanvasModel.class);
+
+        this.labelFontSize = prefs.getInt("labelFontSize", DEFAULT_LABEL_FONT_SIZE);
+        this.axesVisible = prefs.getBoolean("axesVisible", true);
+        this.enableGuidelines = prefs.getBoolean("enableGuidelines", true);
+    }
 
     public ShapeManager getShapeManager() {
         return shapeManager;
@@ -276,7 +288,9 @@ public class CanvasModel {
         final int oldFontSize = labelFontSize;
         labelFontSize = newFontSize;
         support.firePropertyChange("labelFontSize", oldFontSize, newFontSize);
+        prefs.putInt("labelFontSize", newFontSize);
     }
+
 
     public int getLabelFontSize() {
         return labelFontSize;
@@ -306,6 +320,7 @@ public class CanvasModel {
         final boolean oldValue = this.enableGuidelines;
         this.enableGuidelines = enableGuidelines;
         support.firePropertyChange("enableGuidelines", oldValue, enableGuidelines);
+        prefs.putBoolean("enableGuidelines", enableGuidelines);
     }
 
     public LineType getLineType() {
@@ -340,5 +355,6 @@ public class CanvasModel {
         final boolean oldValue = this.axesVisible;
         this.axesVisible = axesVisible;
         support.firePropertyChange("axesVisible", oldValue, axesVisible);
+        prefs.putBoolean("axesVisible", axesVisible);
     }
 }
