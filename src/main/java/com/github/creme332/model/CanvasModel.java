@@ -34,11 +34,11 @@ public class CanvasModel {
      * Spacing (in pixels) between right border of canvas and tick label when axis
      * is out of sight.
      */
-    public static final int TICK_PADDING_RIGHT = 30;
+    public static final int TICK_PADDING_RIGHT = 35;
 
     public static final int MAX_CELL_SIZE = 500;
     public static final int MIN_CELL_SIZE = 1;
-    public static final int DEFAULT_CELL_SIZE = 100;
+    public static final int DEFAULT_CELL_SIZE = 10;
     public static final int ZOOM_INCREMENT = 1;
 
     /**
@@ -47,15 +47,19 @@ public class CanvasModel {
      */
     int cellSize = Math.max(MIN_CELL_SIZE, Math.min(DEFAULT_CELL_SIZE, MAX_CELL_SIZE));
 
+    public static final int DEFAULT_LABEL_FONT_SIZE = 20;
+
     /**
      * Font size of labels on canvas in pixels.
      */
-    private int labelFontSize = 28;
+    private int labelFontSize = DEFAULT_LABEL_FONT_SIZE;
+
+    public static final Color labelForegroundColor = new Color(82, 82, 82);
 
     // define attributes for next shape to be drawn
     private LineType lineType = LineType.SOLID;
     private int lineThickness = 3;
-    private Color shapeColor = Color.BLACK;
+    private Color shapeColor = Color.RED;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     /**
@@ -85,8 +89,23 @@ public class CanvasModel {
 
     ShapeManager shapeManager = new ShapeManager();
 
+    /**
+     * Index of shape on which user clicked when in Mode.MOVE_CANVAS.
+     */
+    int selectedShapeIndex = -1;
+
     public ShapeManager getShapeManager() {
         return shapeManager;
+    }
+
+    public void setSelectedShape(int newShapeIndex) {
+        final int oldShapeIndex = this.selectedShapeIndex;
+        selectedShapeIndex = newShapeIndex;
+        support.firePropertyChange("selectedShapeIndex", oldShapeIndex, newShapeIndex);
+    }
+
+    public int getSelectedShapeIndex() {
+        return selectedShapeIndex;
     }
 
     /**
@@ -201,14 +220,15 @@ public class CanvasModel {
      * @param zoomIn Zoom in if true, zoom out otherwise
      */
     public void updateCanvasZoom(boolean zoomIn) {
+        final int oldCellSize = cellSize;
         int newCellSize;
         if (zoomIn) {
             newCellSize = (Math.min(CanvasModel.MAX_CELL_SIZE, getCellSize() + CanvasModel.ZOOM_INCREMENT));
         } else {
             newCellSize = (Math.max(CanvasModel.MIN_CELL_SIZE, getCellSize() - CanvasModel.ZOOM_INCREMENT));
         }
-        support.firePropertyChange("cellSize", cellSize, newCellSize);
         cellSize = newCellSize;
+        support.firePropertyChange("cellSize", oldCellSize, newCellSize);
     }
 
     /**
@@ -245,6 +265,7 @@ public class CanvasModel {
         support.addPropertyChangeListener("cellSize", listener);
         support.addPropertyChangeListener("standardView", listener);
         support.addPropertyChangeListener("labelFontSize", listener);
+        support.addPropertyChangeListener("selectedShapeIndex", listener);
     }
 
     public int getCellSize() {
@@ -252,8 +273,9 @@ public class CanvasModel {
     }
 
     public void setLabelFontSize(int newFontSize) {
-        support.firePropertyChange("labelFontSize", this.labelFontSize, newFontSize);
+        final int oldFontSize = labelFontSize;
         labelFontSize = newFontSize;
+        support.firePropertyChange("labelFontSize", oldFontSize, newFontSize);
     }
 
     public int getLabelFontSize() {
@@ -281,8 +303,9 @@ public class CanvasModel {
     }
 
     public void setGuidelinesEnabled(boolean enableGuidelines) {
-        support.firePropertyChange("enableGuidelines", this.enableGuidelines, enableGuidelines);
+        final boolean oldValue = this.enableGuidelines;
         this.enableGuidelines = enableGuidelines;
+        support.firePropertyChange("enableGuidelines", oldValue, enableGuidelines);
     }
 
     public LineType getLineType() {
@@ -314,7 +337,8 @@ public class CanvasModel {
     }
 
     public void setAxesVisible(boolean axesVisible) {
-        support.firePropertyChange("axesVisible", this.axesVisible, axesVisible);
+        final boolean oldValue = this.axesVisible;
         this.axesVisible = axesVisible;
+        support.firePropertyChange("axesVisible", oldValue, axesVisible);
     }
 }

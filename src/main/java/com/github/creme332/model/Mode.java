@@ -18,10 +18,14 @@ public enum Mode {
     DRAW_CIRCLE_FIXED("Circle: Center & Radius", "Select center point, then enter radius",
             loadSVGIcon("/icons/circle-radius.svg")),
 
-    DRAW_ELLIPSE("Ellipse", "Select two foci, then point on ellipse", loadSVGIcon("/icons/ellipse.svg")),
+    DRAW_ELLIPSE("Ellipse with Foci through Point", "Select two foci, then point on ellipse",
+            loadSVGIcon("/icons/ellipse.svg")),
+    DRAW_ELLIPSE_FIXED("Ellipse: Foci & Radius", "Select two foci, then enter radii",
+            loadSVGIcon("/icons/ellipse-foci.svg")),
 
-    DRAW_POLYGON_DYNAMIC("Polygon", "Select all vertices, then first vertex again", loadSVGIcon("/icons/triangle.svg")),
-    DRAW_REGULAR_POLYGON("Regular Polygon", "Select center, then enter number of vertices",
+    DRAW_POLYGON_DYNAMIC("Polygon", "Select all vertices, then first vertex again",
+            loadSVGIcon("/icons/triangle.svg")),
+    DRAW_REGULAR_POLYGON("Regular Polygon", "Select two points, then enter number of vertices",
             loadSVGIcon("/icons/regular-polygon.svg")),
 
     REFLECT_ABOUT_LINE("Reflect about Line", "Select object to reflect, then line of reflection",
@@ -29,8 +33,8 @@ public enum Mode {
     REFLECT_ABOUT_POINT("Reflect about Point", "Select object to reflect, then center point",
             loadSVGIcon("/icons/reflect-about-point.svg")),
 
-    ROTATE_AROUND_POINT("Rotate around Point", "Select object to rotate and center point, then enter angle",
-            loadSVGIcon("/icons/reflect-about-point.svg")),
+    ROTATE_ABOUT_POINT("Rotate about Point", "Select object to rotate and center point, then enter angle",
+            loadSVGIcon("/icons/rotate-about-point.svg")),
 
     ZOOM_IN("Zoom In", "Click/tap to zoom (or Mouse Wheel)", FontIcon.of(BootstrapIcons.ZOOM_IN, 35)),
     ZOOM_OUT("Zoom Out", "Click/tap to zoom (or Mouse Wheel)", FontIcon.of(BootstrapIcons.ZOOM_OUT, 35)),
@@ -38,13 +42,13 @@ public enum Mode {
     MOVE_GRAPHICS_VIEW("Move Graphics View", "Drag white background or axis",
             FontIcon.of(BootstrapIcons.ARROWS_MOVE, 35)),
 
-    TRANSLATION("Translation", "Select object to translate", loadSVGIcon("/icons/translate-vector.svg")),
-    NORMAL_ROTATION("Rotate around point", "Select object to rotate", loadSVGIcon("/icons/rotate-around-point.svg")),
-    SCALING("Scaling", "Select object to scale then enter scaling factor",
+    TRANSLATION("Translate by Vector", "Select object to translate, then enter vector",
+            loadSVGIcon("/icons/translate-vector.svg")),
+    SCALING("Scaling", "Select object to scale then enter scale factor",
             FontIcon.of(BootstrapIcons.ARROWS_ANGLE_EXPAND, 35)),
-    SHEAR("Shear", "Select object to translate, then enter scaling factor",
+    SHEAR("Shear", "Select object then enter shear factor",
             FontIcon.of(BootstrapIcons.BOX_ARROW_DOWN_LEFT, 35)),
-    CLIPPING("Clipping", "Draw clipping region with mouse drag", FontIcon.of(BootstrapIcons.SCISSORS, 35));
+    CLIP("Clip", "Draw clipping region with mouse drag", FontIcon.of(BootstrapIcons.SCISSORS, 35));
 
     private final String title;
     private final String instructions;

@@ -2,13 +2,14 @@ package com.github.creme332.utils;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
-import com.github.creme332.view.SVGIcon;
+import com.github.creme332.view.common.SVGIcon;
 import com.github.weisj.jsvg.SVGDocument;
 import com.github.weisj.jsvg.parser.SVGLoader;
 
@@ -119,13 +120,21 @@ public class IconLoader {
     }
 
     public static Icon loadSVGIcon(String path, Dimension dimension) {
+        // validate path
         if (path.length() < 1 || path.charAt(0) != '/' || !path.endsWith(".svg")) {
-            System.out.println("Invalid svg:" + path);
+            System.err.println("Invalid svg:" + path);
+            System.exit(0);
+        }
+
+        // check if resource exists
+        final URL url = IconLoader.class.getResource(path);
+        if (url == null) {
+            System.err.println("SVG not found:" + path);
             System.exit(0);
         }
 
         SVGLoader loader = new SVGLoader();
-        SVGDocument svgDocument = loader.load(IconLoader.class.getResource(path));
+        SVGDocument svgDocument = loader.load(url);
         return new SVGIcon(svgDocument, dimension.width, dimension.height);
     }
 }

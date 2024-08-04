@@ -1,9 +1,13 @@
 package com.github.creme332.view;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,7 @@ import org.kordamp.ikonli.swing.FontIcon;
 
 import com.github.creme332.model.MenuModel;
 import com.github.creme332.model.Mode;
+import com.github.creme332.view.common.RoundedMenu;
 
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 
@@ -28,20 +33,20 @@ public class MenuBar extends JMenuBar {
     private JButton redoButton;
     private JButton undoButton;
 
-    private List<JMenu> jmenus = new ArrayList<>();
+    private List<JMenu> jMenusList = new ArrayList<>();
     public static final int HEIGHT = 70;
 
     public MenuBar(MenuModel[] menus) {
 
         setPreferredSize(new Dimension(getWidth(), HEIGHT));
         setBorder(new EmptyBorder(new Insets(7, 0, 7, 0)));
-        setBackground(new Color(248, 248, 248));
+        putClientProperty("FlatLaf.style", "background: #f8f8f8");
 
         // add menus to menubar
         for (MenuModel menuModel : menus) {
             JMenu menu = new RoundedMenu();
             menu.setOpaque(false);
-            jmenus.add(menu);
+            jMenusList.add(menu);
             menu.setIcon(menuModel.getActiveItem().getIcon());
             menu.setToolTipText(menuModel.getActiveItem().getTitle());
 
@@ -58,34 +63,47 @@ public class MenuBar extends JMenuBar {
         leftPanel.setOpaque(false);
 
         // undo button
-        undoButton = new JButton();
-        undoButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_COUNTERCLOCKWISE, 40));
-        undoButton.setBorderPainted(false);
+        undoButton = createTransparentButton(FontIcon.of(BootstrapIcons.ARROW_COUNTERCLOCKWISE, 40));
         leftPanel.add(undoButton);
         undoButton.setToolTipText("Undo");
 
         // redo button
-        redoButton = new JButton();
-        redoButton.setIcon(FontIcon.of(BootstrapIcons.ARROW_CLOCKWISE, 40));
-        redoButton.setBorderPainted(false);
-        leftPanel.add(redoButton);
+        redoButton = createTransparentButton(FontIcon.of(BootstrapIcons.ARROW_CLOCKWISE, 40));
         redoButton.setToolTipText("Redo");
+        leftPanel.add(redoButton);
 
         // help button
-        helpButton = new JButton();
-        helpButton.setIcon(FontIcon.of(BootstrapIcons.QUESTION_CIRCLE, 37));
-        helpButton.setBorderPainted(false);
+        helpButton = createTransparentButton(FontIcon.of(BootstrapIcons.QUESTION_CIRCLE, 37));
         helpButton.setToolTipText("Help");
         leftPanel.add(helpButton);
 
         // sidebar menu button
-        sidebarButton = new JButton();
-        sidebarButton.setIcon(FontIcon.of(BootstrapIcons.LIST, 40));
-        sidebarButton.setBorderPainted(false);
-        leftPanel.add(sidebarButton);
+        sidebarButton = createTransparentButton(FontIcon.of(BootstrapIcons.LIST, 40));
         sidebarButton.setToolTipText("Toggle sidebar");
+        leftPanel.add(sidebarButton);
 
         this.add(leftPanel);
+    }
+
+    public JButton createTransparentButton(FontIcon icon) {
+        JButton button = new JButton();
+        button.setIcon(icon);
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+
+        // Show hand cursor when hovered on
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(Cursor.getDefaultCursor());
+            }
+        });
+        return button;
     }
 
     /**
@@ -96,7 +114,7 @@ public class MenuBar extends JMenuBar {
      * @return
      */
     public JMenu getMyMenu(int i) {
-        return jmenus.get(i);
+        return jMenusList.get(i);
     }
 
     public JButton getSideBarButton() {
@@ -107,11 +125,31 @@ public class MenuBar extends JMenuBar {
         return helpButton;
     }
 
-    public JButton getRedoButton() {
-        return redoButton;
+    private void updateButtonColor(JButton button, boolean enabled) {
+        FontIcon currentIcon = (FontIcon) button.getIcon();
+        if (enabled) {
+            currentIcon.setIconColor(Color.black);
+        } else {
+            currentIcon.setIconColor(new Color(153, 153, 153));
+        }
+        button.setIcon(currentIcon);
+        button.repaint();
     }
 
-    public JButton getUndoButton() {
-        return undoButton;
+    public void setRedoEnabled(boolean enabled) {
+        updateButtonColor(redoButton, enabled);
     }
+
+    public void setUndoEnabled(boolean enabled) {
+        updateButtonColor(undoButton, enabled);
+    }
+
+    public void handleRedo(ActionListener listener) {
+        redoButton.addActionListener(listener);
+    }
+
+    public void handleUndo(ActionListener listener) {
+        undoButton.addActionListener(listener);
+    }
+
 }

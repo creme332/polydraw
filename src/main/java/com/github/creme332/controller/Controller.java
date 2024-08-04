@@ -1,5 +1,7 @@
 package com.github.creme332.controller;
 
+import com.github.creme332.controller.canvas.CanvasController;
+import com.github.creme332.controller.console.CanvasConsoleController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.utils.exception.InvalidPathException;
 import com.github.creme332.view.*;
@@ -17,13 +19,14 @@ public class Controller {
             Frame frame = new Frame(app);
             frameController = new FrameController(app, frame);
 
+            // play start animation
+            frameController.playStartAnimation();
+            
             // create controllers for main screens
             new CanvasController(app, frame.getMyCanvas());
             new CanvasConsoleController(app, frame.getCanvasConsole());
             new TutorialScreenController(app, frame.getTutorialCenter());
 
-            // play start animation
-            frameController.playStartAnimation();
         } catch (InvalidPathException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(1);

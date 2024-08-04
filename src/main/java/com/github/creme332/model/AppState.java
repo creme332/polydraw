@@ -30,16 +30,10 @@ public class AppState {
     }
 
     private MenuModel[] createMenuModels() {
-        MenuModel graphicsMenuModel = new MenuModel(new Mode[] {
-                Mode.MOVE_GRAPHICS_VIEW,
-                Mode.ZOOM_IN,
-                Mode.ZOOM_OUT
-        });
-
         MenuModel transformationsMenuModel = new MenuModel(new Mode[] {
                 Mode.REFLECT_ABOUT_LINE,
                 Mode.REFLECT_ABOUT_POINT,
-                Mode.ROTATE_AROUND_POINT,
+                Mode.ROTATE_ABOUT_POINT,
                 Mode.TRANSLATION,
                 Mode.SCALING,
                 Mode.SHEAR
@@ -52,7 +46,8 @@ public class AppState {
         });
 
         MenuModel ellipseMenuModel = new MenuModel(new Mode[] {
-                Mode.DRAW_ELLIPSE });
+                Mode.DRAW_ELLIPSE,
+                Mode.DRAW_ELLIPSE_FIXED });
 
         MenuModel circleMenuModel = new MenuModel(new Mode[] {
                 Mode.DRAW_CIRCLE_DYNAMIC,
@@ -66,11 +61,12 @@ public class AppState {
         });
 
         MenuModel cursorMenuModel = new MenuModel(new Mode[] {
-                Mode.MOVE_CANVAS
+                Mode.MOVE_CANVAS,
+                Mode.MOVE_GRAPHICS_VIEW,
         });
 
         MenuModel deletionModel = new MenuModel(new Mode[] {
-                Mode.DELETE, Mode.CLIPPING
+                Mode.DELETE, Mode.CLIP
         });
 
         return new MenuModel[] {
@@ -80,14 +76,14 @@ public class AppState {
                 ellipseMenuModel,
                 polygonMenuModel,
                 transformationsMenuModel,
-                graphicsMenuModel,
                 deletionModel
         };
     }
 
     public void switchScreen(Screen newScreen) {
-        support.firePropertyChange("screen", currentScreen, newScreen);
+        final Screen oldScreen = currentScreen;
         currentScreen = newScreen;
+        support.firePropertyChange("screen", oldScreen, newScreen);
     }
 
     public Screen getCurrentScreen() {
@@ -144,8 +140,10 @@ public class AppState {
     }
 
     public void setSideBarVisibility(boolean newValue) {
-        support.firePropertyChange("sidebarVisibility", visibleSidebar, newValue);
+        final boolean oldValue = visibleSidebar;
         visibleSidebar = newValue;
+        support.firePropertyChange("sidebarVisibility", oldValue, newValue);
+
     }
 
     public Mode getMode() {
@@ -153,9 +151,9 @@ public class AppState {
     }
 
     public void setMode(Mode newMode) {
-        System.out.println("Mode: " + mode + " -> " + newMode);
-        support.firePropertyChange("mode", mode, newMode);
-        mode = newMode;
+        final Mode oldMode = this.mode;
+        this.mode = newMode;
+        support.firePropertyChange("mode", oldMode, newMode);
     }
 
     public boolean isMaximizeFrame() {
@@ -163,9 +161,9 @@ public class AppState {
     }
 
     public void setMaximizeFrame(boolean maximizeFrame) {
-        support.firePropertyChange("maximizeFrame", this.maximizeFrame,
-                maximizeFrame);
+        final boolean oldValue = this.maximizeFrame;
         this.maximizeFrame = maximizeFrame;
+        support.firePropertyChange("maximizeFrame", oldValue, this.maximizeFrame);
     }
 
     public void startPrintingProcess() {

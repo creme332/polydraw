@@ -1,25 +1,20 @@
 package com.github.creme332.view.tutorial;
 
-import static com.github.creme332.utils.IconLoader.loadIcon;
 import static com.github.creme332.utils.IconLoader.loadSVGIcon;
 
-import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.StyleConstants;
 
 import com.github.creme332.model.TutorialModel;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
-public class DrawCircleTutorial extends TutorialPanel {
+public class DrawCircleTutorial extends AbstractTutorial {
 
-    private static final String IMAGE_PATH_PREFIX = "/images/tutorials/draw-circle/";
     private static final TutorialModel DRAW_CIRCLE_MODEL = new TutorialModel("Draw Circle");
 
     public DrawCircleTutorial() throws InvalidPathException, InvalidIconSizeException {
         super(DRAW_CIRCLE_MODEL, loadSVGIcon("/icons/circle.svg", TutorialCard.IMAGE_DIMENSION));
         model.addKeyword("bresenham");
-        ImageIcon icon;
 
         try {
             doc.insertString(doc.getLength(),
@@ -35,12 +30,10 @@ public class DrawCircleTutorial extends TutorialPanel {
                     regular);
 
             doc.insertString(doc.getLength(),
-                    "\n\n1. Click on the circle icon (third icon from the left) in the menu bar and select the first option in the dropdown menu.\n",
+                    "\n\n1. Click on the circle icon (third icon from the left) in the menu bar and select the first option in the dropdown menu.\n\n",
                     regular);
 
-            icon = loadIcon(IMAGE_PATH_PREFIX + "step-1.png");
-            StyleConstants.setIcon(imageStyle, icon);
-            doc.insertString(doc.getLength(), " ", imageStyle);
+            insertImage("step-1.png");
 
             doc.insertString(doc.getLength(),
                     "\n\n2. Move your mouse cursor to the canvas and click on a point to select the center of your circle.\n",
@@ -49,9 +42,7 @@ public class DrawCircleTutorial extends TutorialPanel {
                     "\n\n4. As you move your cursor, you should see the size of the circle changing. Once you are satisfied with the size, click on another point to fix the radius.\n\n",
                     regular);
 
-            icon = loadIcon(IMAGE_PATH_PREFIX + "step-2.png");
-            StyleConstants.setIcon(imageStyle, icon);
-            doc.insertString(doc.getLength(), " ", imageStyle);
+            insertImage("step-2.png");
 
             doc.insertString(doc.getLength(),
                     "\n\nMethod 2: Circle: Center & Radius\n\n",
@@ -66,22 +57,23 @@ public class DrawCircleTutorial extends TutorialPanel {
                     "\n\n2. After selecting the circle center with your cursor, you will be prompted to enter the circle radius. ",
                     regular);
             doc.insertString(doc.getLength(),
-                    "The radius must be an integer greater than 0. \n",
+                    "The radius must be an integer greater than 0. \n\n",
                     highlightRed);
 
-            icon = loadIcon(IMAGE_PATH_PREFIX + "step-3.png");
-            StyleConstants.setIcon(imageStyle, icon);
-            doc.insertString(doc.getLength(), " ", imageStyle);
+            insertImage("step-3.png");
 
             doc.insertString(doc.getLength(),
-                    "\n\n6. After entering a valid radius, you should see a newly drawn circle:\n",
+                    "\n\n6. After entering a valid radius, you should see a newly drawn circle:\n\n",
                     regular);
 
-            icon = loadIcon(IMAGE_PATH_PREFIX + "step-4.png");
-            StyleConstants.setIcon(imageStyle, icon);
-            doc.insertString(doc.getLength(), " ", imageStyle);
+            insertImage("step-4.png");
         } catch (BadLocationException | InvalidPathException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getImagePathPrefix() {
+        return "/images/tutorials/draw-circle/";
     }
 }

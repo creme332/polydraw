@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
 
@@ -16,9 +18,8 @@ import com.github.creme332.utils.IconLoader;
 import com.github.creme332.utils.exception.InvalidIconSizeException;
 import com.github.creme332.utils.exception.InvalidPathException;
 
-public class GettingStartedTutorial extends TutorialPanel {
+public class GettingStartedTutorial extends AbstractTutorial {
 
-    private static final String IMAGE_PATH_PREFIX = "/images/tutorials/getting-started/";
     private static final TutorialModel GETTING_STARTED_MODEL = new TutorialModel("Getting Started");
 
     GridBagConstraints gbc = new GridBagConstraints();
@@ -30,6 +31,8 @@ public class GettingStartedTutorial extends TutorialPanel {
                         IconLoader.getScaledDimension(new Dimension(512, 512), TutorialCard.IMAGE_DIMENSION)));
         // remove bodyPanel since default layout is not being used
         this.remove(bodyPanel);
+
+        mainPanel.setBackground(Color.white);
 
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -63,7 +66,7 @@ public class GettingStartedTutorial extends TutorialPanel {
         gbc.gridy++;
 
         // add image
-        JLabel zoomPanelImage = new JLabel(loadIcon(IMAGE_PATH_PREFIX + "zoom-panel.png"));
+        JLabel zoomPanelImage = new JLabel(loadIcon(getImagePathPrefix() + "zoom-panel.png"));
         mainPanel.add(zoomPanelImage, gbc);
         gbc.gridy++;
 
@@ -89,7 +92,7 @@ public class GettingStartedTutorial extends TutorialPanel {
         gbc.gridy++;
 
         // add image
-        mainPanel.add(new JLabel(loadIcon(IMAGE_PATH_PREFIX + "toast.png")), gbc);
+        mainPanel.add(new JLabel(loadIcon(getImagePathPrefix() + "toast.png")), gbc);
         gbc.gridy++;
 
         // add description
@@ -105,17 +108,17 @@ public class GettingStartedTutorial extends TutorialPanel {
         gbc.gridy++;
 
         // menubar image
-        mainPanel.add(new JLabel(loadIcon(IMAGE_PATH_PREFIX + "menubar.png")), gbc);
+        mainPanel.add(new JLabel(loadIcon(getImagePathPrefix() + "menubar.png")), gbc);
         gbc.gridy++;
 
         JTextArea buttonExplanation = createParagraph(
-                "The menubar contains the commonly used buttons which enable you to quickly change the drawing mode. There are several buttons available in the interface for various actions on the right side of the Menu Bar:");
+                "The menubar consists of two groups of buttons. The left group of buttons allows you to change the mode of the canvas while the right group allows you to perform actions such as undo and redo.");
         mainPanel.add(buttonExplanation, gbc);
         gbc.gridy++;
 
         JPanel modesTable = createTextTable(new Object[][] {
-                { "Mode", "Drag or select object" },
-                { "Freehand Shape", "Sketch a function or geometric object" },
+                { "Cursor", "Drag or select object. You can also drag the canvas." },
+                { "Move Graphics View", "Drag white background or axis" },
                 { "Line: DDA", "Select two points or positions" },
                 { "Line: Bresenham", "Select two points or positions" },
                 { "Circle with Center through Point", "Select center point, then point on circle" },
@@ -125,13 +128,9 @@ public class GettingStartedTutorial extends TutorialPanel {
                 { "Regular Polygon", "Select two points, then enter number of vertices" },
                 { "Reflect about Line", "Select object to reflect, then line of reflection" },
                 { "Reflect about Point", "Select object to reflect, then center point" },
-                { "Rotate around Point", "Select object to rotate and center point, then enter angle" },
-                { "Zoom In", "Click/tap to zoom (or Mouse Wheel)" },
-                { "Zoom Out", "Click/tap to zoom (or Mouse Wheel)" },
+                { "Rotate about Point", "Select object to rotate and center point, then enter angle" },
                 { "Delete", "Select object which should be deleted" },
-                { "Move Graphics View", "Drag white background or axis" },
                 { "Translation", "Select object to translate" },
-                { "Normal Rotation", "Select object to rotate" },
                 { "Scaling", "Select object to scale then enter scaling factor" },
                 { "Shear", "Select object to translate, then enter scaling factor" },
                 { "Clip", "Draw clipping region with mouse drag" }
@@ -194,8 +193,11 @@ public class GettingStartedTutorial extends TutorialPanel {
 
         table.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
 
-        table.setBackground(new Color(245, 245, 245));
-        table.setGridColor(new Color(200, 200, 200));
+        table.setSelectionBackground(new Color(238, 238, 238));
+        table.setSelectionForeground(Color.black);
+
+        JTableHeader tableHeader = table.getTableHeader();
+        tableHeader.setBackground(new Color(227, 227, 227));
 
         table.setOpaque(true);
         ((DefaultTableCellRenderer) table.getDefaultRenderer(Object.class)).setOpaque(true);
@@ -220,8 +222,11 @@ public class GettingStartedTutorial extends TutorialPanel {
         table.setRowHeight(30);
         table.setFillsViewportHeight(true);
 
-        table.setBackground(new Color(245, 245, 245));
-        table.setGridColor(new Color(200, 200, 200));
+        table.setSelectionBackground(new Color(238, 238, 238));
+        table.setSelectionForeground(Color.black);
+
+        JTableHeader tableHeader = table.getTableHeader();
+        tableHeader.setBackground(new Color(227, 227, 227));
 
         table.setOpaque(true);
         ((DefaultTableCellRenderer) table.getDefaultRenderer(Object.class)).setOpaque(true);
@@ -230,5 +235,10 @@ public class GettingStartedTutorial extends TutorialPanel {
         tablePanel.add(table.getTableHeader(), BorderLayout.PAGE_START);
         tablePanel.add(table, BorderLayout.CENTER);
         return tablePanel;
+    }
+
+    @Override
+    public String getImagePathPrefix() {
+        return "/images/tutorials/getting-started/";
     }
 }
