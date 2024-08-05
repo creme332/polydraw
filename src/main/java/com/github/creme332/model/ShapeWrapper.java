@@ -13,6 +13,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.PathIterator;
 
 public class ShapeWrapper {
     private Shape shape;
@@ -364,4 +365,94 @@ public class ShapeWrapper {
             plottedPoints.set(i, new Point2D.Double((int) newX, (int) newY));
         }
     }
+
+    public void reflect(double gradient, double yIntercept) {
+        if (shape == null) {
+            return;
+        }
+
+        // Calculate reflection of each plotted point
+        for (int i = 0; i < plottedPoints.size(); i++) {
+            Point2D originalPoint = plottedPoints.get(i);
+            Point2D reflectedPoint = reflectPoint(originalPoint, gradient, yIntercept);
+            plottedPoints.set(i, reflectedPoint);
+        }
+
+        // Apply the transformation to the shape
+        if (shape instanceof Polygon) {
+            Polygon polygon = (Polygon) shape;
+            int[] xPoints = new int[polygon.npoints];
+            int[] yPoints = new int[polygon.npoints];
+
+            for (int i = 0; i < polygon.npoints; i++) {
+                Point2D originalPoint = new Point2D.Double(polygon.xpoints[i], polygon.ypoints[i]);
+                Point2D reflectedPoint = reflectPoint(originalPoint, gradient, yIntercept);
+                xPoints[i] = (int) reflectedPoint.getX();
+                yPoints[i] = (int) reflectedPoint.getY();
+            }
+
+            shape = new Polygon(xPoints, yPoints, polygon.npoints);
+        } else if (shape instanceof Path2D.Double) {
+            Path2D.Double path = (Path2D.Double) shape;
+            Path2D.Double newPath = new Path2D.Double();
+
+            // Reflect each point in the path
+            float[] coords = new float[6];
+            for (PathIterator it = path.getPathIterator(null); !it.isDone(); it.next()) {
+                int type = it.currentSegment(coords);
+                Point2D point = new Point2D.Double(coords[0], coords[1]);
+                Point2D reflectedPoint = reflectPoint(point, gradient, yIntercept);
+                coords[0] = (float) reflectedPoint.getX();
+                coords[1] = (float) reflectedPoint.getY();
+
+                switch (type) {
+                    case PathIterator.SEG_MOVETO:
+                        newPath.moveTo(coords[0], coords[1]);
+                        break;
+                    case PathIterator.SEG_LINETO:
+                        newPath.lineTo(coords[0], coords[1]);
+                        break;
+                    case PathIterator.SEG_QUADTO:
+                        newPath.quadTo(coords[0], coords[1], coords[2], coords[3]);
+                        break;
+                    case PathIterator.SEG_CUBICTO:
+                        newPath.curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
+                        break;
+                    case PathIterator.SEG_CLOSE:
+                        newPath.closePath();
+                        break;
+                }
+            }
+
+            shape = newPath;
+        }
+    }
+
+    /**
+     * Reflects a point across a line defined by a gradient and y-intercept.
+     * 
+     * @param point      the point to reflect
+     * @param gradient   the slope of the reflection line
+     * @param yIntercept the y-intercept of the reflection line
+     * @return the reflected point
+     */
+    private Point2D reflectPoint(Point2D point, double gradient, double yIntercept) {
+        double x = point.getX();
+        double y = point.getY();
+
+        // Calculate the slope and intercept of the perpendicular line
+        double perpendicularSlope = -1 / gradient;
+        double perpendicularIntercept = y - perpendicularSlope * x;
+
+        // Calculate intersection point of the line and the perpendicular
+        double intersectionX = (perpendicularIntercept - yIntercept) / (gradient - perpendicularSlope);
+        double intersectionY = gradient * intersectionX + yIntercept;
+
+        // Calculate reflected point
+        double reflectedX = 2 * intersectionX - x;
+        double reflectedY = 2 * intersectionY - y;
+
+        return new Point2D.Double(reflectedX, reflectedY);
+    }
+
 }
