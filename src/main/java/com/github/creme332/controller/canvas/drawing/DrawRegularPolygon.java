@@ -14,9 +14,7 @@ import com.github.creme332.model.calculator.PolygonCalculator;
 import com.github.creme332.view.Canvas;
 
 public class DrawRegularPolygon extends AbstractDrawer {
-
     PolygonCalculator calculator = new PolygonCalculator();
-    private int numSides = 5; // default to 5 sides (pentagon)
     private Point2D firstVertex = null;
     private Point2D secondVertex = null;
 
@@ -56,7 +54,7 @@ public class DrawRegularPolygon extends AbstractDrawer {
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
             // ask user to enter number of sides
-            numSides = inputVertices();
+            int numSides = inputVertices();
 
             if (numSides < 3) {
                 // invalid input => reset state and cancel operation
@@ -96,7 +94,7 @@ public class DrawRegularPolygon extends AbstractDrawer {
         panel.add(new JLabel("Vertices:"));
         panel.add(numSidesField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Regular Polygon", JOptionPane.OK_CANCEL_OPTION,
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Regular Polygon", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
         // request focus again otherwise keyboard shortcuts will not work

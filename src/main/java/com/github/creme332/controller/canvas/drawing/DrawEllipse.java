@@ -131,7 +131,7 @@ public class DrawEllipse extends AbstractDrawer {
         panel.add(new JLabel("Radius Y:"));
         panel.add(ryField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Ellipse: Foci & Radius", JOptionPane.OK_CANCEL_OPTION,
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Ellipse: Foci & Radius", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
         // Request focus again otherwise keyboard shortcuts will not work
