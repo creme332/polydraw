@@ -66,7 +66,7 @@ public class Rotator extends AbstractTransformer {
         panel.add(counterClockwiseButton);
         panel.add(clockwiseButton);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Rotate About Point",
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Rotate About Point",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         // Request focus again otherwise keyboard shortcuts will not work

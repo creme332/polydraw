@@ -116,7 +116,7 @@ public class DrawCircle extends AbstractDrawer {
         panel.add(new JLabel("Radius:"));
         panel.add(radiusField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Circle: Center & Radius", JOptionPane.OK_CANCEL_OPTION,
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Circle: Center & Radius", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
         // request focus again otherwise keyboard shortcuts will not work

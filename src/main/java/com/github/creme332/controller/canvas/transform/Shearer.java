@@ -59,7 +59,7 @@ public class Shearer extends AbstractTransformer {
         panel.add(new JLabel("Shear Y:"));
         panel.add(syField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Enter shear factors",
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Enter shear factors",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
