@@ -8,6 +8,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.prefs.Preferences;
 
 public class CanvasModel {
     private Dimension canvasDimension;
@@ -85,14 +86,24 @@ public class CanvasModel {
     /**
      * Mouse position of user on canvas in polyspace coordinates.
      */
-    Point2D userMousePosition;
+    private Point2D userMousePosition;
 
-    ShapeManager shapeManager = new ShapeManager();
+    private ShapeManager shapeManager = new ShapeManager();
 
     /**
      * Index of shape on which user clicked when in Mode.MOVE_CANVAS.
      */
-    int selectedShapeIndex = -1;
+    private int selectedShapeIndex = -1;
+
+    private Preferences canvasPreferences;
+
+    public CanvasModel() {
+        canvasPreferences = Preferences.userNodeForPackage(CanvasModel.class);
+
+        this.labelFontSize = canvasPreferences.getInt("labelFontSize", DEFAULT_LABEL_FONT_SIZE);
+        this.axesVisible = canvasPreferences.getBoolean("axesVisible", true);
+        this.enableGuidelines = canvasPreferences.getBoolean("enableGuidelines", true);
+    }
 
     public ShapeManager getShapeManager() {
         return shapeManager;
@@ -276,6 +287,7 @@ public class CanvasModel {
         final int oldFontSize = labelFontSize;
         labelFontSize = newFontSize;
         support.firePropertyChange("labelFontSize", oldFontSize, newFontSize);
+        canvasPreferences.putInt("labelFontSize", newFontSize);
     }
 
     public int getLabelFontSize() {
@@ -306,6 +318,7 @@ public class CanvasModel {
         final boolean oldValue = this.enableGuidelines;
         this.enableGuidelines = enableGuidelines;
         support.firePropertyChange("enableGuidelines", oldValue, enableGuidelines);
+        canvasPreferences.putBoolean("enableGuidelines", enableGuidelines);
     }
 
     public LineType getLineType() {
@@ -340,5 +353,6 @@ public class CanvasModel {
         final boolean oldValue = this.axesVisible;
         this.axesVisible = axesVisible;
         support.firePropertyChange("axesVisible", oldValue, axesVisible);
+        canvasPreferences.putBoolean("axesVisible", axesVisible);
     }
 }
