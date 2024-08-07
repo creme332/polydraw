@@ -27,7 +27,7 @@ public class Scaler extends AbstractTransformer {
 
         // Request user for the scaling point and scaling factors
         double[] scaleData = requestScaleData();
-        if (scaleData == null) {
+        if (scaleData.length != 4) {
             return; // User cancelled the dialog
         }
 
