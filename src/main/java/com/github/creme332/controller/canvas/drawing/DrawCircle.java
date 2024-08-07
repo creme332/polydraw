@@ -116,7 +116,7 @@ public class DrawCircle extends AbstractDrawer {
         panel.add(new JLabel("Radius:"));
         panel.add(radiusField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Circle: Center & Radius", JOptionPane.OK_CANCEL_OPTION,
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Circle: Center & Radius", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
         // request focus again otherwise keyboard shortcuts will not work
@@ -124,8 +124,14 @@ public class DrawCircle extends AbstractDrawer {
 
         if (result == JOptionPane.OK_OPTION) {
             try {
-                return Integer.parseInt(radiusField.getText());
+                int radius = Integer.parseInt(radiusField.getText());
+                if (radius <= 0) {
+                    throw new NumberFormatException("Radius must be positive.");
+                }
+                return radius;
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(canvas, "Invalid input. Please enter a positive integer for the radius.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return -1;
             }
         }
