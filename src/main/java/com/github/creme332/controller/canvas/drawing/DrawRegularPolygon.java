@@ -110,7 +110,7 @@ public class DrawRegularPolygon extends AbstractDrawer {
                 }
                 return numSides;
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(canvas,
                         "Invalid input. Please enter an integer greater than or equal to 3 for the number of vertices.",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return -1;

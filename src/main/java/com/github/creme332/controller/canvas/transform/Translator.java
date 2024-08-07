@@ -76,7 +76,7 @@ public class Translator extends AbstractTransformer {
                 double y = Double.parseDouble(ryField.getText());
                 return new Point2D.Double(x, y);
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid input! Please enter valid numbers.", "Error",
+                JOptionPane.showMessageDialog(canvas, "Invalid input! Please enter valid numbers.", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 return zeroVector;
             }

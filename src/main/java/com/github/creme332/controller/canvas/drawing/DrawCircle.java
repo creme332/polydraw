@@ -130,7 +130,7 @@ public class DrawCircle extends AbstractDrawer {
                 }
                 return radius;
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a positive integer for the radius.",
+                JOptionPane.showMessageDialog(canvas, "Invalid input. Please enter a positive integer for the radius.",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return -1;
             }

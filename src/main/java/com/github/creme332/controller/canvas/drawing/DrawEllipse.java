@@ -146,7 +146,7 @@ public class DrawEllipse extends AbstractDrawer {
                 }
                 return new int[] { rx, ry };
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid input. Please enter positive integers for the radii.",
+                JOptionPane.showMessageDialog(canvas, "Invalid input. Please enter positive integers for the radii.",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
