@@ -75,6 +75,8 @@ public class Shearer extends AbstractTransformer {
 
                 return shearFactors;
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(canvas, "Invalid input! Please enter valid numbers.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return shearFactors;
             }
         }

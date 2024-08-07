@@ -80,6 +80,8 @@ public class Rotator extends AbstractTransformer {
                 boolean isClockwise = clockwiseButton.isSelected();
                 return new RotationDetails(angle, new Point2D.Double(pivotX, pivotY), isClockwise);
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(canvas, "Invalid input! Please enter valid numbers.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 // Handle invalid input gracefully, return default rotation details
                 return new RotationDetails(0, new Point2D.Double(0, 0), false);
             }

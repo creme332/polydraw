@@ -52,9 +52,11 @@ public class Scaler extends AbstractTransformer {
     }
 
     /**
-     * Requests user to enter the coordinates of the scaling point and scaling factors.
+     * Requests user to enter the coordinates of the scaling point and scaling
+     * factors.
      * 
-     * @return An array containing [x, y, sx, sy] or null if the input is invalid or cancelled.
+     * @return An array containing [x, y, sx, sy] or null if the input is invalid or
+     *         cancelled.
      */
     private double[] requestScaleData() {
         JTextField xField = new JTextField(5);
@@ -72,7 +74,7 @@ public class Scaler extends AbstractTransformer {
         panel.add(new JLabel("Scale Y:"));
         panel.add(syField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Enter scaling data",
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Enter scaling data",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
@@ -84,9 +86,11 @@ public class Scaler extends AbstractTransformer {
                 double sy = Double.parseDouble(syField.getText());
                 return new double[] { x, y, sx, sy };
             } catch (NumberFormatException e) {
-                return null; // Invalid input
+                JOptionPane.showMessageDialog(canvas, "Invalid input! Please enter valid numbers.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return new double[] {};
             }
         }
-        return null; // Cancelled
+        return new double[] {};
     }
 }

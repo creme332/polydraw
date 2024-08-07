@@ -104,8 +104,15 @@ public class DrawRegularPolygon extends AbstractDrawer {
 
         if (result == JOptionPane.OK_OPTION) {
             try {
-                return Integer.parseInt(numSidesField.getText());
+                int input = Integer.parseInt(numSidesField.getText());
+                if (input < 3) {
+                    throw new NumberFormatException("Number of sides must be at least 3.");
+                }
+                return input;
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(canvas,
+                        "Invalid input. Please enter an integer greater than or equal to 3 for the number of vertices.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return -1;
             }
         }
