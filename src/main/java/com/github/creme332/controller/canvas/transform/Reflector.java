@@ -25,14 +25,14 @@ public class Reflector extends AbstractTransformer {
         final ShapeWrapper selectedWrapperCopy = canvasModel.getShapeManager().getShapeByIndex(shapeIndex);
 
         // Request user for line of reflection (gradient and y-intercept)
-        final double[] reflectionLine = requestReflectionLine();
+        final double[] data = requestReflectionLine();
 
-        if (reflectionLine == null) {
+        if (data.length != 2) {
             return; // Cancel operation if user input is invalid
         }
 
-        double gradient = reflectionLine[0];
-        double yIntercept = reflectionLine[1];
+        double gradient = data[0];
+        double yIntercept = data[1];
 
         // Reflect the shape using the gradient and y-intercept
         selectedWrapperCopy.reflect(gradient, yIntercept);
@@ -51,7 +51,8 @@ public class Reflector extends AbstractTransformer {
 
     /**
      * Asks user to enter the gradient and y-intercept of the line of reflection.
-     * If input values are invalid or if the operation is canceled, null is returned.
+     * If input values are invalid or if the operation is canceled, null is
+     * returned.
      * 
      * @return array with gradient and y-intercept [m, b]
      */
@@ -64,7 +65,7 @@ public class Reflector extends AbstractTransformer {
         panel.add(new JLabel("Y-Intercept (b):"));
         panel.add(yInterceptField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Line of Reflection",
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Enter Line of Reflection",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
@@ -80,6 +81,6 @@ public class Reflector extends AbstractTransformer {
                 JOptionPane.showMessageDialog(null, "Invalid input. Please enter numeric values.");
             }
         }
-        return null;
+        return new double[] {};
     }
 }
