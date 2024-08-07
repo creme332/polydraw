@@ -68,6 +68,8 @@ public class Scaler extends AbstractTransformer {
                 double y = Double.parseDouble(yField.getText());
                 return new Point2D.Double(x, y);
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(canvas, "Invalid input! Please enter valid numbers.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return new Point2D.Double(0, 0); // Default value if input is invalid
             }
         }
@@ -98,6 +100,8 @@ public class Scaler extends AbstractTransformer {
                 double sy = Double.parseDouble(syField.getText());
                 return new double[] { sx, sy };
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(canvas, "Invalid input! Please enter valid numbers.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return new double[] { 1.0, 1.0 }; // Default scaling factors if input is invalid
             }
         }
