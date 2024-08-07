@@ -5,9 +5,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 
@@ -45,9 +47,9 @@ public class MenuBarController implements PropertyChangeListener {
         defaultBorder = menubar.getMyMenu(0).getBorder();
 
         // for each menu in menubar
-        for (int i = 0; i < menuModels.length; i++) {
-            JMenu jMenu = menubar.getMyMenu(i);
-            MenuModel menuModel = menuModels[i];
+        for (int menuIndex = 0; menuIndex < menuModels.length; menuIndex++) {
+            final JMenu jMenu = menubar.getMyMenu(menuIndex);
+            final MenuModel menuModel = menuModels[menuIndex];
 
             // listen to changes in each menu model
             menuModel.addPropertyChangeListener(this);
@@ -55,30 +57,46 @@ public class MenuBarController implements PropertyChangeListener {
             // create a menu controller
             new MenuController(menuModel, jMenu);
 
-            if (i == activeMenuIndex) {
+            if (menuIndex == activeMenuIndex) {
                 jMenu.setBorder(VISIBLE_BORDER);
             }
 
-            final int menuIndex = i;
             // when user clicks on a menu
+            final int menuIndexCopy = menuIndex;
             jMenu.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     // remove border from previously active menu
                     menubar.getMyMenu(activeMenuIndex).setBorder(defaultBorder);
 
-                    activeMenuIndex = menuIndex;
+                    activeMenuIndex = menuIndexCopy;
 
                     // add border to clickedMenu
                     jMenu.setBorder(VISIBLE_BORDER);
 
                     // update global mode using menu model for clicked menu
                     app.setMode(menuModel.getActiveItem());
-
-                    // display updated toast
-                    app.activateToast();
                 }
             });
+
+            // Add hover listener to each JMenuItem in current menu
+            List<JMenuItem> items = menubar.getAllMenuItems(menuIndex);
+            for (int menuItemIndex = 0; menuItemIndex < items.size(); menuItemIndex++) {
+                final JMenuItem menuItem = items.get(menuItemIndex);
+
+                final int menuItemIndexCopy = menuItemIndex;
+                menuItem.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        app.activateToast(menuModel.getItems()[menuItemIndexCopy]);
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        // do nothing
+                    }
+                });
+            }
         }
 
         menubar.getSideBarButton().addMouseListener(new MouseAdapter() {
@@ -114,9 +132,6 @@ public class MenuBarController implements PropertyChangeListener {
 
             // update global mode
             app.setMode(newMode);
-
-            // display updated toast
-            app.activateToast();
         }
 
         if ("mode".equals(propertyName)) {
