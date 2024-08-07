@@ -440,6 +440,12 @@ public class ShapeWrapper {
         double x = point.getX();
         double y = point.getY();
 
+        if (gradient == 0) {
+            // When the line is horizontal (gradient is 0)
+            double reflectedY = 2 * yIntercept - y;
+            return new Point2D.Double(x, reflectedY);
+        }
+
         // Calculate the slope and intercept of the perpendicular line
         double perpendicularSlope = -1 / gradient;
         double perpendicularIntercept = y - perpendicularSlope * x;
