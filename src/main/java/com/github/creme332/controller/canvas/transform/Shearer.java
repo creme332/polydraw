@@ -59,7 +59,7 @@ public class Shearer extends AbstractTransformer {
         panel.add(new JLabel("Shear Y:"));
         panel.add(syField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Enter shear factors",
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Enter shear factors",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
@@ -75,6 +75,8 @@ public class Shearer extends AbstractTransformer {
 
                 return shearFactors;
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(canvas, "Invalid input! Please enter valid numbers.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return shearFactors;
             }
         }

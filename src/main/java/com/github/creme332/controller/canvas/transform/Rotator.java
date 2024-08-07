@@ -66,7 +66,7 @@ public class Rotator extends AbstractTransformer {
         panel.add(counterClockwiseButton);
         panel.add(clockwiseButton);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Rotate About Point",
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Rotate About Point",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         // Request focus again otherwise keyboard shortcuts will not work
@@ -80,6 +80,8 @@ public class Rotator extends AbstractTransformer {
                 boolean isClockwise = clockwiseButton.isSelected();
                 return new RotationDetails(angle, new Point2D.Double(pivotX, pivotY), isClockwise);
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(canvas, "Invalid input! Please enter valid numbers.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 // Handle invalid input gracefully, return default rotation details
                 return new RotationDetails(0, new Point2D.Double(0, 0), false);
             }

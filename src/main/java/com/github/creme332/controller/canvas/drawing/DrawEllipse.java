@@ -95,7 +95,8 @@ public class DrawEllipse extends AbstractDrawer {
 
                 final Point2D firstFocus = preview.getPlottedPoints().get(0);
                 final Point2D secondFocus = preview.getPlottedPoints().get(1);
-                int[][] coordinates = ellipseCalculator.getOrderedPointsWithRadius(firstFocus, secondFocus, radii[0], radii[1]);
+                int[][] coordinates = ellipseCalculator.getOrderedPointsWithRadius(firstFocus, secondFocus, radii[0],
+                        radii[1]);
 
                 if (coordinates.length == 2) {
                     Polygon ellipse = new Polygon(coordinates[0], coordinates[1], coordinates[0].length);
@@ -130,7 +131,7 @@ public class DrawEllipse extends AbstractDrawer {
         panel.add(new JLabel("Radius Y:"));
         panel.add(ryField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Ellipse: Foci & Radius", JOptionPane.OK_CANCEL_OPTION,
+        int result = JOptionPane.showConfirmDialog(canvas, panel, "Ellipse: Foci & Radius", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
         // Request focus again otherwise keyboard shortcuts will not work
@@ -140,8 +141,13 @@ public class DrawEllipse extends AbstractDrawer {
             try {
                 int rx = Integer.parseInt(rxField.getText());
                 int ry = Integer.parseInt(ryField.getText());
-                return new int[]{rx, ry};
+                if (rx <= 0 || ry <= 0) {
+                    throw new NumberFormatException("Radii must be positive.");
+                }
+                return new int[] { rx, ry };
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(canvas, "Invalid input. Please enter positive integers for the radii.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
         }
