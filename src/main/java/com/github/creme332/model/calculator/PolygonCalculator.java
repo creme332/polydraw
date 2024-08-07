@@ -244,9 +244,15 @@ public class PolygonCalculator {
                 Edge edge1 = activeEdgeTable.get(i);
                 Edge edge2 = activeEdgeTable.get(i + 1);
 
-                for (int x = (int) Math.ceil(edge1.currentX); x < edge2.currentX; x++) {
+                // Include the starting x-coordinate of edge1 (border pixel)
+                filledPixels.add(new Point((int) Math.ceil(edge1.currentX), y));
+
+                for (int x = (int) Math.ceil(edge1.currentX + 1); x < edge2.currentX; x++) {
                     filledPixels.add(new Point(x, y));
                 }
+
+                // Include the ending x-coordinate of edge2 (border pixel)
+                filledPixels.add(new Point((int) edge2.currentX, y));
             }
 
             // Update x for each edge in the active edge table
