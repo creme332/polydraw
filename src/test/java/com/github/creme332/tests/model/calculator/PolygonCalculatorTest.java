@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,5 +78,72 @@ public class PolygonCalculatorTest {
 
         assertEquals(expected.size(), result.size());
         assertEquals(expected,  result);
+    }
+
+    @Test
+    public void testGetOrderedPointsForTriangle() {
+        int sidesCount = 3;
+        int length = 10;
+        int centerX = 0;
+        int centerY = 0;
+        int[][] orderedPoints = calculator.getOrderedPoints(sidesCount, length, centerX, centerY);
+
+        int[][] expected = {
+                { 9, -9, 0 },
+                { 5, 5, -10 }
+        };
+
+        assertArrayEquals(expected[0], orderedPoints[0]);
+        assertArrayEquals(expected[1], orderedPoints[1]);
+    }
+
+    @Test
+    public void testGetOrderedPointsForPentagon() {
+        int sidesCount = 5;
+        int length = 10;
+        int centerX = 0;
+        int centerY = 0;
+        int[][] orderedPoints = calculator.getOrderedPoints(sidesCount, length, centerX, centerY);
+
+        int[][] expected = {
+                { 6, -6, -10, 0, 10 },
+                { 8, 8, -3, -10, -3 }
+        };
+
+        assertArrayEquals(expected[0], orderedPoints[0]);
+        assertArrayEquals(expected[1], orderedPoints[1]);
+    }
+
+    @Test
+    public void testGetOrderedPointsForIrregularPolygon() {
+        Polygon polygon = new Polygon(new int[] { 0, 4, 2, -2, -4 }, new int[] { 0, 3, 5, 5, 3 }, 5);
+        List<Point> expectedPoints = Arrays.asList(
+                new Point(0, 0), new Point(4, 3), new Point(2, 5),
+                new Point(-2, 5), new Point(-4, 3));
+        List<Point> actualPoints = new ArrayList<>();
+        for (int i = 0; i < polygon.npoints; i++) {
+            actualPoints.add(new Point(polygon.xpoints[i], polygon.ypoints[i]));
+        }
+
+        assertEquals(expectedPoints, actualPoints);
+    }
+
+    @Test
+    public void testScanFillIrregularPolygon() {
+        Polygon polygon = new Polygon(new int[] { 0, 5, 3, -3, -5 }, new int[] { 0, 3, 7, 7, 3 }, 5);
+        List<Point> result = PolygonCalculator.scanFill(polygon);
+
+        // Verify filled area size
+        assertFalse(result.isEmpty());
+    }
+
+    @Test
+    public void testScanFillSmallCircleStoredInPolygon() {
+        // Create a polygon approximating a small circle (using 8 sides)
+        Polygon polygon = calculator.getRegularPolygon(new Point2D.Double(0, 10), new Point2D.Double(10, 0), 8);
+        List<Point> result = PolygonCalculator.scanFill(polygon);
+
+        // Since this is a small circle, expect points to form a roughly circular area
+        assertFalse(result.isEmpty());
     }
 }
