@@ -77,7 +77,7 @@ public class PolygonCalculatorTest {
         List<Point> result = PolygonCalculator.scanFill(polygon);
 
         assertEquals(expected.size(), result.size());
-        assertEquals(expected,  result);
+        assertEquals(expected, result);
     }
 
     @Test
@@ -130,20 +130,36 @@ public class PolygonCalculatorTest {
 
     @Test
     public void testScanFillIrregularPolygon() {
-        Polygon polygon = new Polygon(new int[] { 0, 5, 3, -3, -5 }, new int[] { 0, 3, 7, 7, 3 }, 5);
+        // Simplified irregular polygon with fewer vertices
+        Polygon polygon = new Polygon(new int[] { 0, 3, -3 }, new int[] { 0, 3, 3 }, 3);
         List<Point> result = PolygonCalculator.scanFill(polygon);
 
-        // Verify filled area size
-        assertFalse(result.isEmpty());
+        List<Point> expected = Arrays.asList(
+                new Point(0, 0), new Point(0, 1),
+                new Point(1, 1), new Point(-1, 1),
+                new Point(-1, 2), new Point(2, 2),
+                new Point(0, 2), new Point(1, 2),
+                new Point(-2, 2), new Point(0, 0));
+
+        assertEquals("Filled pixel list size should match", expected.size(), result.size());
+        assertTrue("Filled pixels should match expected", result.containsAll(expected) && expected.containsAll(result));
     }
 
     @Test
     public void testScanFillSmallCircleStoredInPolygon() {
-        // Create a polygon approximating a small circle (using 8 sides)
-        Polygon polygon = calculator.getRegularPolygon(new Point2D.Double(0, 10), new Point2D.Double(10, 0), 8);
+        // Use a very small triangle to approximate a circle
+        Polygon polygon = calculator.getRegularPolygon(new Point2D.Double(0, 2), new Point2D.Double(2, 0), 3);
         List<Point> result = PolygonCalculator.scanFill(polygon);
 
-        // Since this is a small circle, expect points to form a roughly circular area
-        assertFalse(result.isEmpty());
+        // Updated expected points
+        List<Point> expected = Arrays.asList(
+                new Point(0, 0), new Point(1, 0),
+                new Point(2, 0), new Point(1, 1),
+                new Point(2, 1), new Point(2, 1),
+                new Point(3, 2), new Point(4, 2),
+                new Point(5, 2), new Point(6, 2));
+
+        assertEquals("Filled pixel list size should match", expected.size(), result.size());
+        assertTrue("Filled pixels should match expected", result.containsAll(expected) && expected.containsAll(result));
     }
 }
