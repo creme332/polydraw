@@ -76,8 +76,6 @@ public class PolygonCalculatorTest {
         List<Point> result = PolygonCalculator.scanFill(polygon);
 
         assertEquals(expected.size(), result.size());
-        for (Point p : expected) {
-            assertTrue(result.contains(p));
-        }
+        assertEquals(expected,  result);
     }
 }
