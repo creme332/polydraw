@@ -3,9 +3,9 @@ package com.github.creme332.model.calculator;
 /**
  * The Clipper class implements the Cohen-Sutherland line clipping algorithm.
  */
-public class ClipperCalculator {
+public class LineClipperCalculator {
     
-    private ClipperCalculator() {
+    private LineClipperCalculator() {
         // Private constructor to prevent instantiation
     }
 

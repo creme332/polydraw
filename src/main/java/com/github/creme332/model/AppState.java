@@ -132,11 +132,11 @@ public class AppState {
     }
 
     /**
-     * Informs ToastController that toast must be displayed and updated. Property
-     * change is guaranteed to get fired.
+     * Informs ToastController that the toast must be displayed and updated.
+     * Property change is guaranteed to get fired.
      */
-    public void activateToast() {
-        support.firePropertyChange("activateToast", null, mode);
+    public void activateToast(Mode modeToDisplay) {
+        support.firePropertyChange("activateToast", null, modeToDisplay);
     }
 
     public void setSideBarVisibility(boolean newValue) {
@@ -154,6 +154,7 @@ public class AppState {
         final Mode oldMode = this.mode;
         this.mode = newMode;
         support.firePropertyChange("mode", oldMode, newMode);
+        activateToast(newMode);
     }
 
     public boolean isMaximizeFrame() {

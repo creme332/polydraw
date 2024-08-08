@@ -41,30 +41,31 @@ public class ToolBarController implements PropertyChangeListener {
                 }
             }
 
-            JDialog dialog = JColorChooser.createDialog(toolbar, "Select a Color", true, cc, eee -> {
-                Color selectedColor = cc.getColor();
-                if (selectedColor != null) {
+            JDialog dialog = JColorChooser.createDialog(toolbar.getTopLevelAncestor(), "Select a Color", true, cc,
+                    eee -> {
+                        Color selectedColor = cc.getColor();
+                        if (selectedColor != null) {
 
-                    int selectedShapeIndex = canvasModel.getSelectedShapeIndex();
+                            int selectedShapeIndex = canvasModel.getSelectedShapeIndex();
 
-                    // if a shape is currently selected, edit the shape
-                    if (selectedShapeIndex >= 0) {
-                        ShapeManager manager = canvasModel.getShapeManager();
-                        ShapeWrapper wrapper = manager.getShapeByIndex(selectedShapeIndex);
-                        wrapper.setLineColor(selectedColor);
-                        manager.editShape(selectedShapeIndex, wrapper);
-                    } else {
-                        // else edit global canvas attributes
-                        canvasModel.setShapeColor(selectedColor);
-                    }
-                    toolbar.getColorBox().setBackground(selectedColor);
+                            // if a shape is currently selected, edit the shape
+                            if (selectedShapeIndex >= 0) {
+                                ShapeManager manager = canvasModel.getShapeManager();
+                                ShapeWrapper wrapper = manager.getShapeByIndex(selectedShapeIndex);
+                                wrapper.setLineColor(selectedColor);
+                                manager.editShape(selectedShapeIndex, wrapper);
+                            } else {
+                                // else edit global canvas attributes
+                                canvasModel.setShapeColor(selectedColor);
+                            }
+                            toolbar.getColorBox().setBackground(selectedColor);
 
-                    // request focus again otherwise keyboard shortcuts will stop working after
-                    // opening color dialog
-                    toolbar.getTopLevelAncestor().requestFocus();
-                }
+                            // request focus again otherwise keyboard shortcuts will stop working after
+                            // opening color dialog
+                            toolbar.getTopLevelAncestor().requestFocus();
+                        }
 
-            }, null);
+                    }, null);
 
             dialog.setVisible(true);
         });
