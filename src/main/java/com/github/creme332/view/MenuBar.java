@@ -117,6 +117,24 @@ public class MenuBar extends JMenuBar {
         return jMenusList.get(i);
     }
 
+    /**
+     * Get all JMenuItems from a given JMenu.
+     * 
+     * @param menu the JMenu to get items from
+     * @return a list of JMenuItems
+     */
+    public List<JMenuItem> getAllMenuItems(int menuIndex) {
+        JMenu menu = getMyMenu(menuIndex);
+        List<JMenuItem> menuItems = new ArrayList<>();
+        for (int i = 0; i < menu.getItemCount(); i++) {
+            JMenuItem menuItem = menu.getItem(i);
+            if (menuItem != null) {
+                menuItems.add(menuItem);
+            }
+        }
+        return menuItems;
+    }
+
     public JButton getSideBarButton() {
         return sidebarButton;
     }

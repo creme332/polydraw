@@ -186,7 +186,6 @@ public class FrameController implements PropertyChangeListener {
         MenuModel[] menuModels = app.getMenuModels();
         if (index >= 0 && index < menuModels.length) {
             app.setMode(menuModels[index].getActiveItem());
-            app.activateToast();
         }
     }
 

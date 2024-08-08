@@ -22,6 +22,14 @@ public class DrawLine extends AbstractDrawer {
         return getCanvasMode() == Mode.DRAW_LINE_BRESENHAM || getCanvasMode() == Mode.DRAW_LINE_DDA;
     }
 
+    /**
+     * Uses Bresenham algorithm to create a polyline
+     */
+    public static Path2D.Double createPolyline(int x0, int y0, int x1, int y1) {
+        int[][] coordinates = LineCalculator.bresenham(x0, y0, x1, y1);
+        return createPolyline(coordinates[0], coordinates[1], coordinates[0].length);
+    }
+
     public static Path2D.Double createPolyline(int[] xPoints, int[] yPoints, int length) {
         if (xPoints == null || yPoints == null || xPoints.length != yPoints.length || length <= 0
                 || length > xPoints.length) {

@@ -132,6 +132,10 @@ public class ShapeWrapper {
         }
     }
 
+    public boolean isLine() {
+        return getShape() instanceof Path2D.Double;
+    }
+
     /**
      * Translates shape and plotted points by a given translation vector.
      * 
@@ -250,11 +254,6 @@ public class ShapeWrapper {
         return shape;
     }
 
-    public Polygon toPolygon() {
-        Polygon original = (Polygon) shape;
-        return new Polygon(original.xpoints, original.ypoints, original.npoints);
-    }
-
     public void setShape(Shape shape) {
         this.shape = shape;
     }
@@ -302,26 +301,70 @@ public class ShapeWrapper {
         this.lineType = lineType;
     }
 
+    /**
+     * Extracts the x and y coordinates from the given shape.
+     *
+     * @param shape the shape from which to extract coordinates
+     * @return a 2D array where each row is a pair of coordinates {x, y}
+     */
+    public double[][] getCoordinates() {
+        List<double[]> coordinates = new ArrayList<>();
+        PathIterator pathIterator = shape.getPathIterator(null);
+        double[] coords = new double[6];
+
+        while (!pathIterator.isDone()) {
+            int segmentType = pathIterator.currentSegment(coords);
+            switch (segmentType) {
+                case PathIterator.SEG_MOVETO:
+                case PathIterator.SEG_LINETO:
+                    coordinates.add(new double[] { coords[0], coords[1] });
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    coordinates.add(new double[] { coords[0], coords[1] });
+                    coordinates.add(new double[] { coords[2], coords[3] });
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    coordinates.add(new double[] { coords[0], coords[1] });
+                    coordinates.add(new double[] { coords[2], coords[3] });
+                    coordinates.add(new double[] { coords[4], coords[5] });
+                    break;
+                case PathIterator.SEG_CLOSE:
+                    // Closing the path; no new coordinates to add
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unexpected segment type: " + segmentType);
+            }
+            pathIterator.next();
+        }
+
+        // Convert the list to a 2D array
+        double[][] result = new double[coordinates.size()][2];
+        for (int i = 0; i < coordinates.size(); i++) {
+            result[i] = coordinates.get(i);
+        }
+
+        return result;
+    }
+
     @Override
     public String toString() {
         // create a list of plotted point coordinates
         StringBuilder plottedPointString = new StringBuilder();
         plottedPointString.append("[");
         for (Point2D point2d : plottedPoints) {
-            plottedPointString.append(String.format("[%f, %f], ", point2d.getX(), point2d.getY()));
+            plottedPointString.append(String.format("[%.3f, %.3f], ", point2d.getX(), point2d.getY()));
         }
         plottedPointString.append("]");
 
         return String.format("""
                 ShapeWrapper{
                     plottedPoints: %s
-                    xpoints: %s
-                    ypoints: %s
+                    points: %s
                     lineColor: %s
                     lineType: %s
                     lineThickness: %d
                 }
-                """, plottedPointString, Arrays.toString(toPolygon().xpoints), Arrays.toString(toPolygon().ypoints),
+                """, plottedPointString, Arrays.deepToString(getCoordinates()),
                 lineColor, lineType, lineThickness);
     }
 
