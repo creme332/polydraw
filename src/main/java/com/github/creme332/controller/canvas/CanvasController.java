@@ -70,6 +70,9 @@ public class CanvasController implements PropertyChangeListener {
         this.canvas = canvas;
         this.model = app.getCanvasModel();
 
+        // initialize dimensions of canvas
+        model.setCanvasDimension(new Dimension(canvas.getWidth(), canvas.getHeight()));
+
         // listen to model
         model.addPropertyChangeListener(this);
         model.getShapeManager().addPropertyChangeListener(this);
