@@ -1,11 +1,14 @@
 package com.github.creme332.controller.canvas.transform;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
@@ -31,14 +34,45 @@ public class Translator extends AbstractTransformer {
         // request user for translation vector
         final Point2D translationVector = requestTranslationVector();
 
-        // translate wrapper
-        selectedWrapperCopy.translate(translationVector);
+        startTranslationAnimation(selectedWrapperCopy, shapeIndex, translationVector);
+    }
 
-        // replace old shape with new one
-        canvasModel.getShapeManager().editShape(shapeIndex, selectedWrapperCopy);
+    /**
+     * Animates the translation of a given shape using linear interpolation.
+     */
+    public void startTranslationAnimation(final ShapeWrapper selectedWrapperCopy, final int shapeIndex,
+            Point2D translationVector) {
+        final int totalSteps = 60; // 60 frames
+        final int animationDuration = 1000; // 1 second
+        final int animationDelay = animationDuration / totalSteps; // Delay in milliseconds between updates
 
-        // repaint canvas
-        canvas.repaint();
+        // Timer to handle the animation
+        Timer timer = new Timer(animationDelay, new ActionListener() {
+            private int stepCount = 0;
+            ShapeWrapper copyPreview;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (stepCount <= totalSteps) {
+                    copyPreview = new ShapeWrapper(selectedWrapperCopy);
+                    Point2D newTranslationVector = new Point2D.Double(translationVector.getX() * stepCount / totalSteps,
+                            translationVector.getY() * stepCount / totalSteps);
+                    copyPreview.translate(newTranslationVector);
+                    canvasModel.getShapeManager().setShapePreview(copyPreview);
+                    canvas.repaint();
+
+                    stepCount++;
+                } else {
+                    ((Timer) e.getSource()).stop(); // Stop the timer when done
+                    canvasModel.getShapeManager().setShapePreview(null);
+                    // Replace old shape with new one so that transformation can be undo-ed
+                    canvasModel.getShapeManager().editShape(shapeIndex, copyPreview);
+                    canvas.repaint();
+                }
+            }
+        });
+
+        timer.start();
     }
 
     @Override
