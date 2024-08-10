@@ -13,6 +13,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +42,7 @@ import com.github.creme332.controller.canvas.transform.Rotator;
 import com.github.creme332.controller.canvas.transform.Scaler;
 import com.github.creme332.controller.canvas.transform.Shearer;
 import com.github.creme332.controller.canvas.transform.Translator;
+import com.github.creme332.controller.console.SideMenuController;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.Mode;
@@ -158,7 +161,7 @@ public class CanvasController implements PropertyChangeListener {
         canvas.getActionMap().put("exportCanvas", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleCanvasExport();
+                handleCanvasImageExport();
             }
         });
 
@@ -343,7 +346,7 @@ public class CanvasController implements PropertyChangeListener {
      * </li>
      * </ol>
      */
-    private void handleCanvasExport() {
+    private void handleCanvasImageExport() {
         // temporarily hide cursor position
         Point2D cursorPosition = model.getUserMousePosition();
         model.setUserMousePosition(null);
@@ -366,10 +369,11 @@ public class CanvasController implements PropertyChangeListener {
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             final String folderPath = fileChooser.getSelectedFile().toString();
-            final String imagePath = folderPath + "/canvas.png";
+            final String fileName = SideMenuController.addTimePrefix("canvas.png");
+            Path filePath = Paths.get(folderPath, fileName);
             try {
-                ImageIO.write(image, "png", new File(imagePath));
-                JOptionPane.showMessageDialog(canvas, "canvas.png was successfully saved at " + folderPath);
+                ImageIO.write(image, "png", new File(filePath.toString()));
+                JOptionPane.showMessageDialog(canvas, fileName + " was successfully saved at " + folderPath);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(0);
@@ -409,7 +413,7 @@ public class CanvasController implements PropertyChangeListener {
 
         // if printingCanvas property has changed to true, handle export
         if ("printingCanvas".equals(propertyName) && (boolean) e.getNewValue()) {
-            handleCanvasExport();
+            handleCanvasImageExport();
         }
     }
 }

@@ -6,12 +6,15 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -22,21 +25,29 @@ import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
 
 public class SideMenuPanel extends JPanel {
-    JButton newCanvasButton = createButton("New", BootstrapIcons.PLUS);
-    JButton exportImageButton = createButton("Export Image", BootstrapIcons.IMAGE);
-    JButton tutorialsButton = createButton("Tutorials", BootstrapIcons.BOOK);
-    JButton saveToComputerButton = createButton("Save to your computer", BootstrapIcons.SAVE);
-    JButton reportProblemButton = createButton("Report problem", BootstrapIcons.BUG);
-    JButton aboutButton = createButton("About", BootstrapIcons.INFO);
-    JButton openButton = createButton("Open", BootstrapIcons.FOLDER2_OPEN);
+    private JButton newCanvasButton = createButton("New", BootstrapIcons.PLUS);
+    private JButton exportImageButton = createButton("Export Image", BootstrapIcons.IMAGE);
+    private JButton tutorialsButton = createButton("Tutorials", BootstrapIcons.BOOK);
+    private JButton saveToComputerButton = createButton("Save to your computer", BootstrapIcons.SAVE);
+    private JButton reportProblemButton = createButton("Report problem", BootstrapIcons.BUG);
+    private JButton aboutButton = createButton("About", BootstrapIcons.INFO);
+    private JButton openFileButton = createButton("Open", BootstrapIcons.FOLDER2_OPEN);
 
-    JCheckBox gridLinesCheckBox;
-    JCheckBox axesCheckbox;
-    JComboBox<String> fontSizeSelector;
-    JButton resetButton;
+    private JCheckBox gridLinesCheckBox;
+    private JCheckBox axesCheckbox;
+    private JComboBox<String> fontSizeSelector;
+    private JButton resetCanvasSettingsButton;
 
     public static final int BORDER_SIZE = 1;
     public static final int PREFERRED_WIDTH = 275;
+    private static final String PROJECT_INFO = """
+            Polydraw is an application for drawing rasterized shapes, inspired by Geogebra Classic.
+
+            For more information, visit our GitHub page: https://github.com/creme332/polydraw/.
+
+            Version: 0.0
+            License: MIT
+            """;
 
     public SideMenuPanel() {
         setLayout(new BorderLayout());
@@ -56,6 +67,13 @@ public class SideMenuPanel extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(container);
         this.add(scrollPane);
+
+        // Display project info in a dialog when about button is clicked
+        aboutButton.addActionListener(e -> {
+            JDialog aboutDialog = new JOptionPane(PROJECT_INFO,
+                    JOptionPane.INFORMATION_MESSAGE).createDialog("About");
+            aboutDialog.setVisible(true);
+        });
     }
 
     private JPanel createSettingsPanel() {
@@ -107,10 +125,10 @@ public class SideMenuPanel extends JPanel {
         JPanel resetButtonContainer = new JPanel(new BorderLayout());
         resetButtonContainer.setBorder(new EmptyBorder(0, 0, 0, 10));
 
-        resetButton = new JButton("Reset");
-        resetButton.putClientProperty("FlatLaf.style", "background: #FFB8B8");
+        resetCanvasSettingsButton = new JButton("Reset");
+        resetCanvasSettingsButton.putClientProperty("FlatLaf.style", "background: #FFB8B8");
 
-        resetButtonContainer.add(resetButton);
+        resetButtonContainer.add(resetCanvasSettingsButton);
         settingsPanel.add(resetButtonContainer, BorderLayout.SOUTH);
 
         return settingsPanel;
@@ -132,7 +150,7 @@ public class SideMenuPanel extends JPanel {
         buttonsPanel.add(saveToComputerButton, gbc);
 
         gbc.gridy++;
-        buttonsPanel.add(openButton, gbc);
+        buttonsPanel.add(openFileButton, gbc);
 
         gbc.gridy++;
         buttonsPanel.add(exportImageButton, gbc);
@@ -160,32 +178,32 @@ public class SideMenuPanel extends JPanel {
         return button;
     }
 
-    public JButton getNewCanvasButton() {
-        return newCanvasButton;
+    public void handleCanvasClear(ActionListener listener) {
+        newCanvasButton.addActionListener(listener);
     }
 
-    public JButton getExportImageButton() {
-        return exportImageButton;
+    public void handleImageExport(ActionListener listener) {
+        exportImageButton.addActionListener(listener);
     }
 
-    public JButton getTutorialsButton() {
-        return tutorialsButton;
+    public void handleTutorialAction(ActionListener listener) {
+        tutorialsButton.addActionListener(listener);
     }
 
-    public JButton getSaveToComputerButton() {
-        return saveToComputerButton;
+    public void handleExportCanvasAsFile(ActionListener listener) {
+        saveToComputerButton.addActionListener(listener);
     }
 
-    public JButton getReportProblemButton() {
-        return reportProblemButton;
+    public void handleReportAction(ActionListener listener) {
+        reportProblemButton.addActionListener(listener);
     }
 
-    public JButton getAboutButton() {
-        return aboutButton;
+    public void handleOpenFile(ActionListener listener) {
+        openFileButton.addActionListener(listener);
     }
 
-    public JButton getResetButton() {
-        return resetButton;
+    public void handleCanvasSettingsReset(ActionListener listener) {
+        resetCanvasSettingsButton.addActionListener(listener);
     }
 
     public JCheckBox getGridLinesCheckBox() {

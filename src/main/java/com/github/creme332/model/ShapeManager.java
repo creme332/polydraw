@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -43,6 +44,16 @@ public class ShapeManager {
         undoStack = new Stack<>();
         redoStack = new Stack<>();
         support = new PropertyChangeSupport(this);
+    }
+
+    /**
+     * Replaces all current shapes with new shapes. Undo and redo stacks are reset.
+     */
+    public void importShapes(ShapeWrapper[] newShapes) {
+        shapes = new ArrayList<>(Arrays.asList(newShapes));
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
+        shapePreview = null;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

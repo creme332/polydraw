@@ -10,16 +10,16 @@ An application for drawing rasterized shapes, inspired by GeoGebra Classic.
 - Draw polygons (regular and irregular).
 - Configurable polygon attributes (border color, border thickness, fill color).
 - Circle drawing using midpoint circle algorithm.
-- Animated transformations.
+- Animated transformations (translation, rotation, shearing, ...).
 - Ellipse drawing using midpoint ellipse algorithm.
 - Polygon fill using scan fill algorithm.
-- Shape clipping using Cohen Sutherland line clipping algorithm.
+- Shape clipping.
 - Drag and drop to move shapes.
 - Testing with JUnit 4.
 - Sidebar with opening and closing animation.
 - In-app tutorials with searching functionality.
 - Cross-platform GUI.
-- Export canvas as image.
+- Export canvas in PNG and JSON format.
 - Keyboard shortcuts.
 - Supports undo, redo, and delete operations.
 
@@ -29,5 +29,5 @@ All documentation (installation guide, usage guide, ...) is available in the [`d
 
 ## References
 
-1. Some icons originate from https://www.geogebra.org/classic.
-2. <a href="https://www.flaticon.com/free-icons/icosahedron" title="icosahedron icons">Icosahedron icon created by Pixel perfect - Flaticon</a>.
+1. UI and drawing modes graphics were adapted from https://www.geogebra.org/classic.
+2. App logo: <a href="https://www.flaticon.com/free-icons/icosahedron" title="icosahedron icons">Icosahedron icon created by Pixel perfect - Flaticon</a>.
