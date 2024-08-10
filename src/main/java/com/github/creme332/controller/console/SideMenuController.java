@@ -247,7 +247,7 @@ public class SideMenuController implements PropertyChangeListener {
         // convert list of shapes on canvas to json
         GsonBuilder gsonBuilder = new GsonBuilder();
         List<ShapeWrapper> shapes = app.getCanvasModel().getShapeManager().getShapes();
-        Gson gson = gsonBuilder.setPrettyPrinting().create();
+        Gson gson = gsonBuilder.create();
         String json = gson.toJson(shapes);
 
         // let user choose folder location
