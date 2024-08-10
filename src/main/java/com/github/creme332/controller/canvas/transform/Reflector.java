@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
+import com.github.creme332.utils.RequestFocusListener;
 import com.github.creme332.view.Canvas;
 
 /**
@@ -60,10 +61,13 @@ public class Reflector extends AbstractTransformer {
         JTextField gradientField = new JTextField(5);
         JTextField yInterceptField = new JTextField(5);
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Gradient (m):"));
+        panel.add(new JLabel("Gradient"));
         panel.add(gradientField);
-        panel.add(new JLabel("Y-Intercept (b):"));
+        panel.add(new JLabel("Y-Intercept"));
         panel.add(yInterceptField);
+
+        // Request focus on the textfield when dialog is displayed
+        gradientField.addHierarchyListener(new RequestFocusListener());
 
         int result = JOptionPane.showConfirmDialog(canvas, panel, "Enter Line of Reflection",
                 JOptionPane.OK_CANCEL_OPTION,

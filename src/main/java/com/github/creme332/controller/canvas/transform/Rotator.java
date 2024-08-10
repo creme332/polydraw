@@ -14,6 +14,7 @@ import javax.swing.Timer;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
+import com.github.creme332.utils.RequestFocusListener;
 import com.github.creme332.view.Canvas;
 
 public class Rotator extends AbstractTransformer {
@@ -29,6 +30,9 @@ public class Rotator extends AbstractTransformer {
 
         // Request rotation details from the user
         RotationDetails rotationDetails = requestRotationDetails();
+
+        // Request focus again otherwise keyboard shortcuts will not work
+        canvas.getTopLevelAncestor().requestFocus();
 
         // Calculate rotation angle in radians
         double radAngle = Math.toRadians(rotationDetails.angle * (rotationDetails.isClockwise ? -1 : 1));
@@ -91,6 +95,9 @@ public class Rotator extends AbstractTransformer {
         JTextField pivotXField = new JTextField("0", 5);
         JTextField pivotYField = new JTextField("0", 5);
 
+        // Request focus on the textfield when dialog is displayed
+        angleField.addHierarchyListener(new RequestFocusListener());
+
         JRadioButton clockwiseButton = new JRadioButton("clockwise");
         JRadioButton counterClockwiseButton = new JRadioButton("counterclockwise");
         counterClockwiseButton.setSelected(true);
@@ -111,9 +118,6 @@ public class Rotator extends AbstractTransformer {
 
         int result = JOptionPane.showConfirmDialog(canvas, panel, "Rotate About Point",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-        // Request focus again otherwise keyboard shortcuts will not work
-        canvas.getTopLevelAncestor().requestFocus();
 
         if (result == JOptionPane.OK_OPTION) {
             try {

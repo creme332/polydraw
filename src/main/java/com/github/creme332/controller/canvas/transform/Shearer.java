@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
+import com.github.creme332.utils.RequestFocusListener;
 import com.github.creme332.view.Canvas;
 
 /**
@@ -54,10 +55,13 @@ public class Shearer extends AbstractTransformer {
         JTextField sxField = new JTextField(5);
         JTextField syField = new JTextField(5);
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Shear X:"));
+        panel.add(new JLabel("Shear X"));
         panel.add(sxField);
-        panel.add(new JLabel("Shear Y:"));
+        panel.add(new JLabel("Shear Y"));
         panel.add(syField);
+
+        // Request focus on the textfield when dialog is displayed
+        sxField.addHierarchyListener(new RequestFocusListener());
 
         int result = JOptionPane.showConfirmDialog(canvas, panel, "Enter shear factors",
                 JOptionPane.OK_CANCEL_OPTION,

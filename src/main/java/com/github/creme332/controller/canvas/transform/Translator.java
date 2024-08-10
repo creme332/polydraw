@@ -13,6 +13,7 @@ import javax.swing.Timer;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
+import com.github.creme332.utils.RequestFocusListener;
 import com.github.creme332.view.Canvas;
 
 /**
@@ -92,10 +93,13 @@ public class Translator extends AbstractTransformer {
         JTextField rxField = new JTextField(5);
         JTextField ryField = new JTextField(5);
         JPanel panel = new JPanel();
-        panel.add(new JLabel("X:"));
+        panel.add(new JLabel("X"));
         panel.add(rxField);
-        panel.add(new JLabel("Y:"));
+        panel.add(new JLabel("Y"));
         panel.add(ryField);
+
+        // Request focus on the textfield when dialog is displayed
+        rxField.addHierarchyListener(new RequestFocusListener());
 
         int result = JOptionPane.showConfirmDialog(null, panel, "Enter translation vector",
                 JOptionPane.OK_CANCEL_OPTION,

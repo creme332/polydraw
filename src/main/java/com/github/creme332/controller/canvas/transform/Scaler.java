@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
+import com.github.creme332.utils.RequestFocusListener;
 import com.github.creme332.view.Canvas;
 
 /**
@@ -59,20 +60,23 @@ public class Scaler extends AbstractTransformer {
      *         cancelled.
      */
     private double[] requestScaleData() {
-        JTextField xField = new JTextField(5);
-        JTextField yField = new JTextField(5);
+        JTextField xField = new JTextField("0", 5);
+        JTextField yField = new JTextField("0", 5);
         JTextField sxField = new JTextField(5);
         JTextField syField = new JTextField(5);
 
         JPanel panel = new JPanel();
-        panel.add(new JLabel("X:"));
-        panel.add(xField);
-        panel.add(new JLabel("Y:"));
-        panel.add(yField);
-        panel.add(new JLabel("Scale X:"));
+        panel.add(new JLabel("Scale X"));
         panel.add(sxField);
-        panel.add(new JLabel("Scale Y:"));
+        panel.add(new JLabel("Scale Y"));
         panel.add(syField);
+        panel.add(new JLabel("X"));
+        panel.add(xField);
+        panel.add(new JLabel("Y"));
+        panel.add(yField);
+
+        // Request focus on the textfield when dialog is displayed
+        sxField.addHierarchyListener(new RequestFocusListener());
 
         int result = JOptionPane.showConfirmDialog(canvas, panel, "Enter scaling data",
                 JOptionPane.OK_CANCEL_OPTION,
