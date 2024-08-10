@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,7 +30,7 @@ import com.google.gson.GsonBuilder;
 /**
  * Controller responsible for managing sidebar in CanvasConsole.
  */
-public class SideMenuController {
+public class SideMenuController implements PropertyChangeListener {
 
     private SideMenuPanel sidebar;
     private AppState app;
@@ -38,6 +40,8 @@ public class SideMenuController {
         this.app = app;
         this.sidebar = sidebar;
         canvasModel = app.getCanvasModel();
+
+        app.addPropertyChangeListener(this);
 
         refreshCanvasSettingsUI();
 
@@ -268,5 +272,13 @@ public class SideMenuController {
                     fileName + " was successfully saved at " + folderLocation);
         }
         sidebar.getTopLevelAncestor().requestFocus();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        // if printingCanvas property has changed to true, handle export
+        if ("exportCanvasToJSON".equals(evt.getPropertyName())) {
+            handleCanvasToJSON();
+        }
     }
 }

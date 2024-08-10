@@ -15,7 +15,7 @@ public class AppState {
 
     private MenuModel[] menuModels;
 
-    Map<Mode, Integer> modeToMenuMapper;
+    private Map<Mode, Integer> modeToMenuMapper;
 
     /**
      * Screen currently visible.
@@ -125,6 +125,7 @@ public class AppState {
         support.addPropertyChangeListener("maximizeFrame", listener);
         support.addPropertyChangeListener("activateToast", listener);
         support.addPropertyChangeListener("printingCanvas", listener);
+        support.addPropertyChangeListener("exportCanvasToJSON", listener);
     }
 
     public boolean getSideBarVisibility() {
@@ -169,5 +170,9 @@ public class AppState {
 
     public void startPrintingProcess() {
         support.firePropertyChange("printingCanvas", null, true);
+    }
+
+    public void notifyExportToCanvasHandler() {
+        support.firePropertyChange("exportCanvasToJSON", null, true);
     }
 }
