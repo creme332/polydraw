@@ -209,6 +209,9 @@ public class ShapeWrapper {
      * @param pivot    the x-y coordinates of the rotation point
      */
     public void rotate(double radAngle, Point2D pivot) {
+        if (radAngle == 0)
+            return;
+
         AffineTransform transform = new AffineTransform();
 
         // Step 1: Translate the shape to the origin (negative of the rotation point)
