@@ -194,9 +194,11 @@ public class ShapeWrapper {
         // translate plotted points
         for (int i = 0; i < plottedPoints.size(); i++) {
             Point2D oldPoint = plottedPoints.get(i);
+            int roundedX = (int) (oldPoint.getX() + translationVector.getX());
+            int roundedY = (int) (oldPoint.getY() + translationVector.getY());
+
             plottedPoints.set(i,
-                    new Point2D.Double(oldPoint.getX() + translationVector.getX(),
-                            oldPoint.getY() + translationVector.getY()));
+                    new Point2D.Double(roundedX, roundedY));
         }
     }
 
