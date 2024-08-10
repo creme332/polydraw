@@ -167,6 +167,10 @@ public class ShapeManager {
     }
 
     public void editShape(final int oldShapeIndex, final ShapeWrapper newShape) {
+        if (newShape == null) {
+            throw new NullPointerException("Edit shape failed: Cannot replace a shape with null.");
+        }
+        
         final ShapeWrapper oldShape = shapes.get(oldShapeIndex);
         if (oldShapeIndex != -1) {
             shapes.set(oldShapeIndex, newShape);
