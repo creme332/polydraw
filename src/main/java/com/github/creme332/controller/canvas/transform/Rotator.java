@@ -34,9 +34,6 @@ public class Rotator extends AbstractTransformer {
         double radAngle = Math.toRadians(rotationDetails.angle * (rotationDetails.isClockwise ? -1 : 1));
 
         startRotationAnimation(selectedWrapperCopy, shapeIndex, radAngle, rotationDetails.pivot);
-
-        // Repaint canvas
-        canvas.repaint();
     }
 
     /**
@@ -52,9 +49,10 @@ public class Rotator extends AbstractTransformer {
             final Point2D pivot) {
         if (radAngle == 0)
             return;
+
         final int animationDelay = 10; // Delay in milliseconds between updates
-        final double stepAngle = Math.toRadians(1); // Step size for each update (1 degree)
-        final double totalSteps = Math.abs(radAngle) / stepAngle; // Total number of steps
+        final double stepAngle = Math.toRadians(1.0) * Math.signum(radAngle); // Step size for each update (1 degree)
+        final double totalSteps = Math.abs(radAngle) / Math.abs(stepAngle); // Total number of steps
 
         // Timer to handle the animation
         Timer timer = new Timer(animationDelay, new ActionListener() {
