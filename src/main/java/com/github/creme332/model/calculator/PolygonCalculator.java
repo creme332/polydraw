@@ -217,11 +217,9 @@ public class PolygonCalculator {
             Iterator<Edge> edgeIterator = edgeTable.iterator();
             while (edgeIterator.hasNext()) {
                 Edge edge = edgeIterator.next();
-                if (edge.maxY >= y) {
-                    if (edge.currentX == (int) edge.currentX) {
-                        activeEdgeTable.add(edge);
-                        edgeIterator.remove();
-                    }
+                if (edge.yMin == y) {
+                    activeEdgeTable.add(edge);
+                    edgeIterator.remove();
                 }
             }
 
@@ -244,15 +242,10 @@ public class PolygonCalculator {
                 Edge edge1 = activeEdgeTable.get(i);
                 Edge edge2 = activeEdgeTable.get(i + 1);
 
-                // Include the starting x-coordinate of edge1 (border pixel)
-                filledPixels.add(new Point((int) Math.ceil(edge1.currentX), y));
-
-                for (int x = (int) Math.ceil(edge1.currentX + 1); x < edge2.currentX; x++) {
+                // Fill the pixels between the pairs of intersections
+                for (int x = (int) Math.ceil(edge1.currentX); x <= (int) Math.floor(edge2.currentX); x++) {
                     filledPixels.add(new Point(x, y));
                 }
-
-                // Include the ending x-coordinate of edge2 (border pixel)
-                filledPixels.add(new Point((int) edge2.currentX, y));
             }
 
             // Update x for each edge in the active edge table
@@ -260,6 +253,7 @@ public class PolygonCalculator {
                 edge.currentX += edge.inverseSlope;
             }
         }
+
         return filledPixels;
     }
 
@@ -279,21 +273,9 @@ public class PolygonCalculator {
             int x2 = polygon.xpoints[(i + 1) % n];
             int y2 = polygon.ypoints[(i + 1) % n];
 
-            if (y1 == y2)
-                continue; // Skip horizontal edges
-
-            Edge edge = new Edge();
-            if (y1 < y2) {
-                edge.currentX = x1;
-                edge.maxY = y2;
-                edge.inverseSlope = (double) (x2 - x1) / (y2 - y1);
-            } else {
-                edge.currentX = x2;
-                edge.maxY = y1;
-                edge.inverseSlope = (double) (x1 - x2) / (y1 - y2);
+            if (y1 != y2) {
+                edgeTable.add(new Edge(x1, y1, x2, y2));
             }
-
-            edgeTable.add(edge);
         }
 
         edgeTable.sort(Comparator.comparingDouble(e -> e.currentX));
@@ -304,8 +286,23 @@ public class PolygonCalculator {
      * Private inner class representing an edge for the scan-line fill algorithm.
      */
     private static class Edge {
+        int yMin;
         int maxY;
         double currentX;
         double inverseSlope;
+
+        Edge(int x1, int y1, int x2, int y2) {
+            if (y1 < y2) {
+                this.yMin = y1;
+                this.maxY = y2;
+                this.currentX = x1;
+                this.inverseSlope = (double) (x2 - x1) / (y2 - y1);
+            } else {
+                this.yMin = y2;
+                this.maxY = y1;
+                this.currentX = x2;
+                this.inverseSlope = (double) (x1 - x2) / (y1 - y2);
+            }
+        }
     }
 }

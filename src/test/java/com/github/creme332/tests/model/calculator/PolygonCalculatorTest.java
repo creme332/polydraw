@@ -134,12 +134,13 @@ public class PolygonCalculatorTest {
         Polygon polygon = new Polygon(new int[] { 0, 3, -3 }, new int[] { 0, 3, 3 }, 3);
         List<Point> result = PolygonCalculator.scanFill(polygon);
 
+        // Updated expected points to match the correct filling behavior
         List<Point> expected = Arrays.asList(
-                new Point(0, 0), new Point(0, 1),
-                new Point(1, 1), new Point(-1, 1),
-                new Point(-1, 2), new Point(2, 2),
-                new Point(0, 2), new Point(1, 2),
-                new Point(-2, 2), new Point(0, 0));
+                new Point(0, 0),
+                new Point(-1, 1), new Point(0, 1), new Point(1, 1),
+                new Point(-2, 2), new Point(-1, 2), new Point(0, 2), new Point(1, 2), new Point(2, 2),
+                new Point(-3, 3), new Point(-2, 3), new Point(-1, 3), new Point(0, 3), new Point(1, 3), new Point(2, 3),
+                new Point(3, 3));
 
         assertEquals("Filled pixel list size should match", expected.size(), result.size());
         assertTrue("Filled pixels should match expected", result.containsAll(expected) && expected.containsAll(result));
@@ -153,11 +154,9 @@ public class PolygonCalculatorTest {
 
         // Updated expected points
         List<Point> expected = Arrays.asList(
-                new Point(0, 0), new Point(1, 0),
                 new Point(2, 0), new Point(1, 1),
-                new Point(2, 1), new Point(2, 1),
-                new Point(3, 2), new Point(4, 2),
-                new Point(5, 2), new Point(6, 2));
+                new Point(2, 1), new Point(0, 2),
+                new Point(1, 2), new Point(2, 2));
 
         assertEquals("Filled pixel list size should match", expected.size(), result.size());
         assertTrue("Filled pixels should match expected", result.containsAll(expected) && expected.containsAll(result));
