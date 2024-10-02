@@ -6,13 +6,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.awt.Point;
-import java.util.Iterator;
 
 public class PolygonCalculator {
 
@@ -193,116 +191,97 @@ public class PolygonCalculator {
         return new Polygon(xPoints, yPoints, xPoints.length);
     }
 
-    /**
-     * Fills the polygon using the scan-line fill algorithm.
-     * 
-     * @param polygon The polygon to be filled.
-     * @return A list of points representing the filled pixels.
-     */
-    public static List<Point> scanFill(Polygon polygon) {
-        List<Edge> edgeTable = createEdgeTable(polygon);
-        List<Point> filledPixels = new ArrayList<>();
+    static class Edge {
+        int yMax; // Maximum y value for the edge
+        double xCurrent; // Current x value along the edge
+        double inverseSlope; // Slope of the edge (1/m) for calculating x
 
-        if (edgeTable.isEmpty()) {
-            return filledPixels;
+        public Edge(int yMax, double xCurrent, double inverseSlope) {
+            this.yMax = yMax;
+            this.xCurrent = xCurrent;
+            this.inverseSlope = inverseSlope;
         }
 
-        int minY = Arrays.stream(polygon.ypoints).min().orElseThrow();
-        int maxY = Arrays.stream(polygon.ypoints).max().orElseThrow();
+        @Override
+        public String toString() {
+            return String.format("(%d, %.3f, %.3f)", yMax, xCurrent, inverseSlope);
+        }
+    }
 
+    public static List<Point> scanFill(Polygon polygon) {
+        int[] xPoints = polygon.xpoints;
+        int[] yPoints = polygon.ypoints;
+        int verticesCount = polygon.npoints;
+
+        // Initialize the edge table
+        List<List<Edge>> edgeTable = new ArrayList<>();
+        int maxY = Integer.MIN_VALUE;
+
+        // Create an edge table for each scanline
+        for (int i = 0; i < verticesCount; i++) {
+            Point p1 = new Point(xPoints[i], yPoints[i]);
+            Point p2 = new Point(xPoints[(i + 1) % verticesCount], yPoints[(i + 1) % verticesCount]);
+
+            // Ensure p1.y < p2.y for correct edge handling
+            if (p1.y > p2.y) {
+                Point temp = p1;
+                p1 = p2;
+                p2 = temp;
+            }
+
+            if (p1.y != p2.y) { // Ignore horizontal edges
+                int yMin = p1.y;
+                int yMax = p2.y;
+                float xCurrent = p1.x;
+                float inverseSlope = (float) (p2.x - p1.x) / (p2.y - p1.y);
+
+                maxY = Math.max(maxY, yMax);
+
+                // Add the edge to the corresponding scanline in the edge table
+                while (edgeTable.size() <= yMin) {
+                    edgeTable.add(new ArrayList<>());
+                }
+                edgeTable.get(yMin).add(new Edge(yMax, xCurrent, inverseSlope));
+            }
+        }
+
+        // List to store filled points (can be thought of as the output)
+        List<Point> filledPoints = new ArrayList<>();
+
+        // Active Edge Table (AET)
         List<Edge> activeEdgeTable = new ArrayList<>();
 
-        for (int y = minY; y <= maxY; y++) {
-            // Move edges from edge table to active edge table where y == yMin
-            Iterator<Edge> edgeIterator = edgeTable.iterator();
-            while (edgeIterator.hasNext()) {
-                Edge edge = edgeIterator.next();
-                if (edge.yMin == y) {
-                    activeEdgeTable.add(edge);
-                    edgeIterator.remove();
-                }
+        // Process each scanline
+        for (int scanline = 0; scanline <= maxY; scanline++) {
+            // 1. Move edges from edgeTable to AET where the current scanline starts
+            if (scanline < edgeTable.size()) {
+                activeEdgeTable.addAll(edgeTable.get(scanline));
             }
 
-            // Remove edges from the active edge table where y == maxY
-            edgeIterator = activeEdgeTable.iterator();
-            while (edgeIterator.hasNext()) {
-                Edge edge = edgeIterator.next();
-                if (edge.maxY == y) {
-                    edgeIterator.remove();
-                }
-            }
+            // 2. Sort AET by xCurrent
+            activeEdgeTable.sort(Comparator.comparingDouble(edge -> edge.xCurrent));
 
-            // Sort the active edge table by currentX
-            activeEdgeTable.sort(Comparator.comparingDouble(e -> e.currentX));
-
-            // Fill pixels between pairs of intersections
+            // 3. Fill the pixels between pairs of x-coordinates
             for (int i = 0; i < activeEdgeTable.size(); i += 2) {
-                if (i + 1 >= activeEdgeTable.size())
-                    break;
-                Edge edge1 = activeEdgeTable.get(i);
-                Edge edge2 = activeEdgeTable.get(i + 1);
+                Edge e1 = activeEdgeTable.get(i);
+                Edge e2 = activeEdgeTable.get(i + 1);
 
-                // Fill the pixels between the pairs of intersections
-                for (int x = (int) Math.ceil(edge1.currentX); x <= (int) Math.floor(edge2.currentX); x++) {
-                    filledPixels.add(new Point(x, y));
+                // Add points between the two x coordinates
+                for (int x = (int) Math.ceil(e1.xCurrent); x <= (int) Math.floor(e2.xCurrent); x++) {
+                    filledPoints.add(new Point(x, scanline));
                 }
             }
 
-            // Update x for each edge in the active edge table
+            // 4. Remove edges from AET where scanline >= yMax
+            final int scanlineNumberCopy = scanline;
+            activeEdgeTable.removeIf(edge -> scanlineNumberCopy >= edge.yMax);
+
+            // 5. Update xCurrent for all edges in the AET
             for (Edge edge : activeEdgeTable) {
-                edge.currentX += edge.inverseSlope;
+                edge.xCurrent += edge.inverseSlope;
             }
         }
 
-        return filledPixels;
-    }
-
-    /**
-     * Creates the edge table from the given polygon.
-     * 
-     * @param polygon The polygon to create the edge table from.
-     * @return A list of edges representing the edge table.
-     */
-    private static List<Edge> createEdgeTable(Polygon polygon) {
-        List<Edge> edgeTable = new ArrayList<>();
-
-        int n = polygon.npoints;
-        for (int i = 0; i < n; i++) {
-            int x1 = polygon.xpoints[i];
-            int y1 = polygon.ypoints[i];
-            int x2 = polygon.xpoints[(i + 1) % n];
-            int y2 = polygon.ypoints[(i + 1) % n];
-
-            if (y1 != y2) {
-                edgeTable.add(new Edge(x1, y1, x2, y2));
-            }
-        }
-
-        edgeTable.sort(Comparator.comparingDouble(e -> e.currentX));
-        return edgeTable;
-    }
-
-    /**
-     * Private inner class representing an edge for the scan-line fill algorithm.
-     */
-    private static class Edge {
-        int yMin;
-        int maxY;
-        double currentX;
-        double inverseSlope;
-
-        Edge(int x1, int y1, int x2, int y2) {
-            if (y1 < y2) {
-                this.yMin = y1;
-                this.maxY = y2;
-                this.currentX = x1;
-                this.inverseSlope = (double) (x2 - x1) / (y2 - y1);
-            } else {
-                this.yMin = y2;
-                this.maxY = y1;
-                this.currentX = x2;
-                this.inverseSlope = (double) (x1 - x2) / (y1 - y2);
-            }
-        }
+        return filledPoints;
     }
 }
