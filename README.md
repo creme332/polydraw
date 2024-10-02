@@ -31,3 +31,14 @@ All documentation (installation guide, usage guide, ...) is available in the [`d
 
 1. UI and drawing modes graphics were adapted from https://www.geogebra.org/classic.
 2. App logo: <a href="https://www.flaticon.com/free-icons/icosahedron" title="icosahedron icons">Icosahedron icon created by Pixel perfect - Flaticon</a>.
+
+## Disclaimer
+
+This project was developed as part of an educational assignment and is not production-ready. Please note that the project is currently incomplete, and no further development is planned.
+
+## Contributors
+- creme332
+- Divyeshhhh
+- Vasheel
+- Ramoogur
+- triya12
