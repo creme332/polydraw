@@ -17,9 +17,11 @@ public class TestHelper {
      * 
      * This method does NOT perform JUnit assertions.
      * 
-     * @param expectedPixels The expected array of pixel coordinates.
+     * @param expectedPixels The expected array of pixel coordinates. 2D array of
+     *                       pixels where each element is in the form {x, y}
      * @param actualPixels   The actual array of pixel coordinates to be compared
-     *                       with the expected array.
+     *                       with the expected array.2D array of pixels where each
+     *                       element is in the form {x, y}
      */
     public static void compare2DArraysDebug(int[][] expectedPixels, int[][] actualPixels) {
         // Set to store the expected pixel coordinates
@@ -82,8 +84,10 @@ public class TestHelper {
     /**
      * Asserts that 2 arrays of pixels are identical. Order of pixels is ignored.
      * 
-     * @param expectedPixels
-     * @param actualPixels
+     * @param expectedPixels 2D array of pixels where each element is in the form
+     *                       {x, y}
+     * @param actualPixels   2D array of pixels where each element is in the form
+     *                       {x, y}
      */
     public static void assert2DArrayEquals(int[][] expectedPixels, int[][] actualPixels) {
         // Set to store the expected pixel coordinates
