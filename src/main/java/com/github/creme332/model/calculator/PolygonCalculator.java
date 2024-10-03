@@ -213,9 +213,10 @@ public class PolygonCalculator {
         int[] yPoints = polygon.ypoints;
         int verticesCount = polygon.npoints;
 
-        // Initialize the edge table
-        List<List<Edge>> edgeTable = new ArrayList<>();
+        // Initialize the edge table as a HashMap
+        HashMap<Integer, List<Edge>> edgeTable = new HashMap<>();
         int maxY = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
 
         // Create an edge table for each scanline
         for (int i = 0; i < verticesCount; i++) {
@@ -236,14 +237,24 @@ public class PolygonCalculator {
                 float inverseSlope = (float) (p2.x - p1.x) / (p2.y - p1.y);
 
                 maxY = Math.max(maxY, yMax);
+                minY = Math.min(minY, yMin);
 
-                // Add the edge to the corresponding scanline in the edge table
-                while (edgeTable.size() <= yMin) {
-                    edgeTable.add(new ArrayList<>());
-                }
+                // Add the edge to the corresponding edge list in the edge table
+                edgeTable.putIfAbsent(yMin, new ArrayList<>());
                 edgeTable.get(yMin).add(new Edge(yMax, xCurrent, inverseSlope));
             }
         }
+
+        // After the edge table is built, sort the edges for each scanline
+        for (List<Edge> edges : edgeTable.values()) {
+            edges.sort(Comparator
+                    .comparingInt((Edge edge) -> edge.yMax) // Primary: yMax
+                    .thenComparingDouble(edge -> edge.xCurrent) // Secondary: xCurrent
+                    .thenComparingDouble(edge -> edge.inverseSlope) // Tertiary: inverseSlope
+            );
+        }
+
+        // System.out.println(edgeTable);
 
         // List to store filled points (can be thought of as the output)
         List<Point> filledPoints = new ArrayList<>();
@@ -252,29 +263,36 @@ public class PolygonCalculator {
         List<Edge> activeEdgeTable = new ArrayList<>();
 
         // Process each scanline
-        for (int scanline = 0; scanline <= maxY; scanline++) {
+        for (int scanline = minY; scanline <= maxY; scanline += 1) {
+            // System.out.println("\ny = " + scanline);
+
             // 1. Move edges from edgeTable to AET where the current scanline starts
-            if (scanline < edgeTable.size()) {
+            if (edgeTable.containsKey(scanline)) {
                 activeEdgeTable.addAll(edgeTable.get(scanline));
             }
 
-            // 2. Sort AET by xCurrent
+            // 2. Remove edges from AET where scanline >= yMax
+            final int scanlineNumberCopy = scanline;
+            activeEdgeTable.removeIf(edge -> scanlineNumberCopy >= edge.yMax);
+
+            // 3. Sort AET by xCurrent
             activeEdgeTable.sort(Comparator.comparingDouble(edge -> edge.xCurrent));
 
-            // 3. Fill the pixels between pairs of x-coordinates
-            for (int i = 0; i < activeEdgeTable.size(); i += 2) {
+            // System.out.println(activeEdgeTable);
+
+            // 4. Fill the pixels between pairs of x-coordinates
+            for (int i = 0; i < activeEdgeTable.size() - 1; i += 2) {
                 Edge e1 = activeEdgeTable.get(i);
                 Edge e2 = activeEdgeTable.get(i + 1);
+
+                // System.out.println(
+                //         String.format("Plot [%d, %d]", (int) Math.ceil(e1.xCurrent), (int) Math.floor(e2.xCurrent)));
 
                 // Add points between the two x coordinates
                 for (int x = (int) Math.ceil(e1.xCurrent); x <= (int) Math.floor(e2.xCurrent); x++) {
                     filledPoints.add(new Point(x, scanline));
                 }
             }
-
-            // 4. Remove edges from AET where scanline >= yMax
-            final int scanlineNumberCopy = scanline;
-            activeEdgeTable.removeIf(edge -> scanlineNumberCopy >= edge.yMax);
 
             // 5. Update xCurrent for all edges in the AET
             for (Edge edge : activeEdgeTable) {
