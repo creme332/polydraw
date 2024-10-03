@@ -1,5 +1,7 @@
 package com.github.creme332.controller.canvas.transform;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -7,10 +9,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 import com.github.creme332.model.AppState;
 import com.github.creme332.model.Mode;
 import com.github.creme332.model.ShapeWrapper;
+import com.github.creme332.utils.RequestFocusListener;
 import com.github.creme332.view.Canvas;
 
 public class Rotator extends AbstractTransformer {
@@ -27,15 +31,58 @@ public class Rotator extends AbstractTransformer {
         // Request rotation details from the user
         RotationDetails rotationDetails = requestRotationDetails();
 
-        // Perform rotation
+        // Request focus again otherwise keyboard shortcuts will not work
+        canvas.getTopLevelAncestor().requestFocus();
+
+        // Calculate rotation angle in radians
         double radAngle = Math.toRadians(rotationDetails.angle * (rotationDetails.isClockwise ? -1 : 1));
-        selectedWrapperCopy.rotate(radAngle, rotationDetails.pivot);
 
-        // Replace old shape with new one
-        canvasModel.getShapeManager().editShape(shapeIndex, selectedWrapperCopy);
+        startRotationAnimation(selectedWrapperCopy, shapeIndex, radAngle, rotationDetails.pivot);
+    }
 
-        // Repaint canvas
-        canvas.repaint();
+    /**
+     * Animates rotation of a given shape
+     * 
+     * @param selectedWrapperCopy Shape to be rotated
+     * @param shapeIndex          ID of shape in canvas
+     * @param radAngle            Rotation angle
+     * @param pivot               Rotation pivot
+     */
+    public void startRotationAnimation(final ShapeWrapper selectedWrapperCopy, final int shapeIndex,
+            final double radAngle,
+            final Point2D pivot) {
+        if (radAngle == 0)
+            return;
+
+        final int animationDelay = 10; // Delay in milliseconds between updates
+        final double stepAngle = Math.toRadians(1.0) * Math.signum(radAngle); // Step size for each update (1 degree)
+        final double totalSteps = Math.abs(radAngle) / Math.abs(stepAngle); // Total number of steps
+
+        // Timer to handle the animation
+        Timer timer = new Timer(animationDelay, new ActionListener() {
+            private int stepCount = 0;
+            ShapeWrapper copyPreview;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (stepCount < totalSteps) {
+                    copyPreview = new ShapeWrapper(selectedWrapperCopy);
+                    copyPreview.rotate(stepAngle * stepCount, pivot); // Rotate by the step angle
+                    canvasModel.getShapeManager().setShapePreview(copyPreview);
+                    canvas.repaint();
+
+                    stepCount++;
+                } else {
+                    ((Timer) e.getSource()).stop(); // Stop the timer when done
+                    canvasModel.getShapeManager().setShapePreview(null);
+                    // Replace old shape with new one so that transformation can be undo-ed
+                    canvasModel.getShapeManager().editShape(shapeIndex, copyPreview);
+                    canvas.repaint();
+                }
+            }
+        });
+
+        timer.start();
     }
 
     @Override
@@ -45,8 +92,11 @@ public class Rotator extends AbstractTransformer {
 
     private RotationDetails requestRotationDetails() {
         JTextField angleField = new JTextField(5);
-        JTextField pivotXField = new JTextField(5);
-        JTextField pivotYField = new JTextField(5);
+        JTextField pivotXField = new JTextField("0", 5);
+        JTextField pivotYField = new JTextField("0", 5);
+
+        // Request focus on the textfield when dialog is displayed
+        angleField.addHierarchyListener(new RequestFocusListener());
 
         JRadioButton clockwiseButton = new JRadioButton("clockwise");
         JRadioButton counterClockwiseButton = new JRadioButton("counterclockwise");
@@ -68,9 +118,6 @@ public class Rotator extends AbstractTransformer {
 
         int result = JOptionPane.showConfirmDialog(canvas, panel, "Rotate About Point",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-        // Request focus again otherwise keyboard shortcuts will not work
-        canvas.getTopLevelAncestor().requestFocus();
 
         if (result == JOptionPane.OK_OPTION) {
             try {

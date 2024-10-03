@@ -208,8 +208,8 @@ public class Canvas extends JPanel {
                 Shape s1 = model.toUserSpace(wrapper.getShape());
                 g2.draw(s1);
 
-                // fill shape
-                if (wrapper.isFillable()) {
+                // fill shape if it is not a line
+                if (!wrapper.isLine()) {
                     g2.setColor(wrapper.getFillColor());
                     g2.fill(s1);
                 }

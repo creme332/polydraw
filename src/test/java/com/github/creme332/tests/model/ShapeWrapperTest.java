@@ -36,7 +36,6 @@ public class ShapeWrapperTest {
         assertEquals(originalShapeWrapper.getLineColor(), copiedShapeWrapper.getLineColor());
         assertEquals(originalShapeWrapper.getLineType(), copiedShapeWrapper.getLineType());
         assertEquals(originalShapeWrapper.getLineThickness(), copiedShapeWrapper.getLineThickness());
-        assertEquals(originalShapeWrapper.isFillable(), copiedShapeWrapper.isFillable());
 
         // Check if the shape is copied correctly
         assertTrue(copiedShapeWrapper.getShape() instanceof Polygon);

@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import static com.github.creme332.utils.IconLoader.loadIcon;
 
@@ -59,8 +60,7 @@ public class Frame extends JFrame {
         // make frame resizable
         this.setResizable(true);
 
-        // add close button to frame
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // set application icon
         this.setIconImage(loadIcon("/icons/icosahedron.png").getImage());

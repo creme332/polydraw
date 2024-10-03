@@ -2,6 +2,8 @@ package com.github.creme332.controller;
 
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
@@ -36,6 +38,31 @@ public class FrameController implements PropertyChangeListener {
     public FrameController(AppState model, Frame frame) {
         this.frame = frame;
         this.app = model;
+
+        // Add a WindowListener to handle the close operation
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Show a confirmation dialog
+                int option = JOptionPane.showConfirmDialog(
+                        frame,
+                        "Do you want to save your progress before exiting?",
+                        "Save Progress",
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+
+                if (option == JOptionPane.YES_OPTION) {
+                    app.notifyExportToCanvasHandler();
+
+                    // Exit the application
+                    frame.dispose();
+                } else if (option == JOptionPane.NO_OPTION) {
+                    // Exit without saving
+                    frame.dispose();
+                }
+                // If Cancel (or X) is selected, do nothing, keep the window open
+            }
+        });
 
         // create controller for menubar of frame
         new MenuBarController(app, frame.getMyMenuBar());

@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.github.creme332.model.calculator.PolygonCalculator;
+import com.github.creme332.utils.ColorAdapter;
+import com.github.creme332.utils.Point2DListAdapter;
+import com.github.creme332.utils.ShapeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -15,18 +19,40 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.PathIterator;
 
+/**
+ * A wrapper class for a Shape.
+ * 
+ */
 public class ShapeWrapper {
+    /**
+     * All shapes drawn on canvas, except lines, are stored as a Polygon. Lines are
+     * stored as a Path2D.
+     */
+    @JsonAdapter(ShapeAdapter.class)
     private Shape shape;
+
+    /**
+     * Color of shape outline. It also determines the shape fill color.
+     */
+    @JsonAdapter(ColorAdapter.class)
     private Color lineColor = Color.BLACK;
+
+    /**
+     * Type of line used to draw shape outline.
+     */
     private LineType lineType = LineType.SOLID;
+
+    /**
+     * Line thickness of shape outline.
+     */
     private int lineThickness = 1;
-    private boolean fillable = true;
 
     /**
      * Coordinates plotted by user to create shape. A plotted point is a one which
      * user has clicked one. A point on which user is hovering on is NOT a plotted
      * point.
      */
+    @JsonAdapter(Point2DListAdapter.class)
     private List<Point2D> plottedPoints = new ArrayList<>();
 
     /**
@@ -57,7 +83,6 @@ public class ShapeWrapper {
         lineColor = wrapper.lineColor;
         lineType = wrapper.lineType;
         lineThickness = wrapper.lineThickness;
-        fillable = wrapper.fillable;
 
         // create a new shape object
         if (wrapper.shape != null) {
@@ -132,8 +157,12 @@ public class ShapeWrapper {
         }
     }
 
+    public static boolean isLine(Shape shape) {
+        return shape instanceof Path2D.Double;
+    }
+
     public boolean isLine() {
-        return getShape() instanceof Path2D.Double;
+        return isLine(shape);
     }
 
     /**
@@ -165,9 +194,11 @@ public class ShapeWrapper {
         // translate plotted points
         for (int i = 0; i < plottedPoints.size(); i++) {
             Point2D oldPoint = plottedPoints.get(i);
+            int roundedX = (int) (oldPoint.getX() + translationVector.getX());
+            int roundedY = (int) (oldPoint.getY() + translationVector.getY());
+
             plottedPoints.set(i,
-                    new Point2D.Double(oldPoint.getX() + translationVector.getX(),
-                            oldPoint.getY() + translationVector.getY()));
+                    new Point2D.Double(roundedX, roundedY));
         }
     }
 
@@ -178,6 +209,9 @@ public class ShapeWrapper {
      * @param pivot    the x-y coordinates of the rotation point
      */
     public void rotate(double radAngle, Point2D pivot) {
+        if (radAngle == 0)
+            return;
+
         AffineTransform transform = new AffineTransform();
 
         // Step 1: Translate the shape to the origin (negative of the rotation point)
@@ -266,20 +300,12 @@ public class ShapeWrapper {
         this.lineColor = lineColor;
     }
 
-    public boolean isFillable() {
-        return fillable;
-    }
-
-    public void setFillable(boolean fillable) {
-        this.fillable = fillable;
-    }
-
     /**
      * Returns a fill color for a shape if it is fillable. The fill color of a
      * fillable shape is a transparent version of the line color.
      */
     public Color getFillColor() {
-        if (!fillable)
+        if (isLine())
             return null;
         Color a = lineColor;
         return new Color(a.getRed() / 255f, a.getGreen() / 255f, a.getBlue() / 255f, .2f);
@@ -307,7 +333,7 @@ public class ShapeWrapper {
      * @param shape the shape from which to extract coordinates
      * @return a 2D array where each row is a pair of coordinates {x, y}
      */
-    public double[][] getCoordinates() {
+    public static double[][] getCoordinates(Shape shape) {
         List<double[]> coordinates = new ArrayList<>();
         PathIterator pathIterator = shape.getPathIterator(null);
         double[] coords = new double[6];
@@ -364,7 +390,7 @@ public class ShapeWrapper {
                     lineType: %s
                     lineThickness: %d
                 }
-                """, plottedPointString, Arrays.deepToString(getCoordinates()),
+                """, plottedPointString, Arrays.deepToString(getCoordinates(shape)),
                 lineColor, lineType, lineThickness);
     }
 

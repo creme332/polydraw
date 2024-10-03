@@ -78,9 +78,6 @@ public class DrawLine extends AbstractDrawer {
                     canvasModel.getLineType(),
                     canvasModel.getLineThickness());
 
-            // line should not be fillable
-            preview.setFillable(false);
-
             // save plotted point
             preview.getPlottedPoints().add(polySpaceMousePosition);
 
