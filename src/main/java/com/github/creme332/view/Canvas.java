@@ -5,15 +5,12 @@ import javax.swing.JPanel;
 import com.github.creme332.model.CanvasModel;
 import com.github.creme332.model.LineType;
 import com.github.creme332.model.ShapeWrapper;
-import com.github.creme332.model.calculator.PolygonCalculator;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -147,7 +144,6 @@ public class Canvas extends JPanel {
     }
 
     private void drawVerticalAxis(Graphics2D g2) {
-        // TODO: move calculation to model
         final int canvasWidth = getWidth();
         final int canvasHeight = getHeight();
 
@@ -214,15 +210,6 @@ public class Canvas extends JPanel {
                 // fill shape if it is not a line
                 if (!wrapper.isLine()) {
                     g2.setColor(wrapper.getFillColor());
-
-                    // use custom scanfill algorithm
-                    // List<Point> insidePoints = PolygonCalculator.scanFill((Polygon) wrapper.getShape());
-                    // for (Point2D p : insidePoints) {
-                    //     Shape point = createPointAsShape(model.toUserSpace(p));
-                    //     g2.draw(point);
-                    //     g2.fill(point);
-                    // }
-
                     g2.fill(s1);
                 }
             }

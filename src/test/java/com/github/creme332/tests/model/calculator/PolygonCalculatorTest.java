@@ -2,7 +2,6 @@ package com.github.creme332.tests.model.calculator;
 
 import com.github.creme332.model.calculator.PolygonCalculator;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.awt.*;
